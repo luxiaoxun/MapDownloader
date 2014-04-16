@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GMapFixTest
+namespace GMapPositionFix
 {
-    public static class MarsWGS
+    public static class MarsWGSTransform
     {
         /// <summary>
         /// 火星坐标转换为WGS坐标
@@ -80,6 +80,5 @@ namespace GMapFixTest
             xMars = xWgs + dLon;
             yMars = yWgs + dLat;
         }
-
     }
 }

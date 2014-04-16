@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GMapFixTest
+namespace GMapPositionFix
 {
     public static class CoordinateTransform
     {

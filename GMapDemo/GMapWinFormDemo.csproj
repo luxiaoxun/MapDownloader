@@ -106,6 +106,10 @@
     <None Include="Resources\your_sister.gif" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GMapChinaRegion\GMapChinaRegion.csproj">
+      <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
+      <Name>GMapChinaRegion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapMarkerLib\GMapMarkerLib.csproj">
       <Project>{E25D9C8F-534F-4D86-BD45-9469AD9727E0}</Project>
       <Name>GMapMarkerLib</Name>
@@ -113,10 +117,6 @@
     <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
       <Name>GMapProvidersExt</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GMapRegion\GMapChinaRegion.csproj">
-      <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
-      <Name>GMapChinaRegion</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMapTools\GMapTools.csproj">
       <Project>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</Project>
