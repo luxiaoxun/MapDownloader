@@ -1,0 +1,11 @@
+﻿<Window x:Class="GMapWPFDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:GMapWPFDemo"
+        Title="MainWindow" Height="410" Width="618">
+    <Grid>
+            <GroupBox Name="mapgroup" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <src:MapControl x:Name="mapControl" Zoom="13" MaxZoom="24" MinZoom="1" />
+            </GroupBox>
+    </Grid>
+</Window>
