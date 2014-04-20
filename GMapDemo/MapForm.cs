@@ -25,12 +25,6 @@ namespace GMapWinFormDemo
         private GMapPolygon currentPolygon;
 
         private GMapOverlay polygonsOverlay = new GMapOverlay("polygonsOverlay"); //放置polygon的图层
-        //private GMapOverlay tempPolygonsOverlay = new GMapOverlay("tempPolygonsOverlay");//放置polygon的临时图层
-        //private GMapPolygon drawingPolygon = null; //正在画的polygon
-        //private List<PointLatLng> drawingPoints = new List<PointLatLng>(); //多边形的点集
-        //
-        //private DrawingMode drawingMode = DrawingMode.None;
-        //private GMapDrawingCircle drawingCircle = null; //正在画的circle
 
         private GMapOverlay locations = new GMapOverlay("locations"); //放置搜索结果的图层
         private GeocodingProvider gp; //地址编码服务
@@ -66,6 +60,7 @@ namespace GMapWinFormDemo
             mapControl.ShowCenter = false; //不显示中心十字点
             mapControl.DragButton = System.Windows.Forms.MouseButtons.Left; //左键拖拽地图
             mapControl.Position = new PointLatLng(32.064, 118.704); //地图中心位置：南京
+            mapControl.MouseWheelZoomType = MouseWheelZoomType.MousePositionWithoutCenter;
 
             mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
             mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
@@ -136,7 +131,6 @@ namespace GMapWinFormDemo
             mapType = MapType.Common;
             mapProviderType = MapProviderType.google;
 
-            this.buttonMapType.Location = new Point(this.panelMap.Location.X + panelMap.Width - 65, this.panelMap.Location.Y + this.menuStrip1.Height + 10);
             this.panelMap.SizeChanged += new EventHandler(panelMap_SizeChanged);
             List<string> regionNames = GMapChinaRegion.MapRegion.GetAllRegionName();
             foreach (var regionName in regionNames)
@@ -172,7 +166,7 @@ namespace GMapWinFormDemo
         void panelMap_SizeChanged(object sender, EventArgs e)
         {
             this.buttonMapType.Location = new Point(this.panelMap.Location.X + panelMap.Width - 65, this.panelMap.Location.Y + this.menuStrip1.Height + 10);
-            this.comboBoxRegion.Location = new Point(this.panelMap.Location.X + panelMap.Width - 80, this.panelMap.Location.Y );
+            this.comboBoxRegion.Location = new Point(this.menuStrip1.Location.X + panelMap.Width - 90, this.menuStrip1.Location.Y );
         }
 
         void mapControl_OnPolygonLeave(GMapPolygon item)
@@ -189,19 +183,6 @@ namespace GMapWinFormDemo
 
         void mapControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //if (drawingMode == DrawingMode.Polygon && drawingPolygon != null)
-            //{
-            //    GMapPolygon polygon = new GMapPolygon(drawingPoints, "Polygon");
-            //    polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-            //    polygon.Stroke = new Pen(Color.Blue, 2);
-            //    polygon.IsHitTestVisible = true;
-            //    polygonsOverlay.Polygons.Add(polygon);
-            //    drawingPolygon.Dispose();
-            //    drawingPolygon = null;
-            //    drawingPoints.Clear();
-            //    drawingMode = DrawingMode.None;
-            //}
-
             //if (e.Button == System.Windows.Forms.MouseButtons.Left)
             //{
             //    PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
@@ -235,46 +216,14 @@ namespace GMapWinFormDemo
 
         void mapControl_MouseMove(object sender, MouseEventArgs e)
         {
-            //if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
-            //{
-            //    if (currentMarker != null)
-            //    {
-            //        PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
-            //        currentMarker.Position = point;
-            //    }
-            //}
-
-            //if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown && 
-            //    drawingMode == DrawingMode.Rectangle)
-            //{
-            //    if (drawingPoints.Count > 0)
-            //    {
-            //        PointLatLng startPos = drawingPoints[0];
-            //        PointLatLng currentPos = mapControl.FromLocalToLatLng(e.X, e.Y);
-
-            //        drawingPolygon.Points.Clear();
-            //        drawingPolygon.Points.Add(startPos);
-            //        drawingPolygon.Points.Add(new PointLatLng(currentPos.Lat,startPos.Lng));
-            //        drawingPolygon.Points.Add(currentPos);
-            //        drawingPolygon.Points.Add(new PointLatLng(startPos.Lat, currentPos.Lng));
-            //        drawingPolygon.Points.Add(startPos);
-            //        mapControl.UpdatePolygonLocalPosition(drawingPolygon);
-            //        mapControl.Refresh();
-            //    }
-            //}
-
-            //if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown &&
-            //    drawingMode == DrawingMode.Circle)
-            //{
-            //    if (drawingPoints.Count > 0)
-            //    {
-            //        //PointLatLng startPos = drawingPoints[0];
-            //        PointLatLng currentPos = mapControl.FromLocalToLatLng(e.X, e.Y);
-            //        drawingCircle.EdgePoint = currentPos;
-            //        mapControl.UpdateMarkerLocalPosition(drawingCircle);
-            //        mapControl.Refresh();
-            //    }
-            //}
+            if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
+            {
+                if (currentMarker != null)
+                {
+                    PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
+                    currentMarker.Position = point;
+                }
+            }
         }
 
         void mapControl_MouseUp(object sender, MouseEventArgs e)
@@ -283,60 +232,6 @@ namespace GMapWinFormDemo
             {
                 isLeftButtonDown = false;
             }
-
-            //if (e.Button == System.Windows.Forms.MouseButtons.Left && drawingMode == DrawingMode.Rectangle && 
-            //    drawingPolygon != null)
-            //{
-            //    this.mapControl.CanDragMap = true;
-            //    if (drawingPoints.Count > 0)
-            //    {
-            //        PointLatLng startPos = drawingPoints[0];
-            //        PointLatLng currentPos = mapControl.FromLocalToLatLng(e.X, e.Y);
-            //        drawingPoints.Clear();
-            //        drawingPoints.Add(startPos);
-            //        drawingPoints.Add(new PointLatLng(currentPos.Lat, startPos.Lng));
-            //        drawingPoints.Add(currentPos);
-            //        drawingPoints.Add(new PointLatLng(startPos.Lat, currentPos.Lng));
-            //        drawingPoints.Add(startPos);
-
-            //        GMapPolygon polygon = new GMapPolygon(drawingPoints, "Polygon");
-            //        polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-            //        polygon.Stroke = new Pen(Color.Blue, 2);
-            //        polygon.IsHitTestVisible = true;
-            //        polygonsOverlay.Polygons.Add(polygon);
-            //    }
-            //    tempPolygonsOverlay.Polygons.Clear();
-            //    if (drawingPolygon != null)
-            //    {
-            //        drawingPolygon.Dispose();
-            //        drawingPolygon = null;
-            //    }
-            //    drawingPoints.Clear();
-            //    drawingMode = DrawingMode.None;
-            //}
-
-            //if (e.Button == System.Windows.Forms.MouseButtons.Left && drawingMode == DrawingMode.Circle &&
-            //    drawingCircle != null)
-            //{
-            //    this.mapControl.CanDragMap = true;
-
-            //    PointLatLng currentPos = mapControl.FromLocalToLatLng(e.X, e.Y);
-            //    drawingCircle.EdgePoint = currentPos;
-
-            //    PointLatLng center = drawingPoints[0];
-            //    GMapDrawingCircle circle = new GMapDrawingCircle(center,currentPos);
-            //    polygonsOverlay.Markers.Add(circle);
-
-            //    tempPolygonsOverlay.Markers.Clear();
-            //    if (drawingCircle != null)
-            //    {
-            //        drawingCircle.Dispose();
-            //        drawingCircle = null;
-            //    }
-            //    drawingPoints.Clear();
-            //    drawingMode = DrawingMode.None;
-
-            //}
         }
 
         void mapControl_MouseDown(object sender, MouseEventArgs e)
@@ -344,56 +239,6 @@ namespace GMapWinFormDemo
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 isLeftButtonDown = true;
-
-                //if (drawingMode == DrawingMode.Polygon)
-                //{
-                //    drawingPoints.Add(mapControl.FromLocalToLatLng(e.X, e.Y));
-                //    if (drawingPolygon == null)
-                //    {
-                //        drawingPolygon = new GMapPolygon(drawingPoints, "Polygon");
-                //        drawingPolygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-                //        drawingPolygon.Stroke = new Pen(Color.Blue, 2);
-                //        drawingPolygon.IsHitTestVisible = false;
-                //        tempPolygonsOverlay.Polygons.Add(drawingPolygon);
-                //    }
-                //    else
-                //    {
-                //        drawingPolygon.Points.Clear();
-                //        drawingPolygon.Points.AddRange(drawingPoints);
-                //        if (tempPolygonsOverlay.Polygons.Count == 0)
-                //        {
-                //            tempPolygonsOverlay.Polygons.Add(drawingPolygon);
-                //        }
-                //        else
-                //        {
-                //            mapControl.UpdatePolygonLocalPosition(drawingPolygon);
-                //        }
-                //    }
-                //}
-
-                //if (drawingMode == DrawingMode.Rectangle)
-                //{
-                //    drawingPoints.Add(mapControl.FromLocalToLatLng(e.X, e.Y));
-                //    if (drawingPolygon == null)
-                //    {
-                //        drawingPolygon = new GMapPolygon(drawingPoints, "Rectangle");
-                //        drawingPolygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-                //        drawingPolygon.Stroke = new Pen(Color.Blue, 2);
-                //        drawingPolygon.IsHitTestVisible = false;
-                //        tempPolygonsOverlay.Polygons.Add(drawingPolygon);
-                //    }
-                //}
-
-                //if (drawingMode == DrawingMode.Circle)
-                //{
-                //    PointLatLng center = mapControl.FromLocalToLatLng(e.X, e.Y);
-                //    drawingPoints.Add(center);
-                //    if (drawingCircle == null)
-                //    {
-                //        drawingCircle = new GMapDrawingCircle(center, center);
-                //        tempPolygonsOverlay.Markers.Add(drawingCircle);
-                //    }
-                //}
             }
         }
 

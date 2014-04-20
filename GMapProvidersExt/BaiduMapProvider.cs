@@ -20,7 +20,8 @@ namespace GMapProvidersExt
 
         public override PureProjection Projection
         {
-            get { return MercatorProjection.Instance; }
+            //get { return MercatorProjection.Instance; }
+            get { return BaiduProjection.Instance; }
         }
 
         GMapProvider[] overlays;
@@ -77,20 +78,20 @@ namespace GMapProvidersExt
 
         string MakeTileImageUrl(GPoint pos, int zoom, string language)
         {
-            //zoom = zoom - 1;
-            //var offsetX = Math.Pow(2, zoom);
-            //var offsetY = offsetX - 1;
+            zoom = zoom - 1;
+            var offsetX = Math.Pow(2, zoom);
+            var offsetY = offsetX - 1;
 
-            //var numX = pos.X - offsetX;
-            //var numY = -pos.Y + offsetY;
+            var numX = pos.X - offsetX;
+            var numY = -pos.Y + offsetY;
 
-            //zoom = zoom + 1;
+            zoom = zoom + 1;
             var num = (pos.X + pos.Y) % 4 + 1;
-            //var x = numX.ToString().Replace("-", "M");
-            //var y = numY.ToString().Replace("-", "M");
+            var x = numX.ToString().Replace("-", "M");
+            var y = numY.ToString().Replace("-", "M");
 
-            var x = pos.X;
-            var y = pos.Y;
+            //var x = pos.X;
+            //var y = pos.Y;
 
             string url = string.Format(UrlFormat, num, x, y, zoom);
             return url;

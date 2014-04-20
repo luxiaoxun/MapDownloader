@@ -50,9 +50,16 @@
     <Compile Include="AMapSateliteProvider.cs" />
     <Compile Include="BaiduMapProvider.cs" />
     <Compile Include="BaiduMapSateliteProvider.cs" />
+    <Compile Include="BaiduProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SosoMapProvider.cs" />
     <Compile Include="SosoMapSateliteProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
+      <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>
+      <Name>GMapPositionFix</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
