@@ -79,7 +79,6 @@ namespace GMapWinFormDemo
             mapControl.Overlays.Add(locations);
             mapControl.Overlays.Add(regionOverlay);
             mapControl.Overlays.Add(polygonsOverlay);
-            //mapControl.Overlays.Add(tempPolygonsOverlay);
 
             gp = mapControl.MapProvider as GeocodingProvider;
             if (gp == null) //地址转换服务，没有就使用OpenStreetMap

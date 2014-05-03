@@ -99,21 +99,38 @@ namespace GMapTools
             }
         }
 
+        private void ClearTempDrawing()
+        {
+            tempPolygonsOverlay.Polygons.Clear();
+            tempPolygonsOverlay.Markers.Clear();
+
+            if (drawingPolygon != null)
+            {
+                drawingPolygon.Dispose();
+                drawingPolygon = null;
+            }
+            drawingPoints.Clear();
+
+            if (drawingCircle != null)
+            {
+                drawingCircle.Dispose();
+                drawingCircle = null;
+            }
+            drawingMode = DrawingMode.None;
+        }
+
         private void MapControl_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (drawingMode == DrawingMode.Polygon && drawingPolygon != null)
             {
-                DrawEventArgs args = new DrawEventArgs(drawingMode, drawingPoints);
+                //Double click to complete drawing polygon 
+                //Remove the duplicated last point
+                List<PointLatLng> drawPoints = new List<PointLatLng>();
+                drawPoints.AddRange(drawingPoints.GetRange(0, drawingPoints.Count-1));
+                DrawEventArgs args = new DrawEventArgs(drawingMode, drawPoints);
                 OnDrawComplete(args);
-                
-                tempPolygonsOverlay.Polygons.Clear();
-                if (drawingPolygon != null)
-                {
-                    drawingPolygon.Dispose();
-                    drawingPolygon = null;
-                }
-                drawingPoints.Clear();
-                drawingMode = DrawingMode.None;
+
+                ClearTempDrawing();
             }
         }
 
@@ -134,19 +151,11 @@ namespace GMapTools
                 drawingPoints.Add(new PointLatLng(currentPos.Lat, startPos.Lng));
                 drawingPoints.Add(currentPos);
                 drawingPoints.Add(new PointLatLng(startPos.Lat, currentPos.Lng));
-                drawingPoints.Add(startPos);
 
                 DrawEventArgs args = new DrawEventArgs(drawingMode, drawingPoints);
                 OnDrawComplete(args);
 
-                tempPolygonsOverlay.Polygons.Clear();
-                if (drawingPolygon != null)
-                {
-                    drawingPolygon.Dispose();
-                    drawingPolygon = null;
-                }
-                drawingPoints.Clear();
-                drawingMode = DrawingMode.None;
+                ClearTempDrawing();
             }
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left && drawingMode == DrawingMode.Circle &&
@@ -159,15 +168,7 @@ namespace GMapTools
                 DrawEventArgs args = new DrawEventArgs(drawingMode,center,currentPos);
                 OnDrawComplete(args);
 
-                tempPolygonsOverlay.Markers.Clear();
-                if (drawingCircle != null)
-                {
-                    drawingCircle.Dispose();
-                    drawingCircle = null;
-                }
-                drawingPoints.Clear();
-                drawingMode = DrawingMode.None;
-
+                ClearTempDrawing();
             }
         }
 
@@ -186,7 +187,6 @@ namespace GMapTools
                     drawingPolygon.Points.Add(new PointLatLng(currentPos.Lat, startPos.Lng));
                     drawingPolygon.Points.Add(currentPos);
                     drawingPolygon.Points.Add(new PointLatLng(startPos.Lat, currentPos.Lng));
-                    drawingPolygon.Points.Add(startPos);
                     MapControl.UpdatePolygonLocalPosition(drawingPolygon);
                     MapControl.Refresh();
                 }
@@ -197,7 +197,6 @@ namespace GMapTools
             {
                 if (drawingCircle != null)
                 {
-                    //PointLatLng startPos = drawingPoints[0];
                     PointLatLng currentPos = MapControl.FromLocalToLatLng(e.X, e.Y);
                     drawingCircle.EdgePoint = currentPos;
                     MapControl.UpdateMarkerLocalPosition(drawingCircle);
@@ -228,14 +227,6 @@ namespace GMapTools
                     {
                         drawingPolygon.Points.Clear();
                         drawingPolygon.Points.AddRange(drawingPoints);
-                        //if (tempPolygonsOverlay.Polygons.Count == 0)
-                        //{
-                        //    tempPolygonsOverlay.Polygons.Add(drawingPolygon);
-                        //}
-                        //else
-                        //{
-                        //    MapControl.UpdatePolygonLocalPosition(drawingPolygon);
-                        //}
                         MapControl.UpdatePolygonLocalPosition(drawingPolygon);
                         MapControl.Refresh();
                     }
