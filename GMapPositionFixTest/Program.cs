@@ -7,8 +7,11 @@ namespace GMapFixTest
     {
         static void Main(string[] args)
         {
-            double lat_wgs = 34.121;
-            double lng_wgs = 115.21212;
+            //double lat_wgs = 34.121;
+            //double lng_wgs = 115.21212;
+
+            double lat_wgs = 22.873075;
+            double lng_wgs = 113.918719;
 
             double lat_mars;
             double lng_mars;

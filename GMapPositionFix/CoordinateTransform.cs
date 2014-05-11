@@ -99,7 +99,7 @@ namespace GMapPositionFix
         /// 火星坐标(GCJ02)转换为baidu坐标
         /// </summary>
         /// <param name="lngMars"></param>
-        /// <param name="yMars"></param>
+        /// <param name="latMars"></param>
         /// <param name="lngBaidu"></param>
         /// <param name="latBaidu"></param>
         public static void ConvertMarsToBD09(double lngMars, double latMars, out double lngBaidu, out double latBaidu)

@@ -40,18 +40,22 @@ namespace GMapMarkerLib
         {
             //Radius = 100; // 100m
             Radius = radius;
-            IsHitTestVisible = false;
+            IsHitTestVisible = true;
         }
 
         public override void OnRender(Graphics g)
         {
             int R = (int)((Radius) / Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, Position.Lat)) * 2;
+            if(R == 0) return;
+
+            this.Size = new Size(R, R);
+            this.Offset = new Point(-R / 2, -R / 2);
 
             if (IsFilled)
             {
-                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
+                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
             }
-            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
+            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
         }
 
         public override void Dispose()

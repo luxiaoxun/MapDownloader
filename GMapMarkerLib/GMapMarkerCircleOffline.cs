@@ -42,7 +42,7 @@ namespace GMapMarkerLib
             : base(p)
         {
             Radius = radius;
-            IsHitTestVisible = false;
+            IsHitTestVisible = true;
 
             center = p;
             edgePoint = new PointLatLng(p.Lat, p.Lng + radius);
@@ -56,11 +56,15 @@ namespace GMapMarkerLib
 
             double dis = (ep.X-cp.X)* (ep.X-cp.X) + (ep.Y-cp.Y)*(ep.Y-cp.Y);
             int R = (int)Math.Sqrt(dis)*2;
+
+            this.Size = new Size(R, R);
+            this.Offset = new Point(-R / 2, -R / 2);
+
             if (IsFilled)
             {
-                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
+                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
             }
-            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
+            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
         }
 
         public override void Dispose()

@@ -199,16 +199,16 @@ namespace GMapWinFormDemo
 
             PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
 
-            //GMapMarkerCircle mc = new GMapMarkerCircle(point);
-            //objects.Markers.Add(mc);
+            //GMapMarkerCircle mc = new GMapMarkerCircle(point,200);
+            //markersOverlay.Markers.Add(mc);
 
             //GMapPolygon circle = CirclePolygon.CreateCircle(point, 1, "my circle");
-            //objects.Polygons.Add(circle);
+            //markersOverlay.Polygons.Add(circle);
 
             //GMapPolygon sector = CirclePolygon.CreateSector(point, 1, 25, 90);
-            //objects.Polygons.Add(sector);
+            //markersOverlay.Polygons.Add(sector);
 
-            //GMapMarkerCircleOffline cc = new GMapMarkerCircleOffline(point, 1);
+            //GMapMarkerCircleOffline cc = new GMapMarkerCircleOffline(point, 0.01);
             //markersOverlay.Markers.Add(cc);
 
         }
@@ -217,7 +217,7 @@ namespace GMapWinFormDemo
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
             {
-                if (currentMarker != null)
+                if (currentMarker != null && currentMarker is GMapMarkerFlash)
                 {
                     PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
                     currentMarker.Position = point;
@@ -253,7 +253,7 @@ namespace GMapWinFormDemo
 
         void mapControl_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 this.contextMenuStrip1.Show(Cursor.Position);
                 if (item is GMapMarkerFlash)
@@ -276,10 +276,9 @@ namespace GMapWinFormDemo
                 //GMapMarker marker = new GMapMarkerFlash(point, bitmap);
                 //markersOverlay.Markers.Add(marker);
 
-                //GifImage gif = new GifImage(@"F:\GMap\GMapDemo\GMapDemo\Resources\your_sister.gif");
-                GifImage gif = new GifImage(Properties.Resources.your_sister);
-                GMapMarkerAnimation ani = new GMapMarkerAnimation(point, gif);
-                markersOverlay.Markers.Add(ani);
+                //GifImage gif = new GifImage(Properties.Resources.your_sister);
+                //GMapMarkerAnimation ani = new GMapMarkerAnimation(point, gif);
+                //markersOverlay.Markers.Add(ani);
 
                 //GMapMarker marker = new GMapMarkerDirection(point, Properties.Resources.arrow, 45);
                 //objects.Markers.Add(marker);
@@ -565,16 +564,12 @@ namespace GMapWinFormDemo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //drawingMode = DrawingMode.Circle;
-            //this.mapControl.CanDragMap = false;
             draw.DrawingMode = DrawingMode.Circle;
             draw.IsEnable = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //drawingMode = DrawingMode.Rectangle;
-            //this.mapControl.CanDragMap = false;
             draw.DrawingMode = DrawingMode.Rectangle;
             draw.IsEnable = true;
         }
@@ -583,8 +578,6 @@ namespace GMapWinFormDemo
         {
             draw.DrawingMode = DrawingMode.Polygon;
             draw.IsEnable = true;
-            
-            //drawingMode = DrawingMode.Polygon;
         }
 
         private void button4_Click(object sender, EventArgs e)

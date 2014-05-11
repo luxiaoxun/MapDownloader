@@ -35,8 +35,10 @@ namespace GMapTools
             int R = (int)Math.Sqrt(dis)*2;
             if (R == 0) return;
 
-            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
-            g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X - R / 2, LocalPosition.Y - R / 2, R, R));
+            this.Size = new Size(R, R);
+            this.Offset = new Point(-R / 2, -R / 2);
+            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
+            g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
         }
 
         public override void Dispose()
