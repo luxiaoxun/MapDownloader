@@ -7,7 +7,7 @@ using System.Drawing;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace GMapTools
+namespace GMapDrawTools
 {
     public class GMapDrawingCircle : GMapMarker
     {

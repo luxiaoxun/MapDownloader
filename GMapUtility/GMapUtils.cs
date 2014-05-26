@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows;
-using System.Diagnostics;
-using System.Collections;
 
-namespace GMapEnhanced
+namespace GMapUtility
 {
     /// <summary>
     /// Helper class with static methods
@@ -380,7 +376,7 @@ namespace GMapEnhanced
             return GetLineSegmentIntersection(start1, bearing1, start2, bearing2, end1, end2);
         }
 
-        
+
         /// <summary>
         /// Returns the point of intersection of two paths defined by point and bearing
         /// </summary>
@@ -412,19 +408,19 @@ namespace GMapEnhanced
 
             double dLat = lat2 - lat1;
             double dLon = lon2 - lon1;
-  
-            double dist12 = 2d * Math.Asin(Math.Sqrt( Math.Sin(dLat / 2d) * Math.Sin(dLat / 2d) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Sin(dLon / 2d) * Math.Sin(dLon / 2d)));
+
+            double dist12 = 2d * Math.Asin(Math.Sqrt(Math.Sin(dLat / 2d) * Math.Sin(dLat / 2d) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Sin(dLon / 2d) * Math.Sin(dLon / 2d)));
             if (dist12 == 0d)
             {
                 return PointLatLng.Empty;
             }
-  
+
             // initial/final bearings between points
             double brngA = Math.Acos((Math.Sin(lat2) - Math.Sin(lat1) * Math.Cos(dist12)) / (Math.Sin(dist12) * Math.Cos(lat1)));
             if (Double.IsNaN(brngA))
             {
                 // protect against rounding
-                brngA = 0d;  
+                brngA = 0d;
             }
             double brngB = Math.Acos((Math.Sin(lat1) - Math.Sin(lat2) * Math.Cos(dist12)) / (Math.Sin(dist12) * Math.Cos(lat2)));
 
@@ -439,21 +435,21 @@ namespace GMapEnhanced
                 brng12 = 2d * Math.PI - brngA;
                 brng21 = brngB;
             }
-  
+
             double alpha1 = (brng13 - brng12 + Math.PI) % (2d * Math.PI) - Math.PI;  // angle 2-1-3
             double alpha2 = (brng21 - brng23 + Math.PI) % (2d * Math.PI) - Math.PI;  // angle 1-2-3
-  
-            if(Math.Sin(alpha1) == 0d && Math.Sin(alpha2) == 0d)
+
+            if (Math.Sin(alpha1) == 0d && Math.Sin(alpha2) == 0d)
             {
                 //Infinite intersections
-                return PointLatLng.Empty;  
+                return PointLatLng.Empty;
             }
-            if(Math.Sin(alpha1) * Math.Sin(alpha2) < 0d)
+            if (Math.Sin(alpha1) * Math.Sin(alpha2) < 0d)
             {
                 //Ambiguous intersection
-                return PointLatLng.Empty;       
+                return PointLatLng.Empty;
             }
-   
+
             double alpha3 = Math.Acos(-Math.Cos(alpha1) * Math.Cos(alpha2) + Math.Sin(alpha1) * Math.Sin(alpha2) * Math.Cos(dist12));
             double dist13 = Math.Atan2(Math.Sin(dist12) * Math.Sin(alpha1) * Math.Sin(alpha2), Math.Cos(alpha2) + Math.Cos(alpha1) * Math.Cos(alpha3));
             double lat3 = Math.Asin(Math.Sin(lat1) * Math.Cos(dist13) + Math.Cos(lat1) * Math.Sin(dist13) * Math.Cos(brng13));
@@ -461,7 +457,7 @@ namespace GMapEnhanced
             double lon3 = lon1 + dLon13;
 
             //Normalise to -180...+180°
-            lon3 = (lon3 + 3d * Math.PI) % (2d * Math.PI) - Math.PI;  
+            lon3 = (lon3 + 3d * Math.PI) % (2d * Math.PI) - Math.PI;
 
             PointLatLng intersect = new PointLatLng(ToDegrees(lat3), ToDegrees(lon3));
 
@@ -471,9 +467,9 @@ namespace GMapEnhanced
                 return intersect;
             }
             else
-	        {
+            {
                 return PointLatLng.Empty;
-	        }
+            }
         }
 
         /// <summary>
@@ -506,7 +502,7 @@ namespace GMapEnhanced
             {
                 betweenLons = (p1.Lng >= pX.Lng && p2.Lng <= pX.Lng);
             }
-    
+
             return (betweenLats && betweenLons);
         }
 
@@ -620,7 +616,7 @@ namespace GMapEnhanced
         public static List<PointLatLng> GetGreatCircleRoute(PointLatLng start, PointLatLng end, int numPointsBetween)
         {
             ///Check numPointsBetween
-            if(numPointsBetween <= 1)
+            if (numPointsBetween <= 1)
             {
                 throw new ArgumentException("numPointsBetween must be larger than 1!");
             }
@@ -686,7 +682,7 @@ namespace GMapEnhanced
         /// <returns>Distabnce in RADIANS</returns>
         public static double GetDistanceInRadians(double lat1, double lon1, double lat2, double lon2)
         {
-            double d = 2d * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat1 - lat2) / 2d), 2d) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Pow(Math.Sin((lon1 - lon2)/2d), 2d)));
+            double d = 2d * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat1 - lat2) / 2d), 2d) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Pow(Math.Sin((lon1 - lon2) / 2d), 2d)));
             return d;
         }
 
@@ -710,6 +706,58 @@ namespace GMapEnhanced
         public static double GetDistanceInMeter(PointLatLng p1, PointLatLng p2)
         {
             return GMapProviders.EmptyProvider.Projection.GetDistance(p1, p2) * 1000d;
+        }
+
+        private static double SignedPolygonArea(List<PointLatLng> points)
+        {
+            // Add the first point to the end.
+            int num_points = points.Count;
+            PointLatLng[] pts = new PointLatLng[num_points + 1];
+            points.CopyTo(pts, 0);
+            pts[num_points] = points[0];
+
+            for (int i = 0; i < num_points + 1; ++i)
+            {
+                pts[i].Lat = pts[i].Lat * (System.Math.PI * 6378137 / 180);
+                pts[i].Lng = pts[i].Lng * (System.Math.PI * 6378137 / 180);
+            }
+
+            // Get the areas.
+            double area = 0;
+            for (int i = 0; i < num_points; i++)
+            {
+                area += (pts[i + 1].Lat - pts[i].Lat) * (pts[i + 1].Lng + pts[i].Lng) / 2;
+            }
+
+            // Return the result.
+            return area;
+        }
+
+        /// <summary>
+        /// Get the area of a polygon
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static double GetPolygonArea(List<PointLatLng> points)
+        {
+            // Return the absolute value of the signed area.
+            // The signed area is negative if the polygon is
+            // oriented clockwise.
+            return Math.Abs(SignedPolygonArea(points));
+        }
+
+        /// <summary>
+        /// Get the area of a circle
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="edgePoint"></param>
+        /// <returns></returns>
+        public static double GetCircleArea(PointLatLng center, PointLatLng edgePoint)
+        {
+            double radius = GetDistanceInMeter(center, edgePoint);
+            double aera = System.Math.PI * radius * radius;
+
+            return aera;
         }
 
         /// <summary>

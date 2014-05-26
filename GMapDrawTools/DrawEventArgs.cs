@@ -6,7 +6,7 @@ using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace GMapTools
+namespace GMapDrawTools
 {
     public class DrawEventArgs : EventArgs
     {
@@ -16,6 +16,8 @@ namespace GMapTools
 
         public GMapDrawingCircle Circle { get; set; }
 
+        public GMapRoute Route { set; get; }
+
         public DrawEventArgs()
         {
             
@@ -24,10 +26,19 @@ namespace GMapTools
         public DrawEventArgs(DrawingMode drawingMode, List<PointLatLng> drawingPoints)
         {
             DrawingMode = drawingMode;
-            Polygon = new GMapPolygon(drawingPoints, drawingMode.ToString());
-            Polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-            Polygon.Stroke = new Pen(Color.Blue, 2);
-            Polygon.IsHitTestVisible = true;
+            if (drawingMode == DrawingMode.Polygon || drawingMode == DrawingMode.Rectangle)
+            {
+                Polygon = new GMapPolygon(drawingPoints, drawingMode.ToString());
+                Polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
+                Polygon.Stroke = new Pen(Color.Blue, 2);
+                Polygon.IsHitTestVisible = true;
+            }
+            else if (drawingMode == DrawingMode.Route)
+            {
+                Route = new GMapRoute(drawingPoints, drawingMode.ToString());
+                Route.Stroke = new Pen(Color.Blue, 2);
+                Route.IsHitTestVisible = true;
+            }
         }
 
         public DrawEventArgs(DrawingMode drawingMode, PointLatLng centerPoint, PointLatLng edgePoint)

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</ProjectGuid>
+    <ProjectGuid>{60A086BD-A4D9-459C-8622-4794D1728F08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapTools</RootNamespace>
-    <AssemblyName>GMapTools</AssemblyName>
+    <RootNamespace>GMapUtility</RootNamespace>
+    <AssemblyName>GMapUtility</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,18 +40,16 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Draw.cs" />
-    <Compile Include="DrawEventArgs.cs" />
-    <Compile Include="DrawingMode.cs" />
-    <Compile Include="GMapDrawingCircle.cs" />
+    <Compile Include="GMapUtils.cs" />
+    <Compile Include="PolygonUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

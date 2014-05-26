@@ -4,7 +4,7 @@ using System.Drawing;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace GMapTools
+namespace GMapDrawTools
 {
     public class Draw
     {
@@ -12,6 +12,7 @@ namespace GMapTools
         private List<PointLatLng> drawingPoints = new List<PointLatLng>(); //多边形的点集
         private GMapPolygon drawingPolygon = null; //正在画的polygon
         private GMapDrawingCircle drawingCircle = null; //正在画的circle
+        private GMapRoute drawingRoute = null; //正在画的route
         private bool isLeftButtonDown = false;
 
         public GMapControl MapControl
@@ -103,6 +104,7 @@ namespace GMapTools
         {
             tempPolygonsOverlay.Polygons.Clear();
             tempPolygonsOverlay.Markers.Clear();
+            tempPolygonsOverlay.Routes.Clear();
 
             if (drawingPolygon != null)
             {
@@ -116,6 +118,11 @@ namespace GMapTools
                 drawingCircle.Dispose();
                 drawingCircle = null;
             }
+            if (drawingRoute != null)
+            {
+                drawingRoute.Dispose();
+                drawingRoute = null;
+            }
             drawingMode = DrawingMode.None;
         }
 
@@ -127,6 +134,18 @@ namespace GMapTools
                 //Remove the duplicated last point
                 List<PointLatLng> drawPoints = new List<PointLatLng>();
                 drawPoints.AddRange(drawingPoints.GetRange(0, drawingPoints.Count-1));
+                DrawEventArgs args = new DrawEventArgs(drawingMode, drawPoints);
+                OnDrawComplete(args);
+
+                ClearTempDrawing();
+            }
+
+            if (drawingMode == DrawingMode.Route && drawingRoute != null)
+            {
+                //Double click to complete drawing polygon 
+                //Remove the duplicated last point
+                List<PointLatLng> drawPoints = new List<PointLatLng>();
+                drawPoints.AddRange(drawingPoints.GetRange(0, drawingPoints.Count - 1));
                 DrawEventArgs args = new DrawEventArgs(drawingMode, drawPoints);
                 OnDrawComplete(args);
 
@@ -228,6 +247,26 @@ namespace GMapTools
                         drawingPolygon.Points.Clear();
                         drawingPolygon.Points.AddRange(drawingPoints);
                         MapControl.UpdatePolygonLocalPosition(drawingPolygon);
+                        MapControl.Refresh();
+                    }
+                }
+
+                if (drawingMode == DrawingMode.Route)
+                {
+                    drawingPoints.Add(MapControl.FromLocalToLatLng(e.X, e.Y));
+                    if (drawingRoute == null)
+                    {
+                        drawingRoute = new GMapRoute(drawingPoints, "Route");
+                        drawingRoute.Stroke = new Pen(Color.Blue, 2);
+                        drawingRoute.IsHitTestVisible = false;
+                        tempPolygonsOverlay.Routes.Add(drawingRoute);
+                        MapControl.Refresh();
+                    }
+                    else
+                    {
+                        drawingRoute.Points.Clear();
+                        drawingRoute.Points.AddRange(drawingPoints);
+                        MapControl.UpdateRouteLocalPosition(drawingRoute);
                         MapControl.Refresh();
                     }
                 }

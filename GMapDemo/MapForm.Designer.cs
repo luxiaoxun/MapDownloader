@@ -33,6 +33,7 @@
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTools = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -51,6 +52,7 @@
             this.panelMap = new System.Windows.Forms.Panel();
             this.comboBoxRegion = new System.Windows.Forms.ComboBox();
             this.buttonMapType = new System.Windows.Forms.Button();
+            this.mapControl = new GMapWinFormDemo.MapControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.地图操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +63,6 @@
             this.保存为图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.保存缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.读取缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapControl = new GMapWinFormDemo.MapControl();
             this.contextMenuStrip1.SuspendLayout();
             this.panelTools.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -99,20 +100,31 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button5);
             this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.button2);
             this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Location = new System.Drawing.Point(8, 259);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(144, 94);
+            this.groupBox3.Size = new System.Drawing.Size(144, 121);
             this.groupBox3.TabIndex = 25;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Drawing";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(73, 50);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(67, 23);
+            this.button5.TabIndex = 4;
+            this.button5.Text = "Polyline";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(74, 50);
+            this.button4.Location = new System.Drawing.Point(3, 79);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(67, 23);
             this.button4.TabIndex = 3;
@@ -291,6 +303,32 @@
             this.buttonMapType.UseVisualStyleBackColor = true;
             this.buttonMapType.Click += new System.EventHandler(this.buttonMapType_Click);
             // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 24);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(592, 493);
+            this.mapControl.TabIndex = 1;
+            this.mapControl.Zoom = 0D;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
@@ -373,32 +411,6 @@
             this.读取缓存ToolStripMenuItem.Text = "读取缓存";
             this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
             // 
-            // mapControl
-            // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 24);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(592, 493);
-            this.mapControl.TabIndex = 1;
-            this.mapControl.Zoom = 0D;
-            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -458,6 +470,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }
 

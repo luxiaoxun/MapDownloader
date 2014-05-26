@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
-using System.Drawing;
 
-namespace GMapWinFormDemo
+namespace GMapUtility
 {
-    public static class CirclePolygon
+    public static class PolygonUtils
     {
-        public static GMapPolygon CreateCircle(PointLatLng center, double radius, string name="")
+        public static GMapPolygon CreateCircle(PointLatLng center, double radius, string name = "")
         {
             List<PointLatLng> pList = new List<PointLatLng>();
             int segments = 100000;

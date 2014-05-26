@@ -13,7 +13,7 @@ using GMap.NET.WindowsForms.Markers;
 using GMapMarkerLib;
 using GMapProvidersExt;
 using GMapChinaRegion;
-using GMapTools;
+using GMapDrawTools;
 
 namespace GMapWinFormDemo
 {
@@ -95,25 +95,22 @@ namespace GMapWinFormDemo
 
         void draw_DrawComplete(object sender, DrawEventArgs e)
         {
-            if (e != null && (e.Polygon != null || e.Circle != null))
+            if (e != null && (e.Polygon != null || e.Circle != null || e.Route!=null))
             {
                 switch (e.DrawingMode)
                 {
                     case DrawingMode.Polygon:
-                        {
-                            polygonsOverlay.Polygons.Add(e.Polygon);
-                            break;
-                        }
+                        polygonsOverlay.Polygons.Add(e.Polygon);
+                        break;
                     case DrawingMode.Rectangle:
-                        {
-                            polygonsOverlay.Polygons.Add(e.Polygon);
-                            break;
-                        }
+                        polygonsOverlay.Polygons.Add(e.Polygon);
+                        break;
                     case DrawingMode.Circle:
-                        {
-                            polygonsOverlay.Markers.Add(e.Circle);
-                            break;
-                        }
+                        polygonsOverlay.Markers.Add(e.Circle);
+                        break;
+                    case DrawingMode.Route:
+                        polygonsOverlay.Routes.Add(e.Route);
+                        break;
                     default:
                         draw.IsEnable = false;
                         break;
@@ -586,7 +583,14 @@ namespace GMapWinFormDemo
             {
                 polygonsOverlay.Polygons.Clear();
                 polygonsOverlay.Markers.Clear();
+                polygonsOverlay.Routes.Clear();
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            draw.DrawingMode = DrawingMode.Route;
+            draw.IsEnable = true;
         }
     }
 }
