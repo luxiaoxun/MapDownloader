@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{01B49280-D6F4-467C-8337-CEA9824F36CE}</ProjectGuid>
+    <ProjectGuid>{ED39E8DA-A8F3-4906-BA24-90D09D0AF7CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapChinaRegion</RootNamespace>
-    <AssemblyName>GMapChinaRegion</AssemblyName>
+    <RootNamespace>GMapTools</RootNamespace>
+    <AssemblyName>GMapTools</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,16 +48,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChinaMapRegion.cs" />
-    <Compile Include="ChinaRegion.cs" />
-    <Compile Include="MapRegion.cs" />
+    <Compile Include="DrawDeleteMarker.cs" />
+    <Compile Include="DrawDeleteMarkerToolTip.cs" />
+    <Compile Include="DrawDistance.cs" />
+    <Compile Include="DrawDistanceEventArgs.cs" />
+    <Compile Include="DrawDistanceMarker.cs" />
+    <Compile Include="DrawDistanceMarkerToolTip.cs" />
+    <Compile Include="GMapHelper.cs" />
+    <Compile Include="LineMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TempLineMarker.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
-      <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
-      <Name>NetUtilityLib</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

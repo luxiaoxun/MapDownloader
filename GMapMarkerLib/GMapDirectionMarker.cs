@@ -8,13 +8,13 @@ using GMap.NET.WindowsForms;
 
 namespace GMapMarkerLib
 {
-    public class GMapMarkerDirection : GMapMarker
+    public class GMapDirectionMarker : GMapMarker
     {
         private float angle;
 
         private Image image;
 
-        public GMapMarkerDirection(PointLatLng p, Image image, float angle)
+        public GMapDirectionMarker(PointLatLng p, Image image, float angle)
             : base(p)
         {
             this.angle = angle;

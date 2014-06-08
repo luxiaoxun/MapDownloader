@@ -31,17 +31,17 @@
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelTools = new System.Windows.Forms.Panel();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonPolyline = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonPolygon = new System.Windows.Forms.Button();
+            this.buttonRectangle = new System.Windows.Forms.Button();
+            this.buttonCircle = new System.Windows.Forms.Button();
             this.buttonBeginBlink = new System.Windows.Forms.Button();
             this.buttonStopBlink = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panelMenu = new BSE.Windows.Forms.Panel();
+            this.splitter1 = new BSE.Windows.Forms.Splitter();
+            this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
+            this.xPanderPanelRoute = new BSE.Windows.Forms.XPanderPanel();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,11 +49,12 @@
             this.buttonSetStart = new System.Windows.Forms.Button();
             this.buttonFindRoute = new System.Windows.Forms.Button();
             this.buttonSetEnd = new System.Windows.Forms.Button();
-            this.panelMap = new System.Windows.Forms.Panel();
-            this.comboBoxRegion = new System.Windows.Forms.ComboBox();
-            this.buttonMapType = new System.Windows.Forms.Button();
-            this.mapControl = new GMapWinFormDemo.MapControl();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.xPanderPanelMarker = new BSE.Windows.Forms.XPanderPanel();
+            this.xPanderPanelDraw = new BSE.Windows.Forms.XPanderPanel();
+            this.buttonDistance = new System.Windows.Forms.Button();
+            this.xPanderPanelChinaRegion = new BSE.Windows.Forms.XPanderPanel();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.地图操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.高德地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,13 +64,20 @@
             this.保存为图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.保存缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.读取缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.panelMap = new System.Windows.Forms.Panel();
+            this.buttonMapType = new System.Windows.Forms.Button();
+            this.mapControl = new GMapWinFormDemo.MapControl();
+            this.comboBoxRegion = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1.SuspendLayout();
-            this.panelTools.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.panelMap.SuspendLayout();
+            this.panelMenu.SuspendLayout();
+            this.xPanderPanelList1.SuspendLayout();
+            this.xPanderPanelRoute.SuspendLayout();
+            this.xPanderPanelMarker.SuspendLayout();
+            this.xPanderPanelDraw.SuspendLayout();
+            this.xPanderPanelChinaRegion.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panelMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -86,96 +94,59 @@
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
-            // panelTools
+            // buttonPolyline
             // 
-            this.panelTools.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.panelTools.Controls.Add(this.groupBox3);
-            this.panelTools.Controls.Add(this.groupBox2);
-            this.panelTools.Controls.Add(this.groupBox1);
-            this.panelTools.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelTools.Location = new System.Drawing.Point(592, 0);
-            this.panelTools.Name = "panelTools";
-            this.panelTools.Size = new System.Drawing.Size(158, 517);
-            this.panelTools.TabIndex = 14;
+            this.buttonPolyline.Location = new System.Drawing.Point(95, 93);
+            this.buttonPolyline.Name = "buttonPolyline";
+            this.buttonPolyline.Size = new System.Drawing.Size(67, 23);
+            this.buttonPolyline.TabIndex = 4;
+            this.buttonPolyline.Text = "Polyline";
+            this.buttonPolyline.UseVisualStyleBackColor = true;
+            this.buttonPolyline.Click += new System.EventHandler(this.buttonPolyline_Click);
             // 
-            // groupBox3
+            // buttonClear
             // 
-            this.groupBox3.Controls.Add(this.button5);
-            this.groupBox3.Controls.Add(this.button4);
-            this.groupBox3.Controls.Add(this.button3);
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Location = new System.Drawing.Point(8, 259);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(144, 121);
-            this.groupBox3.TabIndex = 25;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Drawing";
+            this.buttonClear.Location = new System.Drawing.Point(9, 138);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(67, 23);
+            this.buttonClear.TabIndex = 3;
+            this.buttonClear.Text = "Clear";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
-            // button5
+            // buttonPolygon
             // 
-            this.button5.Location = new System.Drawing.Point(73, 50);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(67, 23);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Polyline";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.buttonPolygon.Location = new System.Drawing.Point(9, 93);
+            this.buttonPolygon.Name = "buttonPolygon";
+            this.buttonPolygon.Size = new System.Drawing.Size(67, 23);
+            this.buttonPolygon.TabIndex = 2;
+            this.buttonPolygon.Text = "Polygon";
+            this.buttonPolygon.UseVisualStyleBackColor = true;
+            this.buttonPolygon.Click += new System.EventHandler(this.buttonPolygon_Click);
             // 
-            // button4
+            // buttonRectangle
             // 
-            this.button4.Location = new System.Drawing.Point(3, 79);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(67, 23);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Clear";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.buttonRectangle.Location = new System.Drawing.Point(95, 50);
+            this.buttonRectangle.Name = "buttonRectangle";
+            this.buttonRectangle.Size = new System.Drawing.Size(67, 23);
+            this.buttonRectangle.TabIndex = 1;
+            this.buttonRectangle.Text = "Rectangle";
+            this.buttonRectangle.UseVisualStyleBackColor = true;
+            this.buttonRectangle.Click += new System.EventHandler(this.buttonRectangle_Click);
             // 
-            // button3
+            // buttonCircle
             // 
-            this.button3.Location = new System.Drawing.Point(3, 50);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(67, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Polygon";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(73, 21);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(67, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Rectangle";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(3, 21);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(67, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Circle";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.buttonBeginBlink);
-            this.groupBox2.Controls.Add(this.buttonStopBlink);
-            this.groupBox2.Location = new System.Drawing.Point(6, 164);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(148, 79);
-            this.groupBox2.TabIndex = 24;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Marker";
+            this.buttonCircle.Location = new System.Drawing.Point(9, 49);
+            this.buttonCircle.Name = "buttonCircle";
+            this.buttonCircle.Size = new System.Drawing.Size(67, 23);
+            this.buttonCircle.TabIndex = 0;
+            this.buttonCircle.Text = "Circle";
+            this.buttonCircle.UseVisualStyleBackColor = true;
+            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
             // 
             // buttonBeginBlink
             // 
-            this.buttonBeginBlink.Location = new System.Drawing.Point(6, 20);
+            this.buttonBeginBlink.Location = new System.Drawing.Point(26, 45);
             this.buttonBeginBlink.Name = "buttonBeginBlink";
             this.buttonBeginBlink.Size = new System.Drawing.Size(87, 23);
             this.buttonBeginBlink.TabIndex = 20;
@@ -185,7 +156,7 @@
             // 
             // buttonStopBlink
             // 
-            this.buttonStopBlink.Location = new System.Drawing.Point(6, 49);
+            this.buttonStopBlink.Location = new System.Drawing.Point(26, 89);
             this.buttonStopBlink.Name = "buttonStopBlink";
             this.buttonStopBlink.Size = new System.Drawing.Size(87, 23);
             this.buttonStopBlink.TabIndex = 21;
@@ -193,35 +164,123 @@
             this.buttonStopBlink.UseVisualStyleBackColor = true;
             this.buttonStopBlink.Click += new System.EventHandler(this.buttonStopBlink_Click);
             // 
-            // groupBox1
+            // panelMenu
             // 
-            this.groupBox1.Controls.Add(this.textBoxSearch);
-            this.groupBox1.Controls.Add(this.buttonSearch);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBoxSearchResult);
-            this.groupBox1.Controls.Add(this.buttonSetStart);
-            this.groupBox1.Controls.Add(this.buttonFindRoute);
-            this.groupBox1.Controls.Add(this.buttonSetEnd);
-            this.groupBox1.Location = new System.Drawing.Point(4, 5);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(151, 151);
-            this.groupBox1.TabIndex = 23;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Route";
+            this.panelMenu.AssociatedSplitter = this.splitter1;
+            this.panelMenu.BackColor = System.Drawing.Color.Transparent;
+            this.panelMenu.CaptionFont = new System.Drawing.Font("Segoe UI", 11.75F, System.Drawing.FontStyle.Bold);
+            this.panelMenu.CaptionHeight = 27;
+            this.panelMenu.Controls.Add(this.xPanderPanelList1);
+            this.panelMenu.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.panelMenu.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.panelMenu.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.panelMenu.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.panelMenu.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.panelMenu.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.panelMenu.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.panelMenu.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.panelMenu.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.panelMenu.CustomColors.CollapsedCaptionText = System.Drawing.SystemColors.ControlText;
+            this.panelMenu.CustomColors.ContentGradientBegin = System.Drawing.SystemColors.ButtonFace;
+            this.panelMenu.CustomColors.ContentGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.panelMenu.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.panelMenu.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelMenu.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.panelMenu.Image = null;
+            this.panelMenu.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            this.panelMenu.Location = new System.Drawing.Point(0, 24);
+            this.panelMenu.MinimumSize = new System.Drawing.Size(27, 27);
+            this.panelMenu.Name = "panelMenu";
+            this.panelMenu.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.panelMenu.ShowExpandIcon = true;
+            this.panelMenu.Size = new System.Drawing.Size(172, 493);
+            this.panelMenu.TabIndex = 16;
+            this.panelMenu.Text = "Menu";
+            this.panelMenu.ToolTipTextCloseIcon = null;
+            this.panelMenu.ToolTipTextExpandIconPanelCollapsed = null;
+            this.panelMenu.ToolTipTextExpandIconPanelExpanded = null;
+            // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.Transparent;
+            this.splitter1.Location = new System.Drawing.Point(172, 24);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 493);
+            this.splitter1.TabIndex = 17;
+            this.splitter1.TabStop = false;
+            // 
+            // xPanderPanelList1
+            // 
+            this.xPanderPanelList1.CaptionStyle = BSE.Windows.Forms.CaptionStyle.Normal;
+            this.xPanderPanelList1.Controls.Add(this.xPanderPanelRoute);
+            this.xPanderPanelList1.Controls.Add(this.xPanderPanelMarker);
+            this.xPanderPanelList1.Controls.Add(this.xPanderPanelDraw);
+            this.xPanderPanelList1.Controls.Add(this.xPanderPanelChinaRegion);
+            this.xPanderPanelList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xPanderPanelList1.GradientBackground = System.Drawing.Color.Empty;
+            this.xPanderPanelList1.Location = new System.Drawing.Point(0, 28);
+            this.xPanderPanelList1.Name = "xPanderPanelList1";
+            this.xPanderPanelList1.PanelColors = null;
+            this.xPanderPanelList1.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelList1.Size = new System.Drawing.Size(172, 464);
+            this.xPanderPanelList1.TabIndex = 0;
+            this.xPanderPanelList1.Text = "xPanderPanelList1";
+            // 
+            // xPanderPanelRoute
+            // 
+            this.xPanderPanelRoute.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelRoute.Controls.Add(this.textBoxSearch);
+            this.xPanderPanelRoute.Controls.Add(this.buttonSearch);
+            this.xPanderPanelRoute.Controls.Add(this.label1);
+            this.xPanderPanelRoute.Controls.Add(this.comboBoxSearchResult);
+            this.xPanderPanelRoute.Controls.Add(this.buttonSetStart);
+            this.xPanderPanelRoute.Controls.Add(this.buttonFindRoute);
+            this.xPanderPanelRoute.Controls.Add(this.buttonSetEnd);
+            this.xPanderPanelRoute.CustomColors.BackColor = System.Drawing.SystemColors.Control;
+            this.xPanderPanelRoute.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.xPanderPanelRoute.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
+            this.xPanderPanelRoute.CustomColors.CaptionCheckedGradientEnd = System.Drawing.Color.Empty;
+            this.xPanderPanelRoute.CustomColors.CaptionCheckedGradientMiddle = System.Drawing.Color.Empty;
+            this.xPanderPanelRoute.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelRoute.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelRoute.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelRoute.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.xPanderPanelRoute.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelRoute.CustomColors.CaptionPressedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionPressedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionPressedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionSelectedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelRoute.CustomColors.CaptionSelectedText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelRoute.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelRoute.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelRoute.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelRoute.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelRoute.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelRoute.Image = null;
+            this.xPanderPanelRoute.Name = "xPanderPanelRoute";
+            this.xPanderPanelRoute.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelRoute.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelRoute.TabIndex = 0;
+            this.xPanderPanelRoute.Text = "Route";
+            this.xPanderPanelRoute.ToolTipTextCloseIcon = null;
+            this.xPanderPanelRoute.ToolTipTextExpandIconPanelCollapsed = null;
+            this.xPanderPanelRoute.ToolTipTextExpandIconPanelExpanded = null;
             // 
             // textBoxSearch
             // 
-            this.textBoxSearch.Location = new System.Drawing.Point(6, 20);
+            this.textBoxSearch.Location = new System.Drawing.Point(10, 30);
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(85, 21);
-            this.textBoxSearch.TabIndex = 12;
+            this.textBoxSearch.TabIndex = 19;
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(97, 18);
+            this.buttonSearch.Location = new System.Drawing.Point(101, 28);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(52, 23);
-            this.buttonSearch.TabIndex = 13;
+            this.buttonSearch.TabIndex = 20;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
@@ -229,117 +288,193 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 48);
+            this.label1.Location = new System.Drawing.Point(10, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 12);
-            this.label1.TabIndex = 17;
+            this.label1.TabIndex = 24;
             this.label1.Text = "Search Result:";
             // 
             // comboBoxSearchResult
             // 
             this.comboBoxSearchResult.FormattingEnabled = true;
-            this.comboBoxSearchResult.Location = new System.Drawing.Point(5, 63);
+            this.comboBoxSearchResult.Location = new System.Drawing.Point(9, 73);
             this.comboBoxSearchResult.Name = "comboBoxSearchResult";
             this.comboBoxSearchResult.Size = new System.Drawing.Size(127, 20);
-            this.comboBoxSearchResult.TabIndex = 14;
-            this.comboBoxSearchResult.SelectedIndexChanged += new System.EventHandler(this.comboBoxSearchResult_SelectedIndexChanged);
+            this.comboBoxSearchResult.TabIndex = 21;
+            this.comboBoxSearchResult.SelectedValueChanged += new System.EventHandler(this.comboBoxSearchResult_SelectedIndexChanged);
             // 
             // buttonSetStart
             // 
-            this.buttonSetStart.Location = new System.Drawing.Point(3, 90);
+            this.buttonSetStart.Location = new System.Drawing.Point(7, 100);
             this.buttonSetStart.Name = "buttonSetStart";
             this.buttonSetStart.Size = new System.Drawing.Size(68, 23);
-            this.buttonSetStart.TabIndex = 15;
+            this.buttonSetStart.TabIndex = 22;
             this.buttonSetStart.Text = "Set Start";
             this.buttonSetStart.UseVisualStyleBackColor = true;
             this.buttonSetStart.Click += new System.EventHandler(this.buttonSetStart_Click);
             // 
             // buttonFindRoute
             // 
-            this.buttonFindRoute.Location = new System.Drawing.Point(3, 119);
+            this.buttonFindRoute.Location = new System.Drawing.Point(7, 129);
             this.buttonFindRoute.Name = "buttonFindRoute";
             this.buttonFindRoute.Size = new System.Drawing.Size(75, 23);
-            this.buttonFindRoute.TabIndex = 18;
+            this.buttonFindRoute.TabIndex = 25;
             this.buttonFindRoute.Text = "Find Route";
             this.buttonFindRoute.UseVisualStyleBackColor = true;
             this.buttonFindRoute.Click += new System.EventHandler(this.buttonFindRoute_Click);
             // 
             // buttonSetEnd
             // 
-            this.buttonSetEnd.Location = new System.Drawing.Point(78, 90);
+            this.buttonSetEnd.Location = new System.Drawing.Point(82, 100);
             this.buttonSetEnd.Name = "buttonSetEnd";
             this.buttonSetEnd.Size = new System.Drawing.Size(68, 23);
-            this.buttonSetEnd.TabIndex = 16;
+            this.buttonSetEnd.TabIndex = 23;
             this.buttonSetEnd.Text = "Set End";
             this.buttonSetEnd.UseVisualStyleBackColor = true;
             this.buttonSetEnd.Click += new System.EventHandler(this.buttonSetEnd_Click);
             // 
-            // panelMap
+            // xPanderPanelMarker
             // 
-            this.panelMap.Controls.Add(this.comboBoxRegion);
-            this.panelMap.Controls.Add(this.buttonMapType);
-            this.panelMap.Controls.Add(this.mapControl);
-            this.panelMap.Controls.Add(this.menuStrip1);
-            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(0, 0);
-            this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(592, 517);
-            this.panelMap.TabIndex = 15;
+            this.xPanderPanelMarker.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelMarker.Controls.Add(this.buttonStopBlink);
+            this.xPanderPanelMarker.Controls.Add(this.buttonBeginBlink);
+            this.xPanderPanelMarker.CustomColors.BackColor = System.Drawing.SystemColors.Control;
+            this.xPanderPanelMarker.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.xPanderPanelMarker.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
+            this.xPanderPanelMarker.CustomColors.CaptionCheckedGradientEnd = System.Drawing.Color.Empty;
+            this.xPanderPanelMarker.CustomColors.CaptionCheckedGradientMiddle = System.Drawing.Color.Empty;
+            this.xPanderPanelMarker.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMarker.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMarker.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelMarker.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.xPanderPanelMarker.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelMarker.CustomColors.CaptionPressedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionPressedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionPressedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionSelectedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMarker.CustomColors.CaptionSelectedText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMarker.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMarker.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelMarker.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelMarker.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelMarker.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMarker.Image = null;
+            this.xPanderPanelMarker.Name = "xPanderPanelMarker";
+            this.xPanderPanelMarker.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelMarker.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelMarker.TabIndex = 1;
+            this.xPanderPanelMarker.Text = "Marker";
+            this.xPanderPanelMarker.ToolTipTextCloseIcon = null;
+            this.xPanderPanelMarker.ToolTipTextExpandIconPanelCollapsed = null;
+            this.xPanderPanelMarker.ToolTipTextExpandIconPanelExpanded = null;
             // 
-            // comboBoxRegion
+            // xPanderPanelDraw
             // 
-            this.comboBoxRegion.FormattingEnabled = true;
-            this.comboBoxRegion.Location = new System.Drawing.Point(516, 1);
-            this.comboBoxRegion.Name = "comboBoxRegion";
-            this.comboBoxRegion.Size = new System.Drawing.Size(65, 20);
-            this.comboBoxRegion.TabIndex = 4;
+            this.xPanderPanelDraw.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelDraw.Controls.Add(this.buttonDistance);
+            this.xPanderPanelDraw.Controls.Add(this.buttonClear);
+            this.xPanderPanelDraw.Controls.Add(this.buttonPolyline);
+            this.xPanderPanelDraw.Controls.Add(this.buttonCircle);
+            this.xPanderPanelDraw.Controls.Add(this.buttonRectangle);
+            this.xPanderPanelDraw.Controls.Add(this.buttonPolygon);
+            this.xPanderPanelDraw.CustomColors.BackColor = System.Drawing.SystemColors.Control;
+            this.xPanderPanelDraw.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.xPanderPanelDraw.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
+            this.xPanderPanelDraw.CustomColors.CaptionCheckedGradientEnd = System.Drawing.Color.Empty;
+            this.xPanderPanelDraw.CustomColors.CaptionCheckedGradientMiddle = System.Drawing.Color.Empty;
+            this.xPanderPanelDraw.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelDraw.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelDraw.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelDraw.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.xPanderPanelDraw.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelDraw.CustomColors.CaptionPressedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionPressedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionPressedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionSelectedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelDraw.CustomColors.CaptionSelectedText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelDraw.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelDraw.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelDraw.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelDraw.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelDraw.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelDraw.Image = null;
+            this.xPanderPanelDraw.Name = "xPanderPanelDraw";
+            this.xPanderPanelDraw.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelDraw.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelDraw.TabIndex = 2;
+            this.xPanderPanelDraw.Text = "Draw Tools";
+            this.xPanderPanelDraw.ToolTipTextCloseIcon = null;
+            this.xPanderPanelDraw.ToolTipTextExpandIconPanelCollapsed = null;
+            this.xPanderPanelDraw.ToolTipTextExpandIconPanelExpanded = null;
             // 
-            // buttonMapType
+            // buttonDistance
             // 
-            this.buttonMapType.Location = new System.Drawing.Point(521, 32);
-            this.buttonMapType.Name = "buttonMapType";
-            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
-            this.buttonMapType.TabIndex = 3;
-            this.buttonMapType.UseVisualStyleBackColor = true;
-            this.buttonMapType.Click += new System.EventHandler(this.buttonMapType_Click);
+            this.buttonDistance.Location = new System.Drawing.Point(10, 190);
+            this.buttonDistance.Name = "buttonDistance";
+            this.buttonDistance.Size = new System.Drawing.Size(66, 23);
+            this.buttonDistance.TabIndex = 4;
+            this.buttonDistance.Text = "Distance";
+            this.buttonDistance.UseVisualStyleBackColor = true;
+            this.buttonDistance.Click += new System.EventHandler(this.buttonDistance_Click);
             // 
-            // mapControl
+            // xPanderPanelChinaRegion
             // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 24);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(592, 493);
-            this.mapControl.TabIndex = 1;
-            this.mapControl.Zoom = 0D;
+            this.xPanderPanelChinaRegion.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelChinaRegion.Controls.Add(this.treeView1);
+            this.xPanderPanelChinaRegion.CustomColors.BackColor = System.Drawing.SystemColors.Control;
+            this.xPanderPanelChinaRegion.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionCheckedGradientEnd = System.Drawing.Color.Empty;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionCheckedGradientMiddle = System.Drawing.Color.Empty;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionPressedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionPressedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionPressedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionSelectedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelChinaRegion.CustomColors.CaptionSelectedText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelChinaRegion.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelChinaRegion.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelChinaRegion.Expand = true;
+            this.xPanderPanelChinaRegion.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelChinaRegion.Image = null;
+            this.xPanderPanelChinaRegion.Name = "xPanderPanelChinaRegion";
+            this.xPanderPanelChinaRegion.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(172, 389);
+            this.xPanderPanelChinaRegion.TabIndex = 3;
+            this.xPanderPanelChinaRegion.Text = "China Region";
+            this.xPanderPanelChinaRegion.ToolTipTextCloseIcon = null;
+            this.xPanderPanelChinaRegion.ToolTipTextExpandIconPanelCollapsed = null;
+            this.xPanderPanelChinaRegion.ToolTipTextExpandIconPanelExpanded = null;
             // 
-            // menuStrip1
+            // treeView1
             // 
-            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.地图操作ToolStripMenuItem,
-            this.地图操作ToolStripMenuItem1});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(592, 24);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.Location = new System.Drawing.Point(1, 25);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(170, 364);
+            this.treeView1.TabIndex = 0;
+            // 
+            // miniToolStrip
+            // 
+            this.miniToolStrip.AutoSize = false;
+            this.miniToolStrip.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.miniToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.miniToolStrip.Location = new System.Drawing.Point(140, 2);
+            this.miniToolStrip.Name = "miniToolStrip";
+            this.miniToolStrip.Size = new System.Drawing.Size(750, 24);
+            this.miniToolStrip.TabIndex = 2;
             // 
             // 地图操作ToolStripMenuItem
             // 
@@ -411,27 +546,96 @@
             this.读取缓存ToolStripMenuItem.Text = "读取缓存";
             this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.地图操作ToolStripMenuItem,
+            this.地图操作ToolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(750, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // panelMap
+            // 
+            this.panelMap.Controls.Add(this.buttonMapType);
+            this.panelMap.Controls.Add(this.mapControl);
+            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMap.Location = new System.Drawing.Point(175, 24);
+            this.panelMap.Name = "panelMap";
+            this.panelMap.Size = new System.Drawing.Size(575, 493);
+            this.panelMap.TabIndex = 18;
+            // 
+            // buttonMapType
+            // 
+            this.buttonMapType.Location = new System.Drawing.Point(503, 4);
+            this.buttonMapType.Name = "buttonMapType";
+            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
+            this.buttonMapType.TabIndex = 3;
+            this.buttonMapType.UseVisualStyleBackColor = true;
+            // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(575, 493);
+            this.mapControl.TabIndex = 1;
+            this.mapControl.Zoom = 0D;
+            // 
+            // comboBoxRegion
+            // 
+            this.comboBoxRegion.FormattingEnabled = true;
+            this.comboBoxRegion.Location = new System.Drawing.Point(655, 1);
+            this.comboBoxRegion.Name = "comboBoxRegion";
+            this.comboBoxRegion.Size = new System.Drawing.Size(89, 20);
+            this.comboBoxRegion.TabIndex = 4;
+            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(750, 517);
+            this.Controls.Add(this.comboBoxRegion);
             this.Controls.Add(this.panelMap);
-            this.Controls.Add(this.panelTools);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.panelMenu);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.miniToolStrip;
             this.Name = "MapForm";
             this.Text = "Map Form";
             this.contextMenuStrip1.ResumeLayout(false);
-            this.panelTools.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.panelMap.ResumeLayout(false);
-            this.panelMap.PerformLayout();
+            this.panelMenu.ResumeLayout(false);
+            this.xPanderPanelList1.ResumeLayout(false);
+            this.xPanderPanelRoute.ResumeLayout(false);
+            this.xPanderPanelRoute.PerformLayout();
+            this.xPanderPanelMarker.ResumeLayout(false);
+            this.xPanderPanelDraw.ResumeLayout(false);
+            this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panelMap.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -439,38 +643,44 @@
 
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
-        private System.Windows.Forms.Panel panelTools;
         private System.Windows.Forms.Button buttonStopBlink;
         private System.Windows.Forms.Button buttonBeginBlink;
-        private System.Windows.Forms.Button buttonFindRoute;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonSetEnd;
-        private System.Windows.Forms.Button buttonSetStart;
-        private System.Windows.Forms.ComboBox comboBoxSearchResult;
-        private System.Windows.Forms.Button buttonSearch;
+        private System.Windows.Forms.Button buttonCircle;
+        private System.Windows.Forms.Button buttonRectangle;
+        private System.Windows.Forms.Button buttonPolygon;
+        private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.Button buttonPolyline;
+        private BSE.Windows.Forms.Panel panelMenu;
+        private BSE.Windows.Forms.XPanderPanelList xPanderPanelList1;
+        private BSE.Windows.Forms.XPanderPanel xPanderPanelRoute;
+        private BSE.Windows.Forms.XPanderPanel xPanderPanelMarker;
         private System.Windows.Forms.TextBox textBoxSearch;
-        private System.Windows.Forms.Panel panelMap;
-        private MapControl mapControl;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.Button buttonSearch;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxSearchResult;
+        private System.Windows.Forms.Button buttonSetStart;
+        private System.Windows.Forms.Button buttonFindRoute;
+        private System.Windows.Forms.Button buttonSetEnd;
+        private BSE.Windows.Forms.XPanderPanel xPanderPanelDraw;
+        private System.Windows.Forms.MenuStrip miniToolStrip;
         private System.Windows.Forms.ToolStripMenuItem 地图操作ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 谷歌地图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 高德地图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 腾讯地图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 百度地图ToolStripMenuItem;
-        private System.Windows.Forms.Button buttonMapType;
         private System.Windows.Forms.ToolStripMenuItem 地图操作ToolStripMenuItem1;
-        private System.Windows.Forms.ComboBox comboBoxRegion;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ToolStripMenuItem 保存为图片ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 保存缓存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 读取缓存ToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private BSE.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.Panel panelMap;
+        private System.Windows.Forms.ComboBox comboBoxRegion;
+        private System.Windows.Forms.Button buttonMapType;
+        private MapControl mapControl;
+        private System.Windows.Forms.Button buttonDistance;
+        private BSE.Windows.Forms.XPanderPanel xPanderPanelChinaRegion;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 

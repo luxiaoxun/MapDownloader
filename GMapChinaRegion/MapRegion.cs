@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using GMap.NET;
@@ -75,6 +76,7 @@ namespace GMapChinaRegion
                     }
                 }
                 GMapPolygon polygon = new GMapPolygon(pointList, name);
+                polygon.Fill = new SolidBrush(Color.FromArgb(0, Color.White));
                 return polygon;
             }
             else

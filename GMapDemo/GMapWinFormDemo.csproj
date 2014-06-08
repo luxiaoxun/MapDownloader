@@ -103,6 +103,10 @@
     <None Include="Resources\your_sister.gif" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BSE.Windows.Forms\BSE.Windows.Forms.csproj">
+      <Project>{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}</Project>
+      <Name>BSE.Windows.Forms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapChinaRegion\GMapChinaRegion.csproj">
       <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
       <Name>GMapChinaRegion</Name>
@@ -118,6 +122,14 @@
     <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
       <Name>GMapProvidersExt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapTools\GMapTools.csproj">
+      <Project>{ED39E8DA-A8F3-4906-BA24-90D09D0AF7CD}</Project>
+      <Name>GMapTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
+      <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
+      <Name>NetUtilityLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

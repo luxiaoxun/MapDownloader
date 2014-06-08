@@ -8,23 +8,25 @@ using System.Drawing;
 
 namespace GMapMarkerLib
 {
-    public class GMapMarkerArrow:GMapMarker
+    public class GMapArrowMarker:GMapMarker
     {
         private Pen pen;
 
         private PointLatLng beginPoint;
         private PointLatLng endPoint;
 
-        public GMapMarkerArrow(PointLatLng beginPoint, PointLatLng endPoint):base(beginPoint)
+        public GMapArrowMarker(PointLatLng beginPoint, PointLatLng endPoint, bool isShowArrow):base(beginPoint)
         {
             this.beginPoint = beginPoint;
             this.endPoint = endPoint;
             pen = new Pen(Color.Red);
-            //pen.DashCap = System.Drawing.Drawing2D.DashCap.Flat;
-            //pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            pen.StartCap = System.Drawing.Drawing2D.LineCap.RoundAnchor;
-            pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-            pen.CustomEndCap = new System.Drawing.Drawing2D.AdjustableArrowCap(4, 6, true);
+
+            if (isShowArrow)
+            {
+                pen.StartCap = System.Drawing.Drawing2D.LineCap.RoundAnchor;
+                pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+                pen.CustomEndCap = new System.Drawing.Drawing2D.AdjustableArrowCap(4, 6, true);
+            }
         }
 
         public override void OnRender(Graphics g)

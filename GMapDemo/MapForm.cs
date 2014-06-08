@@ -14,6 +14,9 @@ using GMapMarkerLib;
 using GMapProvidersExt;
 using GMapChinaRegion;
 using GMapDrawTools;
+using GMapTools;
+using Microsoft.SqlServer.Server;
+using NetUtilityLib;
 
 namespace GMapWinFormDemo
 {
@@ -37,6 +40,8 @@ namespace GMapWinFormDemo
         private GMapOverlay regionOverlay = new GMapOverlay("region");
 
         private Draw draw;
+
+        private DrawDistance drawDistance;
 
         public MapForm()
         {
@@ -88,41 +93,20 @@ namespace GMapWinFormDemo
             GMapProvider.Language = LanguageType.ChineseSimplified; //使用的语言，默认是英文
 
             InitUI();
+            InitChinaRegion();
 
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
-        }
 
-        void draw_DrawComplete(object sender, DrawEventArgs e)
-        {
-            if (e != null && (e.Polygon != null || e.Circle != null || e.Route!=null))
-            {
-                switch (e.DrawingMode)
-                {
-                    case DrawingMode.Polygon:
-                        polygonsOverlay.Polygons.Add(e.Polygon);
-                        break;
-                    case DrawingMode.Rectangle:
-                        polygonsOverlay.Polygons.Add(e.Polygon);
-                        break;
-                    case DrawingMode.Circle:
-                        polygonsOverlay.Markers.Add(e.Circle);
-                        break;
-                    case DrawingMode.Route:
-                        polygonsOverlay.Routes.Add(e.Route);
-                        break;
-                    default:
-                        draw.IsEnable = false;
-                        break;
-                }
-            }
-            draw.IsEnable = false;
+            drawDistance = new DrawDistance(this.mapControl);
+            drawDistance.DrawComplete += new EventHandler<DrawDistanceEventArgs>(drawDistance_DrawComplete);
         }
 
         private void InitUI()
         {
             this.谷歌地图ToolStripMenuItem.Enabled = false;
             this.buttonMapType.Image = Properties.Resources.weixing;
+            this.buttonMapType.Click +=new EventHandler(buttonMapType_Click);
 
             mapType = MapType.Common;
             mapProviderType = MapProviderType.google;
@@ -137,32 +121,89 @@ namespace GMapWinFormDemo
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
         }
 
-        void comboBoxRegion_SelectedValueChanged(object sender, EventArgs e)
+        private void InitChinaRegion()
         {
-            try
+            TreeNode rootNode = new TreeNode("中国");
+            this.treeView1.Nodes.Add(rootNode);
+            //Country china = GetCountryDataFromFile(@"F:\GMap\china.xml");
+            string file = System.Windows.Forms.Application.StartupPath+"\\china";
+            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromFile(file);
+            foreach (var provice in china.Province)
             {
-                string selectedName = this.comboBoxRegion.GetItemText(this.comboBoxRegion.SelectedItem);
-                GMapPolygon p = GMapChinaRegion.MapRegion.CreateMapPolygon(selectedName);
-                if (p != null)
+                TreeNode pNode = new TreeNode(provice.name);
+                pNode.Tag = provice;
+                foreach (var city in provice.City)
                 {
-                    regionOverlay.Polygons.Clear();
-                    regionOverlay.Polygons.Add(p);
-                    //RectLatLng rect = new RectLatLng(p.Points[0].Lat,p.Points[0].Lng,Math.Abs(p.Points[p.Points.Count/2].Lng-p.Points[0].Lng),Math.Abs(p.Points[p.Points.Count/2].Lat-p.Points[0].Lat));
-                    RectLatLng rect = GMapChinaRegion.MapRegion.GetRegionMaxRect(p);
-                    this.mapControl.SetZoomToFitRect(rect);
+                    TreeNode cNode = new TreeNode(city.name);
+                    cNode.Tag = city;
+                    foreach (var piecearea in city.Piecearea)
+                    {
+                        TreeNode areaNode = new TreeNode(piecearea.name);
+                        areaNode.Tag = piecearea;
+                        cNode.Nodes.Add(areaNode);
+                    }
+                    pNode.Nodes.Add(cNode);
+                }
+                rootNode.Nodes.Add(pNode);
+            }
+
+            this.treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
+        }
+
+        void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                string name = e.Node.Text;
+                string rings = null;
+                switch (e.Node.Level)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        Province province = e.Node.Tag as Province;
+                        name = province.name;
+                        rings = province.rings;
+                        break;
+                    case 2:
+                        City city = e.Node.Tag as City;
+                        name = city.name;
+                        rings = city.rings;
+                        break;
+                }
+                if (rings != null)
+                {
+                    GMapPolygon polygon = ChinaMapRegion.GetRegionPolygon(name, rings);
+                    if (polygon != null)
+                    {
+                        regionOverlay.Polygons.Clear();
+                        regionOverlay.Polygons.Add(polygon);
+                        RectLatLng rect = GMapChinaRegion.ChinaMapRegion.GetRegionMaxRect(polygon);
+                        this.mapControl.SetZoomToFitRect(rect);
+                    }
                 }
             }
-            catch (Exception ex)
+        }
+
+        void comboBoxRegion_SelectedValueChanged(object sender, EventArgs e)
+        {
+            string selectedName = this.comboBoxRegion.GetItemText(this.comboBoxRegion.SelectedItem);
+            GMapPolygon p = GMapChinaRegion.MapRegion.CreateMapPolygon(selectedName);
+            if (p != null)
             {
-                MessageBox.Show(ex.Message);
+                regionOverlay.Polygons.Clear();
+                regionOverlay.Polygons.Add(p);
+                RectLatLng rect = GMapChinaRegion.MapRegion.GetRegionMaxRect(p);
+                this.mapControl.SetZoomToFitRect(rect);
             }
-            
         }
 
         void panelMap_SizeChanged(object sender, EventArgs e)
         {
-            this.buttonMapType.Location = new Point(this.panelMap.Location.X + panelMap.Width - 65, this.panelMap.Location.Y + this.menuStrip1.Height + 10);
-            this.comboBoxRegion.Location = new Point(this.menuStrip1.Location.X + panelMap.Width - 90, this.menuStrip1.Location.Y );
+            this.buttonMapType.Location = new Point(
+                this.panelMenu.Location.X + panelMap.Width - 80, 
+                this.panelMenu.Location.Y);
+            this.comboBoxRegion.Location = new Point(this.menuStrip1.Location.X + menuStrip1.Width - 100, this.menuStrip1.Location.Y);
         }
 
         void mapControl_OnPolygonLeave(GMapPolygon item)
@@ -214,7 +255,7 @@ namespace GMapWinFormDemo
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
             {
-                if (currentMarker != null && currentMarker is GMapMarkerFlash)
+                if (currentMarker != null && currentMarker is GMapFlashMarker)
                 {
                     PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
                     currentMarker.Position = point;
@@ -253,9 +294,28 @@ namespace GMapWinFormDemo
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 this.contextMenuStrip1.Show(Cursor.Position);
-                if (item is GMapMarkerFlash)
+                if (item is GMapFlashMarker)
                 {
-                    currentMarker = item as GMapMarkerFlash;
+                    currentMarker = item as GMapFlashMarker;
+                }
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                if (item is DrawDeleteMarker)
+                {
+                    currentMarker = item as DrawDeleteMarker;
+
+                    GMapOverlay overlay = currentMarker.Overlay;
+                    if (overlay.Markers.Contains(currentMarker))
+                    {
+                        overlay.Markers.Remove(currentMarker);
+                    }
+
+                    if (this.mapControl.Overlays.Contains(overlay))
+                    {
+                        this.mapControl.Overlays.Remove(overlay);
+                    }
                 }
             }
         }
@@ -285,13 +345,15 @@ namespace GMapWinFormDemo
             }
         }
 
+        #region Marker 操作
+
         private void buttonBeginBlink_Click(object sender, EventArgs e)
         {
             foreach (GMapMarker m in markersOverlay.Markers)
             {
-                if (m is GMapMarkerFlash)
+                if (m is GMapFlashMarker)
                 {
-                    GMapMarkerFlash marker = m as GMapMarkerFlash;
+                    GMapFlashMarker marker = m as GMapFlashMarker;
                     marker.StartFlash();
                 }
             }
@@ -301,13 +363,29 @@ namespace GMapWinFormDemo
         {
             foreach (GMapMarker m in markersOverlay.Markers)
             {
-                if (m is GMapMarkerFlash)
+                if (m is GMapFlashMarker)
                 {
-                    GMapMarkerFlash marker = m as GMapMarkerFlash;
+                    GMapFlashMarker marker = m as GMapFlashMarker;
                     marker.StopFlash();
                 }
             }
         }
+
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentMarker != null)
+            {
+                if (markersOverlay.Markers.Contains(currentMarker))
+                {
+                    markersOverlay.Markers.Remove(currentMarker);
+                    currentMarker.Dispose();
+                }
+            }
+        }
+
+        #endregion
+
+        #region 地址解析与路径查找
 
         private void buttonSearch_Click(object sender, EventArgs e)
         {
@@ -392,17 +470,9 @@ namespace GMapWinFormDemo
             }
         }
 
-        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (currentMarker != null)
-            {
-                if (markersOverlay.Markers.Contains(currentMarker))
-                {
-                    markersOverlay.Markers.Remove(currentMarker);
-                    currentMarker.Dispose();
-                }
-            }
-        }
+        #endregion
+
+        #region 地图选择
 
         private void 谷歌地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -516,6 +586,10 @@ namespace GMapWinFormDemo
             }
         }
 
+        #endregion
+
+        #region 地图操作
+
         private void 保存为图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -559,25 +633,61 @@ namespace GMapWinFormDemo
             this.mapControl.ShowImportDialog();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        #endregion
+
+        #region 画图操作
+
+        void draw_DrawComplete(object sender, DrawEventArgs e)
+        {
+            if (e != null && (e.Polygon != null || e.Circle != null || e.Route != null))
+            {
+                switch (e.DrawingMode)
+                {
+                    case DrawingMode.Polygon:
+                        polygonsOverlay.Polygons.Add(e.Polygon);
+                        break;
+                    case DrawingMode.Rectangle:
+                        polygonsOverlay.Polygons.Add(e.Polygon);
+                        break;
+                    case DrawingMode.Circle:
+                        polygonsOverlay.Markers.Add(e.Circle);
+                        break;
+                    case DrawingMode.Route:
+                        polygonsOverlay.Routes.Add(e.Route);
+                        break;
+                    default:
+                        draw.IsEnable = false;
+                        break;
+                }
+            }
+            draw.IsEnable = false;
+        }
+
+        private void buttonCircle_Click(object sender, EventArgs e)
         {
             draw.DrawingMode = DrawingMode.Circle;
             draw.IsEnable = true;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonRectangle_Click(object sender, EventArgs e)
         {
             draw.DrawingMode = DrawingMode.Rectangle;
             draw.IsEnable = true;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonPolygon_Click(object sender, EventArgs e)
         {
             draw.DrawingMode = DrawingMode.Polygon;
             draw.IsEnable = true;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonPolyline_Click(object sender, EventArgs e)
+        {
+            draw.DrawingMode = DrawingMode.Route;
+            draw.IsEnable = true;
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
         {
             if (polygonsOverlay != null)
             {
@@ -587,10 +697,41 @@ namespace GMapWinFormDemo
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        #endregion
+
+        #region 测距
+
+        void drawDistance_DrawComplete(object sender, DrawDistanceEventArgs e)
         {
-            draw.DrawingMode = DrawingMode.Route;
-            draw.IsEnable = true;
+            if (e != null)
+            {
+                GMapOverlay distanceOverlay = new GMapOverlay();
+                this.mapControl.Overlays.Add(distanceOverlay);
+                foreach (LineMarker line in e.LineMarkers)
+                {
+                    distanceOverlay.Markers.Add(line);
+                }
+                foreach (DrawDistanceMarker marker in e.DistanceMarkers)
+                {
+                    distanceOverlay.Markers.Add(marker);
+                }
+
+                PointLatLng p = new PointLatLng(e.DistanceMarkers[e.DistanceMarkers.Count - 1].Position.Lat, e.DistanceMarkers[e.DistanceMarkers.Count - 1].Position.Lng);
+
+                DrawDeleteMarker deleteMarker = new DrawDeleteMarker(p);
+                distanceOverlay.Markers.Add(deleteMarker);
+            }
+            drawDistance.IsEnable = false;
         }
+
+        private void buttonDistance_Click(object sender, EventArgs e)
+        {
+            if (drawDistance != null)
+            {
+                drawDistance.IsEnable = true;
+            }
+        }
+
+        #endregion
     }
 }

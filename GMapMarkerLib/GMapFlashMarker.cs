@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace GMapMarkerLib
 {
-    public class GMapMarkerFlash : GMapMarker
+    public class GMapFlashMarker : GMapMarker
     {
         private Image image;
 
@@ -23,7 +23,7 @@ namespace GMapMarkerLib
         private int flashRadius;
         private Random rand;
 
-        public GMapMarkerFlash(PointLatLng p, Image image)
+        public GMapFlashMarker(PointLatLng p, Image image)
             : base(p)
         {
             Size = new System.Drawing.Size(image.Width, image.Height);

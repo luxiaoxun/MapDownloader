@@ -8,50 +8,33 @@ using GMap.NET.WindowsForms;
 
 namespace GMapMarkerLib
 {
-    public class GMapMarkerCircleOffline : GMapMarker
+    public class GMapCircleMarker2 : GMapMarker
     {
-        /// <summary>
-        /// In Meters
-        /// </summary>
-        public double Radius;
-
-        /// <summary>
-        /// specifies how the outline is painted
-        /// </summary>
         public Pen Stroke = new Pen(Color.FromArgb(155, Color.MidnightBlue));
 
-        /// <summary>
-        /// background color
-        /// </summary>
         public Brush Fill = new SolidBrush(Color.FromArgb(155, Color.AliceBlue));
 
-        /// <summary>
-        /// is filled
-        /// </summary>
-        public bool IsFilled = true;
+        public bool IsFilled { set; get; }
 
-        private PointLatLng center;
+        private PointLatLng centerPoint;
         private PointLatLng edgePoint;
 
         /// <summary>
-        /// Create a circle with a radius
+        /// Create a circle with a center point and a edge point
         /// </summary>
-        /// <param name="p">circle center</param>
-        /// <param name="radius">circle radius</param>
-        public GMapMarkerCircleOffline(PointLatLng p, double radius)
-            : base(p)
+        /// <param name="centerPoint">circle center point</param>
+        /// <param name="edgePoint">circle edge point</param>
+        public GMapCircleMarker2(PointLatLng centerPoint, PointLatLng edgePoint)
+            : base(centerPoint)
         {
-            Radius = radius;
-            IsHitTestVisible = true;
-
-            center = p;
-            edgePoint = new PointLatLng(p.Lat, p.Lng + radius);
+            this.centerPoint = centerPoint;
+            this.edgePoint = edgePoint;
+            IsFilled = true;
         }
 
         public override void OnRender(Graphics g)
         {
-            //int R = (int)((Radius) / Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, Position.Lat)) * 2;
-            GPoint cp = this.Overlay.Control.FromLatLngToLocal(center);
+            GPoint cp = this.Overlay.Control.FromLatLngToLocal(centerPoint);
             GPoint ep = this.Overlay.Control.FromLatLngToLocal(edgePoint);
 
             double dis = (ep.X-cp.X)* (ep.X-cp.X) + (ep.Y-cp.Y)*(ep.Y-cp.Y);

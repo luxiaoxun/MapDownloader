@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace GMapMarkerLib
 {
-    public class GMapMarkerTip : GMapMarker
+    public class GMapTipMarker : GMapMarker
     {
         private Image image;
 
@@ -21,7 +21,7 @@ namespace GMapMarkerLib
         public Brush TipBrush = new SolidBrush(Color.Navy);
         public StringFormat TipStringFormat = new StringFormat();
 
-        public GMapMarkerTip(GMap.NET.PointLatLng p, Image image, string tipText)
+        public GMapTipMarker(GMap.NET.PointLatLng p, Image image, string tipText)
             : base(p)
         {
             Size = new System.Drawing.Size(image.Width, image.Height);

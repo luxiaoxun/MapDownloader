@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{01B49280-D6F4-467C-8337-CEA9824F36CE}</ProjectGuid>
+    <ProjectGuid>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapChinaRegion</RootNamespace>
-    <AssemblyName>GMapChinaRegion</AssemblyName>
+    <RootNamespace>NetUtilityLib</RootNamespace>
+    <AssemblyName>NetUtilityLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,15 +31,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\Lib\GMap.NET.Core.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\Lib\GMap.NET.WindowsForms.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>Lib\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>Lib\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>Lib\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>Lib\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,16 +62,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChinaMapRegion.cs" />
-    <Compile Include="ChinaRegion.cs" />
-    <Compile Include="MapRegion.cs" />
+    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="ExcelHelper.cs" />
+    <Compile Include="ImageHelper.cs" />
+    <Compile Include="JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
-      <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
-      <Name>NetUtilityLib</Name>
-    </ProjectReference>
+    <Content Include="Lib\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="Lib\Newtonsoft.Json.dll" />
+    <Content Include="Lib\NPOI.dll" />
+    <Content Include="Lib\NPOI.OOXML.dll" />
+    <Content Include="Lib\NPOI.OpenXml4Net.dll" />
+    <Content Include="Lib\NPOI.OpenXmlFormats.dll" />
+    <Content Include="Lib\NPOI.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

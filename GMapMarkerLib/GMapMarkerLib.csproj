@@ -50,13 +50,13 @@
   <ItemGroup>
     <Compile Include="GifImage.cs" />
     <Compile Include="GMapBaloonToolTip.cs" />
-    <Compile Include="GMapMarkerAnimation.cs" />
-    <Compile Include="GMapMarkerArrow.cs" />
-    <Compile Include="GMapMarkerCircle.cs" />
-    <Compile Include="GMapMarkerCircleOffline.cs" />
-    <Compile Include="GMapMarkerDirection.cs" />
-    <Compile Include="GMapMarkerFlash.cs" />
-    <Compile Include="GMapMarkerTip.cs" />
+    <Compile Include="GMapAnimationMarker.cs" />
+    <Compile Include="GMapArrowMarker.cs" />
+    <Compile Include="GMapCircleMarker.cs" />
+    <Compile Include="GMapCircleMarker2.cs" />
+    <Compile Include="GMapDirectionMarker.cs" />
+    <Compile Include="GMapFlashMarker.cs" />
+    <Compile Include="GMapTipMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

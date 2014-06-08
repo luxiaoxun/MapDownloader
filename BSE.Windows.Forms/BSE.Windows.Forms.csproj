@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BSE.Windows.Forms</RootNamespace>
+    <AssemblyName>BSE.Windows.Forms</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ProgressBar\ProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressBar\ProgressBar.designer.cs">
+      <DependentUpon>ProgressBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressBar\ToolStripProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\BseColorTable.cs" />
+    <Compile Include="Renderer\BseRenderer.cs" />
+    <Compile Include="Renderer\ColorTableBlack.cs" />
+    <Compile Include="Renderer\ColorTableBlue.cs" />
+    <Compile Include="Renderer\Office2007BlackColorTable.cs" />
+    <Compile Include="Renderer\Office2007BlueColorTable.cs" />
+    <Compile Include="Renderer\Office2007Renderer.cs" />
+    <Compile Include="Renderer\Office2007SilverColorTable.cs" />
+    <Compile Include="Renderer\OfficeColorTable.cs" />
+    <Compile Include="Renderer\ProfessionalColorTable.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Splitter\Splitter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Splitter\Splitter.designer.cs">
+      <DependentUpon>Splitter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XPander\BasePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XPander\CaptionStyle.cs" />
+    <Compile Include="XPander\ColorScheme.cs" />
+    <Compile Include="XPander\ColorSchemeChangeEventArgs.cs" />
+    <Compile Include="XPander\Constants.cs" />
+    <Compile Include="XPander\CustomColors.cs" />
+    <Compile Include="XPander\CustomPanelColors.cs" />
+    <Compile Include="XPander\CustomXPanderPanelColors.cs" />
+    <Compile Include="XPander\DisplayInformation.cs" />
+    <Compile Include="XPander\HoverState.cs" />
+    <Compile Include="XPander\HoverStateChangeEventArgs.cs" />
+    <Compile Include="XPander\IPanel.cs" />
+    <Compile Include="XPander\Panel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XPander\Panel.designer.cs">
+      <DependentUpon>Panel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XPander\PanelColors.cs" />
+    <Compile Include="XPander\PanelColorsBlack.cs" />
+    <Compile Include="XPander\PanelColorsBlue.cs" />
+    <Compile Include="XPander\PanelColorsBse.cs" />
+    <Compile Include="XPander\PanelColorsOffice.cs" />
+    <Compile Include="XPander\PanelColorsOffice2007Black.cs" />
+    <Compile Include="XPander\PanelColorsOffice2007Blue.cs" />
+    <Compile Include="XPander\PanelColorsOffice2007Silver.cs" />
+    <Compile Include="XPander\PanelColorsRed.cs" />
+    <Compile Include="XPander\PanelSettingsManager.cs" />
+    <Compile Include="XPander\PanelStyle.cs" />
+    <Compile Include="XPander\PanelStyleChangeEventArgs.cs" />
+    <Compile Include="XPander\UseAntiAlias.cs" />
+    <Compile Include="XPander\UseClearTypeGridFit.cs" />
+    <Compile Include="XPander\XPanderPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XPander\XPanderPanel.Designer.cs" />
+    <Compile Include="XPander\XPanderPanelList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XPander\XPanderPanelList.Designer.cs" />
+    <Compile Include="XPander\XPanderStateChangeEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\ChevronDown.png" />
+    <Content Include="Resources\ChevronLeft.png" />
+    <Content Include="Resources\ChevronRight.png" />
+    <Content Include="Resources\ChevronUp.png" />
+    <Content Include="Resources\closePanel.png" />
+    <Content Include="Resources\Collapse.jpg" />
+    <Content Include="Resources\Collapse_h.jpg" />
+    <Content Include="Resources\Expand.jpg" />
+    <Content Include="Resources\Expand_h.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XPander\Panel.resx">
+      <DependentUpon>Panel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XPander\XPanderPanel.resx" />
+    <EmbeddedResource Include="XPander\XPanderPanelList.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
