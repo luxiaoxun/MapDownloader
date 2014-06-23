@@ -10,6 +10,7 @@ namespace GMapWinFormDemo
         google,
         amap,
         tengxun,
+        bing,
         baidu
     }
 

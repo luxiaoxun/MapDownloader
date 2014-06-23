@@ -54,6 +54,9 @@
             this.buttonDistance = new System.Windows.Forms.Button();
             this.xPanderPanelChinaRegion = new BSE.Windows.Forms.XPanderPanel();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.xPanderPanelMap = new BSE.Windows.Forms.XPanderPanel();
+            this.buttonClearSArea = new System.Windows.Forms.Button();
+            this.buttonPrefetchSArea = new System.Windows.Forms.Button();
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.地图操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +79,7 @@
             this.xPanderPanelMarker.SuspendLayout();
             this.xPanderPanelDraw.SuspendLayout();
             this.xPanderPanelChinaRegion.SuspendLayout();
+            this.xPanderPanelMap.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panelMap.SuspendLayout();
             this.SuspendLayout();
@@ -216,6 +220,7 @@
             this.xPanderPanelList1.Controls.Add(this.xPanderPanelMarker);
             this.xPanderPanelList1.Controls.Add(this.xPanderPanelDraw);
             this.xPanderPanelList1.Controls.Add(this.xPanderPanelChinaRegion);
+            this.xPanderPanelList1.Controls.Add(this.xPanderPanelMap);
             this.xPanderPanelList1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xPanderPanelList1.GradientBackground = System.Drawing.Color.Empty;
             this.xPanderPanelList1.Location = new System.Drawing.Point(0, 28);
@@ -446,12 +451,11 @@
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelChinaRegion.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
-            this.xPanderPanelChinaRegion.Expand = true;
             this.xPanderPanelChinaRegion.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelChinaRegion.Image = null;
             this.xPanderPanelChinaRegion.Name = "xPanderPanelChinaRegion";
             this.xPanderPanelChinaRegion.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(172, 389);
+            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(172, 25);
             this.xPanderPanelChinaRegion.TabIndex = 3;
             this.xPanderPanelChinaRegion.Text = "China Region";
             this.xPanderPanelChinaRegion.ToolTipTextCloseIcon = null;
@@ -463,8 +467,66 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(1, 25);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(170, 364);
+            this.treeView1.Size = new System.Drawing.Size(170, 0);
             this.treeView1.TabIndex = 0;
+            // 
+            // xPanderPanelMap
+            // 
+            this.xPanderPanelMap.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelMap.Controls.Add(this.buttonClearSArea);
+            this.xPanderPanelMap.Controls.Add(this.buttonPrefetchSArea);
+            this.xPanderPanelMap.CustomColors.BackColor = System.Drawing.SystemColors.Control;
+            this.xPanderPanelMap.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
+            this.xPanderPanelMap.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
+            this.xPanderPanelMap.CustomColors.CaptionCheckedGradientEnd = System.Drawing.Color.Empty;
+            this.xPanderPanelMap.CustomColors.CaptionCheckedGradientMiddle = System.Drawing.Color.Empty;
+            this.xPanderPanelMap.CustomColors.CaptionCloseIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMap.CustomColors.CaptionExpandIcon = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMap.CustomColors.CaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelMap.CustomColors.CaptionGradientEnd = System.Drawing.SystemColors.ButtonFace;
+            this.xPanderPanelMap.CustomColors.CaptionGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelMap.CustomColors.CaptionPressedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionPressedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionPressedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionSelectedGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionSelectedGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionSelectedGradientMiddle = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(224)))), ((int)(((byte)(255)))));
+            this.xPanderPanelMap.CustomColors.CaptionSelectedText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMap.CustomColors.CaptionText = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMap.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
+            this.xPanderPanelMap.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
+            this.xPanderPanelMap.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelMap.Expand = true;
+            this.xPanderPanelMap.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.xPanderPanelMap.Image = null;
+            this.xPanderPanelMap.Name = "xPanderPanelMap";
+            this.xPanderPanelMap.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
+            this.xPanderPanelMap.Size = new System.Drawing.Size(172, 364);
+            this.xPanderPanelMap.TabIndex = 4;
+            this.xPanderPanelMap.Text = "Map";
+            this.xPanderPanelMap.ToolTipTextCloseIcon = null;
+            this.xPanderPanelMap.ToolTipTextExpandIconPanelCollapsed = null;
+            this.xPanderPanelMap.ToolTipTextExpandIconPanelExpanded = null;
+            // 
+            // buttonClearSArea
+            // 
+            this.buttonClearSArea.Location = new System.Drawing.Point(10, 72);
+            this.buttonClearSArea.Name = "buttonClearSArea";
+            this.buttonClearSArea.Size = new System.Drawing.Size(146, 23);
+            this.buttonClearSArea.TabIndex = 1;
+            this.buttonClearSArea.Text = "Clear selected area";
+            this.buttonClearSArea.UseVisualStyleBackColor = true;
+            this.buttonClearSArea.Click += new System.EventHandler(this.buttonClearSArea_Click);
+            // 
+            // buttonPrefetchSArea
+            // 
+            this.buttonPrefetchSArea.Location = new System.Drawing.Point(10, 43);
+            this.buttonPrefetchSArea.Name = "buttonPrefetchSArea";
+            this.buttonPrefetchSArea.Size = new System.Drawing.Size(146, 23);
+            this.buttonPrefetchSArea.TabIndex = 0;
+            this.buttonPrefetchSArea.Text = "Prefetch selected area";
+            this.buttonPrefetchSArea.UseVisualStyleBackColor = true;
+            this.buttonPrefetchSArea.Click += new System.EventHandler(this.buttonPrefetch_Click);
             // 
             // miniToolStrip
             // 
@@ -631,6 +693,7 @@
             this.xPanderPanelMarker.ResumeLayout(false);
             this.xPanderPanelDraw.ResumeLayout(false);
             this.xPanderPanelChinaRegion.ResumeLayout(false);
+            this.xPanderPanelMap.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panelMap.ResumeLayout(false);
@@ -681,6 +744,9 @@
         private System.Windows.Forms.Button buttonDistance;
         private BSE.Windows.Forms.XPanderPanel xPanderPanelChinaRegion;
         private System.Windows.Forms.TreeView treeView1;
+        private BSE.Windows.Forms.XPanderPanel xPanderPanelMap;
+        private System.Windows.Forms.Button buttonPrefetchSArea;
+        private System.Windows.Forms.Button buttonClearSArea;
     }
 }
 

@@ -121,13 +121,18 @@ namespace GMapWinFormDemo
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
         }
 
+        #region china region
+
         private void InitChinaRegion()
         {
             TreeNode rootNode = new TreeNode("中国");
             this.treeView1.Nodes.Add(rootNode);
             //Country china = GetCountryDataFromFile(@"F:\GMap\china.xml");
-            string file = System.Windows.Forms.Application.StartupPath+"\\china";
-            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromFile(file);
+            //string file = System.Windows.Forms.Application.StartupPath + "\\china";
+            //string file = System.Windows.Forms.Application.StartupPath + "\\china-province city";
+            //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+            string file = System.Windows.Forms.Application.StartupPath + "\\china-province city.xml";
+            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromXmlFile(file);
             foreach (var provice in china.Province)
             {
                 TreeNode pNode = new TreeNode(provice.name);
@@ -136,18 +141,67 @@ namespace GMapWinFormDemo
                 {
                     TreeNode cNode = new TreeNode(city.name);
                     cNode.Tag = city;
-                    foreach (var piecearea in city.Piecearea)
-                    {
-                        TreeNode areaNode = new TreeNode(piecearea.name);
-                        areaNode.Tag = piecearea;
-                        cNode.Nodes.Add(areaNode);
-                    }
+                    //foreach (var piecearea in city.Piecearea)
+                    //{
+                    //    TreeNode areaNode = new TreeNode(piecearea.name);
+                    //    areaNode.Tag = piecearea;
+                    //    cNode.Nodes.Add(areaNode);
+                    //}
                     pNode.Nodes.Add(cNode);
                 }
                 rootNode.Nodes.Add(pNode);
             }
 
-            this.treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
+            this.treeView1.CheckBoxes = true;
+
+            //this.treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
+            this.treeView1.AfterCheck += new TreeViewEventHandler(treeView1_AfterCheck);
+        }
+
+        void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Checked)
+            {
+                string name = e.Node.Text;
+                string rings = null;
+                switch (e.Node.Level)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        Province province = e.Node.Tag as Province;
+                        name = province.name;
+                        rings = province.rings;
+                        break;
+                    case 2:
+                        City city = e.Node.Tag as City;
+                        name = city.name;
+                        rings = city.rings;
+                        break;
+                }
+                if (rings != null)
+                {
+                    GMapPolygon polygon = ChinaMapRegion.GetRegionPolygon(name, rings);
+                    if (polygon != null)
+                    {
+                        //regionOverlay.Polygons.Clear();
+                        regionOverlay.Polygons.Add(polygon);
+                        RectLatLng rect = GMapChinaRegion.ChinaMapRegion.GetRegionMaxRect(polygon);
+                        this.mapControl.SetZoomToFitRect(rect);
+                    }
+                }
+            }
+            else
+            {
+                string name = e.Node.Text;
+                for (int i = regionOverlay.Polygons.Count-1; i >=0; --i)
+                {
+                    if (regionOverlay.Polygons[i].Name == name)
+                    {
+                        regionOverlay.Polygons.RemoveAt(i);
+                    }
+                }
+            }
         }
 
         void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -197,6 +251,8 @@ namespace GMapWinFormDemo
                 this.mapControl.SetZoomToFitRect(rect);
             }
         }
+
+        #endregion
 
         void panelMap_SizeChanged(object sender, EventArgs e)
         {
@@ -279,6 +335,33 @@ namespace GMapWinFormDemo
             }
         }
 
+        void mapControl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
+                
+                //GMapMarker marker = new GMarkerGoogle(point, GMarkerGoogleType.green);
+                //markersOverlay.Markers.Add(marker);
+
+                //Bitmap bitmap = Properties.Resources.point_blue;
+                //GMapMarker marker = new GMapMarkerFlash(point, bitmap);
+                //markersOverlay.Markers.Add(marker);
+
+                //GifImage gif = new GifImage(Properties.Resources.your_sister);
+                //GMapMarkerAnimation ani = new GMapMarkerAnimation(point, gif);
+                //markersOverlay.Markers.Add(ani);
+
+                //GMapMarker marker = new GMapMarkerDirection(point, Properties.Resources.arrow, 45);
+                //objects.Markers.Add(marker);
+
+                //GMapMarker marker = new GMapMarkerTip(point, bitmap, "图标A");
+                //objects.Markers.Add(marker);
+            }
+        }
+
+        #region Marker操作
+
         void mapControl_OnMarkerLeave(GMapMarker item)
         {
             currentMarker = null;
@@ -319,33 +402,6 @@ namespace GMapWinFormDemo
                 }
             }
         }
-
-        void mapControl_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
-                
-                //GMapMarker marker = new GMarkerGoogle(point, GMarkerGoogleType.green);
-                //markersOverlay.Markers.Add(marker);
-
-                //Bitmap bitmap = Properties.Resources.point_blue;
-                //GMapMarker marker = new GMapMarkerFlash(point, bitmap);
-                //markersOverlay.Markers.Add(marker);
-
-                //GifImage gif = new GifImage(Properties.Resources.your_sister);
-                //GMapMarkerAnimation ani = new GMapMarkerAnimation(point, gif);
-                //markersOverlay.Markers.Add(ani);
-
-                //GMapMarker marker = new GMapMarkerDirection(point, Properties.Resources.arrow, 45);
-                //objects.Markers.Add(marker);
-
-                //GMapMarker marker = new GMapMarkerTip(point, bitmap, "图标A");
-                //objects.Markers.Add(marker);
-            }
-        }
-
-        #region Marker 操作
 
         private void buttonBeginBlink_Click(object sender, EventArgs e)
         {
@@ -482,10 +538,6 @@ namespace GMapWinFormDemo
                 mapControl.MapProvider = GMapProviders.GoogleChinaMap;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                this.谷歌地图ToolStripMenuItem.Enabled = false;
-                this.百度地图ToolStripMenuItem.Enabled = true;
-                this.高德地图ToolStripMenuItem.Enabled = true;
-                this.腾讯地图ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -497,10 +549,6 @@ namespace GMapWinFormDemo
                 mapControl.MapProvider = GMapProvidersExt.AMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                this.高德地图ToolStripMenuItem.Enabled = false;
-                this.谷歌地图ToolStripMenuItem.Enabled = true;
-                this.百度地图ToolStripMenuItem.Enabled = true;
-                this.腾讯地图ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -512,10 +560,6 @@ namespace GMapWinFormDemo
                 mapControl.MapProvider = GMapProvidersExt.SosoMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                this.腾讯地图ToolStripMenuItem.Enabled = false;
-                this.高德地图ToolStripMenuItem.Enabled = true;
-                this.谷歌地图ToolStripMenuItem.Enabled = true;
-                this.百度地图ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -527,10 +571,6 @@ namespace GMapWinFormDemo
                 mapControl.MapProvider = GMapProvidersExt.BaiduMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                this.谷歌地图ToolStripMenuItem.Enabled = true;
-                this.百度地图ToolStripMenuItem.Enabled = false;
-                this.高德地图ToolStripMenuItem.Enabled = true;
-                this.腾讯地图ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -584,6 +624,29 @@ namespace GMapWinFormDemo
                 this.buttonMapType.Image = Properties.Resources.weixing;
                 mapControl.MapProvider = GMapProvidersExt.SosoMapProvider.Instance;
             }
+            else if (mapType == MapType.Common && mapProviderType == MapProviderType.bing)
+            {
+                mapType = MapType.Satellite;
+                this.buttonMapType.Image = Properties.Resources.ditu;
+                mapControl.MapProvider = GMapProviders.BingSatelliteMap;
+            }
+            else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.bing)
+            {
+                mapType = MapType.Common;
+                this.buttonMapType.Image = Properties.Resources.weixing;
+                mapControl.MapProvider = GMapProviders.BingMap;
+            }
+        }
+
+        private void 必应地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mapProviderType != MapProviderType.bing)
+            {
+                mapProviderType = MapProviderType.bing;
+                mapControl.MapProvider = GMapProviders.BingMap;
+                mapType = MapType.Common;
+                this.buttonMapType.Image = Properties.Resources.weixing;
+            }
         }
 
         #endregion
@@ -631,6 +694,42 @@ namespace GMapWinFormDemo
         private void 读取缓存ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.ShowImportDialog();
+        }
+
+        private void buttonPrefetch_Click(object sender, EventArgs e)
+        {
+            RectLatLng area = mapControl.SelectedArea;
+            if (!area.IsEmpty)
+            {
+                for (int i = (int)mapControl.Zoom; i <= mapControl.MaxZoom; i++)
+                {
+                    DialogResult res = MessageBox.Show("Ready ripp at Zoom = " + i + " ?", "GMap.NET", MessageBoxButtons.YesNoCancel);
+
+                    if (res == DialogResult.Yes)
+                    {
+                        using (TilePrefetcher obj = new TilePrefetcher())
+                        {
+                            obj.Overlay = markersOverlay; // set overlay if you want to see cache progress on the map
+                            obj.Shuffle = mapControl.Manager.Mode != AccessMode.CacheOnly;
+                            obj.Owner = this;
+                            obj.ShowCompleteMessage = true;
+                            obj.Start(area, i, mapControl.MapProvider, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 100, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 1);
+                        }
+                    }
+                    else if (res == DialogResult.No)
+                    {
+                        continue;
+                    }
+                    else if (res == DialogResult.Cancel)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         #endregion
@@ -715,11 +814,7 @@ namespace GMapWinFormDemo
                 {
                     distanceOverlay.Markers.Add(marker);
                 }
-
-                PointLatLng p = new PointLatLng(e.DistanceMarkers[e.DistanceMarkers.Count - 1].Position.Lat, e.DistanceMarkers[e.DistanceMarkers.Count - 1].Position.Lng);
-
-                DrawDeleteMarker deleteMarker = new DrawDeleteMarker(p);
-                distanceOverlay.Markers.Add(deleteMarker);
+                distanceOverlay.Markers.Add(e.DistanceDeleteMarker);
             }
             drawDistance.IsEnable = false;
         }
@@ -733,5 +828,14 @@ namespace GMapWinFormDemo
         }
 
         #endregion
+
+        private void buttonClearSArea_Click(object sender, EventArgs e)
+        {
+            if (this.mapControl != null)
+            {
+                this.mapControl.SelectedArea = GMap.NET.RectLatLng.Empty;
+            }
+        }
+        
     }
 }

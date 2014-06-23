@@ -65,6 +65,11 @@ namespace GMapTools
             {
                 MapControl.Overlays.Add(tempOverlay);
             }
+            if (distanceList != null && distanceList.Count > 0)
+            {
+                distanceList.Clear();
+            }
+
             
             MapControl.MouseDown += new System.Windows.Forms.MouseEventHandler(MapControl_MouseDown);
             MapControl.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(MapControl_MouseDoubleClick);
@@ -132,12 +137,12 @@ namespace GMapTools
                 double x = p.Lng - lastPointLatLng.Lng;
                 double y = p.Lat - lastPointLatLng.Lat;
                 double dis = GMapHelper.GetDistanceInMeter(p, lastPointLatLng);
-                //string s = "距离差：" + "\r\n" + x.ToString() + "\r\n" + y.ToString();
                 double sum = distanceList.Sum();
                 dis += sum;
-                string s = string.Format("总长：{0:N2}米",dis);
-                this.toolTip.Show(s, this.MapControl);
-
+                string s = string.Format("总长：{0:0.00}米", dis);
+                //this.toolTip.Show(s, this.MapControl);
+                this.toolTip.SetToolTip(this.MapControl, s);
+                
                 tempLine.EndPoint = p;
                 this.MapControl.UpdateMarkerLocalPosition(tempLine);
                 this.MapControl.Refresh();
@@ -164,11 +169,10 @@ namespace GMapTools
                 
                 double x = p.Lng - lastPointLatLng.Lng;
                 double y = p.Lat - lastPointLatLng.Lat;
-                //string s = "距离差：" + "\r\n" + x.ToString() + "\r\n" + y.ToString();
                 double dis = GMapHelper.GetDistanceInMeter(p, lastPointLatLng);
                 distanceList.Add(dis);
                 double sum = distanceList.Sum();
-                string s = string.Format("{0:N2}米", sum);
+                string s = string.Format("{0:0.00}米", sum);
                 
                 DrawDistanceMarker marker = new DrawDistanceMarker(p, s);
                 tempOverlay.Markers.Add(marker);

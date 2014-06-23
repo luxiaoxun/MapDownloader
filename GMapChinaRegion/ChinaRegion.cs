@@ -29,8 +29,8 @@ namespace GMapChinaRegion
         [XmlAttribute]
         public string rings { set; get; }
 
-        [XmlElement]
-        public List<Piecearea> Piecearea { set; get; }
+        //[XmlElement]
+       // public List<Piecearea> Piecearea { set; get; }
     }
 
     public class Province
