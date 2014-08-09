@@ -687,7 +687,7 @@ namespace GMapUtility
         }
 
         /// <summary>
-        /// 
+        /// Gets the distance (in kilometer) between two points
         /// </summary>
         /// <param name="p1"></param>
         /// <param name="p2"></param>
@@ -698,7 +698,7 @@ namespace GMapUtility
         }
 
         /// <summary>
-        /// 
+        /// Gets the distance (in meter) between two points
         /// </summary>
         /// <param name="p1"></param>
         /// <param name="p2"></param>
@@ -711,12 +711,12 @@ namespace GMapUtility
         private static double SignedPolygonArea(List<PointLatLng> points)
         {
             // Add the first point to the end.
-            int num_points = points.Count;
-            PointLatLng[] pts = new PointLatLng[num_points + 1];
+            int pointsCount = points.Count;
+            PointLatLng[] pts = new PointLatLng[pointsCount + 1];
             points.CopyTo(pts, 0);
-            pts[num_points] = points[0];
+            pts[pointsCount] = points[0];
 
-            for (int i = 0; i < num_points + 1; ++i)
+            for (int i = 0; i < pointsCount + 1; ++i)
             {
                 pts[i].Lat = pts[i].Lat * (System.Math.PI * 6378137 / 180);
                 pts[i].Lng = pts[i].Lng * (System.Math.PI * 6378137 / 180);
@@ -724,7 +724,7 @@ namespace GMapUtility
 
             // Get the areas.
             double area = 0;
-            for (int i = 0; i < num_points; i++)
+            for (int i = 0; i < pointsCount; i++)
             {
                 area += (pts[i + 1].Lat - pts[i].Lat) * (pts[i + 1].Lng + pts[i].Lng) / 2;
             }
@@ -741,8 +741,7 @@ namespace GMapUtility
         public static double GetPolygonArea(List<PointLatLng> points)
         {
             // Return the absolute value of the signed area.
-            // The signed area is negative if the polygon is
-            // oriented clockwise.
+            // The signed area is negative if the polygon is oriented clockwise.
             return Math.Abs(SignedPolygonArea(points));
         }
 

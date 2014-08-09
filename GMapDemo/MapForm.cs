@@ -17,6 +17,9 @@ using GMapDrawTools;
 using GMapTools;
 using Microsoft.SqlServer.Server;
 using NetUtilityLib;
+using System.Reflection;
+using System.Diagnostics;
+using System.IO;
 
 namespace GMapWinFormDemo
 {
@@ -104,7 +107,6 @@ namespace GMapWinFormDemo
 
         private void InitUI()
         {
-            this.谷歌地图ToolStripMenuItem.Enabled = false;
             this.buttonMapType.Image = Properties.Resources.weixing;
             this.buttonMapType.Click +=new EventHandler(buttonMapType_Click);
 
@@ -119,7 +121,95 @@ namespace GMapWinFormDemo
                
             }
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
+
+            this.checkBoxTileHost.CheckedChanged += new EventHandler(checkBoxTileHost_CheckedChanged);
         }
+
+        # region Leafletjs web demo
+
+        bool TryExtractLeafletjs()
+        {
+            try
+            {
+                string launch = string.Empty;
+
+                var x = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+                foreach (var f in x)
+                {
+                    if (f.Contains("leafletjs"))
+                    {
+                        var fName = f.Replace("GMapWinFormDemo.", string.Empty);
+                        fName = fName.Replace(".", "\\");
+                        var ll = fName.LastIndexOf("\\");
+                        var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
+
+                        //Demo.WindowsForms.leafletjs.dist.leaflet.js
+
+                        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(f))
+                        {
+                            string fileFullPath = mapControl.CacheLocation + name;
+
+                            if (fileFullPath.Contains("gmap.html"))
+                            {
+                                launch = fileFullPath;
+                            }
+
+                            var dir = Path.GetDirectoryName(fileFullPath);
+                            if (!Directory.Exists(dir))
+                            {
+                                Directory.CreateDirectory(dir);
+                            }
+
+                            using (FileStream fileStream = System.IO.File.Create(fileFullPath, (int)stream.Length))
+                            {
+                                // Fill the bytes[] array with the stream data
+                                byte[] bytesInStream = new byte[stream.Length];
+                                stream.Read(bytesInStream, 0, (int)bytesInStream.Length);
+
+                                // Use FileStream object to write to the specified file
+                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                            }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(launch))
+                {
+                    System.Diagnostics.Process.Start(launch);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("TryExtractLeafletjs: " + ex);
+                return false;
+            }
+            return true;
+        }
+
+        // http://leafletjs.com/
+        // Leaflet is a modern open-source JavaScript library for mobile-friendly interactive maps
+        // Leaflet is designed with simplicity, performance and usability in mind. It works efficiently across all major desktop and mobile platforms out of the box
+        void checkBoxTileHost_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxTileHost.Checked)
+            {
+                try
+                {
+                    mapControl.Manager.EnableTileHost(8844);
+                    TryExtractLeafletjs();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("EnableTileHost: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                mapControl.Manager.DisableTileHost();
+            }
+        }
+
+        #endregion 
 
         #region china region
 
@@ -309,11 +399,13 @@ namespace GMapWinFormDemo
 
         void mapControl_MouseMove(object sender, MouseEventArgs e)
         {
+            PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
+            this.toolStripStatusLabelCurrentPos.Text = "当前坐标："+point.ToString();
+
             if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
             {
                 if (currentMarker != null && currentMarker is GMapFlashMarker)
                 {
-                    PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
                     currentMarker.Position = point;
                 }
             }

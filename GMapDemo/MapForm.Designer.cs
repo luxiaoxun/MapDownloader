@@ -31,33 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonPolyline = new System.Windows.Forms.Button();
-            this.buttonClear = new System.Windows.Forms.Button();
-            this.buttonPolygon = new System.Windows.Forms.Button();
-            this.buttonRectangle = new System.Windows.Forms.Button();
-            this.buttonCircle = new System.Windows.Forms.Button();
-            this.buttonBeginBlink = new System.Windows.Forms.Button();
-            this.buttonStopBlink = new System.Windows.Forms.Button();
-            this.panelMenu = new BSE.Windows.Forms.Panel();
-            this.splitter1 = new BSE.Windows.Forms.Splitter();
-            this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
-            this.xPanderPanelRoute = new BSE.Windows.Forms.XPanderPanel();
-            this.textBoxSearch = new System.Windows.Forms.TextBox();
-            this.buttonSearch = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxSearchResult = new System.Windows.Forms.ComboBox();
-            this.buttonSetStart = new System.Windows.Forms.Button();
-            this.buttonFindRoute = new System.Windows.Forms.Button();
-            this.buttonSetEnd = new System.Windows.Forms.Button();
-            this.xPanderPanelMarker = new BSE.Windows.Forms.XPanderPanel();
-            this.xPanderPanelDraw = new BSE.Windows.Forms.XPanderPanel();
-            this.buttonDistance = new System.Windows.Forms.Button();
-            this.xPanderPanelChinaRegion = new BSE.Windows.Forms.XPanderPanel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.xPanderPanelMap = new BSE.Windows.Forms.XPanderPanel();
-            this.buttonClearSArea = new System.Windows.Forms.Button();
-            this.buttonPrefetchSArea = new System.Windows.Forms.Button();
-            this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.地图操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.高德地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,10 +42,42 @@
             this.读取缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.panelMap = new System.Windows.Forms.Panel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelCurrentPos = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonMapType = new System.Windows.Forms.Button();
             this.mapControl = new GMapWinFormDemo.MapControl();
             this.comboBoxRegion = new System.Windows.Forms.ComboBox();
+            this.splitter1 = new BSE.Windows.Forms.Splitter();
+            this.panelMenu = new BSE.Windows.Forms.Panel();
+            this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
+            this.xPanderPanelRoute = new BSE.Windows.Forms.XPanderPanel();
+            this.textBoxSearch = new System.Windows.Forms.TextBox();
+            this.buttonSearch = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxSearchResult = new System.Windows.Forms.ComboBox();
+            this.buttonSetStart = new System.Windows.Forms.Button();
+            this.buttonFindRoute = new System.Windows.Forms.Button();
+            this.buttonSetEnd = new System.Windows.Forms.Button();
+            this.xPanderPanelMarker = new BSE.Windows.Forms.XPanderPanel();
+            this.buttonStopBlink = new System.Windows.Forms.Button();
+            this.buttonBeginBlink = new System.Windows.Forms.Button();
+            this.xPanderPanelDraw = new BSE.Windows.Forms.XPanderPanel();
+            this.buttonDistance = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonPolyline = new System.Windows.Forms.Button();
+            this.buttonCircle = new System.Windows.Forms.Button();
+            this.buttonRectangle = new System.Windows.Forms.Button();
+            this.buttonPolygon = new System.Windows.Forms.Button();
+            this.xPanderPanelChinaRegion = new BSE.Windows.Forms.XPanderPanel();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.xPanderPanelMap = new BSE.Windows.Forms.XPanderPanel();
+            this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
+            this.buttonClearSArea = new System.Windows.Forms.Button();
+            this.buttonPrefetchSArea = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.panelMap.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.panelMenu.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
             this.xPanderPanelRoute.SuspendLayout();
@@ -80,8 +85,6 @@
             this.xPanderPanelDraw.SuspendLayout();
             this.xPanderPanelChinaRegion.SuspendLayout();
             this.xPanderPanelMap.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.panelMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -98,75 +101,167 @@
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
-            // buttonPolyline
+            // 地图操作ToolStripMenuItem
             // 
-            this.buttonPolyline.Location = new System.Drawing.Point(95, 93);
-            this.buttonPolyline.Name = "buttonPolyline";
-            this.buttonPolyline.Size = new System.Drawing.Size(67, 23);
-            this.buttonPolyline.TabIndex = 4;
-            this.buttonPolyline.Text = "Polyline";
-            this.buttonPolyline.UseVisualStyleBackColor = true;
-            this.buttonPolyline.Click += new System.EventHandler(this.buttonPolyline_Click);
+            this.地图操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.谷歌地图ToolStripMenuItem,
+            this.高德地图ToolStripMenuItem,
+            this.腾讯地图ToolStripMenuItem,
+            this.百度地图ToolStripMenuItem});
+            this.地图操作ToolStripMenuItem.Name = "地图操作ToolStripMenuItem";
+            this.地图操作ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.地图操作ToolStripMenuItem.Text = "地图选择";
             // 
-            // buttonClear
+            // 谷歌地图ToolStripMenuItem
             // 
-            this.buttonClear.Location = new System.Drawing.Point(9, 138);
-            this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(67, 23);
-            this.buttonClear.TabIndex = 3;
-            this.buttonClear.Text = "Clear";
-            this.buttonClear.UseVisualStyleBackColor = true;
-            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            this.谷歌地图ToolStripMenuItem.Name = "谷歌地图ToolStripMenuItem";
+            this.谷歌地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.谷歌地图ToolStripMenuItem.Text = "谷歌地图";
+            this.谷歌地图ToolStripMenuItem.Click += new System.EventHandler(this.谷歌地图ToolStripMenuItem_Click);
             // 
-            // buttonPolygon
+            // 高德地图ToolStripMenuItem
             // 
-            this.buttonPolygon.Location = new System.Drawing.Point(9, 93);
-            this.buttonPolygon.Name = "buttonPolygon";
-            this.buttonPolygon.Size = new System.Drawing.Size(67, 23);
-            this.buttonPolygon.TabIndex = 2;
-            this.buttonPolygon.Text = "Polygon";
-            this.buttonPolygon.UseVisualStyleBackColor = true;
-            this.buttonPolygon.Click += new System.EventHandler(this.buttonPolygon_Click);
+            this.高德地图ToolStripMenuItem.Name = "高德地图ToolStripMenuItem";
+            this.高德地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.高德地图ToolStripMenuItem.Text = "高德地图";
+            this.高德地图ToolStripMenuItem.Click += new System.EventHandler(this.高德地图ToolStripMenuItem_Click);
             // 
-            // buttonRectangle
+            // 腾讯地图ToolStripMenuItem
             // 
-            this.buttonRectangle.Location = new System.Drawing.Point(95, 50);
-            this.buttonRectangle.Name = "buttonRectangle";
-            this.buttonRectangle.Size = new System.Drawing.Size(67, 23);
-            this.buttonRectangle.TabIndex = 1;
-            this.buttonRectangle.Text = "Rectangle";
-            this.buttonRectangle.UseVisualStyleBackColor = true;
-            this.buttonRectangle.Click += new System.EventHandler(this.buttonRectangle_Click);
+            this.腾讯地图ToolStripMenuItem.Name = "腾讯地图ToolStripMenuItem";
+            this.腾讯地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.腾讯地图ToolStripMenuItem.Text = "腾讯地图";
+            this.腾讯地图ToolStripMenuItem.Click += new System.EventHandler(this.腾讯地图ToolStripMenuItem_Click);
             // 
-            // buttonCircle
+            // 百度地图ToolStripMenuItem
             // 
-            this.buttonCircle.Location = new System.Drawing.Point(9, 49);
-            this.buttonCircle.Name = "buttonCircle";
-            this.buttonCircle.Size = new System.Drawing.Size(67, 23);
-            this.buttonCircle.TabIndex = 0;
-            this.buttonCircle.Text = "Circle";
-            this.buttonCircle.UseVisualStyleBackColor = true;
-            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
+            this.百度地图ToolStripMenuItem.Name = "百度地图ToolStripMenuItem";
+            this.百度地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.百度地图ToolStripMenuItem.Text = "百度地图";
+            this.百度地图ToolStripMenuItem.Click += new System.EventHandler(this.百度地图ToolStripMenuItem_Click);
             // 
-            // buttonBeginBlink
+            // 地图操作ToolStripMenuItem1
             // 
-            this.buttonBeginBlink.Location = new System.Drawing.Point(26, 45);
-            this.buttonBeginBlink.Name = "buttonBeginBlink";
-            this.buttonBeginBlink.Size = new System.Drawing.Size(87, 23);
-            this.buttonBeginBlink.TabIndex = 20;
-            this.buttonBeginBlink.Text = "Marker Blink";
-            this.buttonBeginBlink.UseVisualStyleBackColor = true;
-            this.buttonBeginBlink.Click += new System.EventHandler(this.buttonBeginBlink_Click);
+            this.地图操作ToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.保存为图片ToolStripMenuItem,
+            this.保存缓存ToolStripMenuItem,
+            this.读取缓存ToolStripMenuItem});
+            this.地图操作ToolStripMenuItem1.Name = "地图操作ToolStripMenuItem1";
+            this.地图操作ToolStripMenuItem1.Size = new System.Drawing.Size(67, 20);
+            this.地图操作ToolStripMenuItem1.Text = "地图操作";
             // 
-            // buttonStopBlink
+            // 保存为图片ToolStripMenuItem
             // 
-            this.buttonStopBlink.Location = new System.Drawing.Point(26, 89);
-            this.buttonStopBlink.Name = "buttonStopBlink";
-            this.buttonStopBlink.Size = new System.Drawing.Size(87, 23);
-            this.buttonStopBlink.TabIndex = 21;
-            this.buttonStopBlink.Text = "Stop Blink";
-            this.buttonStopBlink.UseVisualStyleBackColor = true;
-            this.buttonStopBlink.Click += new System.EventHandler(this.buttonStopBlink_Click);
+            this.保存为图片ToolStripMenuItem.Name = "保存为图片ToolStripMenuItem";
+            this.保存为图片ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.保存为图片ToolStripMenuItem.Text = "保存地图图片";
+            this.保存为图片ToolStripMenuItem.Click += new System.EventHandler(this.保存为图片ToolStripMenuItem_Click);
+            // 
+            // 保存缓存ToolStripMenuItem
+            // 
+            this.保存缓存ToolStripMenuItem.Name = "保存缓存ToolStripMenuItem";
+            this.保存缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.保存缓存ToolStripMenuItem.Text = "保存缓存";
+            this.保存缓存ToolStripMenuItem.Click += new System.EventHandler(this.保存缓存ToolStripMenuItem_Click);
+            // 
+            // 读取缓存ToolStripMenuItem
+            // 
+            this.读取缓存ToolStripMenuItem.Name = "读取缓存ToolStripMenuItem";
+            this.读取缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.读取缓存ToolStripMenuItem.Text = "读取缓存";
+            this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.地图操作ToolStripMenuItem,
+            this.地图操作ToolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(750, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // panelMap
+            // 
+            this.panelMap.Controls.Add(this.statusStrip1);
+            this.panelMap.Controls.Add(this.buttonMapType);
+            this.panelMap.Controls.Add(this.mapControl);
+            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMap.Location = new System.Drawing.Point(177, 24);
+            this.panelMap.Name = "panelMap";
+            this.panelMap.Size = new System.Drawing.Size(573, 493);
+            this.panelMap.TabIndex = 18;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelCurrentPos});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 471);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(573, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelCurrentPos
+            // 
+            this.toolStripStatusLabelCurrentPos.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripStatusLabelCurrentPos.Name = "toolStripStatusLabelCurrentPos";
+            this.toolStripStatusLabelCurrentPos.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelCurrentPos.Text = "toolStripStatusLabel1";
+            // 
+            // buttonMapType
+            // 
+            this.buttonMapType.Location = new System.Drawing.Point(503, 4);
+            this.buttonMapType.Name = "buttonMapType";
+            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
+            this.buttonMapType.TabIndex = 3;
+            this.buttonMapType.UseVisualStyleBackColor = true;
+            // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(573, 493);
+            this.mapControl.TabIndex = 1;
+            this.mapControl.Zoom = 0D;
+            // 
+            // comboBoxRegion
+            // 
+            this.comboBoxRegion.FormattingEnabled = true;
+            this.comboBoxRegion.Location = new System.Drawing.Point(655, 1);
+            this.comboBoxRegion.Name = "comboBoxRegion";
+            this.comboBoxRegion.Size = new System.Drawing.Size(89, 20);
+            this.comboBoxRegion.TabIndex = 4;
+            // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.Transparent;
+            this.splitter1.Location = new System.Drawing.Point(172, 24);
+            this.splitter1.MinSize = 5;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(5, 493);
+            this.splitter1.TabIndex = 17;
+            this.splitter1.TabStop = false;
             // 
             // panelMenu
             // 
@@ -203,15 +298,6 @@
             this.panelMenu.ToolTipTextCloseIcon = null;
             this.panelMenu.ToolTipTextExpandIconPanelCollapsed = null;
             this.panelMenu.ToolTipTextExpandIconPanelExpanded = null;
-            // 
-            // splitter1
-            // 
-            this.splitter1.BackColor = System.Drawing.Color.Transparent;
-            this.splitter1.Location = new System.Drawing.Point(172, 24);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 493);
-            this.splitter1.TabIndex = 17;
-            this.splitter1.TabStop = false;
             // 
             // xPanderPanelList1
             // 
@@ -375,6 +461,26 @@
             this.xPanderPanelMarker.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelMarker.ToolTipTextExpandIconPanelExpanded = null;
             // 
+            // buttonStopBlink
+            // 
+            this.buttonStopBlink.Location = new System.Drawing.Point(26, 89);
+            this.buttonStopBlink.Name = "buttonStopBlink";
+            this.buttonStopBlink.Size = new System.Drawing.Size(87, 23);
+            this.buttonStopBlink.TabIndex = 21;
+            this.buttonStopBlink.Text = "Stop Blink";
+            this.buttonStopBlink.UseVisualStyleBackColor = true;
+            this.buttonStopBlink.Click += new System.EventHandler(this.buttonStopBlink_Click);
+            // 
+            // buttonBeginBlink
+            // 
+            this.buttonBeginBlink.Location = new System.Drawing.Point(26, 45);
+            this.buttonBeginBlink.Name = "buttonBeginBlink";
+            this.buttonBeginBlink.Size = new System.Drawing.Size(87, 23);
+            this.buttonBeginBlink.TabIndex = 20;
+            this.buttonBeginBlink.Text = "Marker Blink";
+            this.buttonBeginBlink.UseVisualStyleBackColor = true;
+            this.buttonBeginBlink.Click += new System.EventHandler(this.buttonBeginBlink_Click);
+            // 
             // xPanderPanelDraw
             // 
             this.xPanderPanelDraw.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
@@ -426,6 +532,56 @@
             this.buttonDistance.UseVisualStyleBackColor = true;
             this.buttonDistance.Click += new System.EventHandler(this.buttonDistance_Click);
             // 
+            // buttonClear
+            // 
+            this.buttonClear.Location = new System.Drawing.Point(9, 138);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(67, 23);
+            this.buttonClear.TabIndex = 3;
+            this.buttonClear.Text = "Clear";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // buttonPolyline
+            // 
+            this.buttonPolyline.Location = new System.Drawing.Point(95, 93);
+            this.buttonPolyline.Name = "buttonPolyline";
+            this.buttonPolyline.Size = new System.Drawing.Size(67, 23);
+            this.buttonPolyline.TabIndex = 4;
+            this.buttonPolyline.Text = "Polyline";
+            this.buttonPolyline.UseVisualStyleBackColor = true;
+            this.buttonPolyline.Click += new System.EventHandler(this.buttonPolyline_Click);
+            // 
+            // buttonCircle
+            // 
+            this.buttonCircle.Location = new System.Drawing.Point(9, 49);
+            this.buttonCircle.Name = "buttonCircle";
+            this.buttonCircle.Size = new System.Drawing.Size(67, 23);
+            this.buttonCircle.TabIndex = 0;
+            this.buttonCircle.Text = "Circle";
+            this.buttonCircle.UseVisualStyleBackColor = true;
+            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
+            // 
+            // buttonRectangle
+            // 
+            this.buttonRectangle.Location = new System.Drawing.Point(95, 50);
+            this.buttonRectangle.Name = "buttonRectangle";
+            this.buttonRectangle.Size = new System.Drawing.Size(67, 23);
+            this.buttonRectangle.TabIndex = 1;
+            this.buttonRectangle.Text = "Rectangle";
+            this.buttonRectangle.UseVisualStyleBackColor = true;
+            this.buttonRectangle.Click += new System.EventHandler(this.buttonRectangle_Click);
+            // 
+            // buttonPolygon
+            // 
+            this.buttonPolygon.Location = new System.Drawing.Point(9, 93);
+            this.buttonPolygon.Name = "buttonPolygon";
+            this.buttonPolygon.Size = new System.Drawing.Size(67, 23);
+            this.buttonPolygon.TabIndex = 2;
+            this.buttonPolygon.Text = "Polygon";
+            this.buttonPolygon.UseVisualStyleBackColor = true;
+            this.buttonPolygon.Click += new System.EventHandler(this.buttonPolygon_Click);
+            // 
             // xPanderPanelChinaRegion
             // 
             this.xPanderPanelChinaRegion.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
@@ -473,6 +629,7 @@
             // xPanderPanelMap
             // 
             this.xPanderPanelMap.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelMap.Controls.Add(this.checkBoxTileHost);
             this.xPanderPanelMap.Controls.Add(this.buttonClearSArea);
             this.xPanderPanelMap.Controls.Add(this.buttonPrefetchSArea);
             this.xPanderPanelMap.CustomColors.BackColor = System.Drawing.SystemColors.Control;
@@ -508,6 +665,16 @@
             this.xPanderPanelMap.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelMap.ToolTipTextExpandIconPanelExpanded = null;
             // 
+            // checkBoxTileHost
+            // 
+            this.checkBoxTileHost.AutoSize = true;
+            this.checkBoxTileHost.Location = new System.Drawing.Point(9, 117);
+            this.checkBoxTileHost.Name = "checkBoxTileHost";
+            this.checkBoxTileHost.Size = new System.Drawing.Size(198, 16);
+            this.checkBoxTileHost.TabIndex = 2;
+            this.checkBoxTileHost.Text = "TileHost - LeafletJS web demo";
+            this.checkBoxTileHost.UseVisualStyleBackColor = true;
+            // 
             // buttonClearSArea
             // 
             this.buttonClearSArea.Location = new System.Drawing.Point(10, 72);
@@ -528,150 +695,6 @@
             this.buttonPrefetchSArea.UseVisualStyleBackColor = true;
             this.buttonPrefetchSArea.Click += new System.EventHandler(this.buttonPrefetch_Click);
             // 
-            // miniToolStrip
-            // 
-            this.miniToolStrip.AutoSize = false;
-            this.miniToolStrip.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.miniToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            this.miniToolStrip.Location = new System.Drawing.Point(140, 2);
-            this.miniToolStrip.Name = "miniToolStrip";
-            this.miniToolStrip.Size = new System.Drawing.Size(750, 24);
-            this.miniToolStrip.TabIndex = 2;
-            // 
-            // 地图操作ToolStripMenuItem
-            // 
-            this.地图操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.谷歌地图ToolStripMenuItem,
-            this.高德地图ToolStripMenuItem,
-            this.腾讯地图ToolStripMenuItem,
-            this.百度地图ToolStripMenuItem});
-            this.地图操作ToolStripMenuItem.Name = "地图操作ToolStripMenuItem";
-            this.地图操作ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.地图操作ToolStripMenuItem.Text = "地图选择";
-            // 
-            // 谷歌地图ToolStripMenuItem
-            // 
-            this.谷歌地图ToolStripMenuItem.Name = "谷歌地图ToolStripMenuItem";
-            this.谷歌地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.谷歌地图ToolStripMenuItem.Text = "谷歌地图";
-            this.谷歌地图ToolStripMenuItem.Click += new System.EventHandler(this.谷歌地图ToolStripMenuItem_Click);
-            // 
-            // 高德地图ToolStripMenuItem
-            // 
-            this.高德地图ToolStripMenuItem.Name = "高德地图ToolStripMenuItem";
-            this.高德地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.高德地图ToolStripMenuItem.Text = "高德地图";
-            this.高德地图ToolStripMenuItem.Click += new System.EventHandler(this.高德地图ToolStripMenuItem_Click);
-            // 
-            // 腾讯地图ToolStripMenuItem
-            // 
-            this.腾讯地图ToolStripMenuItem.Name = "腾讯地图ToolStripMenuItem";
-            this.腾讯地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.腾讯地图ToolStripMenuItem.Text = "腾讯地图";
-            this.腾讯地图ToolStripMenuItem.Click += new System.EventHandler(this.腾讯地图ToolStripMenuItem_Click);
-            // 
-            // 百度地图ToolStripMenuItem
-            // 
-            this.百度地图ToolStripMenuItem.Name = "百度地图ToolStripMenuItem";
-            this.百度地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.百度地图ToolStripMenuItem.Text = "百度地图";
-            this.百度地图ToolStripMenuItem.Click += new System.EventHandler(this.百度地图ToolStripMenuItem_Click);
-            // 
-            // 地图操作ToolStripMenuItem1
-            // 
-            this.地图操作ToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.保存为图片ToolStripMenuItem,
-            this.保存缓存ToolStripMenuItem,
-            this.读取缓存ToolStripMenuItem});
-            this.地图操作ToolStripMenuItem1.Name = "地图操作ToolStripMenuItem1";
-            this.地图操作ToolStripMenuItem1.Size = new System.Drawing.Size(67, 20);
-            this.地图操作ToolStripMenuItem1.Text = "地图操作";
-            // 
-            // 保存为图片ToolStripMenuItem
-            // 
-            this.保存为图片ToolStripMenuItem.Name = "保存为图片ToolStripMenuItem";
-            this.保存为图片ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.保存为图片ToolStripMenuItem.Text = "保存地图图片";
-            this.保存为图片ToolStripMenuItem.Click += new System.EventHandler(this.保存为图片ToolStripMenuItem_Click);
-            // 
-            // 保存缓存ToolStripMenuItem
-            // 
-            this.保存缓存ToolStripMenuItem.Name = "保存缓存ToolStripMenuItem";
-            this.保存缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.保存缓存ToolStripMenuItem.Text = "保存缓存";
-            this.保存缓存ToolStripMenuItem.Click += new System.EventHandler(this.保存缓存ToolStripMenuItem_Click);
-            // 
-            // 读取缓存ToolStripMenuItem
-            // 
-            this.读取缓存ToolStripMenuItem.Name = "读取缓存ToolStripMenuItem";
-            this.读取缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.读取缓存ToolStripMenuItem.Text = "读取缓存";
-            this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.地图操作ToolStripMenuItem,
-            this.地图操作ToolStripMenuItem1});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(750, 24);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // panelMap
-            // 
-            this.panelMap.Controls.Add(this.buttonMapType);
-            this.panelMap.Controls.Add(this.mapControl);
-            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(175, 24);
-            this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(575, 493);
-            this.panelMap.TabIndex = 18;
-            // 
-            // buttonMapType
-            // 
-            this.buttonMapType.Location = new System.Drawing.Point(503, 4);
-            this.buttonMapType.Name = "buttonMapType";
-            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
-            this.buttonMapType.TabIndex = 3;
-            this.buttonMapType.UseVisualStyleBackColor = true;
-            // 
-            // mapControl
-            // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(575, 493);
-            this.mapControl.TabIndex = 1;
-            this.mapControl.Zoom = 0D;
-            // 
-            // comboBoxRegion
-            // 
-            this.comboBoxRegion.FormattingEnabled = true;
-            this.comboBoxRegion.Location = new System.Drawing.Point(655, 1);
-            this.comboBoxRegion.Name = "comboBoxRegion";
-            this.comboBoxRegion.Size = new System.Drawing.Size(89, 20);
-            this.comboBoxRegion.TabIndex = 4;
-            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -682,10 +705,15 @@
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.miniToolStrip;
             this.Name = "MapForm";
             this.Text = "Map Form";
             this.contextMenuStrip1.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.panelMap.ResumeLayout(false);
+            this.panelMap.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.panelMenu.ResumeLayout(false);
             this.xPanderPanelList1.ResumeLayout(false);
             this.xPanderPanelRoute.ResumeLayout(false);
@@ -694,9 +722,7 @@
             this.xPanderPanelDraw.ResumeLayout(false);
             this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.xPanderPanelMap.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.panelMap.ResumeLayout(false);
+            this.xPanderPanelMap.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -725,7 +751,6 @@
         private System.Windows.Forms.Button buttonFindRoute;
         private System.Windows.Forms.Button buttonSetEnd;
         private BSE.Windows.Forms.XPanderPanel xPanderPanelDraw;
-        private System.Windows.Forms.MenuStrip miniToolStrip;
         private System.Windows.Forms.ToolStripMenuItem 地图操作ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 谷歌地图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 高德地图ToolStripMenuItem;
@@ -747,6 +772,9 @@
         private BSE.Windows.Forms.XPanderPanel xPanderPanelMap;
         private System.Windows.Forms.Button buttonPrefetchSArea;
         private System.Windows.Forms.Button buttonClearSArea;
+        private System.Windows.Forms.CheckBox checkBoxTileHost;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentPos;
     }
 }
 

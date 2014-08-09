@@ -41,6 +41,8 @@ namespace GMapProvidersExt
     public class BaiduMapProvider : BaiduMapProviderBase
     {
         public static readonly BaiduMapProvider Instance;
+        public string SecureWord = "Galileo";
+        private string string_4 = "&s=";
 
         readonly Guid id = new Guid("708748FC-5FDD-4d3a-9027-356F24A755E5");
         public override Guid Id
@@ -76,22 +78,23 @@ namespace GMapProvidersExt
             }
         }
 
+        internal void GetSecureWords(GPoint pos, out string sec1, out string sec2)
+        {
+            sec1 = string.Empty;
+            sec2 = string.Empty;
+            int length = ((int)((pos.X * 3) + pos.Y)) % 8;
+            sec2 = this.SecureWord.Substring(0, length);
+            if ((pos.Y >= 0x2710) && (pos.Y < 0x186a0))
+            {
+                sec1 = string_4;
+            }
+        }
+
         string MakeTileImageUrl(GPoint pos, int zoom, string language)
         {
-            zoom = zoom - 1;
-            var offsetX = Math.Pow(2, zoom);
-            var offsetY = offsetX - 1;
-
-            var numX = pos.X - offsetX;
-            var numY = -pos.Y + offsetY;
-
-            zoom = zoom + 1;
-            var num = (pos.X + pos.Y) % 4 + 1;
-            var x = numX.ToString().Replace("-", "M");
-            var y = numY.ToString().Replace("-", "M");
-
-            //var x = pos.X;
-            //var y = pos.Y;
+            var num = GMapProvider.GetServerNum(pos, 10);
+            var x = (pos.X > 0) ? pos.X.ToString() : ("M" + Math.Abs(pos.X).ToString());
+            var y = (pos.Y > 0) ? pos.Y.ToString() : ("M" + Math.Abs(pos.Y).ToString());
 
             string url = string.Format(UrlFormat, num, x, y, zoom);
             return url;
