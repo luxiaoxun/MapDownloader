@@ -666,6 +666,17 @@ namespace GMapWinFormDemo
             }
         }
 
+        private void 必应地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mapProviderType != MapProviderType.bing)
+            {
+                mapProviderType = MapProviderType.bing;
+                mapControl.MapProvider = GMapProviders.BingMap;
+                mapType = MapType.Common;
+                this.buttonMapType.Image = Properties.Resources.weixing;
+            }
+        }
+
         private void buttonMapType_Click(object sender, EventArgs e)
         {
             if (mapType == MapType.Common && mapProviderType == MapProviderType.google)
@@ -730,16 +741,7 @@ namespace GMapWinFormDemo
             }
         }
 
-        private void 必应地图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (mapProviderType != MapProviderType.bing)
-            {
-                mapProviderType = MapProviderType.bing;
-                mapControl.MapProvider = GMapProviders.BingMap;
-                mapType = MapType.Common;
-                this.buttonMapType.Image = Properties.Resources.weixing;
-            }
-        }
+        
 
         #endregion
 
@@ -786,42 +788,6 @@ namespace GMapWinFormDemo
         private void 读取缓存ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.ShowImportDialog();
-        }
-
-        private void buttonPrefetch_Click(object sender, EventArgs e)
-        {
-            RectLatLng area = mapControl.SelectedArea;
-            if (!area.IsEmpty)
-            {
-                for (int i = (int)mapControl.Zoom; i <= mapControl.MaxZoom; i++)
-                {
-                    DialogResult res = MessageBox.Show("Ready ripp at Zoom = " + i + " ?", "GMap.NET", MessageBoxButtons.YesNoCancel);
-
-                    if (res == DialogResult.Yes)
-                    {
-                        using (TilePrefetcher obj = new TilePrefetcher())
-                        {
-                            obj.Overlay = markersOverlay; // set overlay if you want to see cache progress on the map
-                            obj.Shuffle = mapControl.Manager.Mode != AccessMode.CacheOnly;
-                            obj.Owner = this;
-                            obj.ShowCompleteMessage = true;
-                            obj.Start(area, i, mapControl.MapProvider, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 100, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 1);
-                        }
-                    }
-                    else if (res == DialogResult.No)
-                    {
-                        continue;
-                    }
-                    else if (res == DialogResult.Cancel)
-                    {
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
         }
 
         #endregion
@@ -921,6 +887,44 @@ namespace GMapWinFormDemo
 
         #endregion
 
+        #region 地图下载
+
+        private void buttonPrefetch_Click(object sender, EventArgs e)
+        {
+            RectLatLng area = mapControl.SelectedArea;
+            if (!area.IsEmpty)
+            {
+                for (int i = (int)mapControl.Zoom; i <= mapControl.MaxZoom; i++)
+                {
+                    DialogResult res = MessageBox.Show("Ready ripp at Zoom = " + i + " ?", "GMap.NET", MessageBoxButtons.YesNoCancel);
+
+                    if (res == DialogResult.Yes)
+                    {
+                        using (TilePrefetcher obj = new TilePrefetcher())
+                        {
+                            obj.Overlay = markersOverlay; // set overlay if you want to see cache progress on the map
+                            obj.Shuffle = mapControl.Manager.Mode != AccessMode.CacheOnly;
+                            obj.Owner = this;
+                            obj.ShowCompleteMessage = true;
+                            obj.Start(area, i, mapControl.MapProvider, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 100, mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 1);
+                        }
+                    }
+                    else if (res == DialogResult.No)
+                    {
+                        continue;
+                    }
+                    else if (res == DialogResult.Cancel)
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
         private void buttonClearSArea_Click(object sender, EventArgs e)
         {
             if (this.mapControl != null)
@@ -928,6 +932,8 @@ namespace GMapWinFormDemo
                 this.mapControl.SelectedArea = GMap.NET.RectLatLng.Empty;
             }
         }
-        
+
+        #endregion 
+
     }
 }
