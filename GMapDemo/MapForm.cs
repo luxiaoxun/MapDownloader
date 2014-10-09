@@ -344,24 +344,14 @@ namespace GMapWinFormDemo
 
         #endregion
 
+        #region Map Operation
+
         void panelMap_SizeChanged(object sender, EventArgs e)
         {
             this.buttonMapType.Location = new Point(
                 this.panelMenu.Location.X + panelMap.Width - 80, 
                 this.panelMenu.Location.Y);
-            this.comboBoxRegion.Location = new Point(this.menuStrip1.Location.X + menuStrip1.Width - 100, this.menuStrip1.Location.Y);
-        }
-
-        void mapControl_OnPolygonLeave(GMapPolygon item)
-        {
-            currentPolygon = null;
-            item.Stroke.Color = Color.Blue;
-        }
-
-        void mapControl_OnPolygonEnter(GMapPolygon item)
-        {
-            currentPolygon = item;
-            item.Stroke.Color = Color.Red;
+            this.comboBoxRegion.Location = new Point(this.menuStrip.Location.X + menuStrip.Width - 100, this.menuStrip.Location.Y);
         }
 
         void mapControl_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -452,7 +442,25 @@ namespace GMapWinFormDemo
             }
         }
 
-        #region Marker操作
+        #endregion
+
+        #region Polygon Operation
+
+        void mapControl_OnPolygonLeave(GMapPolygon item)
+        {
+            currentPolygon = null;
+            item.Stroke.Color = Color.Blue;
+        }
+
+        void mapControl_OnPolygonEnter(GMapPolygon item)
+        {
+            currentPolygon = item;
+            item.Stroke.Color = Color.Red;
+        }
+
+        #endregion
+
+        #region Marker Operation
 
         void mapControl_OnMarkerLeave(GMapMarker item)
         {
@@ -468,7 +476,7 @@ namespace GMapWinFormDemo
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                this.contextMenuStrip1.Show(Cursor.Position);
+                this.contextMenuStripMarker.Show(Cursor.Position);
                 if (item is GMapFlashMarker)
                 {
                     currentMarker = item as GMapFlashMarker;

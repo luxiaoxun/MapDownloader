@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\Lib\GMap.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\Lib\GMap.NET.WindowsForms.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -53,6 +47,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
+      <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
+      <Name>GMap.NET.WindowsForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
       <Name>NetUtilityLib</Name>

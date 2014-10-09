@@ -54,7 +54,6 @@ namespace QuickRabbitMQ.imp
 
                 try
                 {
-
                     Stop();
                     _token = Guid.NewGuid().ToString();
                     var myToken = _token;
@@ -78,12 +77,84 @@ namespace QuickRabbitMQ.imp
             }
         }
 
+        private void DoRecive(object obj)
+        {
+            string myToken = obj as string;
+            if (myToken == null)
+            {
+                myToken = "";
+            }
+
+            Log.Debug("开始rabbitmq发送线程," + Thread.CurrentThread.ManagedThreadId + ",token" + myToken);
+            try
+            {
+                if (!myToken.Equals(this._token))
+                {
+                    return;
+                }
+
+                while (true)
+                {
+                    if (!myToken.Equals(this._token))
+                    {
+                        return;
+                    }
+                    try
+                    {
+                        MakeConnection();
+                        var consumer = new QueueingBasicConsumer(_channnel);
+                        _channnel.BasicConsume(_queueParameter.QueueName, true, consumer);
+
+                        while (true)
+                        {
+                            if (!myToken.Equals(this._token))
+                            {
+                                return;
+                            }
+                            try
+                            {
+                                RabbitMQ.Client.Events.BasicDeliverEventArgs args = consumer.Queue.Dequeue();
+                                var body = args.Body;
+
+                                Log.Debug("收到rabbitmq数据");
+
+                                OnMessageRecived(body);
+                            }
+                            catch (Exception exp)
+                            {
+                                CloseConnection();
+                                Log.Error(exp);
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        CloseConnection();
+                        Log.Error(exp);
+                    }
+
+                    if (!myToken.Equals(this._token))
+                    {
+                        return;
+                    }
+                    //休眠10秒
+                    Thread.Sleep(10000);
+                }
+            }
+            catch (Exception exp)
+            {
+                Log.Error(exp);
+            }
+
+            Log.Debug("退出rabbitmq发送线程," + Thread.CurrentThread.ManagedThreadId);
+        }
+
         private void MakeConnection()
         {
             if (_isConnectionOk)
             {
                 return;
-                
             }
             CloseConnection();
             var connFactory = new ConnectionFactory();
@@ -117,28 +188,29 @@ namespace QuickRabbitMQ.imp
             _isConnectionOk = true;
         }
 
-        private void _channnel_ModelShutdown(IModel model, ShutdownEventArgs reason)
+        private void OnMessageRecived(byte[] body)
         {
-            CloseConnection();
-            var msg = "发生端channel连接断开";
-            if (reason != null)
+            var handle = MessageRecieved;
+
+            if (handle != null && body != null)
             {
-                msg += ",reason:" + reason.ToString();
+                var messageArgs = new MessageRecivedEventArgs();
+                messageArgs.MessageBody = body;
+
+                ThreadPool.QueueUserWorkItem((x) =>
+                {
+                    try
+                    {
+                        Log.Debug("MessageRecieved开始处理rabbitmq收的数据");
+                        handle(this, messageArgs);
+                        Log.Debug("MessageRecieved处理rabbitmq收的数据成功");
+                    }
+                    catch (Exception exp)
+                    {
+                        Log.Error("数据接收处理失败", exp);
+                    }
+                }, null);
             }
-            Log.Error(msg);
-
-        }
-
-        private void _connection_ConnectionShutdown(IConnection connection, ShutdownEventArgs reason)
-        {
-            CloseConnection();
-            var msg = "发生端connection连接断开";
-            if (reason != null)
-            {
-                msg += ",reason:" + reason.ToString();
-            }
-            Log.Error(msg);
-
         }
 
         public void Stop()
@@ -150,13 +222,11 @@ namespace QuickRabbitMQ.imp
                 {
                     if (_workThread != null &&_workThread.IsAlive)
                     {
-                       
                         _workThread.Abort();
                     }
                 }
                 catch (Exception)
                 {
-
                 }
                 finally
                 {
@@ -167,7 +237,6 @@ namespace QuickRabbitMQ.imp
 
                 _hasStarted = false;
             }
-           
         }
 
         private void CloseConnection()
@@ -207,106 +276,27 @@ namespace QuickRabbitMQ.imp
             _isConnectionOk = false;
         }
 
-        private void DoRecive(object obj)
+        private void _channnel_ModelShutdown(IModel model, ShutdownEventArgs reason)
         {
-            string myToken = obj as string;
-            if (myToken == null)
+            CloseConnection();
+            var msg = "发生端channel连接断开";
+            if (reason != null)
             {
-                myToken = "";
+                msg += ",reason:" + reason.ToString();
             }
-
-            Log.Debug("开始rabbitmq发送线程," + Thread.CurrentThread.ManagedThreadId+",token"+myToken);
-            try
-            {
-                if (!myToken.Equals(this._token))
-                {
-                    return;
-                }
-
-                while (true)
-                {
-                    if (!myToken.Equals(this._token))
-                    {
-                        return;
-                    }
-                    try
-                    {
-                        MakeConnection();
-                        var consumer = new QueueingBasicConsumer(_channnel);
-                        _channnel.BasicConsume(_queueParameter.QueueName, true, consumer);
-
-                        while (true)
-                        {
-                            if (!myToken.Equals(this._token))
-                            {
-                                return;
-                            }
-                            try
-                            {
-
-                                RabbitMQ.Client.Events.BasicDeliverEventArgs args = consumer.Queue.Dequeue();
-                                var body = args.Body;
-
-                                Log.Debug("收到rabbitmq数据");
-
-                                OnMessageRecived(body);
-                            }
-                            catch (Exception exp)
-                            {
-                                CloseConnection();
-                                Log.Error(exp);
-                                break;
-
-                            }
-                        }
-
-                    }
-                    catch (Exception exp)
-                    {
-                        CloseConnection();
-                        Log.Error(exp);
-                    }
-
-
-                    if (!myToken.Equals(this._token))
-                    {
-                        return;
-                    }
-                    //休眠10秒
-                    Thread.Sleep(10000);
-                }
-            }
-            catch (Exception exp)
-            {
-                Log.Error(exp);
-            }
-
-            Log.Debug("退出rabbitmq发送线程,"+Thread.CurrentThread.ManagedThreadId);
+            Log.Error(msg);
         }
 
-        private void OnMessageRecived(byte[] body)
+        private void _connection_ConnectionShutdown(IConnection connection, ShutdownEventArgs reason)
         {
-            var handle = MessageRecieved;
-
-            if (handle != null && body != null)
+            CloseConnection();
+            var msg = "发生端connection连接断开";
+            if (reason != null)
             {
-                var messageArgs = new MessageRecivedEventArgs();
-                messageArgs.MessageBody = body;
-
-                ThreadPool.QueueUserWorkItem((x) =>
-                {
-                    try
-                    {
-                        Log.Debug("MessageRecieved开始处理rabbitmq收的数据");
-                        handle(this, messageArgs);
-                        Log.Debug("MessageRecieved处理rabbitmq收的数据成功");
-                    }
-                    catch (Exception exp)
-                    {
-                        Log.Error("数据接收处理失败", exp);
-                    }
-                }, null);
+                msg += ",reason:" + reason.ToString();
             }
+            Log.Error(msg);
         }
+        
     }
 }

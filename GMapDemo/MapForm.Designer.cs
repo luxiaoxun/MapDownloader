@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStripMarker = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.地图操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,9 +40,9 @@
             this.保存为图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.保存缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.读取缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelCurrentPos = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonMapType = new System.Windows.Forms.Button();
             this.mapControl = new GMapWinFormDemo.MapControl();
@@ -74,10 +74,10 @@
             this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
             this.buttonClearSArea = new System.Windows.Forms.Button();
             this.buttonPrefetchSArea = new System.Windows.Forms.Button();
-            this.contextMenuStrip1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.contextMenuStripMarker.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.panelMap.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.panelMenu.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
             this.xPanderPanelRoute.SuspendLayout();
@@ -87,12 +87,12 @@
             this.xPanderPanelMap.SuspendLayout();
             this.SuspendLayout();
             // 
-            // contextMenuStrip1
+            // contextMenuStripMarker
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStripMarker.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.删除ToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(99, 26);
+            this.contextMenuStripMarker.Name = "contextMenuStrip1";
+            this.contextMenuStripMarker.Size = new System.Drawing.Size(99, 26);
             // 
             // 删除ToolStripMenuItem
             // 
@@ -171,21 +171,21 @@
             this.读取缓存ToolStripMenuItem.Text = "读取缓存";
             this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.地图操作ToolStripMenuItem,
             this.地图操作ToolStripMenuItem1});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(750, 24);
-            this.menuStrip1.TabIndex = 2;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(750, 24);
+            this.menuStrip.TabIndex = 2;
+            this.menuStrip.Text = "menuStrip1";
             // 
             // panelMap
             // 
-            this.panelMap.Controls.Add(this.statusStrip1);
+            this.panelMap.Controls.Add(this.statusStrip);
             this.panelMap.Controls.Add(this.buttonMapType);
             this.panelMap.Controls.Add(this.mapControl);
             this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -194,15 +194,15 @@
             this.panelMap.Size = new System.Drawing.Size(573, 493);
             this.panelMap.TabIndex = 18;
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelCurrentPos});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 471);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(573, 22);
-            this.statusStrip1.TabIndex = 4;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Location = new System.Drawing.Point(0, 471);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(573, 22);
+            this.statusStrip.TabIndex = 4;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // toolStripStatusLabelCurrentPos
             // 
@@ -704,16 +704,16 @@
             this.Controls.Add(this.panelMap);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panelMenu);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.Name = "MapForm";
             this.Text = "Map Form";
-            this.contextMenuStrip1.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.contextMenuStripMarker.ResumeLayout(false);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.panelMap.ResumeLayout(false);
             this.panelMap.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.panelMenu.ResumeLayout(false);
             this.xPanderPanelList1.ResumeLayout(false);
             this.xPanderPanelRoute.ResumeLayout(false);
@@ -730,7 +730,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripMarker;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.Button buttonStopBlink;
         private System.Windows.Forms.Button buttonBeginBlink;
@@ -760,7 +760,7 @@
         private System.Windows.Forms.ToolStripMenuItem 保存为图片ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 保存缓存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 读取缓存ToolStripMenuItem;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private BSE.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panelMap;
         private System.Windows.Forms.ComboBox comboBoxRegion;
@@ -773,7 +773,7 @@
         private System.Windows.Forms.Button buttonPrefetchSArea;
         private System.Windows.Forms.Button buttonClearSArea;
         private System.Windows.Forms.CheckBox checkBoxTileHost;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentPos;
     }
 }
