@@ -34,7 +34,6 @@ namespace GMapMarkerLib
         {
             nextFrame = this.gifImg.GetNextFrame();
             this.Overlay.Control.Refresh();
-            //throw new NotImplementedException();
         }
 
         public override void OnRender(Graphics g)

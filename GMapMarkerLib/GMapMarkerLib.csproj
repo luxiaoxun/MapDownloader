@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GifImage.cs" />
+    <Compile Include="GMapAnimateMarker.cs" />
+    <Compile Include="GMapFlashMarkerScopePie.cs" />
     <Compile Include="GMapBaloonToolTip.cs" />
     <Compile Include="GMapAnimationMarker.cs" />
     <Compile Include="GMapArrowMarker.cs" />
@@ -50,8 +52,15 @@
     <Compile Include="GMapCircleMarker2.cs" />
     <Compile Include="GMapDirectionMarker.cs" />
     <Compile Include="GMapFlashMarker.cs" />
+    <Compile Include="GMapFlashMarkerCircle.cs" />
+    <Compile Include="GMapMarkerPieAnimate.cs" />
+    <Compile Include="GMapMarkerScopeCircle.cs" />
+    <Compile Include="GMapMarkerScopeCircleAnimate.cs" />
+    <Compile Include="GMapMarkerScopePie.cs" />
+    <Compile Include="GMapMarkerScopePieAnimate.cs" />
     <Compile Include="GMapTipMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">

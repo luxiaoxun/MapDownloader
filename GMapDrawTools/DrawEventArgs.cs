@@ -12,9 +12,11 @@ namespace GMapDrawTools
     {
         public DrawingMode DrawingMode { get; private set; }
 
+        public GMapDrawRectangle Rectangle { set; get; }
+
         public GMapPolygon Polygon { get; set; }
 
-        public GMapDrawingCircle Circle { get; set; }
+        public GMapDrawCircle Circle { get; set; }
 
         public GMapRoute Route { set; get; }
 
@@ -23,28 +25,38 @@ namespace GMapDrawTools
             
         }
 
-        public DrawEventArgs(DrawingMode drawingMode, List<PointLatLng> drawingPoints)
+        public DrawEventArgs(DrawingMode drawingMode, List<PointLatLng> drawingPoints, Pen stroke, Brush fill)
         {
             DrawingMode = drawingMode;
-            if (drawingMode == DrawingMode.Polygon || drawingMode == DrawingMode.Rectangle)
+            if (drawingMode == DrawingMode.Polygon)
             {
                 Polygon = new GMapPolygon(drawingPoints, drawingMode.ToString());
-                Polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-                Polygon.Stroke = new Pen(Color.Blue, 2);
+                Polygon.Fill = fill;
+                Polygon.Stroke = stroke;
                 Polygon.IsHitTestVisible = true;
+            }
+            else if (drawingMode == DrawingMode.Rectangle)
+            {
+                Rectangle = new GMapDrawRectangle(drawingPoints, drawingMode.ToString());
+                Rectangle.Fill = fill;
+                Rectangle.Stroke = stroke;
+                Rectangle.IsHitTestVisible = true;
             }
             else if (drawingMode == DrawingMode.Route)
             {
                 Route = new GMapRoute(drawingPoints, drawingMode.ToString());
-                Route.Stroke = new Pen(Color.Blue, 2);
+                if (stroke != null)
+                {
+                    Route.Stroke = stroke;
+                }
                 Route.IsHitTestVisible = true;
             }
         }
 
-        public DrawEventArgs(DrawingMode drawingMode, PointLatLng centerPoint, PointLatLng edgePoint)
+        public DrawEventArgs(DrawingMode drawingMode, PointLatLng centerPoint, PointLatLng edgePoint, Pen stroke, Brush fill)
         {
             DrawingMode = drawingMode;
-            Circle = new GMapDrawingCircle(centerPoint,edgePoint);
+            Circle = new GMapDrawCircle(centerPoint, edgePoint, stroke,fill);
         }
     }
 }

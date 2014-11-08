@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace RabbitMQSendTool
+namespace RabbitMQTool
 {
     static class Program
     {
@@ -15,7 +15,7 @@ namespace RabbitMQSendTool
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RabbitMQSendForm());
+            Application.Run(new MainForm());
         }
     }
 }

@@ -62,7 +62,6 @@ namespace QuickRabbitMQ.imp
                         {
                             lock (_sendSycRoot)
                             {
-
                                 chan.BasicPublish(_exchangeParameter.ExchangeName, routingKey, null, messageBody);
                             }
                            
@@ -151,7 +150,6 @@ namespace QuickRabbitMQ.imp
                 msg += ",reason:" + reason.ToString();
             }
             Log.Error(msg);
-           
         }
 
         private void _connection_ConnectionShutdown(IConnection connection, ShutdownEventArgs reason)
@@ -163,15 +161,12 @@ namespace QuickRabbitMQ.imp
                 msg += ",reason:" + reason.ToString();
             }
             Log.Error(msg);
-            
         }
 
         public void Stop()
         {
             lock (_sycRoot)
             {
-
-
                 try
                 {
                     if (_channnel != null)
@@ -179,13 +174,9 @@ namespace QuickRabbitMQ.imp
                         _channnel.ModelShutdown -= _channnel_ModelShutdown;
                         _channnel.Close();
                     }
-
-
                 }
                 catch
                 {
-
-
                 }
                 finally
                 {
@@ -199,13 +190,9 @@ namespace QuickRabbitMQ.imp
                         _connection.ConnectionShutdown -= _connection_ConnectionShutdown;
                         _connection.Close();
                     }
-
-
                 }
                 catch
                 {
-
-
                 }
                 finally
                 {
@@ -214,9 +201,8 @@ namespace QuickRabbitMQ.imp
 
                 _hasStarted = false;
             }
-
-
         }
+
         #endregion
     }
 }

@@ -222,24 +222,27 @@ namespace GMapWinFormDemo
             //string file = System.Windows.Forms.Application.StartupPath + "\\china-province city";
             //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
             string file = System.Windows.Forms.Application.StartupPath + "\\china-province city.xml";
-            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromXmlFile(file);
-            foreach (var provice in china.Province)
+            if (System.IO.File.Exists(file))
             {
-                TreeNode pNode = new TreeNode(provice.name);
-                pNode.Tag = provice;
-                foreach (var city in provice.City)
+                Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromXmlFile(file);
+                foreach (var provice in china.Province)
                 {
-                    TreeNode cNode = new TreeNode(city.name);
-                    cNode.Tag = city;
-                    //foreach (var piecearea in city.Piecearea)
-                    //{
-                    //    TreeNode areaNode = new TreeNode(piecearea.name);
-                    //    areaNode.Tag = piecearea;
-                    //    cNode.Nodes.Add(areaNode);
-                    //}
-                    pNode.Nodes.Add(cNode);
+                    TreeNode pNode = new TreeNode(provice.name);
+                    pNode.Tag = provice;
+                    foreach (var city in provice.City)
+                    {
+                        TreeNode cNode = new TreeNode(city.name);
+                        cNode.Tag = city;
+                        //foreach (var piecearea in city.Piecearea)
+                        //{
+                        //    TreeNode areaNode = new TreeNode(piecearea.name);
+                        //    areaNode.Tag = piecearea;
+                        //    cNode.Nodes.Add(areaNode);
+                        //}
+                        pNode.Nodes.Add(cNode);
+                    }
+                    rootNode.Nodes.Add(pNode);
                 }
-                rootNode.Nodes.Add(pNode);
             }
 
             this.treeView1.CheckBoxes = true;
@@ -435,10 +438,16 @@ namespace GMapWinFormDemo
                 //markersOverlay.Markers.Add(ani);
 
                 //GMapMarker marker = new GMapMarkerDirection(point, Properties.Resources.arrow, 45);
-                //objects.Markers.Add(marker);
+                //markersOverlay.Markers.Add(marker);
 
                 //GMapMarker marker = new GMapMarkerTip(point, bitmap, "图标A");
-                //objects.Markers.Add(marker);
+                //markersOverlay.Markers.Add(marker);
+
+                //GMapFlashMarkerScopePie marker = new GMapFlashMarkerScopePie(this.mapControl, point, 0, 60, 300);
+                //markersOverlay.Markers.Add(marker);
+
+                GMapMarkerPieAnimate marker = new GMapMarkerPieAnimate(this.mapControl, point, 300);
+                markersOverlay.Markers.Add(marker);
             }
         }
 
@@ -749,8 +758,6 @@ namespace GMapWinFormDemo
             }
         }
 
-        
-
         #endregion
 
         #region 地图操作
@@ -804,7 +811,7 @@ namespace GMapWinFormDemo
 
         void draw_DrawComplete(object sender, DrawEventArgs e)
         {
-            if (e != null && (e.Polygon != null || e.Circle != null || e.Route != null))
+            if (e != null && (e.Polygon != null ||e.Rectangle!=null || e.Circle != null || e.Route != null))
             {
                 switch (e.DrawingMode)
                 {
@@ -812,7 +819,7 @@ namespace GMapWinFormDemo
                         polygonsOverlay.Polygons.Add(e.Polygon);
                         break;
                     case DrawingMode.Rectangle:
-                        polygonsOverlay.Polygons.Add(e.Polygon);
+                        polygonsOverlay.Polygons.Add(e.Rectangle);
                         break;
                     case DrawingMode.Circle:
                         polygonsOverlay.Markers.Add(e.Circle);
