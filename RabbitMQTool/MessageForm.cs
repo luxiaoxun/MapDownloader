@@ -12,11 +12,11 @@ using RabbitMQ.Client.Framing.v0_9_1;
 
 namespace RabbitMQTool
 {
-    public partial class MainForm : Form
+    public partial class MessageForm : Form
     {
         private RabbitMqCfg rabbitMqCfg = new RabbitMqCfg();
 
-        public MainForm()
+        public MessageForm()
         {
             InitializeComponent();
 

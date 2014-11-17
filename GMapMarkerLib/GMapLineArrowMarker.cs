@@ -8,14 +8,14 @@ using System.Drawing;
 
 namespace GMapMarkerLib
 {
-    public class GMapArrowMarker:GMapMarker
+    public class GMapLineArrowMarker:GMapMarker
     {
         private Pen pen;
 
         private PointLatLng beginPoint;
         private PointLatLng endPoint;
 
-        public GMapArrowMarker(PointLatLng beginPoint, PointLatLng endPoint, bool isShowArrow):base(beginPoint)
+        public GMapLineArrowMarker(PointLatLng beginPoint, PointLatLng endPoint, bool isShowArrow):base(beginPoint)
         {
             this.beginPoint = beginPoint;
             this.endPoint = endPoint;

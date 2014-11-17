@@ -46,8 +46,8 @@
     <Compile Include="GMapAnimateMarker.cs" />
     <Compile Include="GMapFlashMarkerScopePie.cs" />
     <Compile Include="GMapBaloonToolTip.cs" />
-    <Compile Include="GMapAnimationMarker.cs" />
-    <Compile Include="GMapArrowMarker.cs" />
+    <Compile Include="GMapGifMarker.cs" />
+    <Compile Include="GMapLineArrowMarker.cs" />
     <Compile Include="GMapCircleMarker.cs" />
     <Compile Include="GMapCircleMarker2.cs" />
     <Compile Include="GMapDirectionMarker.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="GMapMarkerScopeCircleAnimate.cs" />
     <Compile Include="GMapMarkerScopePie.cs" />
     <Compile Include="GMapMarkerScopePieAnimate.cs" />
+    <Compile Include="GMapPointMarker.cs" />
     <Compile Include="GMapTipMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadManager.cs" />

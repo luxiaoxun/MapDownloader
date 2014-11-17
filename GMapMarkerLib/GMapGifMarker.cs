@@ -9,7 +9,7 @@ using GMap.NET.WindowsForms.ToolTips;
 
 namespace GMapMarkerLib
 {
-    public class GMapAnimationMarker : GMapMarker
+    public class GMapGifMarker : GMapMarker
     {
         // Fields
         private GifImage gifImg;
@@ -17,7 +17,7 @@ namespace GMapMarkerLib
         private System.Windows.Forms.Timer flashTimer = new System.Windows.Forms.Timer();
 
         // Methods
-        public GMapAnimationMarker(PointLatLng p, GifImage image)
+        public GMapGifMarker(PointLatLng p, GifImage image)
             : base(p)
         {
             this.gifImg = image;

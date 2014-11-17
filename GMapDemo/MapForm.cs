@@ -43,66 +43,72 @@ namespace GMapWinFormDemo
         private GMapOverlay regionOverlay = new GMapOverlay("region");
 
         private Draw draw;
-
         private DrawDistance drawDistance;
+
+        private HistoryGeoOverlay historyGeoOverlay = new HistoryGeoOverlay();
 
         public MapForm()
         {
             InitializeComponent();
-            
-            try
+
+            if (!DesignMode)
             {
-                System.Net.IPHostEntry e = System.Net.Dns.GetHostEntry("www.google.com.hk");
+                try
+                {
+                    System.Net.IPHostEntry e = System.Net.Dns.GetHostEntry("ditu.google.cn");
+                }
+                catch
+                {
+                    mapControl.Manager.Mode = AccessMode.CacheOnly;
+                    MessageBox.Show("No internet connection avaible, going to CacheOnly mode.", "GMap.NET Demo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                mapControl.CacheLocation = Environment.CurrentDirectory + "\\GMapCache\\"; //缓存位置
+                mapControl.MapProvider = GMapProviders.GoogleChinaMap; //google china 地图
+                mapControl.MinZoom = 2;  //最小比例
+                mapControl.MaxZoom = 24; //最大比例
+                mapControl.Zoom = 10;     //当前比例
+                mapControl.ShowCenter = false; //不显示中心十字点
+                mapControl.DragButton = System.Windows.Forms.MouseButtons.Left; //左键拖拽地图
+                mapControl.Position = new PointLatLng(32.064, 118.704); //地图中心位置：南京
+                mapControl.MouseWheelZoomType = MouseWheelZoomType.MousePositionWithoutCenter;
+
+                mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
+                mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
+                mapControl.MouseUp += new MouseEventHandler(mapControl_MouseUp);
+                mapControl.MouseMove += new MouseEventHandler(mapControl_MouseMove);
+                mapControl.MouseDoubleClick += new MouseEventHandler(mapControl_MouseDoubleClick);
+
+                mapControl.OnMarkerClick += new MarkerClick(mapControl_OnMarkerClick);
+                mapControl.OnMarkerEnter += new MarkerEnter(mapControl_OnMarkerEnter);
+                mapControl.OnMarkerLeave += new MarkerLeave(mapControl_OnMarkerLeave);
+
+                mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
+                mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
+
+                mapControl.Overlays.Add(markersOverlay);
+                mapControl.Overlays.Add(locations);
+                mapControl.Overlays.Add(regionOverlay);
+                mapControl.Overlays.Add(polygonsOverlay);
+
+                mapControl.Overlays.Add(historyGeoOverlay);
+
+                gp = mapControl.MapProvider as GeocodingProvider;
+                if (gp == null) //地址转换服务，没有就使用OpenStreetMap
+                {
+                    gp = GMapProviders.OpenStreetMap as GeocodingProvider;
+                }
+                GMapProvider.Language = LanguageType.ChineseSimplified; //使用的语言，默认是英文
+
+                draw = new Draw(this.mapControl);
+                draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
+
+                drawDistance = new DrawDistance(this.mapControl);
+                drawDistance.DrawComplete += new EventHandler<DrawDistanceEventArgs>(drawDistance_DrawComplete);
             }
-            catch
-            {
-                mapControl.Manager.Mode = AccessMode.CacheOnly;
-                MessageBox.Show("No internet connection avaible, going to CacheOnly mode.", "GMap.NET Demo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            mapControl.CacheLocation = Environment.CurrentDirectory + "\\GMapCache\\"; //缓存位置
-            mapControl.MapProvider = GMapProviders.GoogleChinaMap; //google china 地图
-            mapControl.MinZoom = 2;  //最小比例
-            mapControl.MaxZoom = 24; //最大比例
-            mapControl.Zoom = 10;     //当前比例
-            mapControl.ShowCenter = false; //不显示中心十字点
-            mapControl.DragButton = System.Windows.Forms.MouseButtons.Left; //左键拖拽地图
-            mapControl.Position = new PointLatLng(32.064, 118.704); //地图中心位置：南京
-            mapControl.MouseWheelZoomType = MouseWheelZoomType.MousePositionWithoutCenter;
-
-            mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
-            mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
-            mapControl.MouseUp += new MouseEventHandler(mapControl_MouseUp);
-            mapControl.MouseMove += new MouseEventHandler(mapControl_MouseMove);
-            mapControl.MouseDoubleClick += new MouseEventHandler(mapControl_MouseDoubleClick);
-
-            mapControl.OnMarkerClick += new MarkerClick(mapControl_OnMarkerClick);
-            mapControl.OnMarkerEnter += new MarkerEnter(mapControl_OnMarkerEnter);
-            mapControl.OnMarkerLeave += new MarkerLeave(mapControl_OnMarkerLeave);
-
-            mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
-            mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
-
-            mapControl.Overlays.Add(markersOverlay);
-            mapControl.Overlays.Add(locations);
-            mapControl.Overlays.Add(regionOverlay);
-            mapControl.Overlays.Add(polygonsOverlay);
-
-            gp = mapControl.MapProvider as GeocodingProvider;
-            if (gp == null) //地址转换服务，没有就使用OpenStreetMap
-            {
-                gp = GMapProviders.OpenStreetMap as GeocodingProvider;
-            }
-            GMapProvider.Language = LanguageType.ChineseSimplified; //使用的语言，默认是英文
 
             InitUI();
             InitChinaRegion();
-
-            draw = new Draw(this.mapControl);
-            draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
-
-            drawDistance = new DrawDistance(this.mapControl);
-            drawDistance.DrawComplete += new EventHandler<DrawDistanceEventArgs>(drawDistance_DrawComplete);
         }
 
         private void InitUI()
@@ -123,6 +129,10 @@ namespace GMapWinFormDemo
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
 
             this.checkBoxTileHost.CheckedChanged += new EventHandler(checkBoxTileHost_CheckedChanged);
+
+            InitHistoryLayerUI();
+
+            this.checkBoxFollow.CheckedChanged += new EventHandler(checkBoxFollow_CheckedChanged);
         }
 
         # region Leafletjs web demo
@@ -393,7 +403,7 @@ namespace GMapWinFormDemo
         void mapControl_MouseMove(object sender, MouseEventArgs e)
         {
             PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
-            this.toolStripStatusLabelCurrentPos.Text = "当前坐标："+point.ToString();
+            //this.toolStripStatusLabelCurrentPos.Text = "当前坐标："+point.ToString();
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left && isLeftButtonDown)
             {
@@ -425,29 +435,49 @@ namespace GMapWinFormDemo
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 PointLatLng point = mapControl.FromLocalToLatLng(e.X, e.Y);
-                
-                //GMapMarker marker = new GMarkerGoogle(point, GMarkerGoogleType.green);
-                //markersOverlay.Markers.Add(marker);
 
-                //Bitmap bitmap = Properties.Resources.point_blue;
-                //GMapMarker marker = new GMapMarkerFlash(point, bitmap);
-                //markersOverlay.Markers.Add(marker);
+                if (this.checkBoxMarker.Checked)
+                {
+                    if (this.rbGMarkerGoogle.Checked)
+                    {
+                        GMapMarker marker = new GMarkerGoogle(point, GMarkerGoogleType.green);
+                        markersOverlay.Markers.Add(marker);
+                    }
+                    else if (this.rbGMapFlashMarker.Checked)
+                    {
+                        Bitmap bitmap = Properties.Resources.point_blue;
+                        GMapMarker marker = new GMapFlashMarker(point, bitmap);
+                        markersOverlay.Markers.Add(marker);
 
-                //GifImage gif = new GifImage(Properties.Resources.your_sister);
-                //GMapMarkerAnimation ani = new GMapMarkerAnimation(point, gif);
-                //markersOverlay.Markers.Add(ani);
-
-                //GMapMarker marker = new GMapMarkerDirection(point, Properties.Resources.arrow, 45);
-                //markersOverlay.Markers.Add(marker);
-
-                //GMapMarker marker = new GMapMarkerTip(point, bitmap, "图标A");
-                //markersOverlay.Markers.Add(marker);
-
-                //GMapFlashMarkerScopePie marker = new GMapFlashMarkerScopePie(this.mapControl, point, 0, 60, 300);
-                //markersOverlay.Markers.Add(marker);
-
-                GMapMarkerPieAnimate marker = new GMapMarkerPieAnimate(this.mapControl, point, 300);
-                markersOverlay.Markers.Add(marker);
+                    }
+                    else if (this.rbGMapGifMarker.Checked)
+                    {
+                        GifImage gif = new GifImage(Properties.Resources.your_sister);
+                        GMapGifMarker ani = new GMapGifMarker(point, gif);
+                        markersOverlay.Markers.Add(ani);
+                    }
+                    else if (this.rbGMapDirectionMarker.Checked)
+                    {
+                        GMapDirectionMarker marker = new GMapDirectionMarker(point, Properties.Resources.arrow, 45);
+                        markersOverlay.Markers.Add(marker);
+                    }
+                    else if (this.rbGMapTipMarker.Checked)
+                    {
+                        Bitmap bitmap = Properties.Resources.point_blue;
+                        GMapTipMarker marker = new GMapTipMarker(point, bitmap, "图标A");
+                        markersOverlay.Markers.Add(marker);
+                    }
+                    else if (this.rbGMapMarkerScopePieAnimate.Checked)
+                    {
+                        GMapMarkerScopePieAnimate marker = new GMapMarkerScopePieAnimate(this.mapControl, point, 0, 60, 300);
+                        markersOverlay.Markers.Add(marker);
+                    }
+                    else if(this.rbGMapMarkerScopeCircleAnimate.Checked)
+                    {
+                        GMapMarkerScopeCircleAnimate marker = new GMapMarkerScopeCircleAnimate(this.mapControl, point, 300);
+                        markersOverlay.Markers.Add(marker);
+                    }
+                }
             }
         }
 
@@ -637,7 +667,7 @@ namespace GMapWinFormDemo
 
         #endregion
 
-        #region 地图选择
+        #region Map Provider
 
         private void 谷歌地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -760,7 +790,7 @@ namespace GMapWinFormDemo
 
         #endregion
 
-        #region 地图操作
+        #region Map
 
         private void 保存为图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -807,7 +837,7 @@ namespace GMapWinFormDemo
 
         #endregion
 
-        #region 画图操作
+        #region Draw Polygon
 
         void draw_DrawComplete(object sender, DrawEventArgs e)
         {
@@ -871,7 +901,7 @@ namespace GMapWinFormDemo
 
         #endregion
 
-        #region 测距
+        #region Distance
 
         void drawDistance_DrawComplete(object sender, DrawDistanceEventArgs e)
         {
@@ -902,7 +932,7 @@ namespace GMapWinFormDemo
 
         #endregion
 
-        #region 地图下载
+        #region Map cache
 
         private void buttonPrefetch_Click(object sender, EventArgs e)
         {
@@ -949,6 +979,157 @@ namespace GMapWinFormDemo
         }
 
         #endregion 
+
+        #region History Route Tracking
+
+        private void InitHistoryLayerUI()
+        {
+            this.buttonStart.Enabled = true;
+            this.buttonStop.Enabled = false;
+            this.buttonPause.Enabled = false;
+            this.buttonResume.Enabled = false;
+            this.buttonSetTimerInterval.Enabled = false;
+            this.checkBoxFollow.Enabled = false;
+        }
+
+        private List<HistoryGeoData> geoDataList = new List<HistoryGeoData>();
+
+        private List<HistoryGeoData> GetTestData()
+        {
+            List<HistoryGeoData> dataList = new List<HistoryGeoData>();
+            Random rand = new Random();
+            for(int i=0; i<500; ++i)
+            {
+                HistoryGeoData data = new HistoryGeoData();
+                data.ID = i;
+                data.PhoneNumber = "43242342";
+                data.X = 117 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
+                data.Y = 31 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
+                data.Time = DateTime.Now;
+
+                dataList.Add(data);
+            }
+
+            return dataList;
+        }
+
+        private void buttonHisTestData_Click(object sender, EventArgs e)
+        {
+            geoDataList = GetTestData();
+
+            this.dataGridView1.DataSource = geoDataList;
+        }
+
+        void checkBoxFollow_CheckedChanged(object sender, EventArgs e)
+        {
+            if (historyGeoOverlay != null)
+            {
+                historyGeoOverlay.Follow = this.checkBoxFollow.Checked;
+            }
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            this.buttonStart.Enabled = false;
+            this.buttonStop.Enabled = true;
+            this.buttonPause.Enabled = true;
+            this.buttonSetTimerInterval.Enabled = true;
+            this.checkBoxFollow.Enabled = true;
+
+            if(historyGeoOverlay!=null)
+            {
+                historyGeoOverlay.Start(geoDataList);
+            }
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            this.buttonStart.Enabled = true;
+            this.buttonStop.Enabled = false;
+            this.buttonPause.Enabled = false;
+            this.buttonResume.Enabled = false;
+            this.buttonSetTimerInterval.Enabled = false;
+            this.checkBoxFollow.Enabled = false;
+
+            if(historyGeoOverlay!=null)
+            {
+                historyGeoOverlay.Stop();
+            }
+        }
+
+        
+
+        private void buttonPause_Click(object sender, EventArgs e)
+        {
+            this.buttonPause.Enabled = false;
+            this.buttonSetTimerInterval.Enabled = false;
+            this.checkBoxFollow.Enabled = false;
+            this.buttonResume.Enabled = true;
+            if (historyGeoOverlay != null)
+            {
+                historyGeoOverlay.Pause();
+            }
+        }
+
+        private void buttonResume_Click(object sender, EventArgs e)
+        {
+            this.buttonResume.Enabled = false;
+            this.buttonPause.Enabled = true;
+            this.buttonSetTimerInterval.Enabled = true;
+            this.checkBoxFollow.Enabled = true;
+
+            if (historyGeoOverlay != null)
+            {
+                historyGeoOverlay.Resume();
+            }
+        }
+
+        private void buttonSetTimerInterval_Click(object sender, EventArgs e)
+        {
+            int index = this.comboBoxTimeSpan.SelectedIndex;
+
+            int span = 1000;
+
+            switch (index)
+            {
+                case 0:
+                    span = 500;
+                    break;
+                case 1:
+                    span = 1000;
+                    break;
+                case 2:
+                    span = 2000;
+                    break;
+                case 3:
+                    span = 3000;
+                    break;
+                case 4:
+                    span = 5000;
+                    break;
+                case 5:
+                    span = 10000;
+                    break;
+                case 6:
+                    span = 20000;
+                    break;
+                case 7:
+                    span = 30000;
+                    break;
+                case 8:
+                    span = 60000;
+                    break;
+                default:
+                    break;
+            }
+
+            if (historyGeoOverlay != null)
+            {
+                historyGeoOverlay.SetTimerInterval(span);
+            }
+        }
+
+        #endregion
 
     }
 }

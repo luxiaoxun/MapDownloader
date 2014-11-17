@@ -42,15 +42,26 @@
             this.读取缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelCurrentPos = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonMapType = new System.Windows.Forms.Button();
             this.mapControl = new GMapWinFormDemo.MapControl();
+            this.panelDock = new System.Windows.Forms.Panel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.phoneNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.historyGeoDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.panelButtonTools = new System.Windows.Forms.Panel();
+            this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.comboBoxRegion = new System.Windows.Forms.ComboBox();
             this.splitter1 = new BSE.Windows.Forms.Splitter();
             this.panelMenu = new BSE.Windows.Forms.Panel();
             this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
             this.xPanderPanelRoute = new BSE.Windows.Forms.XPanderPanel();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.buttonHisTestData = new System.Windows.Forms.Button();
             this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -59,10 +70,22 @@
             this.buttonFindRoute = new System.Windows.Forms.Button();
             this.buttonSetEnd = new System.Windows.Forms.Button();
             this.xPanderPanelMarker = new BSE.Windows.Forms.XPanderPanel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rbGMapMarkerScopeCircleAnimate = new System.Windows.Forms.RadioButton();
+            this.rbGMapMarkerScopePieAnimate = new System.Windows.Forms.RadioButton();
+            this.rbGMapTipMarker = new System.Windows.Forms.RadioButton();
+            this.rbGMapDirectionMarker = new System.Windows.Forms.RadioButton();
+            this.rbGMapGifMarker = new System.Windows.Forms.RadioButton();
+            this.rbGMapFlashMarker = new System.Windows.Forms.RadioButton();
+            this.rbGMarkerGoogle = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonStopBlink = new System.Windows.Forms.Button();
             this.buttonBeginBlink = new System.Windows.Forms.Button();
+            this.checkBoxMarker = new System.Windows.Forms.CheckBox();
             this.xPanderPanelDraw = new BSE.Windows.Forms.XPanderPanel();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.buttonDistance = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonPolyline = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
@@ -74,15 +97,28 @@
             this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
             this.buttonClearSArea = new System.Windows.Forms.Button();
             this.buttonPrefetchSArea = new System.Windows.Forms.Button();
+            this.buttonPause = new System.Windows.Forms.Button();
+            this.buttonResume = new System.Windows.Forms.Button();
+            this.buttonSetTimerInterval = new System.Windows.Forms.Button();
+            this.comboBoxTimeSpan = new System.Windows.Forms.ComboBox();
+            this.checkBoxFollow = new System.Windows.Forms.CheckBox();
             this.contextMenuStripMarker.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.panelMap.SuspendLayout();
-            this.statusStrip.SuspendLayout();
+            this.panelDock.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).BeginInit();
+            this.panelButtonTools.SuspendLayout();
             this.panelMenu.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
             this.xPanderPanelRoute.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.xPanderPanelMarker.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.xPanderPanelDraw.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.xPanderPanelChinaRegion.SuspendLayout();
             this.xPanderPanelMap.SuspendLayout();
             this.SuspendLayout();
@@ -179,45 +215,20 @@
             this.地图操作ToolStripMenuItem1});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(750, 24);
+            this.menuStrip.Size = new System.Drawing.Size(780, 24);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip1";
             // 
             // panelMap
             // 
-            this.panelMap.Controls.Add(this.statusStrip);
             this.panelMap.Controls.Add(this.buttonMapType);
             this.panelMap.Controls.Add(this.mapControl);
+            this.panelMap.Controls.Add(this.panelDock);
             this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(177, 24);
+            this.panelMap.Location = new System.Drawing.Point(196, 24);
             this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(573, 493);
+            this.panelMap.Size = new System.Drawing.Size(584, 493);
             this.panelMap.TabIndex = 18;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelCurrentPos});
-            this.statusStrip.Location = new System.Drawing.Point(0, 471);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(573, 22);
-            this.statusStrip.TabIndex = 4;
-            this.statusStrip.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabelCurrentPos
-            // 
-            this.toolStripStatusLabelCurrentPos.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripStatusLabelCurrentPos.Name = "toolStripStatusLabelCurrentPos";
-            this.toolStripStatusLabelCurrentPos.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelCurrentPos.Text = "toolStripStatusLabel1";
-            // 
-            // buttonMapType
-            // 
-            this.buttonMapType.Location = new System.Drawing.Point(503, 4);
-            this.buttonMapType.Name = "buttonMapType";
-            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
-            this.buttonMapType.TabIndex = 3;
-            this.buttonMapType.UseVisualStyleBackColor = true;
             // 
             // mapControl
             // 
@@ -241,12 +252,111 @@
             this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(573, 493);
-            this.mapControl.TabIndex = 1;
+            this.mapControl.Size = new System.Drawing.Size(584, 377);
+            this.mapControl.TabIndex = 6;
             this.mapControl.Zoom = 0D;
+            // 
+            // panelDock
+            // 
+            this.panelDock.Controls.Add(this.dataGridView1);
+            this.panelDock.Controls.Add(this.panelButtonTools);
+            this.panelDock.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelDock.Location = new System.Drawing.Point(0, 377);
+            this.panelDock.Name = "panelDock";
+            this.panelDock.Size = new System.Drawing.Size(584, 116);
+            this.panelDock.TabIndex = 5;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.iDDataGridViewTextBoxColumn,
+            this.phoneNumberDataGridViewTextBoxColumn,
+            this.xDataGridViewTextBoxColumn,
+            this.yDataGridViewTextBoxColumn,
+            this.timeDataGridViewTextBoxColumn});
+            this.dataGridView1.DataSource = this.historyGeoDataBindingSource;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 28);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.Size = new System.Drawing.Size(584, 88);
+            this.dataGridView1.TabIndex = 1;
+            // 
+            // iDDataGridViewTextBoxColumn
+            // 
+            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
+            // 
+            // phoneNumberDataGridViewTextBoxColumn
+            // 
+            this.phoneNumberDataGridViewTextBoxColumn.DataPropertyName = "PhoneNumber";
+            this.phoneNumberDataGridViewTextBoxColumn.HeaderText = "Number";
+            this.phoneNumberDataGridViewTextBoxColumn.Name = "phoneNumberDataGridViewTextBoxColumn";
+            // 
+            // xDataGridViewTextBoxColumn
+            // 
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "Longitude";
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
+            // 
+            // yDataGridViewTextBoxColumn
+            // 
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Latitude";
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            // 
+            // timeDataGridViewTextBoxColumn
+            // 
+            this.timeDataGridViewTextBoxColumn.DataPropertyName = "Time";
+            this.timeDataGridViewTextBoxColumn.HeaderText = "Time";
+            this.timeDataGridViewTextBoxColumn.Name = "timeDataGridViewTextBoxColumn";
+            // 
+            // historyGeoDataBindingSource
+            // 
+            this.historyGeoDataBindingSource.DataSource = typeof(GMapWinFormDemo.HistoryGeoData);
+            // 
+            // panelButtonTools
+            // 
+            this.panelButtonTools.Controls.Add(this.checkBoxFollow);
+            this.panelButtonTools.Controls.Add(this.comboBoxTimeSpan);
+            this.panelButtonTools.Controls.Add(this.buttonSetTimerInterval);
+            this.panelButtonTools.Controls.Add(this.buttonResume);
+            this.panelButtonTools.Controls.Add(this.buttonPause);
+            this.panelButtonTools.Controls.Add(this.buttonStop);
+            this.panelButtonTools.Controls.Add(this.buttonStart);
+            this.panelButtonTools.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelButtonTools.Location = new System.Drawing.Point(0, 0);
+            this.panelButtonTools.Name = "panelButtonTools";
+            this.panelButtonTools.Size = new System.Drawing.Size(584, 28);
+            this.panelButtonTools.TabIndex = 0;
+            // 
+            // buttonStop
+            // 
+            this.buttonStop.Location = new System.Drawing.Point(66, 3);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(55, 23);
+            this.buttonStop.TabIndex = 1;
+            this.buttonStop.Text = "Stop";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(6, 3);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(55, 23);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // comboBoxRegion
             // 
+            this.comboBoxRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRegion.FormattingEnabled = true;
             this.comboBoxRegion.Location = new System.Drawing.Point(655, 1);
             this.comboBoxRegion.Name = "comboBoxRegion";
@@ -256,7 +366,7 @@
             // splitter1
             // 
             this.splitter1.BackColor = System.Drawing.Color.Transparent;
-            this.splitter1.Location = new System.Drawing.Point(172, 24);
+            this.splitter1.Location = new System.Drawing.Point(191, 24);
             this.splitter1.MinSize = 5;
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(5, 493);
@@ -292,7 +402,7 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
             this.panelMenu.ShowExpandIcon = true;
-            this.panelMenu.Size = new System.Drawing.Size(172, 493);
+            this.panelMenu.Size = new System.Drawing.Size(191, 493);
             this.panelMenu.TabIndex = 16;
             this.panelMenu.Text = "Menu";
             this.panelMenu.ToolTipTextCloseIcon = null;
@@ -313,13 +423,14 @@
             this.xPanderPanelList1.Name = "xPanderPanelList1";
             this.xPanderPanelList1.PanelColors = null;
             this.xPanderPanelList1.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelList1.Size = new System.Drawing.Size(172, 464);
+            this.xPanderPanelList1.Size = new System.Drawing.Size(191, 464);
             this.xPanderPanelList1.TabIndex = 0;
             this.xPanderPanelList1.Text = "xPanderPanelList1";
             // 
             // xPanderPanelRoute
             // 
             this.xPanderPanelRoute.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.xPanderPanelRoute.Controls.Add(this.groupBox5);
             this.xPanderPanelRoute.Controls.Add(this.textBoxSearch);
             this.xPanderPanelRoute.Controls.Add(this.buttonSearch);
             this.xPanderPanelRoute.Controls.Add(this.label1);
@@ -348,16 +459,37 @@
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelRoute.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelRoute.Expand = true;
             this.xPanderPanelRoute.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelRoute.Image = null;
             this.xPanderPanelRoute.Name = "xPanderPanelRoute";
             this.xPanderPanelRoute.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelRoute.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelRoute.Size = new System.Drawing.Size(191, 364);
             this.xPanderPanelRoute.TabIndex = 0;
             this.xPanderPanelRoute.Text = "Route";
             this.xPanderPanelRoute.ToolTipTextCloseIcon = null;
             this.xPanderPanelRoute.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelRoute.ToolTipTextExpandIconPanelExpanded = null;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.buttonHisTestData);
+            this.groupBox5.Location = new System.Drawing.Point(9, 174);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(165, 109);
+            this.groupBox5.TabIndex = 26;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "History Route";
+            // 
+            // buttonHisTestData
+            // 
+            this.buttonHisTestData.Location = new System.Drawing.Point(19, 21);
+            this.buttonHisTestData.Name = "buttonHisTestData";
+            this.buttonHisTestData.Size = new System.Drawing.Size(94, 23);
+            this.buttonHisTestData.TabIndex = 0;
+            this.buttonHisTestData.Text = "Get Test Data";
+            this.buttonHisTestData.UseVisualStyleBackColor = true;
+            this.buttonHisTestData.Click += new System.EventHandler(this.buttonHisTestData_Click);
             // 
             // textBoxSearch
             // 
@@ -427,8 +559,9 @@
             // xPanderPanelMarker
             // 
             this.xPanderPanelMarker.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.xPanderPanelMarker.Controls.Add(this.buttonStopBlink);
-            this.xPanderPanelMarker.Controls.Add(this.buttonBeginBlink);
+            this.xPanderPanelMarker.Controls.Add(this.groupBox2);
+            this.xPanderPanelMarker.Controls.Add(this.groupBox1);
+            this.xPanderPanelMarker.Controls.Add(this.checkBoxMarker);
             this.xPanderPanelMarker.CustomColors.BackColor = System.Drawing.SystemColors.Control;
             this.xPanderPanelMarker.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
             this.xPanderPanelMarker.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
@@ -454,42 +587,154 @@
             this.xPanderPanelMarker.Image = null;
             this.xPanderPanelMarker.Name = "xPanderPanelMarker";
             this.xPanderPanelMarker.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelMarker.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelMarker.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelMarker.TabIndex = 1;
             this.xPanderPanelMarker.Text = "Marker";
             this.xPanderPanelMarker.ToolTipTextCloseIcon = null;
             this.xPanderPanelMarker.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelMarker.ToolTipTextExpandIconPanelExpanded = null;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rbGMapMarkerScopeCircleAnimate);
+            this.groupBox2.Controls.Add(this.rbGMapMarkerScopePieAnimate);
+            this.groupBox2.Controls.Add(this.rbGMapTipMarker);
+            this.groupBox2.Controls.Add(this.rbGMapDirectionMarker);
+            this.groupBox2.Controls.Add(this.rbGMapGifMarker);
+            this.groupBox2.Controls.Add(this.rbGMapFlashMarker);
+            this.groupBox2.Controls.Add(this.rbGMarkerGoogle);
+            this.groupBox2.Location = new System.Drawing.Point(4, 56);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(181, 200);
+            this.groupBox2.TabIndex = 24;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Marker Type";
+            // 
+            // rbGMapMarkerScopeCircleAnimate
+            // 
+            this.rbGMapMarkerScopeCircleAnimate.AutoSize = true;
+            this.rbGMapMarkerScopeCircleAnimate.Location = new System.Drawing.Point(5, 177);
+            this.rbGMapMarkerScopeCircleAnimate.Name = "rbGMapMarkerScopeCircleAnimate";
+            this.rbGMapMarkerScopeCircleAnimate.Size = new System.Drawing.Size(191, 16);
+            this.rbGMapMarkerScopeCircleAnimate.TabIndex = 6;
+            this.rbGMapMarkerScopeCircleAnimate.TabStop = true;
+            this.rbGMapMarkerScopeCircleAnimate.Text = "GMapMarkerScopeCircleAnimate";
+            this.rbGMapMarkerScopeCircleAnimate.UseVisualStyleBackColor = true;
+            // 
+            // rbGMapMarkerScopePieAnimate
+            // 
+            this.rbGMapMarkerScopePieAnimate.AutoSize = true;
+            this.rbGMapMarkerScopePieAnimate.Location = new System.Drawing.Point(5, 151);
+            this.rbGMapMarkerScopePieAnimate.Name = "rbGMapMarkerScopePieAnimate";
+            this.rbGMapMarkerScopePieAnimate.Size = new System.Drawing.Size(173, 16);
+            this.rbGMapMarkerScopePieAnimate.TabIndex = 5;
+            this.rbGMapMarkerScopePieAnimate.TabStop = true;
+            this.rbGMapMarkerScopePieAnimate.Text = "GMapMarkerScopePieAnimate";
+            this.rbGMapMarkerScopePieAnimate.UseVisualStyleBackColor = true;
+            // 
+            // rbGMapTipMarker
+            // 
+            this.rbGMapTipMarker.AutoSize = true;
+            this.rbGMapTipMarker.Location = new System.Drawing.Point(5, 125);
+            this.rbGMapTipMarker.Name = "rbGMapTipMarker";
+            this.rbGMapTipMarker.Size = new System.Drawing.Size(101, 16);
+            this.rbGMapTipMarker.TabIndex = 4;
+            this.rbGMapTipMarker.TabStop = true;
+            this.rbGMapTipMarker.Text = "GMapTipMarker";
+            this.rbGMapTipMarker.UseVisualStyleBackColor = true;
+            // 
+            // rbGMapDirectionMarker
+            // 
+            this.rbGMapDirectionMarker.AutoSize = true;
+            this.rbGMapDirectionMarker.Location = new System.Drawing.Point(5, 99);
+            this.rbGMapDirectionMarker.Name = "rbGMapDirectionMarker";
+            this.rbGMapDirectionMarker.Size = new System.Drawing.Size(137, 16);
+            this.rbGMapDirectionMarker.TabIndex = 3;
+            this.rbGMapDirectionMarker.TabStop = true;
+            this.rbGMapDirectionMarker.Text = "GMapDirectionMarker";
+            this.rbGMapDirectionMarker.UseVisualStyleBackColor = true;
+            // 
+            // rbGMapGifMarker
+            // 
+            this.rbGMapGifMarker.AutoSize = true;
+            this.rbGMapGifMarker.Location = new System.Drawing.Point(5, 73);
+            this.rbGMapGifMarker.Name = "rbGMapGifMarker";
+            this.rbGMapGifMarker.Size = new System.Drawing.Size(101, 16);
+            this.rbGMapGifMarker.TabIndex = 2;
+            this.rbGMapGifMarker.TabStop = true;
+            this.rbGMapGifMarker.Text = "GMapGifMarker";
+            this.rbGMapGifMarker.UseVisualStyleBackColor = true;
+            // 
+            // rbGMapFlashMarker
+            // 
+            this.rbGMapFlashMarker.AutoSize = true;
+            this.rbGMapFlashMarker.Location = new System.Drawing.Point(5, 47);
+            this.rbGMapFlashMarker.Name = "rbGMapFlashMarker";
+            this.rbGMapFlashMarker.Size = new System.Drawing.Size(113, 16);
+            this.rbGMapFlashMarker.TabIndex = 1;
+            this.rbGMapFlashMarker.TabStop = true;
+            this.rbGMapFlashMarker.Text = "GMapFlashMarker";
+            this.rbGMapFlashMarker.UseVisualStyleBackColor = true;
+            // 
+            // rbGMarkerGoogle
+            // 
+            this.rbGMarkerGoogle.AutoSize = true;
+            this.rbGMarkerGoogle.Location = new System.Drawing.Point(5, 21);
+            this.rbGMarkerGoogle.Name = "rbGMarkerGoogle";
+            this.rbGMarkerGoogle.Size = new System.Drawing.Size(101, 16);
+            this.rbGMarkerGoogle.TabIndex = 0;
+            this.rbGMarkerGoogle.TabStop = true;
+            this.rbGMarkerGoogle.Text = "GMarkerGoogle";
+            this.rbGMarkerGoogle.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonStopBlink);
+            this.groupBox1.Controls.Add(this.buttonBeginBlink);
+            this.groupBox1.Location = new System.Drawing.Point(15, 262);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(138, 86);
+            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Flash Marker";
+            // 
             // buttonStopBlink
             // 
-            this.buttonStopBlink.Location = new System.Drawing.Point(26, 89);
+            this.buttonStopBlink.Location = new System.Drawing.Point(22, 55);
             this.buttonStopBlink.Name = "buttonStopBlink";
             this.buttonStopBlink.Size = new System.Drawing.Size(87, 23);
-            this.buttonStopBlink.TabIndex = 21;
+            this.buttonStopBlink.TabIndex = 23;
             this.buttonStopBlink.Text = "Stop Blink";
             this.buttonStopBlink.UseVisualStyleBackColor = true;
             this.buttonStopBlink.Click += new System.EventHandler(this.buttonStopBlink_Click);
             // 
             // buttonBeginBlink
             // 
-            this.buttonBeginBlink.Location = new System.Drawing.Point(26, 45);
+            this.buttonBeginBlink.Location = new System.Drawing.Point(22, 20);
             this.buttonBeginBlink.Name = "buttonBeginBlink";
             this.buttonBeginBlink.Size = new System.Drawing.Size(87, 23);
-            this.buttonBeginBlink.TabIndex = 20;
+            this.buttonBeginBlink.TabIndex = 22;
             this.buttonBeginBlink.Text = "Marker Blink";
             this.buttonBeginBlink.UseVisualStyleBackColor = true;
             this.buttonBeginBlink.Click += new System.EventHandler(this.buttonBeginBlink_Click);
             // 
+            // checkBoxMarker
+            // 
+            this.checkBoxMarker.AutoSize = true;
+            this.checkBoxMarker.Checked = true;
+            this.checkBoxMarker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMarker.Location = new System.Drawing.Point(1, 34);
+            this.checkBoxMarker.Name = "checkBoxMarker";
+            this.checkBoxMarker.Size = new System.Drawing.Size(174, 16);
+            this.checkBoxMarker.TabIndex = 22;
+            this.checkBoxMarker.Text = "Right Click to Add Marker";
+            this.checkBoxMarker.UseVisualStyleBackColor = true;
+            // 
             // xPanderPanelDraw
             // 
             this.xPanderPanelDraw.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.xPanderPanelDraw.Controls.Add(this.buttonDistance);
-            this.xPanderPanelDraw.Controls.Add(this.buttonClear);
-            this.xPanderPanelDraw.Controls.Add(this.buttonPolyline);
-            this.xPanderPanelDraw.Controls.Add(this.buttonCircle);
-            this.xPanderPanelDraw.Controls.Add(this.buttonRectangle);
-            this.xPanderPanelDraw.Controls.Add(this.buttonPolygon);
+            this.xPanderPanelDraw.Controls.Add(this.groupBox4);
+            this.xPanderPanelDraw.Controls.Add(this.groupBox3);
             this.xPanderPanelDraw.CustomColors.BackColor = System.Drawing.SystemColors.Control;
             this.xPanderPanelDraw.CustomColors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(184)))), ((int)(((byte)(184)))), ((int)(((byte)(184)))));
             this.xPanderPanelDraw.CustomColors.CaptionCheckedGradientBegin = System.Drawing.Color.Empty;
@@ -515,69 +760,93 @@
             this.xPanderPanelDraw.Image = null;
             this.xPanderPanelDraw.Name = "xPanderPanelDraw";
             this.xPanderPanelDraw.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelDraw.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelDraw.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelDraw.TabIndex = 2;
             this.xPanderPanelDraw.Text = "Draw Tools";
             this.xPanderPanelDraw.ToolTipTextCloseIcon = null;
             this.xPanderPanelDraw.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelDraw.ToolTipTextExpandIconPanelExpanded = null;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.buttonDistance);
+            this.groupBox4.Location = new System.Drawing.Point(6, 168);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(168, 100);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Distance Tool";
+            // 
             // buttonDistance
             // 
-            this.buttonDistance.Location = new System.Drawing.Point(10, 190);
+            this.buttonDistance.Location = new System.Drawing.Point(6, 20);
             this.buttonDistance.Name = "buttonDistance";
             this.buttonDistance.Size = new System.Drawing.Size(66, 23);
-            this.buttonDistance.TabIndex = 4;
+            this.buttonDistance.TabIndex = 5;
             this.buttonDistance.Text = "Distance";
             this.buttonDistance.UseVisualStyleBackColor = true;
             this.buttonDistance.Click += new System.EventHandler(this.buttonDistance_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttonClear);
+            this.groupBox3.Controls.Add(this.buttonPolyline);
+            this.groupBox3.Controls.Add(this.buttonCircle);
+            this.groupBox3.Controls.Add(this.buttonRectangle);
+            this.groupBox3.Controls.Add(this.buttonPolygon);
+            this.groupBox3.Location = new System.Drawing.Point(4, 33);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(170, 117);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Draw Polygon";
+            // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(9, 138);
+            this.buttonClear.Location = new System.Drawing.Point(6, 83);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(67, 23);
-            this.buttonClear.TabIndex = 3;
+            this.buttonClear.TabIndex = 8;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // buttonPolyline
             // 
-            this.buttonPolyline.Location = new System.Drawing.Point(95, 93);
+            this.buttonPolyline.Location = new System.Drawing.Point(93, 53);
             this.buttonPolyline.Name = "buttonPolyline";
             this.buttonPolyline.Size = new System.Drawing.Size(67, 23);
-            this.buttonPolyline.TabIndex = 4;
+            this.buttonPolyline.TabIndex = 9;
             this.buttonPolyline.Text = "Polyline";
             this.buttonPolyline.UseVisualStyleBackColor = true;
             this.buttonPolyline.Click += new System.EventHandler(this.buttonPolyline_Click);
             // 
             // buttonCircle
             // 
-            this.buttonCircle.Location = new System.Drawing.Point(9, 49);
+            this.buttonCircle.Location = new System.Drawing.Point(7, 23);
             this.buttonCircle.Name = "buttonCircle";
             this.buttonCircle.Size = new System.Drawing.Size(67, 23);
-            this.buttonCircle.TabIndex = 0;
+            this.buttonCircle.TabIndex = 5;
             this.buttonCircle.Text = "Circle";
             this.buttonCircle.UseVisualStyleBackColor = true;
             this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
             // 
             // buttonRectangle
             // 
-            this.buttonRectangle.Location = new System.Drawing.Point(95, 50);
+            this.buttonRectangle.Location = new System.Drawing.Point(93, 24);
             this.buttonRectangle.Name = "buttonRectangle";
             this.buttonRectangle.Size = new System.Drawing.Size(67, 23);
-            this.buttonRectangle.TabIndex = 1;
+            this.buttonRectangle.TabIndex = 6;
             this.buttonRectangle.Text = "Rectangle";
             this.buttonRectangle.UseVisualStyleBackColor = true;
             this.buttonRectangle.Click += new System.EventHandler(this.buttonRectangle_Click);
             // 
             // buttonPolygon
             // 
-            this.buttonPolygon.Location = new System.Drawing.Point(9, 93);
+            this.buttonPolygon.Location = new System.Drawing.Point(7, 53);
             this.buttonPolygon.Name = "buttonPolygon";
             this.buttonPolygon.Size = new System.Drawing.Size(67, 23);
-            this.buttonPolygon.TabIndex = 2;
+            this.buttonPolygon.TabIndex = 7;
             this.buttonPolygon.Text = "Polygon";
             this.buttonPolygon.UseVisualStyleBackColor = true;
             this.buttonPolygon.Click += new System.EventHandler(this.buttonPolygon_Click);
@@ -611,7 +880,7 @@
             this.xPanderPanelChinaRegion.Image = null;
             this.xPanderPanelChinaRegion.Name = "xPanderPanelChinaRegion";
             this.xPanderPanelChinaRegion.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(172, 25);
+            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelChinaRegion.TabIndex = 3;
             this.xPanderPanelChinaRegion.Text = "China Region";
             this.xPanderPanelChinaRegion.ToolTipTextCloseIcon = null;
@@ -623,7 +892,7 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(1, 25);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(170, 0);
+            this.treeView1.Size = new System.Drawing.Size(189, 0);
             this.treeView1.TabIndex = 0;
             // 
             // xPanderPanelMap
@@ -653,12 +922,11 @@
             this.xPanderPanelMap.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelMap.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelMap.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
-            this.xPanderPanelMap.Expand = true;
             this.xPanderPanelMap.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelMap.Image = null;
             this.xPanderPanelMap.Name = "xPanderPanelMap";
             this.xPanderPanelMap.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelMap.Size = new System.Drawing.Size(172, 364);
+            this.xPanderPanelMap.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelMap.TabIndex = 4;
             this.xPanderPanelMap.Text = "Map";
             this.xPanderPanelMap.ToolTipTextCloseIcon = null;
@@ -695,11 +963,72 @@
             this.buttonPrefetchSArea.UseVisualStyleBackColor = true;
             this.buttonPrefetchSArea.Click += new System.EventHandler(this.buttonPrefetch_Click);
             // 
+            // buttonPause
+            // 
+            this.buttonPause.Location = new System.Drawing.Point(126, 3);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(55, 23);
+            this.buttonPause.TabIndex = 2;
+            this.buttonPause.Text = "Pause";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
+            // 
+            // buttonResume
+            // 
+            this.buttonResume.Location = new System.Drawing.Point(186, 3);
+            this.buttonResume.Name = "buttonResume";
+            this.buttonResume.Size = new System.Drawing.Size(55, 23);
+            this.buttonResume.TabIndex = 3;
+            this.buttonResume.Text = "Resume";
+            this.buttonResume.UseVisualStyleBackColor = true;
+            this.buttonResume.Click += new System.EventHandler(this.buttonResume_Click);
+            // 
+            // buttonSetTimerInterval
+            // 
+            this.buttonSetTimerInterval.Location = new System.Drawing.Point(335, 3);
+            this.buttonSetTimerInterval.Name = "buttonSetTimerInterval";
+            this.buttonSetTimerInterval.Size = new System.Drawing.Size(122, 23);
+            this.buttonSetTimerInterval.TabIndex = 4;
+            this.buttonSetTimerInterval.Text = "Set Timer Interval";
+            this.buttonSetTimerInterval.UseVisualStyleBackColor = true;
+            this.buttonSetTimerInterval.Click += new System.EventHandler(this.buttonSetTimerInterval_Click);
+            // 
+            // comboBoxTimeSpan
+            // 
+            this.comboBoxTimeSpan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTimeSpan.FormattingEnabled = true;
+            this.comboBoxTimeSpan.Items.AddRange(new object[] {
+            "0.5秒",
+            "1秒",
+            "2秒",
+            "3秒",
+            "5秒",
+            "10秒",
+            "20秒",
+            "30秒",
+            "60秒"});
+            this.comboBoxTimeSpan.Location = new System.Drawing.Point(248, 6);
+            this.comboBoxTimeSpan.Name = "comboBoxTimeSpan";
+            this.comboBoxTimeSpan.Size = new System.Drawing.Size(81, 20);
+            this.comboBoxTimeSpan.TabIndex = 5;
+            // 
+            // checkBoxFollow
+            // 
+            this.checkBoxFollow.AutoSize = true;
+            this.checkBoxFollow.Checked = true;
+            this.checkBoxFollow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxFollow.Location = new System.Drawing.Point(463, 7);
+            this.checkBoxFollow.Name = "checkBoxFollow";
+            this.checkBoxFollow.Size = new System.Drawing.Size(60, 16);
+            this.checkBoxFollow.TabIndex = 6;
+            this.checkBoxFollow.Text = "Follow";
+            this.checkBoxFollow.UseVisualStyleBackColor = true;
+            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 517);
+            this.ClientSize = new System.Drawing.Size(780, 517);
             this.Controls.Add(this.comboBoxRegion);
             this.Controls.Add(this.panelMap);
             this.Controls.Add(this.splitter1);
@@ -711,15 +1040,24 @@
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.panelMap.ResumeLayout(false);
-            this.panelMap.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
+            this.panelDock.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).EndInit();
+            this.panelButtonTools.ResumeLayout(false);
+            this.panelButtonTools.PerformLayout();
             this.panelMenu.ResumeLayout(false);
             this.xPanderPanelList1.ResumeLayout(false);
             this.xPanderPanelRoute.ResumeLayout(false);
             this.xPanderPanelRoute.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
             this.xPanderPanelMarker.ResumeLayout(false);
+            this.xPanderPanelMarker.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.xPanderPanelDraw.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.xPanderPanelMap.ResumeLayout(false);
             this.xPanderPanelMap.PerformLayout();
@@ -732,13 +1070,6 @@
 
         private System.Windows.Forms.ContextMenuStrip contextMenuStripMarker;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
-        private System.Windows.Forms.Button buttonStopBlink;
-        private System.Windows.Forms.Button buttonBeginBlink;
-        private System.Windows.Forms.Button buttonCircle;
-        private System.Windows.Forms.Button buttonRectangle;
-        private System.Windows.Forms.Button buttonPolygon;
-        private System.Windows.Forms.Button buttonClear;
-        private System.Windows.Forms.Button buttonPolyline;
         private BSE.Windows.Forms.Panel panelMenu;
         private BSE.Windows.Forms.XPanderPanelList xPanderPanelList1;
         private BSE.Windows.Forms.XPanderPanel xPanderPanelRoute;
@@ -764,17 +1095,52 @@
         private BSE.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Panel panelMap;
         private System.Windows.Forms.ComboBox comboBoxRegion;
-        private System.Windows.Forms.Button buttonMapType;
-        private MapControl mapControl;
-        private System.Windows.Forms.Button buttonDistance;
         private BSE.Windows.Forms.XPanderPanel xPanderPanelChinaRegion;
         private System.Windows.Forms.TreeView treeView1;
         private BSE.Windows.Forms.XPanderPanel xPanderPanelMap;
         private System.Windows.Forms.Button buttonPrefetchSArea;
         private System.Windows.Forms.Button buttonClearSArea;
         private System.Windows.Forms.CheckBox checkBoxTileHost;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentPos;
+        private System.Windows.Forms.CheckBox checkBoxMarker;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonStopBlink;
+        private System.Windows.Forms.Button buttonBeginBlink;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton rbGMarkerGoogle;
+        private System.Windows.Forms.RadioButton rbGMapFlashMarker;
+        private System.Windows.Forms.RadioButton rbGMapMarkerScopePieAnimate;
+        private System.Windows.Forms.RadioButton rbGMapTipMarker;
+        private System.Windows.Forms.RadioButton rbGMapDirectionMarker;
+        private System.Windows.Forms.RadioButton rbGMapGifMarker;
+        private System.Windows.Forms.RadioButton rbGMapMarkerScopeCircleAnimate;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button buttonDistance;
+        private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.Button buttonPolyline;
+        private System.Windows.Forms.Button buttonCircle;
+        private System.Windows.Forms.Button buttonRectangle;
+        private System.Windows.Forms.Button buttonPolygon;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button buttonHisTestData;
+        private System.Windows.Forms.Panel panelDock;
+        private System.Windows.Forms.Button buttonMapType;
+        private MapControl mapControl;
+        private System.Windows.Forms.Panel panelButtonTools;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn iDDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn phoneNumberDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn xDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn yDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn timeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.BindingSource historyGeoDataBindingSource;
+        private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Button buttonSetTimerInterval;
+        private System.Windows.Forms.Button buttonResume;
+        private System.Windows.Forms.Button buttonPause;
+        private System.Windows.Forms.ComboBox comboBoxTimeSpan;
+        private System.Windows.Forms.CheckBox checkBoxFollow;
     }
 }
 

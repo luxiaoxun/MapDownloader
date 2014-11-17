@@ -1,6 +1,6 @@
 ﻿namespace RabbitMQTool
 {
-    partial class MainForm
+    partial class MessageForm
     {
         /// <summary>
         /// 必需的设计器变量。

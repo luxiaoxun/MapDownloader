@@ -41,7 +41,6 @@ namespace GMapMarkerLib
             flashTimer.Start();
         }
 
-
         void flashTimer_Tick(object sender, EventArgs e)
         {
             if (FlashPen == null)
