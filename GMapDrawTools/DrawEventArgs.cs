@@ -14,7 +14,7 @@ namespace GMapDrawTools
 
         public GMapDrawRectangle Rectangle { set; get; }
 
-        public GMapPolygon Polygon { get; set; }
+        public GMapDrawPolygon Polygon { get; set; }
 
         public GMapDrawCircle Circle { get; set; }
 
@@ -30,7 +30,7 @@ namespace GMapDrawTools
             DrawingMode = drawingMode;
             if (drawingMode == DrawingMode.Polygon)
             {
-                Polygon = new GMapPolygon(drawingPoints, drawingMode.ToString());
+                Polygon = new GMapDrawPolygon(drawingPoints, drawingMode.ToString());
                 Polygon.Fill = fill;
                 Polygon.Stroke = stroke;
                 Polygon.IsHitTestVisible = true;

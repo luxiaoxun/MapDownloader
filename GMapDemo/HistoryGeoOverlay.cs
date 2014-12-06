@@ -20,6 +20,7 @@ namespace GMapWinFormDemo
         private int index = 0;
         private bool isStarted;
         private bool isPaused;
+        private PointLatLng lastPoint = PointLatLng.Empty;
 
         public HistoryGeoOverlay()
         {
@@ -30,8 +31,6 @@ namespace GMapWinFormDemo
             isPaused = false;
             Follow = true;
         }
-
-        private PointLatLng lastPoint = PointLatLng.Empty;
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -78,6 +77,7 @@ namespace GMapWinFormDemo
             index = 0;
             isStarted = false;
             isPaused = false;
+            lastPoint = PointLatLng.Empty;
         }
 
         public void Start(IList<HistoryGeoData> dataList)

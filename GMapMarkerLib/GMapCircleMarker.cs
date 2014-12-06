@@ -38,16 +38,18 @@ namespace GMapMarkerLib
         public override void OnRender(Graphics g)
         {
             int R = (int)((Radius) / Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, Position.Lat)) * 2;
-            if(R == 0) return;
+            if(R <= 0) return;
 
             this.Size = new Size(R, R);
             this.Offset = new Point(-R / 2, -R / 2);
 
+            Rectangle rect = new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R);
+
             if (IsFilled)
             {
-                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
+                g.FillEllipse(Fill, rect);
             }
-            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
+            g.DrawEllipse(Stroke, rect);
         }
 
         public override void Dispose()

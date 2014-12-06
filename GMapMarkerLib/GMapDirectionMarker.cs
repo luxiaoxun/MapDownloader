@@ -25,7 +25,6 @@ namespace GMapMarkerLib
 
         public override void OnRender(Graphics g)
         {
-
             g.DrawImageUnscaled(RotateImage(image, angle), LocalPosition.X, LocalPosition.Y);
         }
 

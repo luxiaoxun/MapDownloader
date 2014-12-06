@@ -46,6 +46,7 @@
     <Compile Include="DrawEventArgs.cs" />
     <Compile Include="DrawingMode.cs" />
     <Compile Include="GMapDrawCircle.cs" />
+    <Compile Include="GMapDrawPolygon.cs" />
     <Compile Include="GMapDrawRectangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

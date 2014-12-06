@@ -1004,7 +1004,7 @@ namespace GMapWinFormDemo
                 data.ID = i;
                 data.PhoneNumber = "43242342";
                 data.X = 117 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
-                data.Y = 31 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
+                data.Y = 30 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
                 data.Time = DateTime.Now;
 
                 dataList.Add(data);
@@ -1056,8 +1056,6 @@ namespace GMapWinFormDemo
                 historyGeoOverlay.Stop();
             }
         }
-
-        
 
         private void buttonPause_Click(object sender, EventArgs e)
         {

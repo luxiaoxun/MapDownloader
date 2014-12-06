@@ -43,11 +43,13 @@ namespace GMapMarkerLib
             this.Size = new Size(R, R);
             this.Offset = new Point(-R / 2, -R / 2);
 
+            Rectangle rect = new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R);
+
             if (IsFilled)
             {
-                g.FillEllipse(Fill, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
+                g.FillEllipse(Fill, rect);
             }
-            g.DrawEllipse(Stroke, new System.Drawing.Rectangle(LocalPosition.X, LocalPosition.Y, R, R));
+            g.DrawEllipse(Stroke, rect);
         }
 
         public override void Dispose()

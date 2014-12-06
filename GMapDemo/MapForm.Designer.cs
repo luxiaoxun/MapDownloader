@@ -43,16 +43,14 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.panelMap = new System.Windows.Forms.Panel();
             this.buttonMapType = new System.Windows.Forms.Button();
-            this.mapControl = new GMapWinFormDemo.MapControl();
             this.panelDock = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.phoneNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.historyGeoDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panelButtonTools = new System.Windows.Forms.Panel();
+            this.checkBoxFollow = new System.Windows.Forms.CheckBox();
+            this.comboBoxTimeSpan = new System.Windows.Forms.ComboBox();
+            this.buttonSetTimerInterval = new System.Windows.Forms.Button();
+            this.buttonResume = new System.Windows.Forms.Button();
+            this.buttonPause = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.comboBoxRegion = new System.Windows.Forms.ComboBox();
@@ -97,17 +95,18 @@
             this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
             this.buttonClearSArea = new System.Windows.Forms.Button();
             this.buttonPrefetchSArea = new System.Windows.Forms.Button();
-            this.buttonPause = new System.Windows.Forms.Button();
-            this.buttonResume = new System.Windows.Forms.Button();
-            this.buttonSetTimerInterval = new System.Windows.Forms.Button();
-            this.comboBoxTimeSpan = new System.Windows.Forms.ComboBox();
-            this.checkBoxFollow = new System.Windows.Forms.CheckBox();
+            this.mapControl = new GMapWinFormDemo.MapControl();
+            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.phoneNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.historyGeoDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.contextMenuStripMarker.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.panelMap.SuspendLayout();
             this.panelDock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).BeginInit();
             this.panelButtonTools.SuspendLayout();
             this.panelMenu.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -121,6 +120,7 @@
             this.groupBox3.SuspendLayout();
             this.xPanderPanelChinaRegion.SuspendLayout();
             this.xPanderPanelMap.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStripMarker
@@ -230,31 +230,12 @@
             this.panelMap.Size = new System.Drawing.Size(584, 493);
             this.panelMap.TabIndex = 18;
             // 
-            // mapControl
+            // buttonMapType
             // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(584, 377);
-            this.mapControl.TabIndex = 6;
-            this.mapControl.Zoom = 0D;
+            this.buttonMapType.Location = new System.Drawing.Point(510, 12);
+            this.buttonMapType.Name = "buttonMapType";
+            this.buttonMapType.Size = new System.Drawing.Size(50, 49);
+            this.buttonMapType.TabIndex = 0;
             // 
             // panelDock
             // 
@@ -285,40 +266,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(584, 88);
             this.dataGridView1.TabIndex = 1;
             // 
-            // iDDataGridViewTextBoxColumn
-            // 
-            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
-            // 
-            // phoneNumberDataGridViewTextBoxColumn
-            // 
-            this.phoneNumberDataGridViewTextBoxColumn.DataPropertyName = "PhoneNumber";
-            this.phoneNumberDataGridViewTextBoxColumn.HeaderText = "Number";
-            this.phoneNumberDataGridViewTextBoxColumn.Name = "phoneNumberDataGridViewTextBoxColumn";
-            // 
-            // xDataGridViewTextBoxColumn
-            // 
-            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
-            this.xDataGridViewTextBoxColumn.HeaderText = "Longitude";
-            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            // 
-            // yDataGridViewTextBoxColumn
-            // 
-            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
-            this.yDataGridViewTextBoxColumn.HeaderText = "Latitude";
-            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            // 
-            // timeDataGridViewTextBoxColumn
-            // 
-            this.timeDataGridViewTextBoxColumn.DataPropertyName = "Time";
-            this.timeDataGridViewTextBoxColumn.HeaderText = "Time";
-            this.timeDataGridViewTextBoxColumn.Name = "timeDataGridViewTextBoxColumn";
-            // 
-            // historyGeoDataBindingSource
-            // 
-            this.historyGeoDataBindingSource.DataSource = typeof(GMapWinFormDemo.HistoryGeoData);
-            // 
             // panelButtonTools
             // 
             this.panelButtonTools.Controls.Add(this.checkBoxFollow);
@@ -333,6 +280,67 @@
             this.panelButtonTools.Name = "panelButtonTools";
             this.panelButtonTools.Size = new System.Drawing.Size(584, 28);
             this.panelButtonTools.TabIndex = 0;
+            // 
+            // checkBoxFollow
+            // 
+            this.checkBoxFollow.AutoSize = true;
+            this.checkBoxFollow.Checked = true;
+            this.checkBoxFollow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxFollow.Location = new System.Drawing.Point(463, 7);
+            this.checkBoxFollow.Name = "checkBoxFollow";
+            this.checkBoxFollow.Size = new System.Drawing.Size(60, 16);
+            this.checkBoxFollow.TabIndex = 6;
+            this.checkBoxFollow.Text = "Follow";
+            this.checkBoxFollow.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxTimeSpan
+            // 
+            this.comboBoxTimeSpan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTimeSpan.FormattingEnabled = true;
+            this.comboBoxTimeSpan.Items.AddRange(new object[] {
+            "0.5秒",
+            "1秒",
+            "2秒",
+            "3秒",
+            "5秒",
+            "10秒",
+            "20秒",
+            "30秒",
+            "60秒"});
+            this.comboBoxTimeSpan.Location = new System.Drawing.Point(248, 6);
+            this.comboBoxTimeSpan.Name = "comboBoxTimeSpan";
+            this.comboBoxTimeSpan.Size = new System.Drawing.Size(81, 20);
+            this.comboBoxTimeSpan.TabIndex = 5;
+            // 
+            // buttonSetTimerInterval
+            // 
+            this.buttonSetTimerInterval.Location = new System.Drawing.Point(335, 3);
+            this.buttonSetTimerInterval.Name = "buttonSetTimerInterval";
+            this.buttonSetTimerInterval.Size = new System.Drawing.Size(122, 23);
+            this.buttonSetTimerInterval.TabIndex = 4;
+            this.buttonSetTimerInterval.Text = "Set Timer Interval";
+            this.buttonSetTimerInterval.UseVisualStyleBackColor = true;
+            this.buttonSetTimerInterval.Click += new System.EventHandler(this.buttonSetTimerInterval_Click);
+            // 
+            // buttonResume
+            // 
+            this.buttonResume.Location = new System.Drawing.Point(186, 3);
+            this.buttonResume.Name = "buttonResume";
+            this.buttonResume.Size = new System.Drawing.Size(55, 23);
+            this.buttonResume.TabIndex = 3;
+            this.buttonResume.Text = "Resume";
+            this.buttonResume.UseVisualStyleBackColor = true;
+            this.buttonResume.Click += new System.EventHandler(this.buttonResume_Click);
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.Location = new System.Drawing.Point(126, 3);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(55, 23);
+            this.buttonPause.TabIndex = 2;
+            this.buttonPause.Text = "Pause";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
             // 
             // buttonStop
             // 
@@ -476,7 +484,7 @@
             this.groupBox5.Controls.Add(this.buttonHisTestData);
             this.groupBox5.Location = new System.Drawing.Point(9, 174);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(165, 109);
+            this.groupBox5.Size = new System.Drawing.Size(165, 65);
             this.groupBox5.TabIndex = 26;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "History Route";
@@ -963,66 +971,65 @@
             this.buttonPrefetchSArea.UseVisualStyleBackColor = true;
             this.buttonPrefetchSArea.Click += new System.EventHandler(this.buttonPrefetch_Click);
             // 
-            // buttonPause
+            // mapControl
             // 
-            this.buttonPause.Location = new System.Drawing.Point(126, 3);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(55, 23);
-            this.buttonPause.TabIndex = 2;
-            this.buttonPause.Text = "Pause";
-            this.buttonPause.UseVisualStyleBackColor = true;
-            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(584, 377);
+            this.mapControl.TabIndex = 6;
+            this.mapControl.Zoom = 0D;
             // 
-            // buttonResume
+            // iDDataGridViewTextBoxColumn
             // 
-            this.buttonResume.Location = new System.Drawing.Point(186, 3);
-            this.buttonResume.Name = "buttonResume";
-            this.buttonResume.Size = new System.Drawing.Size(55, 23);
-            this.buttonResume.TabIndex = 3;
-            this.buttonResume.Text = "Resume";
-            this.buttonResume.UseVisualStyleBackColor = true;
-            this.buttonResume.Click += new System.EventHandler(this.buttonResume_Click);
+            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
             // 
-            // buttonSetTimerInterval
+            // phoneNumberDataGridViewTextBoxColumn
             // 
-            this.buttonSetTimerInterval.Location = new System.Drawing.Point(335, 3);
-            this.buttonSetTimerInterval.Name = "buttonSetTimerInterval";
-            this.buttonSetTimerInterval.Size = new System.Drawing.Size(122, 23);
-            this.buttonSetTimerInterval.TabIndex = 4;
-            this.buttonSetTimerInterval.Text = "Set Timer Interval";
-            this.buttonSetTimerInterval.UseVisualStyleBackColor = true;
-            this.buttonSetTimerInterval.Click += new System.EventHandler(this.buttonSetTimerInterval_Click);
+            this.phoneNumberDataGridViewTextBoxColumn.DataPropertyName = "PhoneNumber";
+            this.phoneNumberDataGridViewTextBoxColumn.HeaderText = "Number";
+            this.phoneNumberDataGridViewTextBoxColumn.Name = "phoneNumberDataGridViewTextBoxColumn";
             // 
-            // comboBoxTimeSpan
+            // xDataGridViewTextBoxColumn
             // 
-            this.comboBoxTimeSpan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTimeSpan.FormattingEnabled = true;
-            this.comboBoxTimeSpan.Items.AddRange(new object[] {
-            "0.5秒",
-            "1秒",
-            "2秒",
-            "3秒",
-            "5秒",
-            "10秒",
-            "20秒",
-            "30秒",
-            "60秒"});
-            this.comboBoxTimeSpan.Location = new System.Drawing.Point(248, 6);
-            this.comboBoxTimeSpan.Name = "comboBoxTimeSpan";
-            this.comboBoxTimeSpan.Size = new System.Drawing.Size(81, 20);
-            this.comboBoxTimeSpan.TabIndex = 5;
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "Longitude";
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
             // 
-            // checkBoxFollow
+            // yDataGridViewTextBoxColumn
             // 
-            this.checkBoxFollow.AutoSize = true;
-            this.checkBoxFollow.Checked = true;
-            this.checkBoxFollow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxFollow.Location = new System.Drawing.Point(463, 7);
-            this.checkBoxFollow.Name = "checkBoxFollow";
-            this.checkBoxFollow.Size = new System.Drawing.Size(60, 16);
-            this.checkBoxFollow.TabIndex = 6;
-            this.checkBoxFollow.Text = "Follow";
-            this.checkBoxFollow.UseVisualStyleBackColor = true;
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Latitude";
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            // 
+            // timeDataGridViewTextBoxColumn
+            // 
+            this.timeDataGridViewTextBoxColumn.DataPropertyName = "Time";
+            this.timeDataGridViewTextBoxColumn.HeaderText = "Time";
+            this.timeDataGridViewTextBoxColumn.Name = "timeDataGridViewTextBoxColumn";
+            // 
+            // historyGeoDataBindingSource
+            // 
+            this.historyGeoDataBindingSource.DataSource = typeof(GMapWinFormDemo.HistoryGeoData);
             // 
             // MapForm
             // 
@@ -1042,7 +1049,6 @@
             this.panelMap.ResumeLayout(false);
             this.panelDock.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).EndInit();
             this.panelButtonTools.ResumeLayout(false);
             this.panelButtonTools.PerformLayout();
             this.panelMenu.ResumeLayout(false);
@@ -1061,6 +1067,7 @@
             this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.xPanderPanelMap.ResumeLayout(false);
             this.xPanderPanelMap.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
