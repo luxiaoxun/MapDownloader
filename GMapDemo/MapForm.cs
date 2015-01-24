@@ -227,14 +227,14 @@ namespace GMapWinFormDemo
         {
             TreeNode rootNode = new TreeNode("中国");
             this.treeView1.Nodes.Add(rootNode);
-            //Country china = GetCountryDataFromFile(@"F:\GMap\china.xml");
-            //string file = System.Windows.Forms.Application.StartupPath + "\\china";
-            //string file = System.Windows.Forms.Application.StartupPath + "\\china-province city";
-            //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
-            string file = System.Windows.Forms.Application.StartupPath + "\\china-province city.xml";
+            
+            string file = System.Windows.Forms.Application.StartupPath + "\\chinaBoundry";
+            //string file = System.Windows.Forms.Application.StartupPath + "\\china-province-city.xml";
             if (System.IO.File.Exists(file))
             {
-                Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromXmlFile(file);
+                //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromXmlFile(file);
+                Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+
                 foreach (var provice in china.Province)
                 {
                     TreeNode pNode = new TreeNode(provice.name);
@@ -348,6 +348,21 @@ namespace GMapWinFormDemo
             GMapPolygon p = GMapChinaRegion.MapRegion.CreateMapPolygon(selectedName);
             if (p != null)
             {
+                //if (selectedName == "海南")
+                //{
+                //    StringBuilder sb = new StringBuilder();
+                //    for (int i = 0; i < p.Points.Count; ++i)
+                //    {
+                //        sb.Append(p.Points[i].Lng);
+                //        sb.Append(" ");
+                //        sb.Append(p.Points[i].Lat);
+                //        if (i != p.Points.Count - 1)
+                //        {
+                //            sb.Append(",");
+                //        }
+                //    }
+                //    File.WriteAllText("aaa.txt", sb.ToString());
+                //}
                 regionOverlay.Polygons.Clear();
                 regionOverlay.Polygons.Add(p);
                 RectLatLng rect = GMapChinaRegion.MapRegion.GetRegionMaxRect(p);
@@ -754,7 +769,8 @@ namespace GMapWinFormDemo
             {
                 mapType = MapType.Satellite;
                 this.buttonMapType.Image = Properties.Resources.ditu;
-                mapControl.MapProvider = GMapProvidersExt.AMapSateliteProvider.Instance;
+                //mapControl.MapProvider = GMapProvidersExt.AMapSateliteProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.AMapHybirdProvider.Instance;
             }
             else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.amap)
             {
@@ -1003,8 +1019,8 @@ namespace GMapWinFormDemo
                 HistoryGeoData data = new HistoryGeoData();
                 data.ID = i;
                 data.PhoneNumber = "43242342";
-                data.X = 117 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
-                data.Y = 30 + rand.NextDouble()+rand.NextDouble()*0.1+rand.NextDouble()*0.01;
+                data.X = 117 + rand.NextDouble()*0.1+rand.NextDouble()*0.01+rand.NextDouble()*0.001;
+                data.Y = 31 + rand.NextDouble()*0.1+rand.NextDouble()*0.01+rand.NextDouble()*0.001;
                 data.Time = DateTime.Now;
 
                 dataList.Add(data);

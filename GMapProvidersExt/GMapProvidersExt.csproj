@@ -41,12 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AMapHybirdProvider.cs" />
     <Compile Include="AMapProvider.cs" />
     <Compile Include="AMapSateliteProvider.cs" />
     <Compile Include="BaiduMapProvider.cs" />
     <Compile Include="BaiduMapSateliteProvider.cs" />
+    <Compile Include="BaiduMercatorProjection1.cs" />
     <Compile Include="BaiduProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SogouProjection.cs" />
     <Compile Include="SosoMapProvider.cs" />
     <Compile Include="SosoMapSateliteProvider.cs" />
   </ItemGroup>

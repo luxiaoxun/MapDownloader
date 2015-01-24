@@ -22,6 +22,7 @@ namespace GMapProvidersExt
         {
             //get { return MercatorProjection.Instance; }
             get { return BaiduProjection.Instance; }
+            //get { return BaiduMercatorProjection1.Instance; }
         }
 
         GMapProvider[] overlays;
@@ -92,15 +93,27 @@ namespace GMapProvidersExt
 
         string MakeTileImageUrl(GPoint pos, int zoom, string language)
         {
-            var num = GMapProvider.GetServerNum(pos, 10);
-            var x = (pos.X > 0) ? pos.X.ToString() : ("M" + Math.Abs(pos.X).ToString());
-            var y = (pos.Y > 0) ? pos.Y.ToString() : ("M" + Math.Abs(pos.Y).ToString());
+            zoom = zoom - 1;
+            var offsetX = Math.Pow(2, zoom);
+            var offsetY = offsetX - 1;
 
-            string url = string.Format(UrlFormat, num, x, y, zoom);
+            var numX = pos.X - offsetX;
+            var numY = -pos.Y + offsetY;
+
+            zoom = zoom + 1;
+            var num = (pos.X + pos.Y) % 4 + 1;
+            var x = numX.ToString().Replace("-", "M");
+            var y = numY.ToString().Replace("-", "M");
+
+            //var num = GMapProvider.GetServerNum(pos, 4);
+            //var x = (pos.X > 0) ? pos.X.ToString() : ("M" + Math.Abs(pos.X).ToString());
+            //var y = (pos.Y > 0) ? pos.Y.ToString() : ("M" + Math.Abs(pos.Y).ToString());
+
+            string url = string.Format(UrlFormat, x, y, zoom);
             return url;
         }
         //http://online1.map.bdimg.com/tile/?qt=tile&x=1615&y=458&z=13&styles=pl&udt=20140314
-        static readonly string UrlFormat = "http://online{0}.map.bdimg.com/tile/?qt=tile&x={1}&y={2}&z={3}&styles=pl&udt=20140314";
+        static readonly string UrlFormat = "http://online1.map.bdimg.com/tile/?qt=tile&x={0}&y={1}&z={1}&styles=pl&udt=20140314";
 
     }
 }

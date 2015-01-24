@@ -11,27 +11,41 @@ namespace NetUtilityLibTest
     {
         static void Main(string[] args)
         {
-            Country china = GetCountryDataFromFile(@"F:\GMap\china-province city.xml");
-            for (int i = 0; i < china.Province.Count; ++i)
+            //Country china = GetCountryDataFromFile(@"F:\GMap\china-province city.xml");
+            //for (int i = 0; i < china.Province.Count; ++i)
+            //{
+            //    string ps = china.Province[i].rings;
+            //    china.Province[i].rings = GetPositionFromRings(ref ps, china.Province[i].name);
+            //    for (int j = 0; j < china.Province[i].City.Count; ++j)
+            //    {
+            //        string cs = china.Province[i].City[j].rings;
+            //        china.Province[i].City[j].rings = GetPositionFromRings(ref cs, china.Province[i].City[j].name);
+            //        //for (int k = 0; k < china.Province[i].City[j].Piecearea.Count; ++k)
+            //        //{
+            //        //    string pps = china.Province[i].City[j].Piecearea[k].rings;
+            //        //    china.Province[i].City[j].Piecearea[k].rings = GetPositionFromRings(ref pps,
+            //        //        china.Province[i].City[j].Piecearea[k].name);
+            //        //}
+            //    }
+            //}
+
+            //XmlHelper.XmlSerializeToFile(china, @"F:\GMap\china-province city2.xml", Encoding.UTF8);
+            //JsonHelper.JsonSerializeToFile(china, @"F:\GMap\china-province city", Encoding.UTF8);
+
+            string file = "chinaBoundry";
+            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+
+            for (int i = 0; i < china.Province.Count; ++i )
             {
-                string ps = china.Province[i].rings;
-                china.Province[i].rings = GetPositionFromRings(ref ps, china.Province[i].name);
-                for (int j = 0; j < china.Province[i].City.Count; ++j)
+                china.Province[i].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
+                for (int j = 0; j < china.Province[i].City.Count; ++j )
                 {
-                    string cs = china.Province[i].City[j].rings;
-                    china.Province[i].City[j].rings = GetPositionFromRings(ref cs, china.Province[i].City[j].name);
-                    //for (int k = 0; k < china.Province[i].City[j].Piecearea.Count; ++k)
-                    //{
-                    //    string pps = china.Province[i].City[j].Piecearea[k].rings;
-                    //    china.Province[i].City[j].Piecearea[k].rings = GetPositionFromRings(ref pps,
-                    //        china.Province[i].City[j].Piecearea[k].name);
-                    //}
+                    china.Province[i].City[j].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
                 }
             }
 
-            XmlHelper.XmlSerializeToFile(china, @"F:\GMap\china-province city2.xml", Encoding.UTF8);
-            JsonHelper.JsonSerializeToFile(china, @"F:\GMap\china-province city", Encoding.UTF8);
-            
+            JsonHelper.JsonSerializeToFile(china,"chinaBoundryEncode",Encoding.UTF8);
+
             Console.WriteLine("Complete!");
             Console.ReadKey();
         }

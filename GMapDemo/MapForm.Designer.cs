@@ -43,8 +43,15 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.panelMap = new System.Windows.Forms.Panel();
             this.buttonMapType = new System.Windows.Forms.Button();
+            this.mapControl = new GMapWinFormDemo.MapControl();
             this.panelDock = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.phoneNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.historyGeoDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panelButtonTools = new System.Windows.Forms.Panel();
             this.checkBoxFollow = new System.Windows.Forms.CheckBox();
             this.comboBoxTimeSpan = new System.Windows.Forms.ComboBox();
@@ -95,18 +102,12 @@
             this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
             this.buttonClearSArea = new System.Windows.Forms.Button();
             this.buttonPrefetchSArea = new System.Windows.Forms.Button();
-            this.mapControl = new GMapWinFormDemo.MapControl();
-            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.phoneNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.timeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.historyGeoDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.contextMenuStripMarker.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.panelMap.SuspendLayout();
             this.panelDock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).BeginInit();
             this.panelButtonTools.SuspendLayout();
             this.panelMenu.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -120,7 +121,6 @@
             this.groupBox3.SuspendLayout();
             this.xPanderPanelChinaRegion.SuspendLayout();
             this.xPanderPanelMap.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // contextMenuStripMarker
@@ -145,34 +145,34 @@
             this.腾讯地图ToolStripMenuItem,
             this.百度地图ToolStripMenuItem});
             this.地图操作ToolStripMenuItem.Name = "地图操作ToolStripMenuItem";
-            this.地图操作ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.地图操作ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.地图操作ToolStripMenuItem.Text = "地图选择";
             // 
             // 谷歌地图ToolStripMenuItem
             // 
             this.谷歌地图ToolStripMenuItem.Name = "谷歌地图ToolStripMenuItem";
-            this.谷歌地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.谷歌地图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.谷歌地图ToolStripMenuItem.Text = "谷歌地图";
             this.谷歌地图ToolStripMenuItem.Click += new System.EventHandler(this.谷歌地图ToolStripMenuItem_Click);
             // 
             // 高德地图ToolStripMenuItem
             // 
             this.高德地图ToolStripMenuItem.Name = "高德地图ToolStripMenuItem";
-            this.高德地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.高德地图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.高德地图ToolStripMenuItem.Text = "高德地图";
             this.高德地图ToolStripMenuItem.Click += new System.EventHandler(this.高德地图ToolStripMenuItem_Click);
             // 
             // 腾讯地图ToolStripMenuItem
             // 
             this.腾讯地图ToolStripMenuItem.Name = "腾讯地图ToolStripMenuItem";
-            this.腾讯地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.腾讯地图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.腾讯地图ToolStripMenuItem.Text = "腾讯地图";
             this.腾讯地图ToolStripMenuItem.Click += new System.EventHandler(this.腾讯地图ToolStripMenuItem_Click);
             // 
             // 百度地图ToolStripMenuItem
             // 
             this.百度地图ToolStripMenuItem.Name = "百度地图ToolStripMenuItem";
-            this.百度地图ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.百度地图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.百度地图ToolStripMenuItem.Text = "百度地图";
             this.百度地图ToolStripMenuItem.Click += new System.EventHandler(this.百度地图ToolStripMenuItem_Click);
             // 
@@ -183,27 +183,27 @@
             this.保存缓存ToolStripMenuItem,
             this.读取缓存ToolStripMenuItem});
             this.地图操作ToolStripMenuItem1.Name = "地图操作ToolStripMenuItem1";
-            this.地图操作ToolStripMenuItem1.Size = new System.Drawing.Size(67, 20);
+            this.地图操作ToolStripMenuItem1.Size = new System.Drawing.Size(68, 21);
             this.地图操作ToolStripMenuItem1.Text = "地图操作";
             // 
             // 保存为图片ToolStripMenuItem
             // 
             this.保存为图片ToolStripMenuItem.Name = "保存为图片ToolStripMenuItem";
-            this.保存为图片ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.保存为图片ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.保存为图片ToolStripMenuItem.Text = "保存地图图片";
             this.保存为图片ToolStripMenuItem.Click += new System.EventHandler(this.保存为图片ToolStripMenuItem_Click);
             // 
             // 保存缓存ToolStripMenuItem
             // 
             this.保存缓存ToolStripMenuItem.Name = "保存缓存ToolStripMenuItem";
-            this.保存缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.保存缓存ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.保存缓存ToolStripMenuItem.Text = "保存缓存";
             this.保存缓存ToolStripMenuItem.Click += new System.EventHandler(this.保存缓存ToolStripMenuItem_Click);
             // 
             // 读取缓存ToolStripMenuItem
             // 
             this.读取缓存ToolStripMenuItem.Name = "读取缓存ToolStripMenuItem";
-            this.读取缓存ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.读取缓存ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.读取缓存ToolStripMenuItem.Text = "读取缓存";
             this.读取缓存ToolStripMenuItem.Click += new System.EventHandler(this.读取缓存ToolStripMenuItem_Click);
             // 
@@ -215,7 +215,7 @@
             this.地图操作ToolStripMenuItem1});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(780, 24);
+            this.menuStrip.Size = new System.Drawing.Size(780, 25);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -225,9 +225,9 @@
             this.panelMap.Controls.Add(this.mapControl);
             this.panelMap.Controls.Add(this.panelDock);
             this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(196, 24);
+            this.panelMap.Location = new System.Drawing.Point(196, 25);
             this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(584, 493);
+            this.panelMap.Size = new System.Drawing.Size(584, 492);
             this.panelMap.TabIndex = 18;
             // 
             // buttonMapType
@@ -237,12 +237,38 @@
             this.buttonMapType.Size = new System.Drawing.Size(50, 49);
             this.buttonMapType.TabIndex = 0;
             // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(584, 376);
+            this.mapControl.TabIndex = 6;
+            this.mapControl.Zoom = 0D;
+            // 
             // panelDock
             // 
             this.panelDock.Controls.Add(this.dataGridView1);
             this.panelDock.Controls.Add(this.panelButtonTools);
             this.panelDock.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelDock.Location = new System.Drawing.Point(0, 377);
+            this.panelDock.Location = new System.Drawing.Point(0, 376);
             this.panelDock.Name = "panelDock";
             this.panelDock.Size = new System.Drawing.Size(584, 116);
             this.panelDock.TabIndex = 5;
@@ -265,6 +291,40 @@
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.Size = new System.Drawing.Size(584, 88);
             this.dataGridView1.TabIndex = 1;
+            // 
+            // iDDataGridViewTextBoxColumn
+            // 
+            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
+            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
+            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
+            // 
+            // phoneNumberDataGridViewTextBoxColumn
+            // 
+            this.phoneNumberDataGridViewTextBoxColumn.DataPropertyName = "PhoneNumber";
+            this.phoneNumberDataGridViewTextBoxColumn.HeaderText = "Number";
+            this.phoneNumberDataGridViewTextBoxColumn.Name = "phoneNumberDataGridViewTextBoxColumn";
+            // 
+            // xDataGridViewTextBoxColumn
+            // 
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "Longitude";
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
+            // 
+            // yDataGridViewTextBoxColumn
+            // 
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Latitude";
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            // 
+            // timeDataGridViewTextBoxColumn
+            // 
+            this.timeDataGridViewTextBoxColumn.DataPropertyName = "Time";
+            this.timeDataGridViewTextBoxColumn.HeaderText = "Time";
+            this.timeDataGridViewTextBoxColumn.Name = "timeDataGridViewTextBoxColumn";
+            // 
+            // historyGeoDataBindingSource
+            // 
+            this.historyGeoDataBindingSource.DataSource = typeof(GMapWinFormDemo.HistoryGeoData);
             // 
             // panelButtonTools
             // 
@@ -374,10 +434,10 @@
             // splitter1
             // 
             this.splitter1.BackColor = System.Drawing.Color.Transparent;
-            this.splitter1.Location = new System.Drawing.Point(191, 24);
+            this.splitter1.Location = new System.Drawing.Point(191, 25);
             this.splitter1.MinSize = 5;
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(5, 493);
+            this.splitter1.Size = new System.Drawing.Size(5, 492);
             this.splitter1.TabIndex = 17;
             this.splitter1.TabStop = false;
             // 
@@ -405,12 +465,12 @@
             this.panelMenu.ForeColor = System.Drawing.SystemColors.ControlText;
             this.panelMenu.Image = null;
             this.panelMenu.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            this.panelMenu.Location = new System.Drawing.Point(0, 24);
+            this.panelMenu.Location = new System.Drawing.Point(0, 25);
             this.panelMenu.MinimumSize = new System.Drawing.Size(27, 27);
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
             this.panelMenu.ShowExpandIcon = true;
-            this.panelMenu.Size = new System.Drawing.Size(191, 493);
+            this.panelMenu.Size = new System.Drawing.Size(191, 492);
             this.panelMenu.TabIndex = 16;
             this.panelMenu.Text = "Menu";
             this.panelMenu.ToolTipTextCloseIcon = null;
@@ -431,7 +491,7 @@
             this.xPanderPanelList1.Name = "xPanderPanelList1";
             this.xPanderPanelList1.PanelColors = null;
             this.xPanderPanelList1.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelList1.Size = new System.Drawing.Size(191, 464);
+            this.xPanderPanelList1.Size = new System.Drawing.Size(191, 463);
             this.xPanderPanelList1.TabIndex = 0;
             this.xPanderPanelList1.Text = "xPanderPanelList1";
             // 
@@ -467,12 +527,11 @@
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelRoute.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
-            this.xPanderPanelRoute.Expand = true;
             this.xPanderPanelRoute.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelRoute.Image = null;
             this.xPanderPanelRoute.Name = "xPanderPanelRoute";
             this.xPanderPanelRoute.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelRoute.Size = new System.Drawing.Size(191, 364);
+            this.xPanderPanelRoute.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelRoute.TabIndex = 0;
             this.xPanderPanelRoute.Text = "Route";
             this.xPanderPanelRoute.ToolTipTextCloseIcon = null;
@@ -884,11 +943,12 @@
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelChinaRegion.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelChinaRegion.Expand = true;
             this.xPanderPanelChinaRegion.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelChinaRegion.Image = null;
             this.xPanderPanelChinaRegion.Name = "xPanderPanelChinaRegion";
             this.xPanderPanelChinaRegion.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(191, 25);
+            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(191, 363);
             this.xPanderPanelChinaRegion.TabIndex = 3;
             this.xPanderPanelChinaRegion.Text = "China Region";
             this.xPanderPanelChinaRegion.ToolTipTextCloseIcon = null;
@@ -900,7 +960,7 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(1, 25);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(189, 0);
+            this.treeView1.Size = new System.Drawing.Size(189, 338);
             this.treeView1.TabIndex = 0;
             // 
             // xPanderPanelMap
@@ -971,66 +1031,6 @@
             this.buttonPrefetchSArea.UseVisualStyleBackColor = true;
             this.buttonPrefetchSArea.Click += new System.EventHandler(this.buttonPrefetch_Click);
             // 
-            // mapControl
-            // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(584, 377);
-            this.mapControl.TabIndex = 6;
-            this.mapControl.Zoom = 0D;
-            // 
-            // iDDataGridViewTextBoxColumn
-            // 
-            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
-            // 
-            // phoneNumberDataGridViewTextBoxColumn
-            // 
-            this.phoneNumberDataGridViewTextBoxColumn.DataPropertyName = "PhoneNumber";
-            this.phoneNumberDataGridViewTextBoxColumn.HeaderText = "Number";
-            this.phoneNumberDataGridViewTextBoxColumn.Name = "phoneNumberDataGridViewTextBoxColumn";
-            // 
-            // xDataGridViewTextBoxColumn
-            // 
-            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
-            this.xDataGridViewTextBoxColumn.HeaderText = "Longitude";
-            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            // 
-            // yDataGridViewTextBoxColumn
-            // 
-            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
-            this.yDataGridViewTextBoxColumn.HeaderText = "Latitude";
-            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            // 
-            // timeDataGridViewTextBoxColumn
-            // 
-            this.timeDataGridViewTextBoxColumn.DataPropertyName = "Time";
-            this.timeDataGridViewTextBoxColumn.HeaderText = "Time";
-            this.timeDataGridViewTextBoxColumn.Name = "timeDataGridViewTextBoxColumn";
-            // 
-            // historyGeoDataBindingSource
-            // 
-            this.historyGeoDataBindingSource.DataSource = typeof(GMapWinFormDemo.HistoryGeoData);
-            // 
             // MapForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1042,13 +1042,16 @@
             this.Controls.Add(this.panelMenu);
             this.Controls.Add(this.menuStrip);
             this.Name = "MapForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Map Form";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.contextMenuStripMarker.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.panelMap.ResumeLayout(false);
             this.panelDock.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).EndInit();
             this.panelButtonTools.ResumeLayout(false);
             this.panelButtonTools.PerformLayout();
             this.panelMenu.ResumeLayout(false);
@@ -1067,7 +1070,6 @@
             this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.xPanderPanelMap.ResumeLayout(false);
             this.xPanderPanelMap.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.historyGeoDataBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

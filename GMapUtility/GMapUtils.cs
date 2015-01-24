@@ -16,6 +16,7 @@ namespace GMapUtility
     {
         //Radius of the Earth
         internal static readonly double earthRadius = 6371d;
+
         /// <summary>
         /// Given a start point, initial bearing, and distance in km, this will calculate the destination point travelling along a (shortest distance) great circle arc.
         /// See: http://www.movable-type.co.uk/scripts/latlong.html 
@@ -376,7 +377,6 @@ namespace GMapUtility
             return GetLineSegmentIntersection(start1, bearing1, start2, bearing2, end1, end2);
         }
 
-
         /// <summary>
         /// Returns the point of intersection of two paths defined by point and bearing
         /// </summary>
@@ -525,7 +525,6 @@ namespace GMapUtility
         {
             return radians * (180d / Math.PI);
         }
-
 
         /// <summary>
         /// Checks if the given point X is on a linesegment between A and B and calculates the distances
@@ -718,6 +717,7 @@ namespace GMapUtility
 
             for (int i = 0; i < pointsCount + 1; ++i)
             {
+                //6378137 meter is the radius of the earth
                 pts[i].Lat = pts[i].Lat * (System.Math.PI * 6378137 / 180);
                 pts[i].Lng = pts[i].Lng * (System.Math.PI * 6378137 / 180);
             }
@@ -748,8 +748,8 @@ namespace GMapUtility
         /// <summary>
         /// Get the area of a circle
         /// </summary>
-        /// <param name="center"></param>
-        /// <param name="edgePoint"></param>
+        /// <param name="center">The center of the circle</param>
+        /// <param name="edgePoint">The point on the edge of the circle</param>
         /// <returns></returns>
         public static double GetCircleArea(PointLatLng center, PointLatLng edgePoint)
         {
@@ -759,11 +759,54 @@ namespace GMapUtility
             return aera;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
+        // Get point side of the Line(pnt1,pnt2)
+        public static string GetSide(PointLatLng pnt1, PointLatLng pnt2, PointLatLng pnt)
+        {
+            double num = ((pnt2.Lat - pnt1.Lat)*(pnt.Lng - pnt1.Lng)) - ((pnt.Lat - pnt1.Lat)*(pnt2.Lng - pnt1.Lng));
+            if (Math.Abs(num) <= 0.00000001)
+            {
+                return null; // The third pnt is on the line
+            }
+            if (num > 0.0)
+            {
+                return "left";
+            }
+            if (num < 0.0)
+            {
+                return "right";
+            }
+            return null;
+        }
+
+        // Get point side of the Line(pnt1,pnt2)
+        public static int GetPointSide(PointLatLng pnt1, PointLatLng pnt2, PointLatLng pnt)
+        {
+            double num = ((pnt2.Lat - pnt1.Lat) * (pnt.Lng - pnt1.Lng)) - ((pnt.Lat - pnt1.Lat) * (pnt2.Lng - pnt1.Lng));
+            if (Math.Abs(num) <= 0.00000001)
+            {
+                return 0; // The third point is on the line
+            }
+            if (num > 0.0)
+            {
+                return 1;
+            }
+            if (num < 0.0)
+            {
+                return -1;
+            }
+            return 0;
+        }
+
+        // Judge two line is intersecting or not
+        public static bool IsLineIntersect(PointLatLng start1, PointLatLng end1, PointLatLng start2, PointLatLng end2)
+        {
+            int test1 = GetPointSide(start1, end1, start2) * GetPointSide(start1, end1, end2);
+            int test2 = GetPointSide(start2, end2, start1) * GetPointSide(start2, end2, end1);
+
+            return (test1 <= 0) && (test2 <= 0);
+        }
+
+        // Get routes from Shape File 
         //public static List<GMapRoute> GetRoutesFromShapefile(String filename)
         //{
 

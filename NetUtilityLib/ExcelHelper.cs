@@ -109,6 +109,10 @@ namespace NetUtilityLib
                 if (sheetName != null)
                 {
                     sheet = workbook.GetSheet(sheetName);
+                    if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
+                    {
+                        sheet = workbook.GetSheetAt(0);
+                    }
                 }
                 else
                 {
@@ -123,8 +127,16 @@ namespace NetUtilityLib
                     {
                         for (int i = firstRow.FirstCellNum; i < cellCount; ++i)
                         {
-                            DataColumn column = new DataColumn(firstRow.GetCell(i).StringCellValue);
-                            data.Columns.Add(column);
+                            ICell cell = firstRow.GetCell(i);
+                            if (cell != null)
+                            {
+                                string cellValue = cell.StringCellValue;
+                                if (cellValue != null)
+                                {
+                                    DataColumn column = new DataColumn(cellValue);
+                                    data.Columns.Add(column);
+                                }
+                            }
                         }
                         startRow = sheet.FirstRowNum + 1;
                     }
@@ -139,7 +151,7 @@ namespace NetUtilityLib
                     {
                         IRow row = sheet.GetRow(i);
                         if (row == null) continue; //没有数据的行默认是null　　　　　　　
-                        
+
                         DataRow dataRow = data.NewRow();
                         for (int j = row.FirstCellNum; j < cellCount; ++j)
                         {
