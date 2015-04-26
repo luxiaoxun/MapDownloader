@@ -3,19 +3,28 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
 
-namespace GMapProvidersExt
+namespace GMapProvidersExt.SoSo
 {
     public class SosoMapSateliteProvider: SosoMapProviderBase
     {
         public static readonly SosoMapSateliteProvider Instance;
 
-        readonly Guid id = new Guid("441FE314-F379-4566-8FC5-AD62784CF552");
+        private readonly Guid id = new Guid("441FE314-F379-4566-8FC5-AD62784CF552");
         public override Guid Id
         {
             get { return id; }
         }
 
-        readonly string name = "SosoMapSatelite";
+        private readonly string cnName = "SOSO卫星地图";
+        public string CnName
+        {
+            get
+            {
+                return this.cnName;
+            }
+        }
+
+        private readonly string name = "SosoMapSatelite";
         public override string Name
         {
             get

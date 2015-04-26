@@ -239,7 +239,7 @@ namespace GMap.NET.MapProviders
 
             if (MapProviders.Exists(p => p.Id == Id || p.DbId == DbId))
             {
-                throw new Exception("such provider id already exsists, try regenerate your provider guid...");
+                throw new Exception("such provider id already exsists , try regenerate your provider guid..."+Id);
             }
             MapProviders.Add(this);
         }

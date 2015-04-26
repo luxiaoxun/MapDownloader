@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             this.panelTool = new System.Windows.Forms.Panel();
-            this.panelMap = new System.Windows.Forms.Panel();
+            this.gbMapImage = new System.Windows.Forms.GroupBox();
+            this.buttonMapImage = new System.Windows.Forms.Button();
+            this.textBoxImageZoom = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.gbMapDownloader = new System.Windows.Forms.GroupBox();
             this.comboBoxMapType = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,16 +45,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxMinZoom = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.gbMapImage = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxImageZoom = new System.Windows.Forms.TextBox();
-            this.buttonMapImage = new System.Windows.Forms.Button();
+            this.panelMap = new System.Windows.Forms.Panel();
             this.mapControl = new MapDownloader.MapControl();
             this.panelTool.SuspendLayout();
-            this.panelMap.SuspendLayout();
+            this.gbMapImage.SuspendLayout();
             this.gbMapDownloader.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.gbMapImage.SuspendLayout();
+            this.panelMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTool
@@ -65,14 +65,44 @@
             this.panelTool.Size = new System.Drawing.Size(219, 574);
             this.panelTool.TabIndex = 0;
             // 
-            // panelMap
+            // gbMapImage
             // 
-            this.panelMap.Controls.Add(this.mapControl);
-            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(0, 0);
-            this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(584, 574);
-            this.panelMap.TabIndex = 3;
+            this.gbMapImage.Controls.Add(this.buttonMapImage);
+            this.gbMapImage.Controls.Add(this.textBoxImageZoom);
+            this.gbMapImage.Controls.Add(this.label4);
+            this.gbMapImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbMapImage.Location = new System.Drawing.Point(0, 377);
+            this.gbMapImage.Name = "gbMapImage";
+            this.gbMapImage.Size = new System.Drawing.Size(219, 197);
+            this.gbMapImage.TabIndex = 5;
+            this.gbMapImage.TabStop = false;
+            this.gbMapImage.Text = "Map Image";
+            // 
+            // buttonMapImage
+            // 
+            this.buttonMapImage.Location = new System.Drawing.Point(58, 87);
+            this.buttonMapImage.Name = "buttonMapImage";
+            this.buttonMapImage.Size = new System.Drawing.Size(75, 28);
+            this.buttonMapImage.TabIndex = 6;
+            this.buttonMapImage.Text = "Map Image";
+            this.buttonMapImage.UseVisualStyleBackColor = true;
+            // 
+            // textBoxImageZoom
+            // 
+            this.textBoxImageZoom.Location = new System.Drawing.Point(64, 48);
+            this.textBoxImageZoom.Name = "textBoxImageZoom";
+            this.textBoxImageZoom.Size = new System.Drawing.Size(35, 21);
+            this.textBoxImageZoom.TabIndex = 3;
+            this.textBoxImageZoom.Text = "10";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(17, 51);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 12);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Zoom：";
             // 
             // gbMapDownloader
             // 
@@ -195,44 +225,14 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Zoom：";
             // 
-            // gbMapImage
+            // panelMap
             // 
-            this.gbMapImage.Controls.Add(this.buttonMapImage);
-            this.gbMapImage.Controls.Add(this.textBoxImageZoom);
-            this.gbMapImage.Controls.Add(this.label4);
-            this.gbMapImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbMapImage.Location = new System.Drawing.Point(0, 377);
-            this.gbMapImage.Name = "gbMapImage";
-            this.gbMapImage.Size = new System.Drawing.Size(219, 197);
-            this.gbMapImage.TabIndex = 5;
-            this.gbMapImage.TabStop = false;
-            this.gbMapImage.Text = "Map Image";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 51);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(41, 12);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Zoom：";
-            // 
-            // textBoxImageZoom
-            // 
-            this.textBoxImageZoom.Location = new System.Drawing.Point(64, 48);
-            this.textBoxImageZoom.Name = "textBoxImageZoom";
-            this.textBoxImageZoom.Size = new System.Drawing.Size(35, 21);
-            this.textBoxImageZoom.TabIndex = 3;
-            this.textBoxImageZoom.Text = "10";
-            // 
-            // buttonMapImage
-            // 
-            this.buttonMapImage.Location = new System.Drawing.Point(58, 87);
-            this.buttonMapImage.Name = "buttonMapImage";
-            this.buttonMapImage.Size = new System.Drawing.Size(75, 28);
-            this.buttonMapImage.TabIndex = 6;
-            this.buttonMapImage.Text = "Map Image";
-            this.buttonMapImage.UseVisualStyleBackColor = true;
+            this.panelMap.Controls.Add(this.mapControl);
+            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMap.Location = new System.Drawing.Point(0, 0);
+            this.panelMap.Name = "panelMap";
+            this.panelMap.Size = new System.Drawing.Size(584, 574);
+            this.panelMap.TabIndex = 3;
             // 
             // mapControl
             // 
@@ -270,14 +270,15 @@
             this.Name = "MapDownloadForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MapForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panelTool.ResumeLayout(false);
-            this.panelMap.ResumeLayout(false);
+            this.gbMapImage.ResumeLayout(false);
+            this.gbMapImage.PerformLayout();
             this.gbMapDownloader.ResumeLayout(false);
             this.gbMapDownloader.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.gbMapImage.ResumeLayout(false);
-            this.gbMapImage.PerformLayout();
+            this.panelMap.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

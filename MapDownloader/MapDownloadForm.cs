@@ -9,16 +9,24 @@ using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
+using NetUtilityLib;
 
 namespace MapDownloader
 {
     public partial class MapDownloadForm : Form
     {
+        //private string conString = @"Server=127.0.0.1;Port=3306;Database=mapcache;Uid=root;Pwd=admin;";
+
+        private static string conStringFormat = "Server={0};Port={1};Database={2};Uid={3};Pwd={4};";
+        private static string conString;
+
         public MapDownloadForm()
         {
             InitializeComponent();
 
             InitMap();
+
+            InitMySQLConString();
         }
 
         private void InitMap()
@@ -33,15 +41,50 @@ namespace MapDownloader
             mapControl.MaxZoom = 18;
             mapControl.Zoom = 9;
 
-            comboBoxMapType.ValueMember = "Name";
-            comboBoxMapType.DataSource = GMapProviders.List;
+            #region Add maps
+
+            comboBoxMapType.ValueMember = "CnName";
+            //comboBoxMapType.DataSource = GMapProviders.List;
+            
+            //foreach (var mapProvider in GMapProviders.List)
+            //{
+            //    comboBoxMapType.Items.Add(mapProvider);
+            //}
+            comboBoxMapType.Items.Add(GMapProviders.GoogleChinaMap);
+            comboBoxMapType.Items.Add(GMapProviders.GoogleChinaSatelliteMap);
+            comboBoxMapType.Items.Add(GMapProviders.GoogleChinaHybridMap);
+
+            comboBoxMapType.Items.Add(GMapProvidersExt.AMap.AMapProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.AMap.AMapSateliteProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.AMap.AMapHybirdProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.SoSo.SosoMapProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.SoSo.SosoMapSateliteProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.Baidu.BaiduMapProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.Baidu.BaiduSatelliteMapProvider.Instance);
+            comboBoxMapType.Items.Add(GMapProvidersExt.Baidu.BaiduHybridMapProvider.Instance);
+
+
             comboBoxMapType.SelectedItem = mapControl.MapProvider;
+
+            #endregion
 
             this.comboBoxMapType.SelectedValueChanged += new EventHandler(comboBoxMapType_SelectedValueChanged);
             this.radioButtonMySQL.CheckedChanged += new EventHandler(radioButtonMySQL_CheckedChanged);
             this.radioButtonSQLite.CheckedChanged += new EventHandler(radioButtonSQLite_CheckedChanged);
             this.buttonDownload.Click += new EventHandler(buttonDownload_Click);
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
+        }
+
+        private void InitMySQLConString()
+        {
+            string ip = ConfigHelper.GetAppConfig("MySQLServerIP");
+            string port = ConfigHelper.GetAppConfig("MySQLServerPort");
+            string dbName = ConfigHelper.GetAppConfig("Database");
+            string userID = ConfigHelper.GetAppConfig("UserID");
+            string password = ConfigHelper.GetAppConfig("Password");
+
+            conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
         }
 
         void buttonMapImage_Click(object sender, EventArgs e)
@@ -163,7 +206,7 @@ namespace MapDownloader
             if (this.radioButtonMySQL.Checked)
             {
                 GMap.NET.CacheProviders.MySQLPureImageCache cache = new GMap.NET.CacheProviders.MySQLPureImageCache();
-                cache.ConnectionString = @"Server=127.0.0.1;Port=3306;Database=mapcache;Uid=root;Pwd=admin;";
+                cache.ConnectionString = conString;
                 mapControl.Manager.PrimaryCache = cache;
             }
         }

@@ -91,6 +91,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.buttonDistance = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttonLine = new System.Windows.Forms.Button();
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonPolyline = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
@@ -856,6 +857,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.buttonLine);
             this.groupBox3.Controls.Add(this.buttonClear);
             this.groupBox3.Controls.Add(this.buttonPolyline);
             this.groupBox3.Controls.Add(this.buttonCircle);
@@ -868,9 +870,19 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Draw Polygon";
             // 
+            // buttonLine
+            // 
+            this.buttonLine.Location = new System.Drawing.Point(6, 85);
+            this.buttonLine.Name = "buttonLine";
+            this.buttonLine.Size = new System.Drawing.Size(67, 23);
+            this.buttonLine.TabIndex = 10;
+            this.buttonLine.Text = "Line";
+            this.buttonLine.UseVisualStyleBackColor = true;
+            this.buttonLine.Click += new System.EventHandler(this.buttonLine_Click);
+            // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(6, 83);
+            this.buttonClear.Location = new System.Drawing.Point(93, 88);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(67, 23);
             this.buttonClear.TabIndex = 8;
@@ -880,7 +892,7 @@
             // 
             // buttonPolyline
             // 
-            this.buttonPolyline.Location = new System.Drawing.Point(93, 53);
+            this.buttonPolyline.Location = new System.Drawing.Point(93, 55);
             this.buttonPolyline.Name = "buttonPolyline";
             this.buttonPolyline.Size = new System.Drawing.Size(67, 23);
             this.buttonPolyline.TabIndex = 9;
@@ -1150,6 +1162,7 @@
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.ComboBox comboBoxTimeSpan;
         private System.Windows.Forms.CheckBox checkBoxFollow;
+        private System.Windows.Forms.Button buttonLine;
     }
 }
 

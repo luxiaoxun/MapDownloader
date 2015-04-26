@@ -33,6 +33,15 @@ namespace GMap.NET.MapProviders
          }
       }
 
+      private readonly string cnName = "Google中国台湾地图";
+      public string CnName
+      {
+          get
+          {
+              return this.cnName;
+          }
+      }
+
       readonly string name = "GoogleChinaTerrainMap";
       public override string Name
       {

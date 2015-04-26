@@ -3,58 +3,28 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
 
-namespace GMapProvidersExt
+namespace GMapProvidersExt.SoSo
 {
-    public abstract class SosoMapProviderBase : GMapProvider
-    {
-        public SosoMapProviderBase()
-        {
-            MaxZoom = null;
-            RefererUrl = "http://map.soso.com";
-            //Copyright = string.Format("©{0} Tencent Corporation, ©{0} NAVTEQ, ©{0} Image courtesy of NASA", DateTime.Today.Year);    
-        }
-
-        public override PureProjection Projection
-        {
-            get { return MercatorProjection.Instance; }
-        }
-
-        GMapProvider[] overlays;
-        public override GMapProvider[] Overlays
-        {
-            get
-            {
-                if (overlays == null)
-                {
-                    overlays = new GMapProvider[] { this };
-                }
-                return overlays;
-            }
-        }
-
-        //protected override bool CheckTileImageHttpResponse(System.Net.HttpWebResponse response)
-        //{
-        //    var pass =  base.CheckTileImageHttpResponse(response);
-        //    if (!pass)
-        //    {
-        //         return response.ResponseUri.AbsoluteUri.EndsWith(".png") || response.ResponseUri.AbsoluteUri.EndsWith(".JPG");
-        //    }
-
-        //    return true;
-        //}
-    }
-
     public class SosoMapProvider: SosoMapProviderBase
     {
         public static readonly SosoMapProvider Instance;
         
-        readonly Guid id = new Guid("30D069B3-F6A5-4feb-9B5E-84CBF1E34F34");
+        private readonly Guid id = new Guid("30D069B3-F6A5-4feb-9B5E-84CBF1E34F34");
         public override Guid Id
         {
             get { return id; }
         }
 
-        readonly string name = "SoSoMap";
+        private readonly string cnName = "SOSO地图";
+        public string CnName
+        {
+            get
+            {
+                return this.cnName;
+            }
+        }
+
+        readonly string name = "SosoMap";
         public override string Name
         {
             get

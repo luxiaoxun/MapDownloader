@@ -12,7 +12,8 @@ namespace GMapDrawTools
         private List<PointLatLng> drawingPoints = new List<PointLatLng>(); //多边形的点集
         private GMapPolygon drawingPolygon = null; //正在画的polygon
         private GMapDrawCircle drawingCircle = null; //正在画的circle
-        private GMapRoute drawingRoute = null;
+        private GMapDrawRoute drawingRoute = null;
+        private GMapDrawLine drawingLine = null;
         private bool isLeftButtonDown = false;
 
         private Pen stroke = new Pen(Color.Blue, 2);
@@ -132,11 +133,15 @@ namespace GMapDrawTools
                 drawingCircle.Dispose();
                 drawingCircle = null;
             }
-
             if (drawingRoute != null)
             {
                 drawingRoute.Dispose();
                 drawingRoute = null;
+            }
+            if (drawingLine != null)
+            {
+                drawingLine.Dispose();
+                drawingLine = null;
             }
             drawingMode = DrawingMode.None;
         }
@@ -204,6 +209,19 @@ namespace GMapDrawTools
 
                 ClearTempDrawing();
             }
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Left && drawingMode == DrawingMode.Line &&
+                drawingLine != null)
+            {
+                List<PointLatLng> drawPoints = drawingLine.Points;
+                if (drawPoints.Count == 2) //2 points for a line
+                {
+                    DrawEventArgs args = new DrawEventArgs(drawingMode, drawPoints, Stroke, Fill);
+                    OnDrawComplete(args);
+
+                    ClearTempDrawing();
+                }
+            }
         }
 
         void MapControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -234,6 +252,35 @@ namespace GMapDrawTools
                     PointLatLng currentPos = MapControl.FromLocalToLatLng(e.X, e.Y);
                     drawingCircle.EdgePoint = currentPos;
                     MapControl.UpdateMarkerLocalPosition(drawingCircle);
+                    MapControl.Refresh();
+                }
+            }
+
+            if (DrawingMode == DrawingMode.Route)
+            {
+                if (drawingRoute != null && drawingPoints.Count > 0)
+                {
+                    PointLatLng currentPos = MapControl.FromLocalToLatLng(e.X, e.Y);
+
+                    drawingRoute.Points.Clear();
+                    drawingRoute.Points.AddRange(drawingPoints);
+                    drawingRoute.Points.Add(currentPos);
+                    MapControl.UpdateRouteLocalPosition(drawingRoute);
+                    MapControl.Refresh();
+                }
+            }
+
+            if (DrawingMode == DrawingMode.Line)
+            {
+                if (drawingLine != null && drawingPoints.Count > 0)
+                {
+                    PointLatLng startPos = drawingPoints[0];
+                    PointLatLng currentPos = MapControl.FromLocalToLatLng(e.X, e.Y);
+
+                    drawingLine.Points.Clear();
+                    drawingLine.Points.Add(startPos);
+                    drawingLine.Points.Add(currentPos);
+                    MapControl.UpdateRouteLocalPosition(drawingLine);
                     MapControl.Refresh();
                 }
             }
@@ -271,7 +318,7 @@ namespace GMapDrawTools
                     drawingPoints.Add(MapControl.FromLocalToLatLng(e.X, e.Y));
                     if (drawingRoute == null)
                     {
-                        drawingRoute = new GMapRoute(drawingPoints, "Route");
+                        drawingRoute = new GMapDrawRoute(drawingPoints, "Route");
                         if (Stroke != null)
                         {
                             drawingRoute.Stroke = Stroke;
@@ -285,6 +332,29 @@ namespace GMapDrawTools
                         drawingRoute.Points.Clear();
                         drawingRoute.Points.AddRange(drawingPoints);
                         MapControl.UpdateRouteLocalPosition(drawingRoute);
+                        MapControl.Refresh();
+                    }
+                }
+
+                if (drawingMode == DrawingMode.Line)
+                {
+                    drawingPoints.Add(MapControl.FromLocalToLatLng(e.X, e.Y));
+                    if (drawingLine == null)
+                    {
+                        drawingLine = new GMapDrawLine(drawingPoints, "Line");
+                        if (Stroke != null)
+                        {
+                            drawingLine.Stroke = Stroke;
+                        }
+                        drawingLine.IsHitTestVisible = false;
+                        tempPolygonsOverlay.Routes.Add(drawingLine);
+                        MapControl.Refresh();
+                    }
+                    else
+                    {
+                        drawingLine.Points.Clear();
+                        drawingLine.Points.AddRange(drawingPoints);
+                        MapControl.UpdateRouteLocalPosition(drawingLine);
                         MapControl.Refresh();
                     }
                 }

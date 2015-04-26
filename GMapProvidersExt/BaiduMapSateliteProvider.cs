@@ -59,7 +59,8 @@ namespace GMapProvidersExt
 
             //return "http://q3.baidu.com/it/u=x=721;y=209;z=12;v=014;type=web&fm=44";
             //http://q3.baidu.com/it/u=x=721;y=209;z=12;v=014;type=web&fm=44
-            string url = string.Format(UrlFormat, x, y, zoom);
+            string url = string.Format(UrlFormat, pos.X, pos.Y, zoom);
+            //string url = string.Format(UrlFormat, x, y, zoom);
             return url;
         }
 

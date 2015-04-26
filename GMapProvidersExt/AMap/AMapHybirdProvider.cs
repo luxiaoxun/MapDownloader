@@ -3,19 +3,28 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
 
-namespace GMapProvidersExt
+namespace GMapProvidersExt.AMap
 {
     public class AMapHybirdProvider : AMapProviderBase
     {
         public static readonly AMapHybirdProvider Instance;
-   
-        readonly Guid id = new Guid("EF3DD303-3F74-4938-BF40-232D0595EE87");
+        
+        private readonly Guid id = new Guid("EF3DD303-3F74-4938-BF40-232D0595EE87");
         public override Guid Id
         {
             get { return id; }
         }
 
-        readonly string name = "AMapHybird";
+        private readonly string cnName = "高德混合地图";
+        public string CnName
+        {
+            get
+            {
+                return this.cnName;
+            }
+        }
+
+        private readonly string name = "AMapHybird";
         public override string Name
         {
             get
@@ -51,13 +60,11 @@ namespace GMapProvidersExt
 
         string MakeTileImageUrl(GPoint pos, int zoom, string language)
         {
-
-            //http://webst03.is.autonavi.com/appmaptile?style=8&x=1633&y=848&z=11
-            string url = string.Format(UrlFormat, pos.X, pos.Y, zoom);
-            Console.WriteLine("url:" + url);
+            var num = (pos.X + pos.Y) % 4 + 1;
+            string url = string.Format(UrlFormat, num, pos.X, pos.Y, zoom);
             return url;
         }
 
-        static readonly string UrlFormat = "http://webst03.is.autonavi.com/appmaptile?style=8&x={0}&y={1}&z={2}";
+        static readonly string UrlFormat = "http://webst0{0}.is.autonavi.com/appmaptile?style=8&x={1}&y={2}&z={3}";
     }
 }

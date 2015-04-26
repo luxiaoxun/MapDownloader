@@ -124,7 +124,6 @@ namespace GMapWinFormDemo
             foreach (var regionName in regionNames)
             {
                 this.comboBoxRegion.Items.Add(regionName);
-               
             }
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
 
@@ -700,7 +699,7 @@ namespace GMapWinFormDemo
             if (mapProviderType != MapProviderType.amap)
             {
                 mapProviderType = MapProviderType.amap;
-                mapControl.MapProvider = GMapProvidersExt.AMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
             }
@@ -711,7 +710,7 @@ namespace GMapWinFormDemo
             if (mapProviderType != MapProviderType.tengxun)
             {
                 mapProviderType = MapProviderType.tengxun;
-                mapControl.MapProvider = GMapProvidersExt.SosoMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
             }
@@ -745,7 +744,8 @@ namespace GMapWinFormDemo
             {
                 mapType = MapType.Satellite;
                 this.buttonMapType.Image = Properties.Resources.ditu;
-                mapControl.MapProvider = GMapProviders.GoogleChinaSatelliteMap;
+                //mapControl.MapProvider = GMapProviders.GoogleChinaSatelliteMap;
+                mapControl.MapProvider = GMapProviders.GoogleChinaHybridMap;
             }
             else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.google)
             {
@@ -770,25 +770,25 @@ namespace GMapWinFormDemo
                 mapType = MapType.Satellite;
                 this.buttonMapType.Image = Properties.Resources.ditu;
                 //mapControl.MapProvider = GMapProvidersExt.AMapSateliteProvider.Instance;
-                mapControl.MapProvider = GMapProvidersExt.AMapHybirdProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.AMap.AMapHybirdProvider.Instance;
             }
             else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.amap)
             {
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                mapControl.MapProvider = GMapProvidersExt.AMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
             }
             else if (mapType == MapType.Common && mapProviderType == MapProviderType.tengxun)
             {
                 mapType = MapType.Satellite;
                 this.buttonMapType.Image = Properties.Resources.ditu;
-                mapControl.MapProvider = GMapProvidersExt.SosoMapSateliteProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
             }
             else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.tengxun)
             {
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                mapControl.MapProvider = GMapProvidersExt.SosoMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
             }
             else if (mapType == MapType.Common && mapProviderType == MapProviderType.bing)
             {
@@ -857,7 +857,7 @@ namespace GMapWinFormDemo
 
         void draw_DrawComplete(object sender, DrawEventArgs e)
         {
-            if (e != null && (e.Polygon != null ||e.Rectangle!=null || e.Circle != null || e.Route != null))
+            if (e != null && (e.Polygon != null ||e.Rectangle!=null || e.Circle != null || e.Route != null || e.Line!=null))
             {
                 switch (e.DrawingMode)
                 {
@@ -872,6 +872,9 @@ namespace GMapWinFormDemo
                         break;
                     case DrawingMode.Route:
                         polygonsOverlay.Routes.Add(e.Route);
+                        break;
+                    case DrawingMode.Line:
+                        polygonsOverlay.Routes.Add(e.Line);
                         break;
                     default:
                         draw.IsEnable = false;
@@ -902,6 +905,12 @@ namespace GMapWinFormDemo
         private void buttonPolyline_Click(object sender, EventArgs e)
         {
             draw.DrawingMode = DrawingMode.Route;
+            draw.IsEnable = true;
+        }
+
+        private void buttonLine_Click(object sender, EventArgs e)
+        {
+            draw.DrawingMode = DrawingMode.Line;
             draw.IsEnable = true;
         }
 

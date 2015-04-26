@@ -20,8 +20,8 @@ namespace GMapProvidersExt
 
         public override PureProjection Projection
         {
-            //get { return MercatorProjection.Instance; }
-            get { return BaiduProjection.Instance; }
+            get { return MercatorProjection.Instance; }
+            //get { return BaiduProjection.Instance; }
             //get { return BaiduMercatorProjection1.Instance; }
         }
 
@@ -108,12 +108,12 @@ namespace GMapProvidersExt
             //var num = GMapProvider.GetServerNum(pos, 4);
             //var x = (pos.X > 0) ? pos.X.ToString() : ("M" + Math.Abs(pos.X).ToString());
             //var y = (pos.Y > 0) ? pos.Y.ToString() : ("M" + Math.Abs(pos.Y).ToString());
-
-            string url = string.Format(UrlFormat, x, y, zoom);
+            string url = string.Format(UrlFormat, pos.X, pos.Y, zoom);
+            //string url = string.Format(UrlFormat, x, y, zoom);
             return url;
         }
-        //http://online1.map.bdimg.com/tile/?qt=tile&x=1615&y=458&z=13&styles=pl&udt=20140314
-        static readonly string UrlFormat = "http://online1.map.bdimg.com/tile/?qt=tile&x={0}&y={1}&z={1}&styles=pl&udt=20140314";
+        //http://online2.map.bdimg.com/tile/?qt=tile&x=1614&y=457&z=13&styles=pl&udt=20150418&scaler=1
+        static readonly string UrlFormat = "http://online2.map.bdimg.com/tile/?qt=tile&x={0}&y={1}&z={2}&styles=pl&udt=20150418&scaler=1";
 
     }
 }

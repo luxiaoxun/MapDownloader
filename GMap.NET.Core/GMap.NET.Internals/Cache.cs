@@ -66,7 +66,7 @@ namespace GMap.NET.Internals
    /// <summary>
    /// cache system for tiles, geocoding, etc...
    /// </summary>
-   internal class Cache : Singleton<Cache>
+   public class Cache : Singleton<Cache>
    {
       /// <summary>
       /// abstract image cache
@@ -249,7 +249,7 @@ namespace GMap.NET.Internals
       #endregion
    }
 
-   internal enum CacheType
+   public enum CacheType
    {
       GeocoderCache,
       PlacemarkCache,

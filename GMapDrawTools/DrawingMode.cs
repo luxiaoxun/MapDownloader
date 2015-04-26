@@ -11,6 +11,7 @@ namespace GMapDrawTools
         Circle,
         Rectangle,
         Polygon,
-        Route
+        Route,
+        Line
     }
 }

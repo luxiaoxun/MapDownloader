@@ -33,6 +33,15 @@ namespace GMap.NET.MapProviders
          }
       }
 
+      private readonly string cnName = "Google中国卫星地图";
+      public string CnName
+      {
+          get
+          {
+              return this.cnName;
+          }
+      }
+
       readonly string name = "GoogleChinaSatelliteMap";
       public override string Name
       {
@@ -57,11 +66,14 @@ namespace GMap.NET.MapProviders
          string sec2 = string.Empty; // after &zoom=...
          GetSecureWords(pos, out sec1, out sec2);
 
-         return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, pos.X, sec1, pos.Y, zoom, sec2, ServerChina);
+         //return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, pos.X, sec1, pos.Y, zoom, sec2, ServerChina);
+         return string.Format(UrlFormat, pos.X, pos.Y, zoom);
       }
 
       static readonly string UrlFormatServer = "mt";
       static readonly string UrlFormatRequest = "vt";
-      static readonly string UrlFormat = "http://{0}{1}.{9}/{2}/lyrs={3}&gl=cn&x={4}{5}&y={6}&z={7}&s={8}";
+      //static readonly string UrlFormat = "http://{0}{1}.{9}/{2}/lyrs={3}&gl=cn&x={4}{5}&y={6}&z={7}&s={8}";
+      //http://www.google.cn/maps/vt?lyrs=s@167&gl=cn&x=54390&y=26610&z=16
+      static readonly string UrlFormat = "http://www.google.cn/maps/vt?lyrs=s@167&gl=cn&x={0}&y={1}&z={2}";
    }
 }

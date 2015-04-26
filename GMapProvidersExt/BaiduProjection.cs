@@ -47,6 +47,9 @@ namespace GMapProvidersExt
             lat = lat - 14.865;
             lng = lng - 46.895;
 
+            //lat = lat - 12.590178885765;
+            //lng = lng - 43.88955327932;
+
             lat = Clip(lat, MinLatitude, MaxLatitude);
             lng = Clip(lng, MinLongitude, MaxLongitude);
 
@@ -77,6 +80,9 @@ namespace GMapProvidersExt
 
             ret.Lat = 90 - 360 * Math.Atan(Math.Exp(-yy * 2 * Math.PI)) / Math.PI + 14.865;
             ret.Lng = 360 * xx + 46.895;
+
+            //ret.Lat = 90 - 360 * Math.Atan(Math.Exp(-yy * 2 * Math.PI)) / Math.PI + 12.590178885765;
+            //ret.Lng = 360 * xx + 43.88955327932;
 
             return ret;
         }

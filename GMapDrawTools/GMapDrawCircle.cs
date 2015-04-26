@@ -81,6 +81,20 @@ namespace GMapDrawTools
             }
         }
 
+        public bool IsInside(PointLatLng p)
+        {
+            double radius = (edgePoint.Lat - CenterPoint.Lat) * (edgePoint.Lat - CenterPoint.Lat) +
+                            (edgePoint.Lng - CenterPoint.Lng) * (edgePoint.Lng - CenterPoint.Lng);
+
+            double dis = (p.Lat - CenterPoint.Lat) * (p.Lat - CenterPoint.Lat) +
+                            (p.Lng - CenterPoint.Lng) * (p.Lng - CenterPoint.Lng);
+
+            if (dis <= radius)
+                return true;
+
+            return false;
+        }
+
         public override void Dispose()
         {
             if (Stroke != null)

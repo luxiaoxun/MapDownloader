@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E873E646-BE34-4060-A997-5087E9B7021C}</ProjectGuid>
+    <ProjectGuid>{B004E87D-FE07-433C-812C-341D16164A40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapProvidersExt</RootNamespace>
-    <AssemblyName>GMapProvidersExt</AssemblyName>
+    <RootNamespace>GMapCommonType</RootNamespace>
+    <AssemblyName>GMapCommonType</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,25 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AMap\AMapHybirdProvider.cs" />
-    <Compile Include="AMap\AMapProvider.cs" />
-    <Compile Include="AMap\AMapProviderBase.cs" />
-    <Compile Include="AMap\AMapSateliteProvider.cs" />
-    <Compile Include="BaiduMapProvider.cs" />
-    <Compile Include="BaiduMapSateliteProvider.cs" />
-    <Compile Include="BaiduProjection.cs" />
-    <Compile Include="Baidu\BaiduHybridMapProvider.cs" />
-    <Compile Include="Baidu\BaiduMapProvider.cs" />
-    <Compile Include="Baidu\BaiduMapProviderBase.cs" />
-    <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
-    <Compile Include="Baidu\BaituProjection.cs" />
+    <Compile Include="BoundingBox.cs" />
+    <Compile Include="Geometry.cs" />
+    <Compile Include="GeometryType.cs" />
+    <Compile Include="Point2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SogouProjection.cs" />
-    <Compile Include="SoSo\SosoMapHybridProvider.cs" />
-    <Compile Include="SoSo\SosoMapProvider.cs" />
-    <Compile Include="SoSo\SosoMapProviderBase.cs" />
-    <Compile Include="SoSo\SosoMapSateliteProvider.cs" />
-    <Compile Include="TileUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
@@ -70,16 +55,7 @@
       <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GMapCommonType\GMapCommonType.csproj">
-      <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
-      <Name>GMapCommonType</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
-      <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>
-      <Name>GMapPositionFix</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

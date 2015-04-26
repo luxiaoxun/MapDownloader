@@ -14,10 +14,5 @@ namespace GMapDrawTools
         {
 
         }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
     }
 }

@@ -7,12 +7,12 @@ using GMap.NET.WindowsForms;
 
 namespace GMapDrawTools
 {
-    public class GMapDrawPolygon : GMapPolygon
+    public class GMapDrawRoute:GMapRoute
     {
-        public GMapDrawPolygon(List<PointLatLng> points, string name)
-            : base(points, name)
+        public GMapDrawRoute(List<PointLatLng> points, string name) : 
+            base(points, name)
         {
-
+            
         }
     }
 }

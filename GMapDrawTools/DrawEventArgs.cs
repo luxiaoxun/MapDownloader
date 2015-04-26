@@ -18,7 +18,9 @@ namespace GMapDrawTools
 
         public GMapDrawCircle Circle { get; set; }
 
-        public GMapRoute Route { set; get; }
+        public GMapDrawRoute Route { set; get; }
+
+        public GMapDrawLine Line { set; get; }
 
         public DrawEventArgs()
         {
@@ -31,25 +33,46 @@ namespace GMapDrawTools
             if (drawingMode == DrawingMode.Polygon)
             {
                 Polygon = new GMapDrawPolygon(drawingPoints, drawingMode.ToString());
-                Polygon.Fill = fill;
-                Polygon.Stroke = stroke;
+                if (fill != null)
+                {
+                    Polygon.Fill = (Brush)fill.Clone();
+                }
+                if (stroke != null)
+                {
+                    Polygon.Stroke = (Pen)stroke.Clone();
+                }
                 Polygon.IsHitTestVisible = true;
             }
             else if (drawingMode == DrawingMode.Rectangle)
             {
                 Rectangle = new GMapDrawRectangle(drawingPoints, drawingMode.ToString());
-                Rectangle.Fill = fill;
-                Rectangle.Stroke = stroke;
+                if (fill != null)
+                {
+                    Rectangle.Fill = (Brush)fill.Clone();
+                }
+                if (stroke != null)
+                {
+                    Rectangle.Stroke = (Pen)stroke.Clone();
+                }
                 Rectangle.IsHitTestVisible = true;
             }
             else if (drawingMode == DrawingMode.Route)
             {
-                Route = new GMapRoute(drawingPoints, drawingMode.ToString());
+                Route = new GMapDrawRoute(drawingPoints, drawingMode.ToString());
                 if (stroke != null)
                 {
-                    Route.Stroke = stroke;
+                    Route.Stroke = (Pen)stroke.Clone();
                 }
                 Route.IsHitTestVisible = true;
+            }
+            else if (drawingMode == DrawingMode.Line)
+            {
+                Line = new GMapDrawLine(drawingPoints,drawingMode.ToString());
+                if (stroke != null)
+                {
+                    Line.Stroke = (Pen)stroke.Clone();
+                }
+                Line.IsHitTestVisible = true;
             }
         }
 
