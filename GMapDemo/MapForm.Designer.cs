@@ -129,12 +129,12 @@
             this.contextMenuStripMarker.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.删除ToolStripMenuItem});
             this.contextMenuStripMarker.Name = "contextMenuStrip1";
-            this.contextMenuStripMarker.Size = new System.Drawing.Size(99, 26);
+            this.contextMenuStripMarker.Size = new System.Drawing.Size(101, 26);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
