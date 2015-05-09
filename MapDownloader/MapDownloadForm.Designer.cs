@@ -72,22 +72,22 @@
             this.gbMapDownloader = new System.Windows.Forms.GroupBox();
             this.buttonDownload = new DevComponents.DotNetBar.ButtonX();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radioButtonDisk = new System.Windows.Forms.RadioButton();
             this.radioButtonMySQL = new System.Windows.Forms.RadioButton();
             this.radioButtonSQLite = new System.Windows.Forms.RadioButton();
             this.textBoxMaxZoom = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxMinZoom = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.expandableSplitter1 = new DevComponents.DotNetBar.ExpandableSplitter();
-            this.bar1 = new DevComponents.DotNetBar.Bar();
-            this.checkBoxItemShowGrid = new DevComponents.DotNetBar.CheckBoxItem();
-            this.buttonItemTileLocal = new DevComponents.DotNetBar.ButtonItem();
-            this.buttonItemCacheServer = new DevComponents.DotNetBar.ButtonItem();
-            this.panelMap = new System.Windows.Forms.Panel();
             this.xPanderPanel2 = new BSE.Windows.Forms.XPanderPanel();
             this.advTreeChina = new DevComponents.AdvTree.AdvTree();
             this.nodeConnector1 = new DevComponents.AdvTree.NodeConnector();
             this.elementStyle1 = new DevComponents.DotNetBar.ElementStyle();
+            this.expandableSplitter1 = new DevComponents.DotNetBar.ExpandableSplitter();
+            this.bar1 = new DevComponents.DotNetBar.Bar();
+            this.checkBoxItemShowGrid = new DevComponents.DotNetBar.CheckBoxItem();
+            this.buttonItemCacheServer = new DevComponents.DotNetBar.ButtonItem();
+            this.panelMap = new System.Windows.Forms.Panel();
             this.mapControl = new MapDownloader.MapControl();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -97,10 +97,10 @@
             this.gbMapImage.SuspendLayout();
             this.gbMapDownloader.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
-            this.panelMap.SuspendLayout();
             this.xPanderPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.advTreeChina)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
+            this.panelMap.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -490,9 +490,9 @@
             // 
             this.buttonDownload.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonDownload.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonDownload.Location = new System.Drawing.Point(177, 78);
+            this.buttonDownload.Location = new System.Drawing.Point(184, 110);
             this.buttonDownload.Name = "buttonDownload";
-            this.buttonDownload.Size = new System.Drawing.Size(50, 23);
+            this.buttonDownload.Size = new System.Drawing.Size(51, 23);
             this.buttonDownload.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
             this.buttonDownload.TabIndex = 10;
             this.buttonDownload.Text = "下载";
@@ -500,40 +500,51 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.radioButtonDisk);
             this.groupBox2.Controls.Add(this.radioButtonMySQL);
             this.groupBox2.Controls.Add(this.radioButtonSQLite);
             this.groupBox2.Location = new System.Drawing.Point(18, 14);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(221, 50);
+            this.groupBox2.Size = new System.Drawing.Size(221, 90);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "存储数据库";
+            this.groupBox2.Text = "存储方式";
+            // 
+            // radioButtonDisk
+            // 
+            this.radioButtonDisk.AutoSize = true;
+            this.radioButtonDisk.Location = new System.Drawing.Point(19, 68);
+            this.radioButtonDisk.Name = "radioButtonDisk";
+            this.radioButtonDisk.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonDisk.TabIndex = 11;
+            this.radioButtonDisk.Text = "本地磁盘";
+            this.radioButtonDisk.UseVisualStyleBackColor = true;
             // 
             // radioButtonMySQL
             // 
             this.radioButtonMySQL.AutoSize = true;
-            this.radioButtonMySQL.Location = new System.Drawing.Point(116, 20);
+            this.radioButtonMySQL.Location = new System.Drawing.Point(19, 42);
             this.radioButtonMySQL.Name = "radioButtonMySQL";
-            this.radioButtonMySQL.Size = new System.Drawing.Size(53, 16);
+            this.radioButtonMySQL.Size = new System.Drawing.Size(89, 16);
             this.radioButtonMySQL.TabIndex = 10;
-            this.radioButtonMySQL.Text = "MySQL";
+            this.radioButtonMySQL.Text = "MySQL数据库";
             this.radioButtonMySQL.UseVisualStyleBackColor = true;
             // 
             // radioButtonSQLite
             // 
             this.radioButtonSQLite.AutoSize = true;
             this.radioButtonSQLite.Checked = true;
-            this.radioButtonSQLite.Location = new System.Drawing.Point(26, 20);
+            this.radioButtonSQLite.Location = new System.Drawing.Point(18, 20);
             this.radioButtonSQLite.Name = "radioButtonSQLite";
-            this.radioButtonSQLite.Size = new System.Drawing.Size(59, 16);
+            this.radioButtonSQLite.Size = new System.Drawing.Size(95, 16);
             this.radioButtonSQLite.TabIndex = 9;
             this.radioButtonSQLite.TabStop = true;
-            this.radioButtonSQLite.Text = "SQLite";
+            this.radioButtonSQLite.Text = "SQLite数据库";
             this.radioButtonSQLite.UseVisualStyleBackColor = true;
             // 
             // textBoxMaxZoom
             // 
-            this.textBoxMaxZoom.Location = new System.Drawing.Point(120, 80);
+            this.textBoxMaxZoom.Location = new System.Drawing.Point(135, 111);
             this.textBoxMaxZoom.Name = "textBoxMaxZoom";
             this.textBoxMaxZoom.Size = new System.Drawing.Size(35, 21);
             this.textBoxMaxZoom.TabIndex = 4;
@@ -542,7 +553,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(90, 84);
+            this.label3.Location = new System.Drawing.Point(105, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(23, 12);
             this.label3.TabIndex = 3;
@@ -550,7 +561,7 @@
             // 
             // textBoxMinZoom
             // 
-            this.textBoxMinZoom.Location = new System.Drawing.Point(49, 80);
+            this.textBoxMinZoom.Location = new System.Drawing.Point(64, 111);
             this.textBoxMinZoom.Name = "textBoxMinZoom";
             this.textBoxMinZoom.Size = new System.Drawing.Size(35, 21);
             this.textBoxMinZoom.TabIndex = 2;
@@ -559,89 +570,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 84);
+            this.label2.Location = new System.Drawing.Point(24, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "Zoom：";
-            // 
-            // expandableSplitter1
-            // 
-            this.expandableSplitter1.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
-            this.expandableSplitter1.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.expandableSplitter1.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
-            this.expandableSplitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.expandableSplitter1.ExpandableControl = this.xPanderPanelList1;
-            this.expandableSplitter1.ExpandFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
-            this.expandableSplitter1.ExpandFillColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.expandableSplitter1.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.expandableSplitter1.ExpandLineColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
-            this.expandableSplitter1.GripDarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.expandableSplitter1.GripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
-            this.expandableSplitter1.GripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
-            this.expandableSplitter1.GripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.expandableSplitter1.HotBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(151)))), ((int)(((byte)(61)))));
-            this.expandableSplitter1.HotBackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(184)))), ((int)(((byte)(94)))));
-            this.expandableSplitter1.HotBackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemPressedBackground2;
-            this.expandableSplitter1.HotBackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemPressedBackground;
-            this.expandableSplitter1.HotExpandFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
-            this.expandableSplitter1.HotExpandFillColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.expandableSplitter1.HotExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.expandableSplitter1.HotExpandLineColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
-            this.expandableSplitter1.HotGripDarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
-            this.expandableSplitter1.HotGripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
-            this.expandableSplitter1.HotGripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
-            this.expandableSplitter1.HotGripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.expandableSplitter1.Location = new System.Drawing.Point(662, 25);
-            this.expandableSplitter1.Name = "expandableSplitter1";
-            this.expandableSplitter1.Size = new System.Drawing.Size(6, 558);
-            this.expandableSplitter1.Style = DevComponents.DotNetBar.eSplitterStyle.Office2007;
-            this.expandableSplitter1.TabIndex = 9;
-            this.expandableSplitter1.TabStop = false;
-            // 
-            // bar1
-            // 
-            this.bar1.AntiAlias = true;
-            this.bar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bar1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
-            this.checkBoxItemShowGrid,
-            this.buttonItemTileLocal,
-            this.buttonItemCacheServer});
-            this.bar1.Location = new System.Drawing.Point(0, 556);
-            this.bar1.Name = "bar1";
-            this.bar1.Size = new System.Drawing.Size(662, 27);
-            this.bar1.Stretch = true;
-            this.bar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.bar1.TabIndex = 11;
-            this.bar1.TabStop = false;
-            this.bar1.Text = "bar1";
-            // 
-            // checkBoxItemShowGrid
-            // 
-            this.checkBoxItemShowGrid.Name = "checkBoxItemShowGrid";
-            this.checkBoxItemShowGrid.Text = "显示网格";
-            this.checkBoxItemShowGrid.Tooltip = "是否在地图上显示网格线";
-            // 
-            // buttonItemTileLocal
-            // 
-            this.buttonItemTileLocal.Name = "buttonItemTileLocal";
-            this.buttonItemTileLocal.Text = "生成本地切片";
-            this.buttonItemTileLocal.Tooltip = "在本地磁盘上生成切片底图，可用于ArcGIS发布服务";
-            // 
-            // buttonItemCacheServer
-            // 
-            this.buttonItemCacheServer.Name = "buttonItemCacheServer";
-            this.buttonItemCacheServer.Text = "发布服务";
-            this.buttonItemCacheServer.Tooltip = "将本地缓存发布为地图服务";
-            // 
-            // panelMap
-            // 
-            this.panelMap.Controls.Add(this.mapControl);
-            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMap.Location = new System.Drawing.Point(0, 25);
-            this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(662, 531);
-            this.panelMap.TabIndex = 12;
             // 
             // xPanderPanel2
             // 
@@ -711,6 +644,77 @@
             this.elementStyle1.Name = "elementStyle1";
             this.elementStyle1.TextColor = System.Drawing.SystemColors.ControlText;
             // 
+            // expandableSplitter1
+            // 
+            this.expandableSplitter1.BackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
+            this.expandableSplitter1.BackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.expandableSplitter1.BackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBackground;
+            this.expandableSplitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.expandableSplitter1.ExpandableControl = this.xPanderPanelList1;
+            this.expandableSplitter1.ExpandFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
+            this.expandableSplitter1.ExpandFillColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.expandableSplitter1.ExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.expandableSplitter1.ExpandLineColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
+            this.expandableSplitter1.GripDarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.expandableSplitter1.GripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
+            this.expandableSplitter1.GripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
+            this.expandableSplitter1.GripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.expandableSplitter1.HotBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(151)))), ((int)(((byte)(61)))));
+            this.expandableSplitter1.HotBackColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(184)))), ((int)(((byte)(94)))));
+            this.expandableSplitter1.HotBackColor2SchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemPressedBackground2;
+            this.expandableSplitter1.HotBackColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemPressedBackground;
+            this.expandableSplitter1.HotExpandFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
+            this.expandableSplitter1.HotExpandFillColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.expandableSplitter1.HotExpandLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.expandableSplitter1.HotExpandLineColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.ItemText;
+            this.expandableSplitter1.HotGripDarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(147)))), ((int)(((byte)(207)))));
+            this.expandableSplitter1.HotGripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
+            this.expandableSplitter1.HotGripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
+            this.expandableSplitter1.HotGripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
+            this.expandableSplitter1.Location = new System.Drawing.Point(662, 25);
+            this.expandableSplitter1.Name = "expandableSplitter1";
+            this.expandableSplitter1.Size = new System.Drawing.Size(6, 558);
+            this.expandableSplitter1.Style = DevComponents.DotNetBar.eSplitterStyle.Office2007;
+            this.expandableSplitter1.TabIndex = 9;
+            this.expandableSplitter1.TabStop = false;
+            // 
+            // bar1
+            // 
+            this.bar1.AntiAlias = true;
+            this.bar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.bar1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
+            this.checkBoxItemShowGrid,
+            this.buttonItemCacheServer});
+            this.bar1.Location = new System.Drawing.Point(0, 556);
+            this.bar1.Name = "bar1";
+            this.bar1.Size = new System.Drawing.Size(662, 27);
+            this.bar1.Stretch = true;
+            this.bar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.bar1.TabIndex = 11;
+            this.bar1.TabStop = false;
+            this.bar1.Text = "bar1";
+            // 
+            // checkBoxItemShowGrid
+            // 
+            this.checkBoxItemShowGrid.Name = "checkBoxItemShowGrid";
+            this.checkBoxItemShowGrid.Text = "显示网格";
+            this.checkBoxItemShowGrid.Tooltip = "是否在地图上显示网格线";
+            // 
+            // buttonItemCacheServer
+            // 
+            this.buttonItemCacheServer.Name = "buttonItemCacheServer";
+            this.buttonItemCacheServer.Text = "发布服务";
+            this.buttonItemCacheServer.Tooltip = "将本地缓存发布为地图服务";
+            // 
+            // panelMap
+            // 
+            this.panelMap.Controls.Add(this.mapControl);
+            this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMap.Location = new System.Drawing.Point(0, 25);
+            this.panelMap.Name = "panelMap";
+            this.panelMap.Size = new System.Drawing.Size(662, 531);
+            this.panelMap.TabIndex = 12;
+            // 
             // mapControl
             // 
             this.mapControl.Bearing = 0F;
@@ -769,10 +773,10 @@
             this.gbMapDownloader.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bar1)).EndInit();
-            this.panelMap.ResumeLayout(false);
             this.xPanderPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.advTreeChina)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bar1)).EndInit();
+            this.panelMap.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -832,7 +836,6 @@
         private DevComponents.DotNetBar.CheckBoxItem checkBoxItemShowGrid;
         private System.Windows.Forms.Panel panelMap;
         private MapControl mapControl;
-        private DevComponents.DotNetBar.ButtonItem buttonItemTileLocal;
         private DevComponents.DotNetBar.ButtonItem buttonItemCacheServer;
         private DevComponents.DotNetBar.ButtonX buttonDownload;
         private DevComponents.DotNetBar.ButtonX buttonMapImage;
@@ -840,6 +843,7 @@
         private DevComponents.AdvTree.AdvTree advTreeChina;
         private DevComponents.AdvTree.NodeConnector nodeConnector1;
         private DevComponents.DotNetBar.ElementStyle elementStyle1;
+        private System.Windows.Forms.RadioButton radioButtonDisk;
     }
 }
 

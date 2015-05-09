@@ -104,8 +104,10 @@
     <Compile Include="MapDownloadForm.Designer.cs">
       <DependentUpon>MapDownloadForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PrefetchTiles.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TileImageConnector.cs" />
     <EmbeddedResource Include="MapControl.resx">
       <DependentUpon>MapControl.cs</DependentUpon>
     </EmbeddedResource>
