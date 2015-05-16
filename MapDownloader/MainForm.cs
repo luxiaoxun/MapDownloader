@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing.Drawing2D;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
@@ -15,57 +16,17 @@ using GMapDrawTools;
 using NetUtilityLib;
 using GMapChinaRegion;
 using MySql.Data.MySqlClient;
+using log4net;
+using GMapPolygonLib;
+using GMapMarkerLib;
+using System.Reflection;
 
 namespace MapDownloader
 {
-    public partial class MapDownloadForm : DevComponents.DotNetBar.Office2007Form
+    public partial class MainForm : DevComponents.DotNetBar.Office2007Form
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
         //private string conString = @"Server=127.0.0.1;Port=3306;Database=mapcache;Uid=root;Pwd=admin;";
-
-        #region 比例尺变量
-
-        /// <summary>
-        /// The font for the m/km markers
-        /// </summary>
-        private Font fontCustomScale = new Font("Arial", 6);
-
-        /// <summary>
-        /// The font for the scale header 
-        /// </summary>
-        private Font fontCustomScaleBold = new Font("Arial", 10, FontStyle.Bold);
-
-        /// <summary>
-        /// The brush for the scale's background
-        /// </summary>
-        private Brush brushCustomScaleBackColor = new SolidBrush(Color.FromArgb(180, 185, 215, 255));
-
-        /// <summary>
-        /// The Textcolor for the scale's fonts
-        /// </summary>
-        private Color colorCustomScaleText = Color.FromArgb(20, 65, 140);
-
-        /// <summary>
-        /// The width of the scale-rectangle
-        /// </summary>
-        private int intScaleRectWidth = 300;
-
-        /// <summary>
-        /// The height of the scale-rectangle
-        /// </summary>
-        private int intScaleRectHeight = 50;
-
-        /// <summary>
-        /// The height of the scale bar
-        /// </summary>
-        private int intScaleBarHeight = 10;
-
-        /// <summary>
-        /// The padding of the scale
-        /// </summary>
-        private int intScaleLeftPadding = 10;
-
-        #endregion
-
         private static string conStringFormat = "Server={0};Port={1};Database={2};Uid={3};Pwd={4};";
         private static string conString;
 
@@ -84,8 +45,14 @@ namespace MapDownloader
         private string tilePath = "D:\\GisMap";
         private SQLitePureImageCache sqliteCache = new SQLitePureImageCache();
         private MySQLPureImageCache mysqlCache = new MySQLPureImageCache();
+        //private PrefetchTiles prefetchTiles = null;
 
-        public MapDownloadForm()
+        private bool isLeftButtonDown = false;
+        private GMapMarkerEllipse currentDragableNode = null;
+        private List<GMapMarkerEllipse> currentDragableNodes;
+        private GMapAreaPolygon currentDragableRoute;
+
+        public MainForm()
         {
             InitializeComponent();
 
@@ -114,11 +81,132 @@ namespace MapDownloader
             mapControl.Overlays.Add(regionOverlay);
 
             this.mapControl.MouseMove += new MouseEventHandler(mapControl_MouseMove);
+            this.mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
+            this.mapControl.MouseUp += new MouseEventHandler(mapControl_MouseUp);
+            this.mapControl.OnMarkerEnter += new MarkerEnter(mapControl_OnMarkerEnter);
+            this.mapControl.OnMarkerLeave += new MarkerLeave(mapControl_OnMarkerLeave);
+            this.mapControl.OnPolygonClick += new PolygonClick(mapControl_OnPolygonClick);
+            this.mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
+            this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
 
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
         }
 
+        void mapControl_OnMarkerLeave(GMapMarker item)
+        {
+            if (!isLeftButtonDown)
+            {
+                if (item is GMapMarkerEllipse)
+                {
+                    currentDragableNode = null;
+                }
+            }
+        }
+
+        void mapControl_OnMarkerEnter(GMapMarker item)
+        {
+            if (!isLeftButtonDown)
+            {
+                if (item is GMapMarkerEllipse)
+                {
+                    currentDragableNode = item as GMapMarkerEllipse;
+                }
+            }
+        }
+
+        void mapControl_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isLeftButtonDown = false;
+                currentDragableNode = null;
+            }
+        }
+
+        void mapControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isLeftButtonDown = true;
+            }
+        }
+
+        //Mouse move 事件
+        void mapControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
+
+                int zoom = (int)this.mapControl.Zoom;
+                double resolution = this.mapControl.MapProvider.Projection.GetGroundResolution(zoom, this.mapControl.Position.Lat);
+
+                this.toolStripStatusTip.Text = string.Format("显示级别：{0} 分辨率：{1:F3}米/像素 坐标：{2:F4},{3:F4}", zoom, resolution, p.Lng, p.Lat);
+
+                if (isLeftButtonDown && currentDragableNode != null)
+                {
+                    int? tag = (int?)this.currentDragableNode.Tag;
+                    if (tag.HasValue && this.currentDragableRoute != null)
+                    {
+                        int? nullable2 = tag;
+                        int count = this.currentDragableRoute.Points.Count;
+                        if (nullable2.GetValueOrDefault() < count)
+                        {
+                            this.currentDragableRoute.Points[tag.Value] = p;
+                            this.mapControl.UpdatePolygonLocalPosition(this.currentDragableRoute);
+                        }
+                    }
+                    this.currentDragableNode.Position = p;
+                    this.currentDragableNode.ToolTipText = string.Format("X={0} Y={1}", p.Lng.ToString("0.0000"), p.Lat.ToString("0.0000"));
+                    this.currentDragableNode.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                    this.mapControl.UpdateMarkerLocalPosition(this.currentDragableNode);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+        }
+
+        void mapControl_OnPolygonLeave(GMapPolygon item)
+        {
+            if (item is GMapAreaPolygon)
+            {
+                GMapAreaPolygon areaPolygon = item as GMapAreaPolygon;
+                if (currentDragableRoute != null && currentDragableRoute == areaPolygon)
+                {
+                    currentDragableRoute = item as GMapAreaPolygon;
+                    currentDragableRoute.Stroke.Color = Color.Blue;
+                }
+            }
+
+        }
+
+        void mapControl_OnPolygonEnter(GMapPolygon item)
+        {
+            if (item is GMapAreaPolygon)
+            {
+                GMapAreaPolygon areaPolygon = item as GMapAreaPolygon;
+                if (currentDragableRoute != null && currentDragableRoute == areaPolygon)
+                {
+                    currentDragableRoute = item as GMapAreaPolygon;
+                    currentDragableRoute.Stroke.Color = Color.Red;
+                }
+            }
+        }
+
+        void mapControl_OnPolygonClick(GMapPolygon item, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (item is GMapAreaPolygon && currentDragableRoute != null)
+                {
+                    this.contextMenuStripSelectedArea.Show(Cursor.Position);
+                }
+            }
+        }
+        
         //初始化UI
         private void InitUI()
         {
@@ -134,7 +222,91 @@ namespace MapDownloader
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
 
             this.checkBoxItemShowGrid.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxItemShowGrid_CheckedChanged);
+            this.checkBoxCacheServer.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxCacheServer_CheckedChanged);
         }
+
+        #region 离线服务
+
+        bool TryExtractLeafletjs()
+        {
+            try
+            {
+                string launch = string.Empty;
+
+                var x = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+                foreach (var f in x)
+                {
+                    if (f.Contains("leafletjs"))
+                    {
+                        var fName = f.Replace("MapDownloader.", string.Empty);
+                        fName = fName.Replace(".", "\\");
+                        var ll = fName.LastIndexOf("\\");
+                        var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
+
+                        //Demo.WindowsForms.leafletjs.dist.leaflet.js
+
+                        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(f))
+                        {
+                            string fileFullPath = mapControl.CacheLocation + name;
+
+                            if (fileFullPath.Contains("gmap.html"))
+                            {
+                                launch = fileFullPath;
+                            }
+
+                            var dir = Path.GetDirectoryName(fileFullPath);
+                            if (!Directory.Exists(dir))
+                            {
+                                Directory.CreateDirectory(dir);
+                            }
+
+                            using (FileStream fileStream = System.IO.File.Create(fileFullPath, (int)stream.Length))
+                            {
+                                // Fill the bytes[] array with the stream data
+                                byte[] bytesInStream = new byte[stream.Length];
+                                stream.Read(bytesInStream, 0, (int)bytesInStream.Length);
+
+                                // Use FileStream object to write to the specified file
+                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                            }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(launch))
+                {
+                    System.Diagnostics.Process.Start(launch);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("TryExtractLeafletjs: " + ex);
+                return false;
+            }
+            return true;
+        }
+
+        void checkBoxCacheServer_CheckedChanged(object sender, DevComponents.DotNetBar.CheckBoxChangeEventArgs e)
+        {
+            if (checkBoxCacheServer.Checked)
+            {
+                try
+                {
+                    mapControl.Manager.EnableTileHost(8844);
+                    TryExtractLeafletjs();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("EnableTileHost: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                mapControl.Manager.DisableTileHost();
+            }
+        }
+
+        #endregion
 
         #region 加载中国区域
 
@@ -209,9 +381,11 @@ namespace MapDownloader
                     GMapPolygon polygon = ChinaMapRegion.GetRegionPolygon(name, rings);
                     if (polygon != null)
                     {
+                        GMapAreaPolygon areaPolygon = new GMapAreaPolygon(polygon.Points, name);
+                        currentDragableRoute = areaPolygon;
                         regionOverlay.Polygons.Clear();
-                        regionOverlay.Polygons.Add(polygon);
-                        RectLatLng rect = GMapChinaRegion.ChinaMapRegion.GetRegionMaxRect(polygon);
+                        regionOverlay.Polygons.Add(areaPolygon);
+                        RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
                         this.mapControl.SetZoomToFitRect(rect);
                         selectedRect = rect;
                     }
@@ -241,16 +415,28 @@ namespace MapDownloader
                 string userID = ConfigHelper.GetAppConfig("UserID");
                 string password = ConfigHelper.GetAppConfig("Password");
                 string retryStr = ConfigHelper.GetAppConfig("Retry");
+                string center = ConfigHelper.GetAppConfig("MapCenter");
+                string[] centerPoints = center.Split(',');
+                if (centerPoints.Length == 2)
+                {
+                    if (mapControl != null)
+                    {
+                        mapControl.Position = new PointLatLng(double.Parse(centerPoints[1]), double.Parse(centerPoints[0]));
+                    }
+                }
                 retryNum = int.Parse(retryStr);
 
                 conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
-                mysqlCache.ConnectionString = conString;
+                if (mysqlCache != null)
+                {
+                    mysqlCache.ConnectionString = conString;
+                }
 
                 tilePath = ConfigHelper.GetAppConfig("TilePath");
             }
-            catch (Exception ignore)
+            catch (Exception ex)
             {
-
+                log.Error(ex);
             }
         }
 
@@ -317,23 +503,6 @@ namespace MapDownloader
             return rect;
         }
 
-        //Mouse move 事件
-        void mapControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
-
-                int zoom = (int)this.mapControl.Zoom;
-                double resolution = this.mapControl.MapProvider.Projection.GetGroundResolution(zoom, this.mapControl.Position.Lat);
-
-                this.toolStripStatusTip.Text = string.Format("显示级别：{0} 分辨率：{1:F3}米/像素 坐标：{2:F4},{3:F4}",zoom,resolution,p.Lng,p.Lat );
-            }
-            catch (Exception ignore)
-            {
-            }
-        }
-
         #region 存储方式
 
         void radioButtonSQLite_CheckedChanged(object sender, EventArgs e)
@@ -376,7 +545,7 @@ namespace MapDownloader
         {
             if (e != null)
             {
-                UpdateDownloadBar(e.ProgressValue);
+                UpdateDownloadBar(e.ProgressValue,e.TileAllNum,e.TileCompleteNum,e.CurrentDownloadZoom);
             }
         }
 
@@ -388,17 +557,18 @@ namespace MapDownloader
         private void ShowDownloadTip(bool isVisible)
         {
             this.toolStripStatusDownload.Visible = isVisible;
-            this.toolStripProgressBarDownload.Visible = isVisible;
+            //this.toolStripProgressBarDownload.Visible = isVisible;
         }
 
-        private void UpdateDownloadBar(int value)
+        private void UpdateDownloadBar(int value, ulong allNum, ulong comNum, int zoom)
         {
-            this.toolStripProgressBarDownload.Value = value;
-            if (this.toolStripProgressBarDownload.Maximum == value)
-            {
-                ShowDownloadTip(false);
-                MessageBox.Show("地图下载完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
+            this.toolStripStatusDownload.Text = string.Format("下载进度：级别{0}，{1}/{2}",zoom,comNum,allNum);
+        }
+
+        void prefetchTiles_PrefetchTileComplete(object sender, PrefetchTileEventArgs e)
+        {
+            ShowDownloadTip(false);
+            MessageBox.Show("地图下载完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         private void ResetToServerAndCacheMode()
@@ -409,8 +579,7 @@ namespace MapDownloader
             this.在线服务ToolStripMenuItem.Checked = false;
         }
 
-        //下载
-        private void buttonDownload_Click(object sender, EventArgs e)
+        private void DownloadMap()
         {
             RectLatLng area = selectedRect;
             if (!area.IsEmpty)
@@ -424,19 +593,20 @@ namespace MapDownloader
                     if (minZ <= maxZ)
                     {
                         ResetToServerAndCacheMode();
-                        PrefetchTiles obj = new PrefetchTiles();
-                        obj.Retry = retryNum;
-                        obj.PrefetchTileStart += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileStart);
-                        obj.PrefetchTileProgress += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileProgress);
+                        PrefetchTiles prefetchTiles = new PrefetchTiles();
+                        prefetchTiles.Retry = retryNum;
+                        prefetchTiles.PrefetchTileStart += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileStart);
+                        prefetchTiles.PrefetchTileProgress += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileProgress);
+                        prefetchTiles.PrefetchTileComplete += new EventHandler<PrefetchTileEventArgs>(prefetchTiles_PrefetchTileComplete);
                         if (this.radioButtonDisk.Checked)
                         {
                             //切片存在本地磁盘上
-                            obj.Start(area, minZ, maxZ, new GMapProvider[] { mapControl.MapProvider }, 100, tilePath);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, 100, tilePath);
                         }
                         else
                         {
                             //切片存在数据库中
-                            obj.Start(area, minZ, maxZ, new GMapProvider[] { mapControl.MapProvider }, 100);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, 100);
                         }
                     }
                 }
@@ -447,8 +617,15 @@ namespace MapDownloader
             }
             else
             {
-                MessageBox.Show("请先用“矩形”画图工具选择区域", "提示", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //MessageBox.Show("请先用“矩形”画图工具选择区域", "提示", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
             }
+        }
+
+        //下载地图
+        private void buttonDownload_Click(object sender, EventArgs e)
+        {
+            DownloadMap();
         }
 
         #endregion
@@ -619,5 +796,48 @@ namespace MapDownloader
 
         #endregion
 
+        private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            selectedRect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDragableRoute);
+            DownloadMap();
+        }
+
+        private void 下载KMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 允许编辑ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.允许编辑ToolStripMenuItem.Enabled = false;
+            MapRoute route = currentDragableRoute;
+            this.currentDragableNodes = new List<GMapMarkerEllipse>();
+            for (int i = 0; i < route.Points.Count; i++)
+            {
+                GMapMarkerEllipse item = new GMapMarkerEllipse(route.Points[i])
+                {
+                    Pen = new Pen(Color.Blue)
+                };
+                item.Pen.Width = 2f;
+                item.Pen.DashStyle = DashStyle.Solid;
+                item.Fill = new SolidBrush(Color.FromArgb(0xff, Color.AliceBlue));
+                item.Tag = i;
+                this.currentDragableNodes.Add(item);
+                this.regionOverlay.Markers.Add(item);
+            }
+        }
+
+        private void 停止编辑ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.允许编辑ToolStripMenuItem.Enabled = true;
+            if (currentDragableNodes == null) return;
+            for (int i = 0; i < currentDragableNodes.Count; ++i)
+            {
+                if (this.regionOverlay.Markers.Contains(currentDragableNodes[i]))
+                {
+                    this.regionOverlay.Markers.Remove(currentDragableNodes[i]);
+                }
+            }
+        }
     }
 }

@@ -207,29 +207,47 @@ namespace GMap.NET
          return new GSize(s.Width * TileSize.Width, s.Height * TileSize.Height);
       }
 
+      //private static readonly object syncRoot = new object();
+
       /// <summary>
       /// gets all tiles in rect at specific zoom
       /// </summary>
       public List<GPoint> GetAreaTileList(RectLatLng rect, int zoom, int padding)
       {
-         List<GPoint> ret = new List<GPoint>();
+          List<GPoint> ret = new List<GPoint>();
 
-         GPoint topLeft = FromPixelToTileXY(FromLatLngToPixel(rect.LocationTopLeft, zoom));
-         GPoint rightBottom = FromPixelToTileXY(FromLatLngToPixel(rect.LocationRightBottom, zoom));
+          GPoint topLeft = FromPixelToTileXY(FromLatLngToPixel(rect.LocationTopLeft, zoom));
+          GPoint rightBottom = FromPixelToTileXY(FromLatLngToPixel(rect.LocationRightBottom, zoom));
 
-         for(long x = (topLeft.X - padding); x <= (rightBottom.X + padding); x++)
-         {
-            for(long y = (topLeft.Y - padding); y <= (rightBottom.Y + padding); y++)
-            {
-               GPoint p = new GPoint(x, y);
-               if(!ret.Contains(p) && p.X >= 0 && p.Y >= 0)
-               {
-                  ret.Add(p);
-               }
-            }
-         }
+          long begin_x = topLeft.X - padding;
+          long end_x = rightBottom.X + padding;
+          long begin_y = topLeft.Y - padding;
+          long end_y = rightBottom.Y + padding;
 
-         return ret;
+          for (long x = begin_x; x <= end_x; ++x)
+          {
+              for (long y = begin_y; y <= end_y; ++y)
+              {
+                  GPoint p = new GPoint(x, y);
+                  if (!ret.Contains(p) && p.X >= 0 && p.Y >= 0)
+                  {
+                      ret.Add(p);
+                  }
+              }
+          }
+
+          return ret;
+      }
+
+      public List<GPoint> GetAreaTileListBetweenZoom(RectLatLng rect, int minZoom, int maxZoom, int padding)
+      {
+          List<GPoint> ret = new List<GPoint>();
+          for (int i = minZoom; i <= maxZoom; ++i)
+          {
+              ret.AddRange(GetAreaTileList(rect,i,padding));
+          }
+
+          return ret;
       }
 
       /// <summary>

@@ -15,7 +15,7 @@ namespace MapDownloader
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MapDownloadForm());
+            Application.Run(new MainForm());
         }
     }
 }

@@ -65,14 +65,20 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BSE.Windows.Forms">
-      <HintPath>..\..\..\C#\DotNetBar\BSE.Windows.Forms.dll</HintPath>
+    <Reference Include="BSE.Windows.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\DotNetBar11.8\BSE.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="DevComponents.DotNetBar.Design">
-      <HintPath>..\..\..\C#\DotNetBar\DevComponents.DotNetBar.Design.dll</HintPath>
+    <Reference Include="DevComponents.DotNetBar.Design, Version=9.2.0.0, Culture=neutral, PublicKeyToken=3caa4ad0ba35cf8d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\DotNetBar11.8\DevComponents.DotNetBar.Design.dll</HintPath>
     </Reference>
-    <Reference Include="DevComponents.DotNetBar2">
-      <HintPath>..\..\..\C#\DotNetBar\DevComponents.DotNetBar2.dll</HintPath>
+    <Reference Include="DevComponents.DotNetBar2, Version=11.8.0.0, Culture=neutral, PublicKeyToken=c39c3242a43eee2b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\DotNetBar11.8\DevComponents.DotNetBar2.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.2.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -91,18 +97,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapAreaInfo.cs" />
     <Compile Include="MapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapDownloadForm.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MapDownloadForm.Designer.cs">
-      <DependentUpon>MapDownloadForm.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PrefetchTiles.cs" />
     <Compile Include="Program.cs" />
@@ -111,8 +116,8 @@
     <EmbeddedResource Include="MapControl.resx">
       <DependentUpon>MapControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MapDownloadForm.resx">
-      <DependentUpon>MapDownloadForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -124,7 +129,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="leafletjs\dist\images\locate.svg" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -136,10 +144,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="leafletjs\dist\images\layers.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\locate.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\locate_active.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\marker-icon%402x.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\marker-icon.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\marker-shadow.png" />
+    <EmbeddedResource Include="leafletjs\dist\images\spinner.gif" />
+    <EmbeddedResource Include="leafletjs\dist\leaflet-ie.css" />
+    <EmbeddedResource Include="leafletjs\dist\leaflet.css" />
+    <EmbeddedResource Include="leafletjs\dist\leaflet.js" />
+    <EmbeddedResource Include="leafletjs\dist\locate-ie.css" />
+    <EmbeddedResource Include="leafletjs\dist\locate.css" />
+    <EmbeddedResource Include="leafletjs\dist\locate.js" />
+    <EmbeddedResource Include="leafletjs\dist\mobile.css" />
+    <EmbeddedResource Include="leafletjs\dist\proj4js-compressed.js" />
+    <EmbeddedResource Include="leafletjs\dist\proj4leaflet.js" />
+    <EmbeddedResource Include="leafletjs\gmap.html" />
     <Content Include="picture\location.png" />
     <Content Include="picture\system.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonTools\CommonTools.csproj">
+      <Project>{C5681AE2-1966-46E5-9827-462BC625BF03}</Project>
+      <Name>CommonTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
       <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
       <Name>GMap.NET.Core</Name>
@@ -156,15 +185,28 @@
       <Project>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</Project>
       <Name>GMapDrawTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapMarkerLib\GMapMarkerLib.csproj">
+      <Project>{E25D9C8F-534F-4D86-BD45-9469AD9727E0}</Project>
+      <Name>GMapMarkerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapPolygonLib\GMapPolygonLib.csproj">
+      <Project>{22E05880-ED51-420F-A61F-A5B7CDB32FBC}</Project>
+      <Name>GMapPolygonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
       <Name>GMapProvidersExt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapUtil\GMapUtil.csproj">
+      <Project>{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}</Project>
+      <Name>GMapUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
       <Name>NetUtilityLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

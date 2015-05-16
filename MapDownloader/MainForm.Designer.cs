@@ -1,6 +1,6 @@
 ﻿namespace MapDownloader
 {
-    partial class MapDownloadForm
+    partial class MainForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapDownloadForm));
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.地图切换ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.谷歌ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusTip = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusDownload = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBarDownload = new System.Windows.Forms.ToolStripProgressBar();
             this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
             this.xPanderPanel1 = new BSE.Windows.Forms.XPanderPanel();
             this.panelTool = new System.Windows.Forms.Panel();
@@ -86,9 +86,14 @@
             this.expandableSplitter1 = new DevComponents.DotNetBar.ExpandableSplitter();
             this.bar1 = new DevComponents.DotNetBar.Bar();
             this.checkBoxItemShowGrid = new DevComponents.DotNetBar.CheckBoxItem();
-            this.buttonItemCacheServer = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
             this.mapControl = new MapDownloader.MapControl();
+            this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.允许编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.停止编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxCacheServer = new DevComponents.DotNetBar.CheckBoxItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -101,6 +106,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.advTreeChina)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
             this.panelMap.SuspendLayout();
+            this.contextMenuStripSelectedArea.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -341,8 +347,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusTip,
-            this.toolStripStatusDownload,
-            this.toolStripProgressBarDownload});
+            this.toolStripStatusDownload});
             this.statusStrip1.Location = new System.Drawing.Point(0, 583);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(919, 22);
@@ -360,11 +365,6 @@
             this.toolStripStatusDownload.Name = "toolStripStatusDownload";
             this.toolStripStatusDownload.Size = new System.Drawing.Size(68, 17);
             this.toolStripStatusDownload.Text = "下载进度：";
-            // 
-            // toolStripProgressBarDownload
-            // 
-            this.toolStripProgressBarDownload.Name = "toolStripProgressBarDownload";
-            this.toolStripProgressBarDownload.Size = new System.Drawing.Size(100, 16);
             // 
             // xPanderPanelList1
             // 
@@ -449,7 +449,7 @@
             this.buttonMapImage.Location = new System.Drawing.Point(118, 37);
             this.buttonMapImage.Name = "buttonMapImage";
             this.buttonMapImage.Size = new System.Drawing.Size(55, 23);
-            this.buttonMapImage.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.buttonMapImage.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
             this.buttonMapImage.TabIndex = 4;
             this.buttonMapImage.Text = "拼接图";
             this.buttonMapImage.Tooltip = "获取当前地图所填Zoom的拼接大图";
@@ -490,10 +490,10 @@
             // 
             this.buttonDownload.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonDownload.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonDownload.Location = new System.Drawing.Point(184, 110);
+            this.buttonDownload.Location = new System.Drawing.Point(188, 111);
             this.buttonDownload.Name = "buttonDownload";
             this.buttonDownload.Size = new System.Drawing.Size(51, 23);
-            this.buttonDownload.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.buttonDownload.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
             this.buttonDownload.TabIndex = 10;
             this.buttonDownload.Text = "下载";
             this.buttonDownload.Tooltip = "将地图数据下载到所选数据库";
@@ -544,7 +544,7 @@
             // 
             // textBoxMaxZoom
             // 
-            this.textBoxMaxZoom.Location = new System.Drawing.Point(135, 111);
+            this.textBoxMaxZoom.Location = new System.Drawing.Point(134, 111);
             this.textBoxMaxZoom.Name = "textBoxMaxZoom";
             this.textBoxMaxZoom.Size = new System.Drawing.Size(35, 21);
             this.textBoxMaxZoom.TabIndex = 4;
@@ -553,7 +553,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(105, 115);
+            this.label3.Location = new System.Drawing.Point(104, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(23, 12);
             this.label3.TabIndex = 3;
@@ -561,7 +561,7 @@
             // 
             // textBoxMinZoom
             // 
-            this.textBoxMinZoom.Location = new System.Drawing.Point(64, 111);
+            this.textBoxMinZoom.Location = new System.Drawing.Point(63, 111);
             this.textBoxMinZoom.Name = "textBoxMinZoom";
             this.textBoxMinZoom.Size = new System.Drawing.Size(35, 21);
             this.textBoxMinZoom.TabIndex = 2;
@@ -570,7 +570,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 115);
+            this.label2.Location = new System.Drawing.Point(23, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 1;
@@ -639,7 +639,6 @@
             // 
             // elementStyle1
             // 
-            this.elementStyle1.Class = "";
             this.elementStyle1.CornerType = DevComponents.DotNetBar.eCornerType.Square;
             this.elementStyle1.Name = "elementStyle1";
             this.elementStyle1.TextColor = System.Drawing.SystemColors.ControlText;
@@ -671,9 +670,9 @@
             this.expandableSplitter1.HotGripDarkColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.PanelBorder;
             this.expandableSplitter1.HotGripLightColor = System.Drawing.Color.FromArgb(((int)(((byte)(227)))), ((int)(((byte)(239)))), ((int)(((byte)(255)))));
             this.expandableSplitter1.HotGripLightColorSchemePart = DevComponents.DotNetBar.eColorSchemePart.BarBackground;
-            this.expandableSplitter1.Location = new System.Drawing.Point(662, 25);
+            this.expandableSplitter1.Location = new System.Drawing.Point(658, 25);
             this.expandableSplitter1.Name = "expandableSplitter1";
-            this.expandableSplitter1.Size = new System.Drawing.Size(6, 558);
+            this.expandableSplitter1.Size = new System.Drawing.Size(10, 558);
             this.expandableSplitter1.Style = DevComponents.DotNetBar.eSplitterStyle.Office2007;
             this.expandableSplitter1.TabIndex = 9;
             this.expandableSplitter1.TabStop = false;
@@ -682,14 +681,15 @@
             // 
             this.bar1.AntiAlias = true;
             this.bar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.bar1.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.bar1.Items.AddRange(new DevComponents.DotNetBar.BaseItem[] {
             this.checkBoxItemShowGrid,
-            this.buttonItemCacheServer});
+            this.checkBoxCacheServer});
             this.bar1.Location = new System.Drawing.Point(0, 556);
             this.bar1.Name = "bar1";
-            this.bar1.Size = new System.Drawing.Size(662, 27);
+            this.bar1.Size = new System.Drawing.Size(658, 27);
             this.bar1.Stretch = true;
-            this.bar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.bar1.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
             this.bar1.TabIndex = 11;
             this.bar1.TabStop = false;
             this.bar1.Text = "bar1";
@@ -700,19 +700,13 @@
             this.checkBoxItemShowGrid.Text = "显示网格";
             this.checkBoxItemShowGrid.Tooltip = "是否在地图上显示网格线";
             // 
-            // buttonItemCacheServer
-            // 
-            this.buttonItemCacheServer.Name = "buttonItemCacheServer";
-            this.buttonItemCacheServer.Text = "发布服务";
-            this.buttonItemCacheServer.Tooltip = "将本地缓存发布为地图服务";
-            // 
             // panelMap
             // 
             this.panelMap.Controls.Add(this.mapControl);
             this.panelMap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMap.Location = new System.Drawing.Point(0, 25);
             this.panelMap.Name = "panelMap";
-            this.panelMap.Size = new System.Drawing.Size(662, 531);
+            this.panelMap.Size = new System.Drawing.Size(658, 531);
             this.panelMap.TabIndex = 12;
             // 
             // mapControl
@@ -737,11 +731,54 @@
             this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(662, 531);
+            this.mapControl.Size = new System.Drawing.Size(658, 531);
             this.mapControl.TabIndex = 0;
             this.mapControl.Zoom = 0D;
             // 
-            // MapDownloadForm
+            // contextMenuStripSelectedArea
+            // 
+            this.contextMenuStripSelectedArea.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.下载地图ToolStripMenuItem,
+            this.下载KMLToolStripMenuItem,
+            this.允许编辑ToolStripMenuItem,
+            this.停止编辑ToolStripMenuItem});
+            this.contextMenuStripSelectedArea.Name = "contextMenuStripSelectedArea";
+            this.contextMenuStripSelectedArea.Size = new System.Drawing.Size(153, 114);
+            // 
+            // 下载地图ToolStripMenuItem
+            // 
+            this.下载地图ToolStripMenuItem.Name = "下载地图ToolStripMenuItem";
+            this.下载地图ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.下载地图ToolStripMenuItem.Text = "下载地图";
+            this.下载地图ToolStripMenuItem.Click += new System.EventHandler(this.下载地图ToolStripMenuItem_Click);
+            // 
+            // 下载KMLToolStripMenuItem
+            // 
+            this.下载KMLToolStripMenuItem.Name = "下载KMLToolStripMenuItem";
+            this.下载KMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.下载KMLToolStripMenuItem.Text = "下载KML";
+            this.下载KMLToolStripMenuItem.Click += new System.EventHandler(this.下载KMLToolStripMenuItem_Click);
+            // 
+            // 允许编辑ToolStripMenuItem
+            // 
+            this.允许编辑ToolStripMenuItem.Name = "允许编辑ToolStripMenuItem";
+            this.允许编辑ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.允许编辑ToolStripMenuItem.Text = "允许编辑";
+            this.允许编辑ToolStripMenuItem.Click += new System.EventHandler(this.允许编辑ToolStripMenuItem_Click);
+            // 
+            // 停止编辑ToolStripMenuItem
+            // 
+            this.停止编辑ToolStripMenuItem.Name = "停止编辑ToolStripMenuItem";
+            this.停止编辑ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.停止编辑ToolStripMenuItem.Text = "停止编辑";
+            this.停止编辑ToolStripMenuItem.Click += new System.EventHandler(this.停止编辑ToolStripMenuItem_Click);
+            // 
+            // checkBoxCacheServer
+            // 
+            this.checkBoxCacheServer.Name = "checkBoxCacheServer";
+            this.checkBoxCacheServer.Text = " 离线Web服务";
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -756,7 +793,7 @@
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "MapDownloadForm";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "地图下载器";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -777,6 +814,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.advTreeChina)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).EndInit();
             this.panelMap.ResumeLayout(false);
+            this.contextMenuStripSelectedArea.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -830,13 +868,11 @@
         private System.Windows.Forms.ToolStripMenuItem serverAndCacheToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 在线服务ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 本地缓存ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarDownload;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusDownload;
         private DevComponents.DotNetBar.Bar bar1;
         private DevComponents.DotNetBar.CheckBoxItem checkBoxItemShowGrid;
         private System.Windows.Forms.Panel panelMap;
         private MapControl mapControl;
-        private DevComponents.DotNetBar.ButtonItem buttonItemCacheServer;
         private DevComponents.DotNetBar.ButtonX buttonDownload;
         private DevComponents.DotNetBar.ButtonX buttonMapImage;
         private BSE.Windows.Forms.XPanderPanel xPanderPanel2;
@@ -844,6 +880,12 @@
         private DevComponents.AdvTree.NodeConnector nodeConnector1;
         private DevComponents.DotNetBar.ElementStyle elementStyle1;
         private System.Windows.Forms.RadioButton radioButtonDisk;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripSelectedArea;
+        private System.Windows.Forms.ToolStripMenuItem 下载地图ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 下载KMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 允许编辑ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 停止编辑ToolStripMenuItem;
+        private DevComponents.DotNetBar.CheckBoxItem checkBoxCacheServer;
     }
 }
 

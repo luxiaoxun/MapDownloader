@@ -44,6 +44,8 @@
     <Compile Include="Geometry.cs" />
     <Compile Include="GeometryType.cs" />
     <Compile Include="Point2D.cs" />
+    <Compile Include="Polygon.cs" />
+    <Compile Include="Polyline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

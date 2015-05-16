@@ -288,7 +288,7 @@ namespace GMapWinFormDemo
                     {
                         //regionOverlay.Polygons.Clear();
                         regionOverlay.Polygons.Add(polygon);
-                        RectLatLng rect = GMapChinaRegion.ChinaMapRegion.GetRegionMaxRect(polygon);
+                        RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
                         this.mapControl.SetZoomToFitRect(rect);
                     }
                 }
@@ -334,7 +334,7 @@ namespace GMapWinFormDemo
                     {
                         regionOverlay.Polygons.Clear();
                         regionOverlay.Polygons.Add(polygon);
-                        RectLatLng rect = GMapChinaRegion.ChinaMapRegion.GetRegionMaxRect(polygon);
+                        RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
                         this.mapControl.SetZoomToFitRect(rect);
                     }
                 }
@@ -721,7 +721,7 @@ namespace GMapWinFormDemo
             if (mapProviderType != MapProviderType.baidu)
             {
                 mapProviderType = MapProviderType.baidu;
-                mapControl.MapProvider = GMapProvidersExt.BaiduMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
             }
@@ -757,13 +757,13 @@ namespace GMapWinFormDemo
             {
                 mapType = MapType.Satellite;
                 this.buttonMapType.Image = Properties.Resources.ditu;
-                mapControl.MapProvider = GMapProvidersExt.BaiduMapSateliteProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduHybridMapProvider.Instance;
             }
             else if (mapType == MapType.Satellite && mapProviderType == MapProviderType.baidu)
             {
                 mapType = MapType.Common;
                 this.buttonMapType.Image = Properties.Resources.weixing;
-                mapControl.MapProvider = GMapProvidersExt.BaiduMapProvider.Instance;
+                mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
             }
             else if (mapType == MapType.Common && mapProviderType == MapProviderType.amap)
             {

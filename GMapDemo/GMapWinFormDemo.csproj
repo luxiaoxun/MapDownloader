@@ -180,6 +180,10 @@
       <Project>{ED39E8DA-A8F3-4906-BA24-90D09D0AF7CD}</Project>
       <Name>GMapTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapUtil\GMapUtil.csproj">
+      <Project>{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}</Project>
+      <Name>GMapUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
       <Name>NetUtilityLib</Name>

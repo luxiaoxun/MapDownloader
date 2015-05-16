@@ -45,14 +45,11 @@
     <Compile Include="AMap\AMapProvider.cs" />
     <Compile Include="AMap\AMapProviderBase.cs" />
     <Compile Include="AMap\AMapSateliteProvider.cs" />
-    <Compile Include="BaiduMapProvider.cs" />
-    <Compile Include="BaiduMapSateliteProvider.cs" />
-    <Compile Include="BaiduProjection.cs" />
     <Compile Include="Baidu\BaiduHybridMapProvider.cs" />
     <Compile Include="Baidu\BaiduMapProvider.cs" />
     <Compile Include="Baidu\BaiduMapProviderBase.cs" />
     <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
-    <Compile Include="Baidu\BaituProjection.cs" />
+    <Compile Include="Baidu\BaiduProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SogouProjection.cs" />
     <Compile Include="SoSo\SosoMapHybridProvider.cs" />

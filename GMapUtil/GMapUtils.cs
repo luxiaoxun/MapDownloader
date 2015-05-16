@@ -7,7 +7,7 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 
-namespace GMapUtility
+namespace GMapUtil
 {
     /// <summary>
     /// Helper class with static methods
@@ -759,7 +759,13 @@ namespace GMapUtility
             return aera;
         }
 
-        // Get point side of the Line(pnt1,pnt2)
+        /// <summary>
+        /// Get which side (left or right) of the point to Line(pnt1,pnt2)
+        /// </summary>
+        /// <param name="pnt1"></param>
+        /// <param name="pnt2"></param>
+        /// <param name="pnt"></param>
+        /// <returns></returns>
         public static string GetSide(PointLatLng pnt1, PointLatLng pnt2, PointLatLng pnt)
         {
             double num = ((pnt2.Lat - pnt1.Lat)*(pnt.Lng - pnt1.Lng)) - ((pnt.Lat - pnt1.Lat)*(pnt2.Lng - pnt1.Lng));
@@ -778,7 +784,13 @@ namespace GMapUtility
             return null;
         }
 
-        // Get point side of the Line(pnt1,pnt2)
+        /// <summary>
+        /// Get which side (left or right) of the point to Line(pnt1,pnt2)
+        /// </summary>
+        /// <param name="pnt1"></param>
+        /// <param name="pnt2"></param>
+        /// <param name="pnt"></param>
+        /// <returns>1:left, -1:right, 0:on the line</returns>
         public static int GetPointSide(PointLatLng pnt1, PointLatLng pnt2, PointLatLng pnt)
         {
             double num = ((pnt2.Lat - pnt1.Lat) * (pnt.Lng - pnt1.Lng)) - ((pnt.Lat - pnt1.Lat) * (pnt2.Lng - pnt1.Lng));
@@ -797,7 +809,14 @@ namespace GMapUtility
             return 0;
         }
 
-        // Judge two line is intersecting or not
+        /// <summary>
+        /// Judge two line is intersected or not
+        /// </summary>
+        /// <param name="start1"></param>
+        /// <param name="end1"></param>
+        /// <param name="start2"></param>
+        /// <param name="end2"></param>
+        /// <returns></returns>
         public static bool IsLineIntersect(PointLatLng start1, PointLatLng end1, PointLatLng start2, PointLatLng end2)
         {
             int test1 = GetPointSide(start1, end1, start2) * GetPointSide(start1, end1, end2);

@@ -7,10 +7,10 @@ using GMap.NET;
 
 namespace GMapProvidersExt.Baidu
 {
-    public class BaituProjection : PureProjection
+    public class BaiduProjection : PureProjection
     {
         // Fields
-        public static readonly BaituProjection Instance;
+        public static readonly BaiduProjection Instance;
         private static readonly double MaxLatitude;
         private static readonly double MaxLongitude;
         private static readonly double MinLatitude;
@@ -18,21 +18,18 @@ namespace GMapProvidersExt.Baidu
         private readonly GSize tileSize;
 
         // Methods
-        static BaituProjection()
+        static BaiduProjection()
         {
-            //Class3.VhQqLwFzr0qRr();
-            Instance = new BaituProjection();
+            Instance = new BaiduProjection();
             MinLatitude = -85.05112878;
             MaxLatitude = 85.05112878;
             MinLongitude = -180.0;
             MaxLongitude = 180.0;
         }
 
-        private BaituProjection()
+        private BaiduProjection()
         {
-            //Class3.VhQqLwFzr0qRr();
             this.tileSize = new GSize(0x100, 0x100);
-            //base.EpsgCode = 0xf11;
         }
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)

@@ -32,19 +32,35 @@ namespace NetUtilityLibTest
             //XmlHelper.XmlSerializeToFile(china, @"F:\GMap\china-province city2.xml", Encoding.UTF8);
             //JsonHelper.JsonSerializeToFile(china, @"F:\GMap\china-province city", Encoding.UTF8);
 
-            string file = "chinaBoundry";
-            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+            //string file = "chinaBoundry";
+            //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
 
-            for (int i = 0; i < china.Province.Count; ++i )
-            {
-                china.Province[i].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
-                for (int j = 0; j < china.Province[i].City.Count; ++j )
+            //for (int i = 0; i < china.Province.Count; ++i )
+            //{
+            //    china.Province[i].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
+            //    for (int j = 0; j < china.Province[i].City.Count; ++j )
+            //    {
+            //        china.Province[i].City[j].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
+            //    }
+            //}
+
+            //JsonHelper.JsonSerializeToFile(china,"chinaBoundryEncode",Encoding.UTF8);
+
+            DateTime s = DateTime.Now;
+            List<int> datas = new List<int>();
+            for (int k = 1; k <= 10; ++k )
+                for (int i = 1; i <= 300; ++i)
                 {
-                    china.Province[i].City[j].rings = EncodeDecodeHelper.CompressString(china.Province[i].rings);
+                    for (int j = 1; j <= 300; ++j)
+                    {
+                        int n = i * j;
+                        if (!datas.Contains(n))
+                        {
+                            datas.Add(n);
+                        }
+                    }
                 }
-            }
-
-            JsonHelper.JsonSerializeToFile(china,"chinaBoundryEncode",Encoding.UTF8);
+            Console.WriteLine("Count:{0},Time:{1}ms", datas.Count, DateTime.Now.Millisecond - s.Millisecond);
 
             Console.WriteLine("Complete!");
             Console.ReadKey();

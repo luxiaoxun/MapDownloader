@@ -6,7 +6,7 @@ using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 
-namespace GMapUtility
+namespace GMapUtil
 {
     public static class PolygonUtils
     {
@@ -47,6 +47,35 @@ namespace GMapUtility
         internal static double ToRadians(double degrees)
         {
             return degrees * (Math.PI / 180d);
+        }
+
+        public static RectLatLng GetRegionMaxRect(GMapPolygon polygon)
+        {
+            double latMin = 90;
+            double latMax = -90;
+            double lngMin = 180;
+            double lngMax = -180;
+            foreach (var point in polygon.Points)
+            {
+                if (point.Lat < latMin)
+                {
+                    latMin = point.Lat;
+                }
+                else if (point.Lat > latMax)
+                {
+                    latMax = point.Lat;
+                }
+                else if (point.Lng < lngMin)
+                {
+                    lngMin = point.Lng;
+                }
+                else if (point.Lng > lngMax)
+                {
+                    lngMax = point.Lng;
+                }
+            }
+
+            return new RectLatLng(latMax, lngMin, lngMax - lngMin, latMax - latMin);
         }
     }
 }

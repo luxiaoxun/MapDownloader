@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{60A086BD-A4D9-459C-8622-4794D1728F08}</ProjectGuid>
+    <ProjectGuid>{22E05880-ED51-420F-A61F-A5B7CDB32FBC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapUtility</RootNamespace>
-    <AssemblyName>GMapUtility</AssemblyName>
+    <RootNamespace>GMapPolygonLib</RootNamespace>
+    <AssemblyName>GMapPolygonLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,11 +39,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GMapUtils.cs" />
-    <Compile Include="PolygonUtils.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="GMapAreaPolygon.cs" />
+    <Compile Include="GMapRectangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace MapDownloader
 {
     public class PrefetchTiles
     {
-        BackgroundWorker worker = new BackgroundWorker();
+        private BackgroundWorker worker = new BackgroundWorker();
 
         public event EventHandler<PrefetchTileEventArgs> PrefetchTileStart;
         public event EventHandler<PrefetchTileEventArgs> PrefetchTileComplete;
@@ -25,10 +25,12 @@ namespace MapDownloader
             get { return retry; }
             set { retry = value; }
         }
+        private Dictionary<int, List<GPoint>> zoomGPointDic = new Dictionary<int, List<GPoint>>();
 
-        private ulong TotalTiles = 0;
-        private ulong OverallCompleted = 0;
-        private int OverallProgress = 0;
+        private ulong totalTiles = 0;
+        private ulong overallCompleted = 0;
+        private int overallProgress = 0;
+        private int currentZoom;
 
         private string tilePath;
 
@@ -41,7 +43,14 @@ namespace MapDownloader
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
         }
 
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider[] providers, int sleep)
+        public bool IsBusy 
+        {
+            get { return worker.IsBusy; }
+        }
+
+        GMapProvider provider;
+
+        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, int sleep)
         {
             if (!worker.IsBusy)
             {
@@ -49,7 +58,7 @@ namespace MapDownloader
                 args.MinZoom = minZoom;
                 args.MaxZoom = maxZoom;
                 args.Area = area;
-                args.Providers = providers;
+                args.Provider = provider;
                 args.TileSleeper = sleep;
 
                 GMaps.Instance.UseMemoryCache = false;
@@ -63,7 +72,7 @@ namespace MapDownloader
             }
         }
 
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider[] providers, int sleep, string path)
+        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, int sleep, string path)
         {
             this.tilePath = path;
 
@@ -73,7 +82,7 @@ namespace MapDownloader
                 args.MinZoom = minZoom;
                 args.MaxZoom = maxZoom;
                 args.Area = area;
-                args.Providers = providers;
+                args.Provider = provider;
                 args.TileSleeper = sleep;
 
                 GMaps.Instance.UseMemoryCache = false;
@@ -93,73 +102,90 @@ namespace MapDownloader
             {
                 worker.CancelAsync();
             }
+
+            totalTiles = 0;
+            overallCompleted = 0;
+            overallProgress = 0;
         }
 
         #region Background Worker
+
         void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
             WorkerArgs args = (WorkerArgs)e.Argument;
             List<GPoint> list = new List<GPoint>();
 
-            for (int z = args.MinZoom; z <= args.MaxZoom; z++)
-            {
-                foreach (GMapProvider provider in args.Providers)
-                {
-                    TotalTiles += (ulong)provider.Projection.GetAreaTileList(args.Area, z, 0).Count;
-                }
-            }
+            GMapProvider provider = args.Provider;
+
+            // Get the tiles we need to download
+            //for (int z = args.MinZoom; z <= args.MaxZoom; z++)
+            //{
+            //    List<GPoint> gPoints = provider.Projection.GetAreaTileList(args.Area, z, 0);
+            //    if (!zoomGPointDic.ContainsKey(z))
+            //    {
+            //        zoomGPointDic.Add(z, gPoints);
+            //        totalTiles += (ulong)gPoints.Count;
+            //    }
+            //}
 
             for (int z = args.MinZoom; z <= args.MaxZoom; z++)
             {
                 if (worker.CancellationPending)
                     break;
 
-                foreach (GMapProvider provider in args.Providers)
+                if (list != null)
+                {
+                    list.Clear();
+                    list = null;
+                }
+
+                currentZoom = z;
+                overallCompleted = 0;
+                totalTiles = 0;
+                list = provider.Projection.GetAreaTileList(args.Area, z, 0);
+
+                //if (zoomGPointDic.ContainsKey(z) && zoomGPointDic[z].Count>0)
+                //{
+                //    list = zoomGPointDic[z];
+                //}
+                //else
+                //{
+                //    continue;
+                //}
+                Shuffle<GPoint>(list);
+
+                int numfiles = list.Count;
+                totalTiles = (ulong)numfiles;
+
+                // Download all tiles in the list
+                int retryCount = 0;
+                for (int i = 0; i < numfiles; i++)
                 {
                     if (worker.CancellationPending)
                         break;
 
-                    if (list != null)
+                    // Download the tile
+                    // Retry if there is a failure
+                    if (CacheTiles(z, list[i], provider))
+                        retryCount = 0;
+                    else
                     {
-                        list.Clear();
-                        list = null;
-                    }
-
-                    // Get the tiles we need to download
-                    list = provider.Projection.GetAreaTileList(args.Area, z, 0);
-                    Shuffle<GPoint>(list);
-
-                    int numfiles = list.Count;
-
-                    // Download all tiles in the list
-                    int retryCount = 0;
-                    for (int i = 0; i < numfiles; i++)
-                    {
-                        if (worker.CancellationPending)
-                            break;
-
-                        // Download the tile
-                        // Retry if there is a failure
-                        if (CacheTiles(z, list[i], provider))
-                            retryCount = 0;
-                        else
+                        if (++retryCount <= retry)
                         {
-                            if (++retryCount <= retry)
-                            {
-                                i--;
-                                System.Threading.Thread.Sleep(1111);
-                                continue;
-                            }
-                            else
-                                retryCount = 0;
+                            i--;
+                            System.Threading.Thread.Sleep(1000);
+                            continue;
                         }
-                        // Report progress
-                        OverallCompleted++;
-                        OverallProgress = Convert.ToInt32(OverallCompleted * 100 / TotalTiles);
-                        worker.ReportProgress(OverallProgress);
-                        System.Threading.Thread.Sleep(args.TileSleeper);
+                        else
+                            retryCount = 0;
                     }
+                    // Report progress
+                    overallCompleted++;
+                    overallProgress = Convert.ToInt32(overallCompleted * 100 / totalTiles);
+                    PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(totalTiles, overallCompleted, currentZoom);
+                    worker.ReportProgress(overallProgress, progressArgs);
+                    //System.Threading.Thread.Sleep(args.TileSleeper);
                 }
             }
 
@@ -173,7 +199,8 @@ namespace MapDownloader
             {
                 if (PrefetchTileProgress != null)
                 {
-                    PrefetchTileProgress(this, new PrefetchTileEventArgs(e.ProgressPercentage));
+                    //PrefetchTileProgress(this, new PrefetchTileEventArgs(totalTiles, overallCompleted,currentZoom));
+                    PrefetchTileProgress(this, e.UserState as PrefetchTileEventArgs);
                 }
             }
         }
@@ -188,6 +215,7 @@ namespace MapDownloader
                 PrefetchTileComplete(this, new PrefetchTileEventArgs(100));
             }
         }
+
         #endregion
 
         #region Standalone Methods
@@ -224,10 +252,12 @@ namespace MapDownloader
                 Exception ex;
                 PureImage img;
 
-                img = GMaps.Instance.GetImageFrom(pr, p, zoom, out ex);
+                //img = GMaps.Instance.GetImageFrom(pr, p, zoom, out ex);
+                img = pr.GetTileImage(p, zoom);
 
                 if (img != null)
                 {
+                    GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, p, zoom);
                     // if the tile path is not null, write the tile to disk
                     if (tilePath != null)
                     {
@@ -264,9 +294,23 @@ namespace MapDownloader
     {
         public int ProgressValue { set; get; }
 
+        public ulong TileAllNum { set; get; }
+
+        public ulong TileCompleteNum { set; get; }
+
+        public int CurrentDownloadZoom { set; get; }
+
         public PrefetchTileEventArgs(int value)
         {
             ProgressValue = value;
+        }
+
+        public PrefetchTileEventArgs(ulong allNum,ulong comNum,int zoom)
+        {
+            TileAllNum = allNum;
+            TileCompleteNum = comNum;
+            CurrentDownloadZoom = zoom;
+            ProgressValue = Convert.ToInt32(TileCompleteNum * 100 / TileAllNum); ;
         }
     }
 
@@ -274,7 +318,7 @@ namespace MapDownloader
 
     internal class WorkerArgs
     {
-        public GMapProvider[] Providers;
+        public GMapProvider Provider;
         public int TileSleeper;
         public RectLatLng Area;
         public int MinZoom;
