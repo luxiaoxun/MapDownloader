@@ -11,6 +11,12 @@ namespace GMapChinaRegion
 {
     public static class ChinaMapRegion
     {
+        public static Country GetChinaRegionFromJsonBinaryBytes(byte[] buffer)
+        {
+            Country china = JsonHelper.JsonDeserializeFromBinaryBytes<Country>(buffer);
+            return china;
+        }
+
         public static Country GetChinaRegionFromJsonFile(string filePath)
         {
             Country china = JsonHelper.JsonDeserializeFromFile<Country>(filePath, Encoding.UTF8);

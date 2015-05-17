@@ -26,6 +26,20 @@ namespace NetUtilityLib
             }
         }
 
+        public static void JsonSerializeToBinaryFile(Object obj, string path)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            string result = JsonSerialize(obj);
+            System.IO.FileInfo info = new System.IO.FileInfo(path);
+            System.IO.Directory.CreateDirectory(info.Directory.FullName);
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(result);
+            File.WriteAllBytes(path, buffer);
+        }
+
         public static void JsonSerializeToFile(Object obj, string path, Encoding encoding)
         {
             if (obj == null)
@@ -61,6 +75,15 @@ namespace NetUtilityLib
                 throw new ArgumentNullException("encoding");
 
             string json = File.ReadAllText(path, encoding);
+            return JsonDeserialize<T>(json);
+        }
+
+        public static T JsonDeserializeFromBinaryBytes<T>(byte[] content)
+        {
+            if (content==null)
+                throw new ArgumentNullException("content");
+
+            string json = System.Text.Encoding.UTF8.GetString(content);
             return JsonDeserialize<T>(json);
         }
     }

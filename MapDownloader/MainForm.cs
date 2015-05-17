@@ -93,6 +93,8 @@ namespace MapDownloader
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
         }
 
+        #region 地图控件事件
+
         void mapControl_OnMarkerLeave(GMapMarker item)
         {
             if (!isLeftButtonDown)
@@ -206,7 +208,9 @@ namespace MapDownloader
                 }
             }
         }
-        
+
+        #endregion
+
         //初始化UI
         private void InitUI()
         {
@@ -334,21 +338,33 @@ namespace MapDownloader
 
         void loadChinaWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (china == null) return;
-            foreach (var provice in china.Province)
+            if (china == null)
             {
-                DevComponents.AdvTree.Node pNode = new DevComponents.AdvTree.Node(provice.name);
-                pNode.Tag = provice;
-                //pNode.ContextMenuStrip = this.contextMenuStripRegion;
-                foreach (var city in provice.City)
+                log.Warn("加载中国省市边界失败！");
+                return;
+            }
+
+            try
+            {
+                foreach (var provice in china.Province)
                 {
-                    DevComponents.AdvTree.Node cNode = new DevComponents.AdvTree.Node(city.name);
-                    cNode.Tag = city;
-                    //cNode.ContextMenuStrip = this.contextMenuStripRegion;
-                    pNode.Nodes.Add(cNode);
+                    DevComponents.AdvTree.Node pNode = new DevComponents.AdvTree.Node(provice.name);
+                    pNode.Tag = provice;
+                    //pNode.ContextMenuStrip = this.contextMenuStripRegion;
+                    foreach (var city in provice.City)
+                    {
+                        DevComponents.AdvTree.Node cNode = new DevComponents.AdvTree.Node(city.name);
+                        cNode.Tag = city;
+                        //cNode.ContextMenuStrip = this.contextMenuStripRegion;
+                        pNode.Nodes.Add(cNode);
+                    }
+                    DevComponents.AdvTree.Node rootNode = this.advTreeChina.Nodes[0];
+                    rootNode.Nodes.Add(pNode);
                 }
-                DevComponents.AdvTree.Node rootNode = this.advTreeChina.Nodes[0];
-                rootNode.Nodes.Add(pNode);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
             }
 
             this.advTreeChina.NodeClick += new DevComponents.AdvTree.TreeNodeMouseEventHandler(advTreeChina_NodeClick);
@@ -395,10 +411,19 @@ namespace MapDownloader
 
         void loadChinaWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string file = System.Windows.Forms.Application.StartupPath + "\\chinaBoundry";
-            if (System.IO.File.Exists(file))
+            //string file = System.Windows.Forms.Application.StartupPath + "\\chinaBoundry";
+            //if (System.IO.File.Exists(file))
+            //{
+            //    china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+            //}
+            try
             {
-                china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+                byte[] buffer = Properties.Resources.chinaBoundryBinary;
+                china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonBinaryBytes(buffer);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
             }
         }
 
@@ -464,7 +489,7 @@ namespace MapDownloader
                     {
                         case DrawingMode.Polygon:
                             polygonsOverlay.Polygons.Add(e.Polygon);
-             
+                            selectedRect = GetRectLatLngFromDrawing(e.Polygon);
                             break;
                         case DrawingMode.Rectangle:
                             polygonsOverlay.Polygons.Add(e.Rectangle);
@@ -472,11 +497,12 @@ namespace MapDownloader
                             break;
                         case DrawingMode.Circle:
                             polygonsOverlay.Markers.Add(e.Circle);
-                           
                             break;
                         case DrawingMode.Line:
                             polygonsOverlay.Routes.Add(e.Line);
-                          
+                            break;
+                        case DrawingMode.Route:
+                            polygonsOverlay.Routes.Add(e.Route);
                             break;
                         default:
                             draw.IsEnable = false;
@@ -491,7 +517,7 @@ namespace MapDownloader
         }
 
         //从画图“矩形”得到矩形范围
-        private RectLatLng GetRectLatLngFromDrawing(GMapDrawRectangle rectangle)
+        private RectLatLng GetRectLatLngFromDrawing(GMapPolygon rectangle)
         {
             RectLatLng rect = RectLatLng.Empty;
             if (rectangle != null && rectangle.Points.Count==4)
@@ -654,7 +680,8 @@ namespace MapDownloader
             }
             else
             {
-                MessageBox.Show("请先用“矩形”画图工具选择区域", "提示", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //MessageBox.Show("请先用“矩形”画图工具选择区域", "提示", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
             }
         }
 

@@ -142,6 +142,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resource\chinaBoundry" />
+    <None Include="Resource\chinaBoundryBinary" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="leafletjs\dist\images\layers.png" />
