@@ -34,12 +34,15 @@ namespace GMapProvidersExt.Baidu
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
         {
-            Point2D pointd = LonLat2Mercator(new Point2D(lng, lat));
-            pointd.Y -= 20000.0;
+            double X;
+            double Y;
+            LonLat2Mercator(lng, lat, out X, out Y);
+            //Point2D pointd = LonLat2Mercator(new Point2D(lng, lat));
+            Y -= 20000.0;
             this.GetTileMatrixMinXY(zoom);
             double levelResolution = this.GetLevelResolution(zoom);
-            long x = (long)((pointd.X - this.BaiduProjectedOrigin.X) / levelResolution);
-            return new GPoint(x, (long)((this.BaiduProjectedOrigin.Y - pointd.Y) / levelResolution));
+            long x = (long)((X - this.BaiduProjectedOrigin.X) / levelResolution);
+            return new GPoint(x, (long)((this.BaiduProjectedOrigin.Y - Y) / levelResolution));
         }
 
         public override PointLatLng FromPixelToLatLng(long x, long y, int zoom)
@@ -91,11 +94,19 @@ namespace GMapProvidersExt.Baidu
             return TileUtil.GetTile(this.BaiduProjectedOrigin.X, this.BaiduProjectedOrigin.Y, this.ProjectedBounds.Left, this.ProjectedBounds.Top, this.GetLevelResolution(zoom), 0x100, 0x100);
         }
 
-        private static Point2D LonLat2Mercator(Point2D lonLat)
+        //private static Point2D LonLat2Mercator(Point2D lonLat)
+        //{
+        //    double x = ((lonLat.X * 3.1415926535897931) * 6378137.0) / 180.0;
+        //    double num2 = Math.Log(Math.Tan(((90.0 + lonLat.Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+        //    return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
+        //}
+
+        private static void LonLat2Mercator(double X, double Y,out double x, out double y)
         {
-            double x = ((lonLat.X * 3.1415926535897931) * 6378137.0) / 180.0;
-            double num2 = Math.Log(Math.Tan(((90.0 + lonLat.Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-            return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
+            x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
+            double num2 = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+            //return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
+            y = ((num2 * 3.1415926535897931) * 6378137.0) / 180.0;
         }
 
         private PointLatLng MercatorToLonLat(double x, double y)

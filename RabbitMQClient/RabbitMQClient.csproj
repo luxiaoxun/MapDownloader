@@ -58,9 +58,9 @@
     <Compile Include="RbbitMqMessageReciver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
+    <ProjectReference Include="..\NetUtil\NetUtil.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
-      <Name>NetUtilityLib</Name>
+      <Name>NetUtil</Name>
     </ProjectReference>
     <ProjectReference Include="..\QuickRabbitMQ\QuickRabbitMQ.csproj">
       <Project>{71BF751C-FD42-4171-B98D-07A4356DC154}</Project>

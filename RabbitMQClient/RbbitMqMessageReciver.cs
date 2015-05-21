@@ -6,7 +6,7 @@ using log4net;
 using QuickRabbitMQ;
 using RabbitMQ.Client;
 using Newtonsoft.Json;
-using NetUtilityLib;
+using NetUtil;
 
 namespace RabbitMQClient
 {

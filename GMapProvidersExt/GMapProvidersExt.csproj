@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="osr_csharp">
+      <HintPath>..\Lib\osr_csharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -50,12 +54,20 @@
     <Compile Include="Baidu\BaiduMapProviderBase.cs" />
     <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
     <Compile Include="Baidu\BaiduProjection.cs" />
+    <Compile Include="CoordinateTransformUtil.cs" />
+    <Compile Include="Here\NokiaHybridMapProvider.cs" />
+    <Compile Include="Here\NokiaMapProvider.cs" />
+    <Compile Include="Here\NokiaMapProviderBase.cs" />
+    <Compile Include="Here\NokiaSatelliteMapProvider.cs" />
+    <Compile Include="MapUnit.cs" />
+    <Compile Include="ProjectionUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SogouProjection.cs" />
     <Compile Include="SoSo\SosoMapHybridProvider.cs" />
     <Compile Include="SoSo\SosoMapProvider.cs" />
     <Compile Include="SoSo\SosoMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapSateliteProvider.cs" />
+    <Compile Include="SphericalMercatorProjection.cs" />
     <Compile Include="TileUtil.cs" />
   </ItemGroup>
   <ItemGroup>

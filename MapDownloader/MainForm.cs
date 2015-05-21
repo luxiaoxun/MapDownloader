@@ -13,7 +13,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
 using GMap.NET.CacheProviders;
 using GMapDrawTools;
-using NetUtilityLib;
+using NetUtil;
 using GMapChinaRegion;
 using MySql.Data.MySqlClient;
 using log4net;
@@ -754,6 +754,21 @@ namespace MapDownloader
             this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
         }
 
+        private void 普通地图ToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            mapControl.MapProvider = GMapProvidersExt.Here.NokiaMapProvider.Instance;
+        }
+
+        private void 卫星地图ToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            mapControl.MapProvider = GMapProvidersExt.Here.NokiaSatelliteMapProvider.Instance;
+        }
+
+        private void 混合地图ToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            mapControl.MapProvider = GMapProvidersExt.Here.NokiaHybridMapProvider.Instance;
+        }
+
         #endregion
 
         #region 画图工具
@@ -866,5 +881,6 @@ namespace MapDownloader
                 }
             }
         }
+        
     }
 }

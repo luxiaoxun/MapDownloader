@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using GMap.NET;
 using GMap.NET.WindowsForms;
-using NetUtilityLib;
+using NetUtil;
 
 namespace GMapChinaRegion
 {

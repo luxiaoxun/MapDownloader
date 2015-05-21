@@ -55,9 +55,9 @@
       <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
+    <ProjectReference Include="..\NetUtil\NetUtil.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
-      <Name>NetUtilityLib</Name>
+      <Name>NetUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

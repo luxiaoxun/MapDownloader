@@ -184,9 +184,9 @@
       <Project>{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}</Project>
       <Name>GMapUtil</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetUtilityLib\NetUtilityLib.csproj">
+    <ProjectReference Include="..\NetUtil\NetUtil.csproj">
       <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
-      <Name>NetUtilityLib</Name>
+      <Name>NetUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -16,7 +16,7 @@ using GMapChinaRegion;
 using GMapDrawTools;
 using GMapTools;
 using Microsoft.SqlServer.Server;
-using NetUtilityLib;
+using NetUtil;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
