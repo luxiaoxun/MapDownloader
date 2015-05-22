@@ -8,18 +8,22 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using GMap.NET;
 using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 using GMap.NET.MapProviders;
 using GMap.NET.CacheProviders;
-using GMapDrawTools;
 using NetUtil;
-using GMapChinaRegion;
+using GMapUtil;
 using MySql.Data.MySqlClient;
 using log4net;
+using GMapChinaRegion;
 using GMapPolygonLib;
 using GMapMarkerLib;
-using System.Reflection;
+using GMapDrawTools;
+using GMapCommonType;
+
 
 namespace MapDownloader
 {
@@ -229,6 +233,106 @@ namespace MapDownloader
             this.checkBoxCacheServer.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxCacheServer_CheckedChanged);
         }
 
+        //初始化App config配置信息
+        private void InitMySQLConString()
+        {
+            try
+            {
+                string ip = ConfigHelper.GetAppConfig("MySQLServerIP");
+                string port = ConfigHelper.GetAppConfig("MySQLServerPort");
+                string dbName = ConfigHelper.GetAppConfig("Database");
+                string userID = ConfigHelper.GetAppConfig("UserID");
+                string password = ConfigHelper.GetAppConfig("Password");
+                string retryStr = ConfigHelper.GetAppConfig("Retry");
+                string center = ConfigHelper.GetAppConfig("MapCenter");
+                string[] centerPoints = center.Split(',');
+                if (centerPoints.Length == 2)
+                {
+                    if (mapControl != null)
+                    {
+                        mapControl.Position = new PointLatLng(double.Parse(centerPoints[1]), double.Parse(centerPoints[0]));
+                    }
+                }
+                retryNum = int.Parse(retryStr);
+
+                conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
+                if (mysqlCache != null)
+                {
+                    mysqlCache.ConnectionString = conString;
+                }
+
+                tilePath = ConfigHelper.GetAppConfig("TilePath");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+        }
+
+        //是否显示网格
+        void checkBoxItemShowGrid_CheckedChanged(object sender, DevComponents.DotNetBar.CheckBoxChangeEventArgs e)
+        {
+            if (this.checkBoxItemShowGrid.Checked)
+            {
+                this.mapControl.ShowTileGridLines = true;
+            }
+            else
+            {
+                this.mapControl.ShowTileGridLines = false;
+            }
+        }
+
+        //画图完成函数
+        void draw_DrawComplete(object sender, DrawEventArgs e)
+        {
+            try
+            {
+                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null))
+                {
+                    switch (e.DrawingMode)
+                    {
+                        case DrawingMode.Polygon:
+                            polygonsOverlay.Polygons.Add(e.Polygon);
+                            selectedRect = GetRectLatLngFromDrawing(e.Polygon);
+                            break;
+                        case DrawingMode.Rectangle:
+                            polygonsOverlay.Polygons.Add(e.Rectangle);
+                            selectedRect = GetRectLatLngFromDrawing(e.Rectangle);
+                            break;
+                        case DrawingMode.Circle:
+                            polygonsOverlay.Markers.Add(e.Circle);
+                            break;
+                        case DrawingMode.Line:
+                            polygonsOverlay.Routes.Add(e.Line);
+                            break;
+                        case DrawingMode.Route:
+                            polygonsOverlay.Routes.Add(e.Route);
+                            break;
+                        default:
+                            draw.IsEnable = false;
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                draw.IsEnable = false;
+            }
+        }
+
+        //从画图“矩形”得到矩形范围
+        private RectLatLng GetRectLatLngFromDrawing(GMapPolygon rectangle)
+        {
+            RectLatLng rect = RectLatLng.Empty;
+            if (rectangle != null && rectangle.Points.Count == 4)
+            {
+                PointLatLng leftTop = rectangle.Points[0];
+                PointLatLng rightBottom = rectangle.Points[2];
+                rect = new RectLatLng(leftTop.Lat, leftTop.Lng, leftTop.Lat - rightBottom.Lat, rightBottom.Lng - leftTop.Lng);
+            }
+            return rect;
+        }
+
         #region 离线服务
 
         bool TryExtractLeafletjs()
@@ -428,106 +532,6 @@ namespace MapDownloader
         }
 
         #endregion 
-
-        //初始化App config配置信息
-        private void InitMySQLConString()
-        {
-            try
-            {
-                string ip = ConfigHelper.GetAppConfig("MySQLServerIP");
-                string port = ConfigHelper.GetAppConfig("MySQLServerPort");
-                string dbName = ConfigHelper.GetAppConfig("Database");
-                string userID = ConfigHelper.GetAppConfig("UserID");
-                string password = ConfigHelper.GetAppConfig("Password");
-                string retryStr = ConfigHelper.GetAppConfig("Retry");
-                string center = ConfigHelper.GetAppConfig("MapCenter");
-                string[] centerPoints = center.Split(',');
-                if (centerPoints.Length == 2)
-                {
-                    if (mapControl != null)
-                    {
-                        mapControl.Position = new PointLatLng(double.Parse(centerPoints[1]), double.Parse(centerPoints[0]));
-                    }
-                }
-                retryNum = int.Parse(retryStr);
-
-                conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
-                if (mysqlCache != null)
-                {
-                    mysqlCache.ConnectionString = conString;
-                }
-
-                tilePath = ConfigHelper.GetAppConfig("TilePath");
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-            }
-        }
-
-        //是否显示网格
-        void checkBoxItemShowGrid_CheckedChanged(object sender, DevComponents.DotNetBar.CheckBoxChangeEventArgs e)
-        {
-            if (this.checkBoxItemShowGrid.Checked)
-            {
-                this.mapControl.ShowTileGridLines = true;
-            }
-            else
-            {
-                this.mapControl.ShowTileGridLines = false;
-            }
-        }
-
-        //画图完成函数
-        void draw_DrawComplete(object sender, DrawEventArgs e)
-        {
-            try
-            {
-                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null))
-                {
-                    switch (e.DrawingMode)
-                    {
-                        case DrawingMode.Polygon:
-                            polygonsOverlay.Polygons.Add(e.Polygon);
-                            selectedRect = GetRectLatLngFromDrawing(e.Polygon);
-                            break;
-                        case DrawingMode.Rectangle:
-                            polygonsOverlay.Polygons.Add(e.Rectangle);
-                            selectedRect = GetRectLatLngFromDrawing(e.Rectangle);
-                            break;
-                        case DrawingMode.Circle:
-                            polygonsOverlay.Markers.Add(e.Circle);
-                            break;
-                        case DrawingMode.Line:
-                            polygonsOverlay.Routes.Add(e.Line);
-                            break;
-                        case DrawingMode.Route:
-                            polygonsOverlay.Routes.Add(e.Route);
-                            break;
-                        default:
-                            draw.IsEnable = false;
-                            break;
-                    }
-                }
-            }
-            finally
-            {
-                draw.IsEnable = false;
-            }
-        }
-
-        //从画图“矩形”得到矩形范围
-        private RectLatLng GetRectLatLngFromDrawing(GMapPolygon rectangle)
-        {
-            RectLatLng rect = RectLatLng.Empty;
-            if (rectangle != null && rectangle.Points.Count==4)
-            {
-                PointLatLng leftTop = rectangle.Points[0];
-                PointLatLng rightBottom = rectangle.Points[2];
-                rect = new RectLatLng(leftTop.Lat, leftTop.Lng, leftTop.Lat - rightBottom.Lat, rightBottom.Lng - leftTop.Lng);
-            }
-            return rect;
-        }
 
         #region 存储方式
 
@@ -844,8 +848,23 @@ namespace MapDownloader
             DownloadMap();
         }
 
-        private void 下载KMLToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveKmlToFile(MapRoute item, string name, string fileName)
         {
+            if (item is GMapRoute)
+            {
+                GMapRoute route = (GMapRoute)item;
+                KmlUtil.SaveLineString(route.Points, name, fileName);
+            }
+            else if (item is GMapRectangle)
+            {
+                GMapRectangle rectangle = (GMapRectangle)item;
+                KmlUtil.SavePolygon(rectangle.Points, name, fileName);
+            }
+            else if (item is GMapPolygon)
+            {
+                GMapPolygon polygon = (GMapPolygon)item;
+                KmlUtil.SavePolygon(polygon.Points, name, fileName);
+            }
 
         }
 
@@ -881,6 +900,257 @@ namespace MapDownloader
                 }
             }
         }
-        
+
+        private void buttonItemReadGpx_Click(object sender, EventArgs e)
+        {
+            using (FileDialog dialog = new OpenFileDialog())
+            {
+                dialog.InitialDirectory = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "gpx";
+                dialog.CheckPathExists = true;
+                dialog.CheckFileExists = false;
+                dialog.AddExtension = true;
+                dialog.DefaultExt = "gpx";
+                dialog.ValidateNames = true;
+                dialog.Title = "选择GPX文件";
+                dialog.Filter = "GPX文件 (*.gpx)|*.gpx|所有文件 (*.*)|*.*";
+                dialog.FilterIndex = 1;
+                dialog.RestoreDirectory = true;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        string objectXml = File.ReadAllText(dialog.FileName);
+                        gpxType type = this.mapControl.Manager.DeserializeGPX(objectXml);
+                        if (type != null)
+                        {
+                            if ((type.trk != null) && (type.trk.Length > 0))
+                            {
+                                List<PointLatLng> points = new List<PointLatLng>();
+                                foreach (trkType trk in type.trk)
+                                {
+                                    foreach (trksegType seg in trk.trkseg)
+                                    {
+                                        foreach (wptType p in seg.trkpt)
+                                        {
+                                            points.Add(new PointLatLng((double)p.lat, (double)p.lon));
+                                        }
+                                    }
+                                    string name = string.IsNullOrEmpty(trk.name) ? string.Empty : trk.name;
+                                    GMapRoute item = new GMapRoute(points, name)
+                                    {
+                                        Stroke = new Pen(Color.FromArgb(0x90, Color.Red))
+                                    };
+                                    item.Stroke.Width = 5f;
+                                    item.Stroke.DashStyle = DashStyle.DashDot;
+                                    this.polygonsOverlay.Routes.Add(item);
+                                }
+                            }
+                            if ((type.rte != null) && (type.rte.Length > 0))
+                            {
+                                List<PointLatLng> points = new List<PointLatLng>();
+                                foreach (rteType rte in type.rte)
+                                {
+                                    foreach (wptType p in rte.rtept)
+                                    {
+                                        points.Add(new PointLatLng((double)p.lat, (double)p.lon));
+                                    }
+                                    string str3 = string.IsNullOrEmpty(rte.name) ? string.Empty : rte.name;
+                                    GMapRoute route2 = new GMapRoute(points, str3)
+                                    {
+                                        Stroke = new Pen(Color.FromArgb(0x90, Color.Red))
+                                    };
+                                    route2.Stroke.Width = 5f;
+                                    route2.Stroke.DashStyle = DashStyle.DashDot;
+                                    this.polygonsOverlay.Routes.Add(route2);
+                                }
+                            }
+                            if (type.wpt != null && type.wpt.Length > 0)
+                            {
+                                foreach (wptType p in type.wpt)
+                                {
+                                    PointLatLng point = new PointLatLng((double)p.lat, (double)p.lon);
+                                    GMarkerGoogle marker = new GMarkerGoogle(point, GMarkerGoogleType.blue_dot);
+                                    this.polygonsOverlay.Markers.Add(marker);
+                                }
+                            }
+                            this.mapControl.ZoomAndCenterRoutes(null);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        CommonTools.PromptingMessage.ErrorMessage(this, "读取GPX文件错误");
+                    }
+                }
+            }
+        }
+
+        #region KML操作
+
+        private void 下载KMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentDragableRoute != null)
+            {
+                string name = "KmlFile.kml";
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    FileName = name,
+                    Title = "选择Kml文件位置",
+                    Filter = "Kml文件|*.kml"
+                };
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    SaveKmlToFile(currentDragableRoute, name, dialog.FileName);
+                }
+            }
+        }
+
+        private void DrawPlaceMark(KmlPlaceMark placeMark, bool centerToMark = true,
+            bool showToolTip = true, GMarkerGoogleType markerType = GMarkerGoogleType.blue_pushpin, bool isTempMark = false)
+        {
+            if (((placeMark != null) && (placeMark.Geometry != null)) && (placeMark.Geometry.Points.Count != 0))
+            {
+                switch (placeMark.Geometry.GeoType)
+                {
+                    case GeometryType.Point:
+                        {
+                            GMarkerGoogle item = new GMarkerGoogle(placeMark.Geometry.ToPointLatLngs()[0], markerType);
+                            this.polygonsOverlay.Markers.Add(item);
+                            if (showToolTip)
+                            {
+                                if (!isTempMark)
+                                {
+                                    item.ToolTipText = placeMark.Name;
+                                    item.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                                }
+                                else
+                                {
+                                    item.ToolTipText = placeMark.Description;
+                                }
+                            }
+                            if (centerToMark)
+                            {
+                                this.mapControl.ZoomAndCenterMarkers(this.polygonsOverlay.Id);
+                            }
+                            return;
+                        }
+                    case GeometryType.Polyline:
+                        {
+                            GMapRoute route = new GMapRoute(placeMark.Geometry.ToPointLatLngs(), "_kmlPolyline")
+                            {
+                                IsHitTestVisible = true
+                            };
+                            if (showToolTip)
+                            {
+                                int num2 = placeMark.Geometry.Points.Count / 2;
+                                Point2D pointd2 = placeMark.Geometry.Points[num2];
+                                GMapMarkerEllipse ellipse2 = new GMapMarkerEllipse(pointd2.ToPointLatLngs()[0])
+                                {
+                                    ToolTipText = string.Format("名称:{0}\r\n类型:{1}\r\n描述:{2}", placeMark.Name, "多边形", placeMark.Description),
+                                    ToolTipMode = MarkerTooltipMode.OnMouseOver
+                                };
+                                //route.ToolTipMarker = ellipse2;
+                                //route.ToolTipPosition = MapRouteToolTipPosition.Custom;
+                            }
+                            this.polygonsOverlay.Routes.Add(route);
+                            if (centerToMark)
+                            {
+                                this.mapControl.ZoomAndCenterRoute(route);
+                            }
+                            return;
+                        }
+                    case GeometryType.Polygon:
+                        {
+                            GMapPolygon polygon = new GMapPolygon(placeMark.Geometry.ToPointLatLngs(), "_kmlPolygon")
+                            {
+                                Stroke = new Pen(Color.FromArgb(0xff, Color.Blue))
+                            };
+                            polygon.Stroke.Width = 2f;
+                            polygon.Stroke.DashStyle = DashStyle.Dash;
+                            polygon.Fill = new SolidBrush(Color.FromArgb(20, Color.Blue));
+                            polygon.IsHitTestVisible = true;
+                            //polygon.EnableRightClick = true;
+                            if (showToolTip)
+                            {
+                                GMapMarkerEllipse ellipse = new GMapMarkerEllipse(placeMark.Geometry.Center.ToPointLatLngs()[0])
+                                {
+                                    ToolTipText = string.Format("名称:{0}\r\n类型:{1}\r\n描述:{2}", placeMark.Name, "多边形", placeMark.Description),
+                                    ToolTipMode = MarkerTooltipMode.OnMouseOver
+                                };
+                                //polygon.ToolTipMarker = ellipse;
+                                //polygon.ToolTipPosition = MapRouteToolTipPosition.Custom;
+                            }
+                            this.polygonsOverlay.Polygons.Add(polygon);
+                            if (centerToMark)
+                            {
+                                this.mapControl.ZoomAndCenterRoute(polygon);
+                                return;
+                            }
+                            return;
+                        }
+                }
+            }
+        }
+
+        private void InitKMLPlaceMarks(List<KmlPlaceMark> placeMarks)
+        {
+            Polygon polygon = new Polygon();
+            int num = 0;
+            foreach (KmlPlaceMark mark in placeMarks)
+            {
+                num++;
+                string str = "多边形";
+                if (mark.Geometry.GeoType == GeometryType.Point)
+                {
+                    str = "点";
+                }
+                if (mark.Geometry.GeoType == GeometryType.Polyline)
+                {
+                    str = "折线";
+                }
+                //if (string.IsNullOrEmpty(mark.Name))
+                //{
+                //    this.cbx_SelectKML.Items.Add(string.Format("{0}:{1}", str, num));
+                //}
+                //else
+                //{
+                //    this.cbx_SelectKML.Items.Add(string.Format("{0}", mark.Name));
+                //}
+                DrawPlaceMark(mark, false, true, GMarkerGoogleType.blue_pushpin, false);
+                polygon.Points.AddRange(mark.Geometry.Points);
+            }
+            BoundingBox envelope = polygon.Envelope;
+            this.mapControl.SetZoomToFitRect(RectLatLng.FromLTRB(envelope.Left, envelope.Top, envelope.Right, envelope.Bottom));
+            this.mapControl.Position = new PointLatLng(envelope.Center.Y, envelope.Center.X);
+        }
+
+        private void buttonItemReadKML_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (FileDialog dialog = new OpenFileDialog())
+                {
+                    dialog.CheckPathExists = true;
+                    dialog.CheckFileExists = false;
+                    dialog.AddExtension = true;
+                    dialog.ValidateNames = true;
+                    dialog.Title = "选择KML文件";
+                    dialog.FilterIndex = 1;
+                    dialog.RestoreDirectory = true;
+                    dialog.Filter = "KML文件 (*.kml)|*.kml|所有文件 (*.*)|*.*";
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        this.polygonsOverlay.Clear();
+                        InitKMLPlaceMarks(KmlUtil.GetPlaceMarksFromKmlFile(dialog.FileName));
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                CommonTools.PromptingMessage.ErrorMessage(this, "下载KML文件时出现异常");
+            }
+        }
+
+        #endregion
+
     }
 }

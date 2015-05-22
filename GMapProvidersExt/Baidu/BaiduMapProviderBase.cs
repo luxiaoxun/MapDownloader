@@ -53,5 +53,63 @@ namespace GMapProvidersExt.Baidu
             }
         }
 
+        public override void OnInitialized()
+        {
+            if (!init)
+            {
+                string url = "http://map.baidu.com";
+                try
+                {
+                    string contentUsingHttp = Singleton<Cache>.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(24.0));
+                    if (string.IsNullOrEmpty(contentUsingHttp))
+                    {
+                        contentUsingHttp = base.GetContentUsingHttp(url);
+                        if (!string.IsNullOrEmpty(contentUsingHttp))
+                        {
+                            Singleton<Cache>.Instance.SaveContent(url, CacheType.UrlCache, contentUsingHttp);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(contentUsingHttp))
+                    {
+                        Regex regex = new Regex("{\"version\":\"(\\d*)\",\"updateDate\":\".{6,8}\"},\"satellite\":", RegexOptions.IgnoreCase);
+                        Match match = regex.Match(contentUsingHttp);
+                        if (match.Success)
+                        {
+                            GroupCollection groups3 = match.Groups;
+                            if (groups3.Count > 0)
+                            {
+                                string str4 = groups3[1].Value;
+                                BaiduMapProvider.Instance.Version = str4;
+                            }
+                        }
+                        regex = new Regex("{\"version\":\"(\\d*)\",\"updateDate\":\".{6,8}\"},\"normalTraffic\":", RegexOptions.IgnoreCase);
+                        match = regex.Match(contentUsingHttp);
+                        if (match.Success)
+                        {
+                            GroupCollection groups2 = match.Groups;
+                            if (groups2.Count > 0)
+                            {
+                                string str5 = groups2[1].Value;
+                                BaiduSatelliteMapProvider.Instance.Version = str5;
+                            }
+                        }
+                        match = new Regex("{\"version\":\"(\\d*)\",\"updateDate\":\".{6,8}\"},\"dem\":", RegexOptions.IgnoreCase).Match(contentUsingHttp);
+                        if (match.Success)
+                        {
+                            GroupCollection groups = match.Groups;
+                            if (groups.Count > 0)
+                            {
+                                string str3 = groups[1].Value;
+                                BaiduHybridMapProvider.Instance.Version = str3;
+                            }
+                        }
+                    }
+                    init = true;
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
     }
 }

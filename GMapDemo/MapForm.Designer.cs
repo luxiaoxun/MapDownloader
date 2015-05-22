@@ -651,11 +651,12 @@
             this.xPanderPanelMarker.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelMarker.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelMarker.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelMarker.Expand = true;
             this.xPanderPanelMarker.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelMarker.Image = null;
             this.xPanderPanelMarker.Name = "xPanderPanelMarker";
             this.xPanderPanelMarker.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelMarker.Size = new System.Drawing.Size(191, 25);
+            this.xPanderPanelMarker.Size = new System.Drawing.Size(191, 363);
             this.xPanderPanelMarker.TabIndex = 1;
             this.xPanderPanelMarker.Text = "Marker";
             this.xPanderPanelMarker.ToolTipTextCloseIcon = null;
@@ -955,12 +956,11 @@
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelChinaRegion.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelChinaRegion.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
-            this.xPanderPanelChinaRegion.Expand = true;
             this.xPanderPanelChinaRegion.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelChinaRegion.Image = null;
             this.xPanderPanelChinaRegion.Name = "xPanderPanelChinaRegion";
             this.xPanderPanelChinaRegion.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(191, 363);
+            this.xPanderPanelChinaRegion.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelChinaRegion.TabIndex = 3;
             this.xPanderPanelChinaRegion.Text = "China Region";
             this.xPanderPanelChinaRegion.ToolTipTextCloseIcon = null;
@@ -972,7 +972,7 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(1, 25);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(189, 338);
+            this.treeView1.Size = new System.Drawing.Size(189, 0);
             this.treeView1.TabIndex = 0;
             // 
             // xPanderPanelMap

@@ -183,6 +183,10 @@
       <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
       <Name>GMapChinaRegion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapCommonType\GMapCommonType.csproj">
+      <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
+      <Name>GMapCommonType</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapDrawTools\GMapDrawTools.csproj">
       <Project>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</Project>
       <Name>GMapDrawTools</Name>

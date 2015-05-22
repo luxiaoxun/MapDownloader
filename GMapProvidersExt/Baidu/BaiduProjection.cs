@@ -34,15 +34,13 @@ namespace GMapProvidersExt.Baidu
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
         {
-            double X;
-            double Y;
-            LonLat2Mercator(lng, lat, out X, out Y);
             //Point2D pointd = LonLat2Mercator(new Point2D(lng, lat));
-            Y -= 20000.0;
+            PointLatLng p = LonLat2Mercator(lng, lat);
+            p.Lat -= 20000.0;
             this.GetTileMatrixMinXY(zoom);
             double levelResolution = this.GetLevelResolution(zoom);
-            long x = (long)((X - this.BaiduProjectedOrigin.X) / levelResolution);
-            return new GPoint(x, (long)((this.BaiduProjectedOrigin.Y - Y) / levelResolution));
+            long x = (long)((p.Lng - this.BaiduProjectedOrigin.Lng) / levelResolution);
+            return new GPoint(x, (long)((this.BaiduProjectedOrigin.Lat - p.Lat) / levelResolution));
         }
 
         public override PointLatLng FromPixelToLatLng(long x, long y, int zoom)
@@ -51,8 +49,8 @@ namespace GMapProvidersExt.Baidu
             double num2 = x * levelResolution;
             double num3 = y * levelResolution;
             this.GetTileMatrixMinXY(zoom);
-            double num4 = num2 + this.BaiduProjectedOrigin.X;
-            double num5 = this.BaiduProjectedOrigin.Y - num3;
+            double num4 = num2 + this.BaiduProjectedOrigin.Lng;
+            double num5 = this.BaiduProjectedOrigin.Lat - num3;
             num5 += 20000.0;
             PointLatLng lng = this.MercatorToLonLat(num4, num5);
             if (lng.Lat < MinLatitude)
@@ -86,12 +84,12 @@ namespace GMapProvidersExt.Baidu
 
         public override GSize GetTileMatrixMaxXY(int zoom)
         {
-            return TileUtil.GetTile(this.BaiduProjectedOrigin.X, this.BaiduProjectedOrigin.Y, this.ProjectedBounds.Right, this.ProjectedBounds.Bottom, this.GetLevelResolution(zoom), 0x100, 0x100);
+            return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Right, this.ProjectedBounds.Bottom, this.GetLevelResolution(zoom), 0x100, 0x100);
         }
 
         public override GSize GetTileMatrixMinXY(int zoom)
         {
-            return TileUtil.GetTile(this.BaiduProjectedOrigin.X, this.BaiduProjectedOrigin.Y, this.ProjectedBounds.Left, this.ProjectedBounds.Top, this.GetLevelResolution(zoom), 0x100, 0x100);
+            return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Left, this.ProjectedBounds.Top, this.GetLevelResolution(zoom), 0x100, 0x100);
         }
 
         //private static Point2D LonLat2Mercator(Point2D lonLat)
@@ -101,12 +99,12 @@ namespace GMapProvidersExt.Baidu
         //    return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
         //}
 
-        private static void LonLat2Mercator(double X, double Y,out double x, out double y)
+        private static PointLatLng LonLat2Mercator(double X, double Y)
         {
-            x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
+            double x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
             double num2 = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-            //return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
-            y = ((num2 * 3.1415926535897931) * 6378137.0) / 180.0;
+            double y = ((num2 * 3.1415926535897931) * 6378137.0) / 180.0;
+            return new PointLatLng(y, x);
         }
 
         private PointLatLng MercatorToLonLat(double x, double y)
@@ -114,6 +112,14 @@ namespace GMapProvidersExt.Baidu
             double lng = (x / (3.1415926535897931 * this.Axis)) * 180.0;
             y = (y / (3.1415926535897931 * this.Axis)) * 180.0;
             return new PointLatLng(57.295779513082323 * ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966), lng);
+        }
+
+        public static GSize GetTile(double originX, double originY, double x, double y, double resolution, int tileWidth = 0x100, int tileHeight = 0x100)
+        {
+            double d = (x - originX) / (tileWidth * resolution);
+            double num2 = (originY - y) / (tileHeight * resolution);
+            long width = (long)Math.Floor(d);
+            return new GSize(width, (long)Math.Floor(num2));
         }
 
         // Properties
@@ -125,11 +131,19 @@ namespace GMapProvidersExt.Baidu
             }
         }
 
-        private Point2D BaiduProjectedOrigin
+        //private Point2D BaiduProjectedOrigin
+        //{
+        //    get
+        //    {
+        //        return new Point2D(-this.GetLevelResolution(1) * 256.0, this.GetLevelResolution(1) * 256.0);
+        //    }
+        //}
+
+        private PointLatLng BaiduProjectedOrigin
         {
             get
             {
-                return new Point2D(-this.GetLevelResolution(1) * 256.0, this.GetLevelResolution(1) * 256.0);
+                return new PointLatLng(this.GetLevelResolution(1) * 256.0, -this.GetLevelResolution(1) * 256.0);
             }
         }
 
@@ -149,11 +163,19 @@ namespace GMapProvidersExt.Baidu
             }
         }
 
+        //private BoundingBox ProjectedBounds
+        //{
+        //    get
+        //    {
+        //        return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, null);
+        //    }
+        //}
+
         private BoundingBox ProjectedBounds
         {
             get
             {
-                return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, null);
+                return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis);
             }
         }
 
@@ -161,7 +183,7 @@ namespace GMapProvidersExt.Baidu
         {
             get
             {
-                return this.MercatorToLonLat(this.BaiduProjectedOrigin.X, this.BaiduProjectedOrigin.Y);
+                return this.MercatorToLonLat(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat);
             }
         }
 
@@ -173,5 +195,24 @@ namespace GMapProvidersExt.Baidu
             }
         }
 
+    }
+
+    internal class BoundingBox
+    {
+        public double Left { set; get; }
+
+        public double Bottom { set; get; }
+
+        public double Right { set; get; }
+
+        public double Top { set; get; }
+
+        public BoundingBox(double left, double bottom, double right, double top)
+        {
+            Left = left;
+            Bottom = bottom;
+            Right = right;
+            Top = top;
+        }
     }
 }
