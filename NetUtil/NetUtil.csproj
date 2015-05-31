@@ -69,6 +69,7 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="EncodeDecodeHelper.cs" />
     <Compile Include="ExcelHelper.cs" />
+    <Compile Include="HttpUtil.cs" />
     <Compile Include="NpoiExcelHelper.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="JsonHelper.cs" />

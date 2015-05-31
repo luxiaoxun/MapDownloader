@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GMapChinaRegion;
 using NetUtil;
+using GMapProvidersExt;
 
 namespace NetUtilTest
 {
@@ -32,8 +33,8 @@ namespace NetUtilTest
             //XmlHelper.XmlSerializeToFile(china, @"F:\GMap\china-province city2.xml", Encoding.UTF8);
             //JsonHelper.JsonSerializeToFile(china, @"F:\GMap\china-province city", Encoding.UTF8);
 
-            string file = "chinaBoundry";
-            Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
+            //string file = "chinaBoundry";
+            //Country china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
 
             //for (int i = 0; i < china.Province.Count; ++i )
             //{
@@ -46,7 +47,15 @@ namespace NetUtilTest
 
             //JsonHelper.JsonSerializeToFile(china,"chinaBoundryEncode",Encoding.UTF8);
 
-            JsonHelper.JsonSerializeToBinaryFile(china, "BoundryBinary");
+            //JsonHelper.JsonSerializeToBinaryFile(china, "BoundryBinary");
+
+            List<Placemark> placeList = new List<Placemark>();
+            placeList = SoSoMapProvider.Instance.GetPlacemarksByKeywords("东南大学");
+
+            foreach (var place in placeList)
+            {
+                Console.WriteLine(place);
+            }
 
             Console.WriteLine("Complete!");
             Console.ReadKey();

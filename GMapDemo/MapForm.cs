@@ -611,7 +611,7 @@ namespace GMapWinFormDemo
                     GMarkerGoogle marker = new GMarkerGoogle(point, GMarkerGoogleType.arrow);
 
                     GeoCoderStatusCode placeMarkResult = new GeoCoderStatusCode();
-                    Placemark? place = gp.GetPlacemark(point, out placeMarkResult);
+                    GMap.NET.Placemark? place = gp.GetPlacemark(point, out placeMarkResult);
                     locations.Markers.Add(marker);
                     this.comboBoxSearchResult.Items.Add(place.Value.Address);
                 }

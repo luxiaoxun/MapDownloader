@@ -61,8 +61,8 @@ namespace GMapProvidersExt
             Point2D projectedPoint = GetProjectedPoint(new PointLatLng(lat, lng));
             double x = projectedPoint.X;
             double y = projectedPoint.Y;
-            long X = (long)Math.Round((double) ((x - this.MercatorOrigin.Lng)/this.GetLevelResolution(zoom)));
-            long Y = (long) Math.Round((double) ((this.MercatorOrigin.Lat - y)/this.GetLevelResolution(zoom)));
+            long X = (long)Math.Round((double)((x - this.MercatorOrigin.Lng) / this.GetLevelResolution(zoom)));
+            long Y = (long)Math.Round((double)((this.MercatorOrigin.Lat - y) / this.GetLevelResolution(zoom)));
             return new GPoint(getCorrectPixel(X), getCorrectPixel(Y));
         }
 
@@ -95,7 +95,7 @@ namespace GMapProvidersExt
 
         private long getCorrectPixel(long p)
         {
-            if ((p%this.TileSize.Width) == 0)
+            if ((p % this.TileSize.Width) == 0)
             {
                 p--;
             }
@@ -104,17 +104,17 @@ namespace GMapProvidersExt
 
         public double GetLevelResolution(int level)
         {
-            return (((3.1415926535897931*this.Axis)*2.0)/(Math.Pow(2.0, (double) level)*this.TileSize.Width));
+            return (((3.1415926535897931 * this.Axis) * 2.0) / (Math.Pow(2.0, (double)level) * this.TileSize.Width));
         }
 
         public double GetLevelScale(int level)
         {
-            return Math.Round((double) ((this.GetLevelResolution(level)*96.0)/0.0254), 2);
+            return Math.Round((double)((this.GetLevelResolution(level) * 96.0) / 0.0254), 2);
         }
 
         public override GSize GetTileMatrixMaxXY(int zoom)
         {
-            long num = ((int) 1) << zoom;
+            long num = ((int)1) << zoom;
             return new GSize(num - 1, num - 1);
         }
 
@@ -125,11 +125,11 @@ namespace GMapProvidersExt
 
         private PointLatLng MercatorToLonLat(double x, double y)
         {
-            double lng = (x/(3.1415926535897931*this.Axis))*180.0;
-            y = (y/(3.1415926535897931*this.Axis))*180.0;
-            double lat = 57.295779513082323*
-                         ((2.0*Math.Atan(Math.Exp((y*3.1415926535897931)/180.0))) - 1.5707963267948966);
-            return new PointLatLng(lat,lng);
+            double lng = (x / (3.1415926535897931 * this.Axis)) * 180.0;
+            y = (y / (3.1415926535897931 * this.Axis)) * 180.0;
+            double lat = 57.295779513082323 *
+                         ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966);
+            return new PointLatLng(lat, lng);
         }
 
         // Properties
@@ -161,7 +161,7 @@ namespace GMapProvidersExt
         {
             get
             {
-                return new PointLatLng(3.1415926535897931*this.Axis, -3.1415926535897931*this.Axis);
+                return new PointLatLng(3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis);
             }
         }
 

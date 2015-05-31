@@ -92,14 +92,18 @@
             this.checkBoxItemShowGrid = new DevComponents.DotNetBar.CheckBoxItem();
             this.checkBoxCacheServer = new DevComponents.DotNetBar.CheckBoxItem();
             this.buttonItemReadGpx = new DevComponents.DotNetBar.ButtonItem();
+            this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.mapControl = new MapDownloader.MapControl();
             this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.允许编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.停止编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
+            this.contextMenuStripRegion = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pOI查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pOI查询ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapControl = new MapDownloader.MapControl();
+            this.toolStripStatusPOIDownload = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -113,6 +117,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
             this.panelMap.SuspendLayout();
             this.contextMenuStripSelectedArea.SuspendLayout();
+            this.contextMenuStripRegion.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -385,7 +390,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusTip,
-            this.toolStripStatusDownload});
+            this.toolStripStatusDownload,
+            this.toolStripStatusPOIDownload});
             this.statusStrip1.Location = new System.Drawing.Point(0, 583);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(919, 22);
@@ -751,6 +757,12 @@
             this.buttonItemReadGpx.Text = "读取GPX";
             this.buttonItemReadGpx.Click += new System.EventHandler(this.buttonItemReadGpx_Click);
             // 
+            // buttonItemReadKML
+            // 
+            this.buttonItemReadKML.Name = "buttonItemReadKML";
+            this.buttonItemReadKML.Text = "读取KML";
+            this.buttonItemReadKML.Click += new System.EventHandler(this.buttonItemReadKML_Click);
+            // 
             // panelMap
             // 
             this.panelMap.Controls.Add(this.mapControl);
@@ -760,41 +772,16 @@
             this.panelMap.Size = new System.Drawing.Size(658, 531);
             this.panelMap.TabIndex = 12;
             // 
-            // mapControl
-            // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(658, 531);
-            this.mapControl.TabIndex = 0;
-            this.mapControl.Zoom = 0D;
-            // 
             // contextMenuStripSelectedArea
             // 
             this.contextMenuStripSelectedArea.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.下载地图ToolStripMenuItem,
             this.下载KMLToolStripMenuItem,
             this.允许编辑ToolStripMenuItem,
-            this.停止编辑ToolStripMenuItem});
+            this.停止编辑ToolStripMenuItem,
+            this.pOI查询ToolStripMenuItem1});
             this.contextMenuStripSelectedArea.Name = "contextMenuStripSelectedArea";
-            this.contextMenuStripSelectedArea.Size = new System.Drawing.Size(127, 92);
+            this.contextMenuStripSelectedArea.Size = new System.Drawing.Size(127, 114);
             // 
             // 下载地图ToolStripMenuItem
             // 
@@ -824,11 +811,58 @@
             this.停止编辑ToolStripMenuItem.Text = "停止编辑";
             this.停止编辑ToolStripMenuItem.Click += new System.EventHandler(this.停止编辑ToolStripMenuItem_Click);
             // 
-            // buttonItemReadKML
+            // contextMenuStripRegion
             // 
-            this.buttonItemReadKML.Name = "buttonItemReadKML";
-            this.buttonItemReadKML.Text = "读取KML";
-            this.buttonItemReadKML.Click += new System.EventHandler(this.buttonItemReadKML_Click);
+            this.contextMenuStripRegion.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pOI查询ToolStripMenuItem});
+            this.contextMenuStripRegion.Name = "contextMenuStripRegion";
+            this.contextMenuStripRegion.Size = new System.Drawing.Size(122, 26);
+            // 
+            // pOI查询ToolStripMenuItem
+            // 
+            this.pOI查询ToolStripMenuItem.Name = "pOI查询ToolStripMenuItem";
+            this.pOI查询ToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.pOI查询ToolStripMenuItem.Text = "POI查询";
+            this.pOI查询ToolStripMenuItem.Click += new System.EventHandler(this.pOI查询ToolStripMenuItem_Click);
+            // 
+            // pOI查询ToolStripMenuItem1
+            // 
+            this.pOI查询ToolStripMenuItem1.Name = "pOI查询ToolStripMenuItem1";
+            this.pOI查询ToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
+            this.pOI查询ToolStripMenuItem1.Text = "POI查询";
+            this.pOI查询ToolStripMenuItem1.Click += new System.EventHandler(this.pOI查询ToolStripMenuItem1_Click);
+            // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(658, 531);
+            this.mapControl.TabIndex = 0;
+            this.mapControl.Zoom = 0D;
+            // 
+            // toolStripStatusPOIDownload
+            // 
+            this.toolStripStatusPOIDownload.Name = "toolStripStatusPOIDownload";
+            this.toolStripStatusPOIDownload.Size = new System.Drawing.Size(89, 17);
+            this.toolStripStatusPOIDownload.Text = "POI下载进度：";
             // 
             // MainForm
             // 
@@ -867,6 +901,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).EndInit();
             this.panelMap.ResumeLayout(false);
             this.contextMenuStripSelectedArea.ResumeLayout(false);
+            this.contextMenuStripRegion.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -944,6 +979,10 @@
         private System.Windows.Forms.ToolStripMenuItem 混合地图ToolStripMenuItem4;
         private DevComponents.DotNetBar.ButtonItem buttonItemReadGpx;
         private DevComponents.DotNetBar.ButtonItem buttonItemReadKML;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripRegion;
+        private System.Windows.Forms.ToolStripMenuItem pOI查询ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pOI查询ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusPOIDownload;
     }
 }
 

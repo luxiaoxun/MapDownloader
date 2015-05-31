@@ -81,9 +81,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapChinaRegion\GMapChinaRegion.csproj">
       <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
       <Name>GMapChinaRegion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
+      <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
+      <Name>GMapProvidersExt</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMapUtil\GMapUtil.csproj">
       <Project>{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}</Project>

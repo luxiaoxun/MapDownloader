@@ -23,7 +23,7 @@ using GMapPolygonLib;
 using GMapMarkerLib;
 using GMapDrawTools;
 using GMapCommonType;
-
+using GMapProvidersExt;
 
 namespace MapDownloader
 {
@@ -37,6 +37,8 @@ namespace MapDownloader
         private Draw draw;
         private GMapOverlay polygonsOverlay = new GMapOverlay("polygonsOverlay"); //放置polygon的图层
         private GMapDrawRectangle rectangle;
+
+        private GMapOverlay poiOverlay = new GMapOverlay("poiOverlay"); //放置poi的图层
 
         //中国省市边界
         private Country china;
@@ -54,7 +56,7 @@ namespace MapDownloader
         private bool isLeftButtonDown = false;
         private GMapMarkerEllipse currentDragableNode = null;
         private List<GMapMarkerEllipse> currentDragableNodes;
-        private GMapAreaPolygon currentDragableRoute;
+        private GMapAreaPolygon currentAreaPolygon;
 
         public MainForm()
         {
@@ -83,6 +85,7 @@ namespace MapDownloader
 
             mapControl.Overlays.Add(polygonsOverlay);
             mapControl.Overlays.Add(regionOverlay);
+            mapControl.Overlays.Add(poiOverlay);
 
             this.mapControl.MouseMove += new MouseEventHandler(mapControl_MouseMove);
             this.mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
@@ -153,14 +156,14 @@ namespace MapDownloader
                 if (isLeftButtonDown && currentDragableNode != null)
                 {
                     int? tag = (int?)this.currentDragableNode.Tag;
-                    if (tag.HasValue && this.currentDragableRoute != null)
+                    if (tag.HasValue && this.currentAreaPolygon != null)
                     {
                         int? nullable2 = tag;
-                        int count = this.currentDragableRoute.Points.Count;
+                        int count = this.currentAreaPolygon.Points.Count;
                         if (nullable2.GetValueOrDefault() < count)
                         {
-                            this.currentDragableRoute.Points[tag.Value] = p;
-                            this.mapControl.UpdatePolygonLocalPosition(this.currentDragableRoute);
+                            this.currentAreaPolygon.Points[tag.Value] = p;
+                            this.mapControl.UpdatePolygonLocalPosition(this.currentAreaPolygon);
                         }
                     }
                     this.currentDragableNode.Position = p;
@@ -180,10 +183,10 @@ namespace MapDownloader
             if (item is GMapAreaPolygon)
             {
                 GMapAreaPolygon areaPolygon = item as GMapAreaPolygon;
-                if (currentDragableRoute != null && currentDragableRoute == areaPolygon)
+                if (currentAreaPolygon != null && currentAreaPolygon == areaPolygon)
                 {
-                    currentDragableRoute = item as GMapAreaPolygon;
-                    currentDragableRoute.Stroke.Color = Color.Blue;
+                    currentAreaPolygon = item as GMapAreaPolygon;
+                    currentAreaPolygon.Stroke.Color = Color.Blue;
                 }
             }
 
@@ -194,10 +197,10 @@ namespace MapDownloader
             if (item is GMapAreaPolygon)
             {
                 GMapAreaPolygon areaPolygon = item as GMapAreaPolygon;
-                if (currentDragableRoute != null && currentDragableRoute == areaPolygon)
+                if (currentAreaPolygon != null && currentAreaPolygon == areaPolygon)
                 {
-                    currentDragableRoute = item as GMapAreaPolygon;
-                    currentDragableRoute.Stroke.Color = Color.Red;
+                    currentAreaPolygon = item as GMapAreaPolygon;
+                    currentAreaPolygon.Stroke.Color = Color.Red;
                 }
             }
         }
@@ -206,7 +209,7 @@ namespace MapDownloader
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (item is GMapAreaPolygon && currentDragableRoute != null)
+                if (item is GMapAreaPolygon && currentAreaPolygon != null)
                 {
                     this.contextMenuStripSelectedArea.Show(Cursor.Position);
                 }
@@ -219,6 +222,8 @@ namespace MapDownloader
         private void InitUI()
         {
             ShowDownloadTip(false);
+            this.toolStripStatusPOIDownload.Visible = false;
+
             this.serverAndCacheToolStripMenuItem.Checked = true;
             this.xPanderPanel2.ExpandClick += new EventHandler<EventArgs>(xPanderPanel2_ExpandClick);
 
@@ -454,12 +459,13 @@ namespace MapDownloader
                 {
                     DevComponents.AdvTree.Node pNode = new DevComponents.AdvTree.Node(provice.name);
                     pNode.Tag = provice;
+                    //pNode.ContextMenu = this.contextMenuStripRegion;
                     //pNode.ContextMenuStrip = this.contextMenuStripRegion;
                     foreach (var city in provice.City)
                     {
                         DevComponents.AdvTree.Node cNode = new DevComponents.AdvTree.Node(city.name);
                         cNode.Tag = city;
-                        //cNode.ContextMenuStrip = this.contextMenuStripRegion;
+                        //cNode.ContextMenu = this.contextMenuStripRegion;
                         pNode.Nodes.Add(cNode);
                     }
                     DevComponents.AdvTree.Node rootNode = this.advTreeChina.Nodes[0];
@@ -472,12 +478,12 @@ namespace MapDownloader
             }
 
             this.advTreeChina.NodeClick += new DevComponents.AdvTree.TreeNodeMouseEventHandler(advTreeChina_NodeClick);
-
         }
 
         void advTreeChina_NodeClick(object sender, DevComponents.AdvTree.TreeNodeMouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            this.advTreeChina.SelectedNode = sender as DevComponents.AdvTree.Node;
+            if (e.Button == MouseButtons.Left||e.Button==MouseButtons.Right)
             {
                 string name = e.Node.Text;
                 string rings = null;
@@ -502,7 +508,7 @@ namespace MapDownloader
                     if (polygon != null)
                     {
                         GMapAreaPolygon areaPolygon = new GMapAreaPolygon(polygon.Points, name);
-                        currentDragableRoute = areaPolygon;
+                        currentAreaPolygon = areaPolygon;
                         regionOverlay.Polygons.Clear();
                         regionOverlay.Polygons.Add(areaPolygon);
                         RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
@@ -698,6 +704,7 @@ namespace MapDownloader
 
         #region 地图切换
 
+        //Google地图
         private void 普通地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProviders.GoogleChinaMap;
@@ -713,6 +720,7 @@ namespace MapDownloader
             mapControl.MapProvider = GMapProviders.GoogleChinaHybridMap;
         }
 
+        //Baidu地图
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
@@ -728,6 +736,7 @@ namespace MapDownloader
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduHybridMapProvider.Instance;
         }
 
+        //高德地图
         private void 普通地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
@@ -743,9 +752,11 @@ namespace MapDownloader
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapHybirdProvider.Instance;
         }
 
+        //SoSo地图
         private void 普通地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
+            //this.mapControl.MapProvider = GMapProvidersExt.SoSoMapProvider.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem3_Click(object sender, EventArgs e)
@@ -758,6 +769,7 @@ namespace MapDownloader
             this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
         }
 
+        //Here地图
         private void 普通地图ToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProvidersExt.Here.NokiaMapProvider.Instance;
@@ -844,34 +856,14 @@ namespace MapDownloader
 
         private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            selectedRect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDragableRoute);
+            selectedRect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
             DownloadMap();
-        }
-
-        private void SaveKmlToFile(MapRoute item, string name, string fileName)
-        {
-            if (item is GMapRoute)
-            {
-                GMapRoute route = (GMapRoute)item;
-                KmlUtil.SaveLineString(route.Points, name, fileName);
-            }
-            else if (item is GMapRectangle)
-            {
-                GMapRectangle rectangle = (GMapRectangle)item;
-                KmlUtil.SavePolygon(rectangle.Points, name, fileName);
-            }
-            else if (item is GMapPolygon)
-            {
-                GMapPolygon polygon = (GMapPolygon)item;
-                KmlUtil.SavePolygon(polygon.Points, name, fileName);
-            }
-
         }
 
         private void 允许编辑ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.允许编辑ToolStripMenuItem.Enabled = false;
-            MapRoute route = currentDragableRoute;
+            MapRoute route = currentAreaPolygon;
             this.currentDragableNodes = new List<GMapMarkerEllipse>();
             for (int i = 0; i < route.Points.Count; i++)
             {
@@ -986,9 +978,29 @@ namespace MapDownloader
 
         #region KML操作
 
+        private void SaveKmlToFile(MapRoute item, string name, string fileName)
+        {
+            if (item is GMapRoute)
+            {
+                GMapRoute route = (GMapRoute)item;
+                KmlUtil.SaveLineString(route.Points, name, fileName);
+            }
+            else if (item is GMapRectangle)
+            {
+                GMapRectangle rectangle = (GMapRectangle)item;
+                KmlUtil.SavePolygon(rectangle.Points, name, fileName);
+            }
+            else if (item is GMapPolygon)
+            {
+                GMapPolygon polygon = (GMapPolygon)item;
+                KmlUtil.SavePolygon(polygon.Points, name, fileName);
+            }
+
+        }
+
         private void 下载KMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentDragableRoute != null)
+            if (currentAreaPolygon != null)
             {
                 string name = "KmlFile.kml";
                 SaveFileDialog dialog = new SaveFileDialog
@@ -999,7 +1011,7 @@ namespace MapDownloader
                 };
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    SaveKmlToFile(currentDragableRoute, name, dialog.FileName);
+                    SaveKmlToFile(currentAreaPolygon, name, dialog.FileName);
                 }
             }
         }
@@ -1147,6 +1159,78 @@ namespace MapDownloader
             catch (Exception exception)
             {
                 CommonTools.PromptingMessage.ErrorMessage(this, "下载KML文件时出现异常");
+            }
+        }
+
+        #endregion
+
+        #region POI查询
+
+        private void pOI查询ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.poiOverlay.Markers.Clear();
+            if (this.advTreeChina.SelectedNode != null)
+            {
+                if (currentAreaPolygon != null)
+                {
+                    BackgroundWorker poiWorker = new BackgroundWorker();
+                    poiWorker.DoWork += new DoWorkEventHandler(poiWorker_DoWork);
+                    poiWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiWorker_RunWorkerCompleted);
+                    poiWorker.RunWorkerAsync();
+                }
+            }
+        }
+
+        List<GMapProvidersExt.Placemark> poisQueryResult = new List<GMapProvidersExt.Placemark>();
+        int poiQueryCount = 0;
+
+        private void queryProgressEvent(long completedCount, long total)
+        {
+            this.toolStripStatusPOIDownload.Text = string.Format("已找到：{0}条POI，还在查询中...", completedCount);
+        }
+        
+        void poiWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (poisQueryResult != null && poisQueryResult.Count > 0)
+            {
+                foreach (GMapProvidersExt.Placemark place in poisQueryResult)
+                {
+                    GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
+                    //marker.ToolTipText = place.Address;
+                    marker.ToolTipText = place.Name;
+                    this.poiOverlay.Markers.Add(marker);
+                }
+            }
+            this.toolStripStatusPOIDownload.Text = string.Format("共找到：{0}条POI数据", poisQueryResult.Count);
+        }
+
+        void poiWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string keyWords = e.Argument as string;
+            string regionName = currentAreaPolygon.Name;
+            RectLatLng rect = selectedRect;
+            string poiQueryRectangleStr = string.Format("{0},{1},{2},{3}", new object[] { rect.LocationRightBottom.Lat, rect.LocationTopLeft.Lng, rect.LocationTopLeft.Lat, rect.LocationRightBottom.Lng });
+            SoSoMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr,
+                "", "", this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+            //SoSoMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, "", "", "", 
+            //this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+        }
+
+        private void pOI查询ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PoiKeyWordForm poiKeyWord = new PoiKeyWordForm();
+            if (poiKeyWord.ShowDialog() == DialogResult.OK)
+            {
+                string keyWord = poiKeyWord.GetKeyWord();
+                this.poiOverlay.Markers.Clear();
+                if (currentAreaPolygon != null)
+                {
+                    toolStripStatusPOIDownload.Visible = true;
+                    BackgroundWorker poiWorker = new BackgroundWorker();
+                    poiWorker.DoWork += new DoWorkEventHandler(poiWorker_DoWork);
+                    poiWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiWorker_RunWorkerCompleted);
+                    poiWorker.RunWorkerAsync(keyWord);
+                }
             }
         }
 

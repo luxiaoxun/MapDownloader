@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="osr_csharp">
       <HintPath>..\Lib\osr_csharp.dll</HintPath>
     </Reference>
@@ -38,6 +41,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,9 +64,12 @@
     <Compile Include="Here\NokiaMapProviderBase.cs" />
     <Compile Include="Here\NokiaSatelliteMapProvider.cs" />
     <Compile Include="MapUnit.cs" />
+    <Compile Include="Placemark.cs" />
     <Compile Include="ProjectionUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SogouProjection.cs" />
+    <Compile Include="SoSoMapProvider.cs" />
+    <Compile Include="SoSoMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapHybridProvider.cs" />
     <Compile Include="SoSo\SosoMapProvider.cs" />
     <Compile Include="SoSo\SosoMapProviderBase.cs" />
@@ -86,6 +93,10 @@
     <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
       <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>
       <Name>GMapPositionFix</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetUtil\NetUtil.csproj">
+      <Project>{0B25DE8C-3747-4FD5-90A6-789FE09B1816}</Project>
+      <Name>NetUtil</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
