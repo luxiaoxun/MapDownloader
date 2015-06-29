@@ -5,7 +5,7 @@ using System.Text;
 using GMap.NET;
 using GMap.NET.MapProviders;
 
-namespace GMapProvidersExt
+namespace GMapProvidersExt.Tencent
 {
     public abstract class SoSoMapProviderBase : GMapProvider
     {

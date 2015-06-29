@@ -50,7 +50,7 @@ namespace MapDownloader
 
         GMapProvider provider;
 
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, int sleep)
+        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider)
         {
             if (!worker.IsBusy)
             {
@@ -59,7 +59,6 @@ namespace MapDownloader
                 args.MaxZoom = maxZoom;
                 args.Area = area;
                 args.Provider = provider;
-                args.TileSleeper = sleep;
 
                 GMaps.Instance.UseMemoryCache = false;
                 GMaps.Instance.CacheOnIdleRead = false;
@@ -72,7 +71,7 @@ namespace MapDownloader
             }
         }
 
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, int sleep, string path)
+        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, string path)
         {
             this.tilePath = path;
 
@@ -83,7 +82,6 @@ namespace MapDownloader
                 args.MaxZoom = maxZoom;
                 args.Area = area;
                 args.Provider = provider;
-                args.TileSleeper = sleep;
 
                 GMaps.Instance.UseMemoryCache = false;
                 GMaps.Instance.CacheOnIdleRead = false;
@@ -185,7 +183,6 @@ namespace MapDownloader
                     overallProgress = Convert.ToInt32(overallCompleted * 100 / totalTiles);
                     PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(totalTiles, overallCompleted, currentZoom);
                     worker.ReportProgress(overallProgress, progressArgs);
-                    //System.Threading.Thread.Sleep(args.TileSleeper);
                 }
             }
 
@@ -319,7 +316,6 @@ namespace MapDownloader
     internal class WorkerArgs
     {
         public GMapProvider Provider;
-        public int TileSleeper;
         public RectLatLng Area;
         public int MinZoom;
         public int MaxZoom;

@@ -58,6 +58,9 @@
     <Compile Include="Baidu\BaiduMapProviderBase.cs" />
     <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
     <Compile Include="Baidu\BaiduProjection.cs" />
+    <Compile Include="Bing\BingChinaMapProvider.cs" />
+    <Compile Include="Bing\BingMapProvider.cs" />
+    <Compile Include="Bing\BingMapProviderBase.cs" />
     <Compile Include="CoordinateTransformUtil.cs" />
     <Compile Include="Here\NokiaHybridMapProvider.cs" />
     <Compile Include="Here\NokiaMapProvider.cs" />
@@ -68,13 +71,17 @@
     <Compile Include="ProjectionUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SogouProjection.cs" />
-    <Compile Include="SoSoMapProvider.cs" />
-    <Compile Include="SoSoMapProviderBase.cs" />
+    <Compile Include="Sogou\SogouMapProvider.cs" />
+    <Compile Include="Sogou\SogouMapProviderBase.cs" />
+    <Compile Include="Tencent\SoSoMapProvider.cs" />
+    <Compile Include="Tencent\SoSoMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapHybridProvider.cs" />
     <Compile Include="SoSo\SosoMapProvider.cs" />
     <Compile Include="SoSo\SosoMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapSateliteProvider.cs" />
     <Compile Include="SphericalMercatorProjection.cs" />
+    <Compile Include="Tencent\SoSoTerrainMapAnnoProvider.cs" />
+    <Compile Include="Tencent\SoSoTerrainMapProvider.cs" />
     <Compile Include="TileUtil.cs" />
   </ItemGroup>
   <ItemGroup>

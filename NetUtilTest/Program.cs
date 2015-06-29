@@ -5,6 +5,7 @@ using System.Text;
 using GMapChinaRegion;
 using NetUtil;
 using GMapProvidersExt;
+using GMapProvidersExt.Tencent;
 
 namespace NetUtilTest
 {

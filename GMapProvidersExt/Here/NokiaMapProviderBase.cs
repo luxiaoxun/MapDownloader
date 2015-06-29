@@ -18,7 +18,7 @@ namespace GMapProvidersExt.Here
         static NokiaMapProviderBase()
         {
             maxServer = 3;
-            UrlFormat = "http://{0}.maps.nlp.nokia.com.cn/maptile/2.1/maptile/a859cf9432/{1}.day/{2}/{3}/{4}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2";
+            UrlFormat = "http://{0}.maps.nlp.nokia.com.cn/maptile/2.1/maptile/5b33fc2110/{1}.day/{2}/{3}/{4}/256/png8?lg=CHI&app_id=90oGXsXHT8IRMSt5D79X&token=JY0BReev8ax1gIrHZZoqIg&xnlp=CL_JSMv2.5.3.2";
         }
 
         public NokiaMapProviderBase()

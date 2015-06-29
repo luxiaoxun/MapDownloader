@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using NetUtil;
 
-namespace GMapProvidersExt
+namespace GMapProvidersExt.Tencent
 {
     public class SoSoMapProvider : SoSoMapProviderBase, GeocodingProvider
     {
@@ -74,13 +74,13 @@ namespace GMapProvidersExt
             return RectLatLng.FromLTRB(center.Lng - (num3 / 2.0), center.Lat + (num3 / 2.0), center.Lng + (num3 / 2.0), center.Lat - (num3 / 2.0));
         }
 
-        public Placemark? GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
+        public Placemark GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
         {
             status = GeoCoderStatusCode.G_GEO_SUCCESS;
             List<Placemark> placemarksByLocation = this.GetPlacemarksByLocation(location);
             if ((placemarksByLocation != null) && (placemarksByLocation.Count > 0))
             {
-                return new Placemark?(placemarksByLocation[0]);
+                return new Placemark(placemarksByLocation[0]);
             }
             return null;
         }
@@ -164,7 +164,7 @@ namespace GMapProvidersExt
             string nearby, string key, int pageIndex, QueryProgressDelegate queryProgressEvent, ref int count)
         {
             List<Placemark> list = new List<Placemark>();
-            if (this.succeedCount <= 5000)//最多5000个
+            //if (this.succeedCount <= 5000)//最多5000个
             {
                 if (!this.RunPoiQuery)
                 {
@@ -400,5 +400,4 @@ namespace GMapProvidersExt
         }
     }
  
-
 }

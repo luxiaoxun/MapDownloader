@@ -24,6 +24,7 @@ using GMapMarkerLib;
 using GMapDrawTools;
 using GMapCommonType;
 using GMapProvidersExt;
+using GMapProvidersExt.Tencent;
 
 namespace MapDownloader
 {
@@ -637,12 +638,12 @@ namespace MapDownloader
                         if (this.radioButtonDisk.Checked)
                         {
                             //切片存在本地磁盘上
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, 100, tilePath);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, tilePath);
                         }
                         else
                         {
                             //切片存在数据库中
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, 100);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider);
                         }
                     }
                 }
@@ -720,6 +721,11 @@ namespace MapDownloader
             mapControl.MapProvider = GMapProviders.GoogleChinaHybridMap;
         }
 
+        private void 地形图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.GoogleChinaTerrainMap;
+        }
+
         //Baidu地图
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -756,7 +762,6 @@ namespace MapDownloader
         private void 普通地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
-            //this.mapControl.MapProvider = GMapProvidersExt.SoSoMapProvider.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem3_Click(object sender, EventArgs e)
@@ -767,6 +772,11 @@ namespace MapDownloader
         private void 混合地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
+        }
+
+        private void 地形地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = SoSoTerrainMapAnnoProvider.Instance;
         }
 
         //Here地图
@@ -783,6 +793,33 @@ namespace MapDownloader
         private void 混合地图ToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProvidersExt.Here.NokiaHybridMapProvider.Instance;
+        }
+
+        //Bing地图
+        private void 普通地图ToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.BingMap;
+        }
+
+        private void 卫星地图ToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.BingSatelliteMap;
+        }
+
+        private void 混合地图ToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.BingHybridMap;
+        }
+
+        private void 普通地图中文ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.Bing.BingChinaMapProvider.Instance;
+        }
+
+        //搜狗地图
+        private void 普通地图ToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.Sogou.SogouMapProvider.Instance;
         }
 
         #endregion
@@ -1196,8 +1233,7 @@ namespace MapDownloader
                 foreach (GMapProvidersExt.Placemark place in poisQueryResult)
                 {
                     GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
-                    //marker.ToolTipText = place.Address;
-                    marker.ToolTipText = place.Name;
+                    marker.ToolTipText = place.Name+"\r\n"+place.Address+"\r\n"+place.Category;
                     this.poiOverlay.Markers.Add(marker);
                 }
             }
@@ -1234,7 +1270,30 @@ namespace MapDownloader
             }
         }
 
+        private void buttonAddressSearch_Click(object sender, EventArgs e)
+        {
+            string address = this.textBoxAddress.Text.Trim();
+            if (!string.IsNullOrEmpty(address))
+            {
+                this.poiOverlay.Markers.Clear();
+                List<GMapProvidersExt.Placemark> queryResult = SoSoMapProvider.Instance.GetPlacemarksByKeywords(address);
+                if (queryResult != null && queryResult.Count > 0)
+                {
+                    foreach (GMapProvidersExt.Placemark place in queryResult)
+                    {
+                        GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
+                        marker.ToolTipText = place.Name + "\r\n" + place.Address + "\r\n" + place.Category;
+                        this.poiOverlay.Markers.Add(marker);
+                        //this.listBoxAddress.Items.Add(place.Address);
+                    }
+                    this.listBoxAddress.Items.AddRange(queryResult.ToArray());
+                    this.listBoxAddress.DisplayMember = "Address";
+                }
+            }
+        }
+
         #endregion
+
 
     }
 }
