@@ -31,8 +31,15 @@ namespace GMapProvidersExt.Tencent
 
         public override PureImage GetTileImage(GPoint pos, int zoom)
         {
-            string url = string.Format(UrlFormat, new object[] { GMapProvider.GetServerNum(pos, SoSoMapProviderBase.maxServer), "demTiles", base.GetSosoMapTileNo(pos, zoom), "jpg" });
-            return base.GetTileImageUsingHttp(url);
+            try
+            {
+                string url = string.Format(UrlFormat, new object[] { GMapProvider.GetServerNum(pos, SoSoMapProviderBase.maxServer), "demTiles", base.GetSosoMapTileNo(pos, zoom), "jpg" });
+                return base.GetTileImageUsingHttp(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         // Properties

@@ -31,8 +31,16 @@ namespace GMapProvidersExt
 
         private SphericalMercatorProjection()
         {
-            this.tileSize = new GSize(0x100, 0x100);
-            EpsgCode = 0xf11;
+            this.tileSize = new GSize(0x100L, 0x100L);
+            //EpsgCode = 0xf11;
+            EpsgCode = 3857;
+        }
+
+        private Point2D LonLat2Mercator(double x, double y)
+        {
+            double num = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
+            double num2 = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+            return new Point2D(num, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
         }
 
         public Point2D GetProjectedPoint(PointLatLng pointLatLng)
@@ -48,56 +56,49 @@ namespace GMapProvidersExt
             return pointLatLng.TransformFromWGS84(ProjectionUtil.GetWKTFromEpsgCode(this.EpsgCode));
         }
 
-        private static Point2D LonLat2Mercator(double x, double y)
-        {
-            double num = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
-            double num2 = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-            return new Point2D(num, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
-        }
-
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
         {
-            //GPoint point;
+            GPoint point = new GPoint();
             Point2D projectedPoint = GetProjectedPoint(new PointLatLng(lat, lng));
             double x = projectedPoint.X;
             double y = projectedPoint.Y;
-            long X = (long)Math.Round((double)((x - this.MercatorOrigin.Lng) / this.GetLevelResolution(zoom)));
-            long Y = (long)Math.Round((double)((this.MercatorOrigin.Lat - y) / this.GetLevelResolution(zoom)));
-            return new GPoint(getCorrectPixel(X), getCorrectPixel(Y));
+            point.X = (long)Math.Round((double)((x - this.MercatorOrigin.Lng) / this.GetLevelResolution(zoom)));
+            point.Y = (long)Math.Round((double)((this.MercatorOrigin.Lat - y) / this.GetLevelResolution(zoom)));
+            return new GPoint{ X = this.getCorrectPixel(point.X), Y = this.getCorrectPixel(point.Y) };
         }
 
         public override PointLatLng FromPixelToLatLng(long x, long y, int zoom)
         {
-            PointLatLng lng = new PointLatLng
-                              {
-                                  Lng = (-3.1415926535897931 * this.Axis) + (x * this.GetLevelResolution(zoom)),
-                                  Lat = (3.1415926535897931 * this.Axis) - (y * this.GetLevelResolution(zoom))
-                              };
-            PointLatLng lng2 = this.MercatorToLonLat(lng.Lng, lng.Lat);
-            if (lng2.Lat < MinLatitude)
+            PointLatLng p = new PointLatLng
             {
-                lng2.Lat = MinLatitude;
-            }
-            if (lng2.Lat > MaxLatitude)
+                Lng = (-3.1415926535897931 * this.Axis) + (x * this.GetLevelResolution(zoom)),
+                Lat = (3.1415926535897931 * this.Axis) - (y * this.GetLevelResolution(zoom))
+            };
+            PointLatLng point = this.MercatorToLonLat(p.Lng, p.Lat);
+            if (point.Lat < MinLatitude)
             {
-                lng2.Lat = MaxLatitude;
+                point.Lat = MinLatitude;
             }
-            if (lng2.Lng < MinLongitude)
+            if (point.Lat > MaxLatitude)
             {
-                lng2.Lng = MinLongitude;
+                point.Lat = MaxLatitude;
             }
-            if (lng2.Lng > MaxLongitude)
+            if (point.Lng < MinLongitude)
             {
-                lng2.Lng = MaxLongitude;
+                point.Lng = MinLongitude;
             }
-            return lng2;
+            if (point.Lng > MaxLongitude)
+            {
+                point.Lng = MaxLongitude;
+            }
+            return point;
         }
 
         private long getCorrectPixel(long p)
         {
-            if ((p % this.TileSize.Width) == 0)
+            if ((p % this.TileSize.Width) == 0L)
             {
-                p--;
+                p -= 1L;
             }
             return p;
         }
@@ -115,21 +116,19 @@ namespace GMapProvidersExt
         public override GSize GetTileMatrixMaxXY(int zoom)
         {
             long num = ((int)1) << zoom;
-            return new GSize(num - 1, num - 1);
+            return new GSize(num - 1L, num - 1L);
         }
 
         public override GSize GetTileMatrixMinXY(int zoom)
         {
-            return new GSize(0, 0);
+            return new GSize(0L, 0L);
         }
 
         private PointLatLng MercatorToLonLat(double x, double y)
         {
-            double lng = (x / (3.1415926535897931 * this.Axis)) * 180.0;
+            double p = (x / (3.1415926535897931 * this.Axis)) * 180.0;
             y = (y / (3.1415926535897931 * this.Axis)) * 180.0;
-            double lat = 57.295779513082323 *
-                         ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966);
-            return new PointLatLng(lat, lng);
+            return new PointLatLng(57.295779513082323 * ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966), p);
         }
 
         // Properties

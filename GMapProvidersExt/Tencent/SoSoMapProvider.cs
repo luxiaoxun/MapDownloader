@@ -342,8 +342,15 @@ namespace GMapProvidersExt.Tencent
 
         public override PureImage GetTileImage(GPoint pos, int zoom)
         {
-            string url = string.Format(SoSoMapProviderBase.UrlFormat, new object[] { GMapProvider.GetServerNum(pos, SoSoMapProviderBase.maxServer), "maptilesv2", base.GetSosoMapTileNo(pos, zoom), "png" });
-            return base.GetTileImageUsingHttp(url);
+            try
+            {
+                string url = string.Format(SoSoMapProviderBase.UrlFormat, new object[] { GMapProvider.GetServerNum(pos, SoSoMapProviderBase.maxServer), "maptilesv2", base.GetSosoMapTileNo(pos, zoom), "png" });
+                return base.GetTileImageUsingHttp(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private Placemark ParseCity(JObject cityJson)

@@ -21,9 +21,8 @@ namespace GMapProvidersExt
                 SpatialReference reference = new SpatialReference(wkt);
                 return double.Parse(reference.GetAttrValue("SPHEROID", 1));
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                //LogUtil.Error(exception.Message, exception);
                 return 0.0;
             }
         }
@@ -37,9 +36,9 @@ namespace GMapProvidersExt
             string pattern = @"urn:ogc:def:crs:epsg:.*:(\w?)";
             Match match = new Regex(pattern).Match(crs);
             int result = 0xf11;
-            if (!match.Success || !int.TryParse(match.Groups[1].Value, out result))
+            if (match.Success && int.TryParse(match.Groups[1].Value, out result))
             {
-                //LogUtil.Warn(string.Format("解析CRS（{0}）失败，系统将会当作WebMercator投影处理", crs), null);
+                return result;
             }
             return result;
         }
@@ -49,24 +48,23 @@ namespace GMapProvidersExt
             SpatialReference reference = new SpatialReference(wkt);
             if (reference.IsProjected() == 1)
             {
-                string authorityCode = reference.GetAuthorityCode("PROJCS");
-                if (authorityCode == null)
-                {
-                    return -1000;
-                }
-                return int.Parse(authorityCode);
-            }
-            if (reference.IsGeographic() == 1)
-            {
-                string s = reference.GetAuthorityCode("GEOGCS");
+                string s = reference.GetAuthorityCode("PROJCS");
                 if (s == null)
                 {
                     return -1000;
                 }
                 return int.Parse(s);
             }
-            //LogUtil.Error(string.Format("从WKT中获取EpsgCode失败。\n\tWKT：" + wkt, new object[0]), null);
-            return -1000;
+            if (reference.IsGeographic() != 1)
+            {
+                return -1000;
+            }
+            string authorityCode = reference.GetAuthorityCode("GEOGCS");
+            if (authorityCode == null)
+            {
+                return -1000;
+            }
+            return int.Parse(authorityCode);
         }
 
         public static double GetFlattening(string wkt)
@@ -76,9 +74,8 @@ namespace GMapProvidersExt
                 SpatialReference reference = new SpatialReference(wkt);
                 return (1.0 / double.Parse(reference.GetAttrValue("SPHEROID", 2)));
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                //LogUtil.Error(exception.Message, exception);
                 return 0.0;
             }
         }
@@ -96,7 +93,7 @@ namespace GMapProvidersExt
             }
             catch (Exception)
             {
-                //LogUtil.Error("通过WKT获取地图单位失败，返回默认单位：degree。\nwkt：" + wkt, null);
+                string text1 = "通过WKT获取地图单位失败，返回默认单位：degree。\nwkt：" + wkt;
                 return MapUnit.Degree;
             }
         }
@@ -131,13 +128,35 @@ namespace GMapProvidersExt
             if (sourceWkt.Contains("ESRI"))
             {
                 string msg = string.Empty;
-                //if (!new GDALTool().TryToTransESRIToWkt(sourceWkt, ref dstWkt, ref msg))
+                if (!TryToTransESRIToWkt(sourceWkt, ref dstWkt, ref msg))
                 {
-                   // LogUtil.Error("尝试将ESRI投影解析为标准WKT出错。" + msg, null);
                     dstWkt = sourceWkt.Replace("ESRI", "EPSG");
                 }
             }
             return dstWkt;
+        }
+
+        public static bool TryToTransESRIToWkt(string esriProj, ref string dstWkt, ref string msg)
+        {
+            bool flag;
+            try
+            {
+                using (SpatialReference reference = new SpatialReference(""))
+                {
+                    reference.ImportFromESRI(new string[] { esriProj });
+                    if (reference.ExportToWkt(out dstWkt) == 1)
+                    {
+                        return false;
+                    }
+                    flag = true;
+                }
+            }
+            catch (Exception exception)
+            {
+                msg = exception.Message;
+                flag = false;
+            }
+            return flag;
         }
 
         // Properties
@@ -153,6 +172,5 @@ namespace GMapProvidersExt
             }
         }
     }
-
 
 }

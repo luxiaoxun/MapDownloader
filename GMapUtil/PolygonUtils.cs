@@ -61,15 +61,15 @@ namespace GMapUtil
                 {
                     latMin = point.Lat;
                 }
-                else if (point.Lat > latMax)
+                if (point.Lat > latMax)
                 {
                     latMax = point.Lat;
                 }
-                else if (point.Lng < lngMin)
+                if (point.Lng < lngMin)
                 {
                     lngMin = point.Lng;
                 }
-                else if (point.Lng > lngMax)
+                if (point.Lng > lngMax)
                 {
                     lngMax = point.Lng;
                 }

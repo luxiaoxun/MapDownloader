@@ -82,7 +82,18 @@
     <Compile Include="SphericalMercatorProjection.cs" />
     <Compile Include="Tencent\SoSoTerrainMapAnnoProvider.cs" />
     <Compile Include="Tencent\SoSoTerrainMapProvider.cs" />
+    <Compile Include="TianDitu\TiandituMapProvider3857.cs" />
+    <Compile Include="TianDitu\TiandituMapProvider4326.cs" />
+    <Compile Include="TianDitu\TiandituMapProviderWithAnno3857.cs" />
+    <Compile Include="TianDitu\TiandituMapProviderWithAnno4326.cs" />
+    <Compile Include="TianDitu\TiandituProviderBase3857.cs" />
+    <Compile Include="TianDitu\TiandituProviderBase4326.cs" />
+    <Compile Include="TianDitu\TiandituSatelliteMapProvider3857.cs" />
+    <Compile Include="TianDitu\TiandituSatelliteMapProvider4326.cs" />
+    <Compile Include="TianDitu\TiandituSatelliteMapProviderWithAnno3857.cs" />
+    <Compile Include="TianDitu\TiandituSatelliteMapProviderWithAnno4326.cs" />
     <Compile Include="TileUtil.cs" />
+    <Compile Include="WGS84Projection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">

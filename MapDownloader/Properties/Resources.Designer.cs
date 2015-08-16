@@ -60,16 +60,16 @@ namespace MapDownloader.Properties {
             }
         }
         
-        internal static byte[] chinaBoundry {
+        internal static byte[] ChinaBoundryBinary_Province_City {
             get {
-                object obj = ResourceManager.GetObject("chinaBoundry", resourceCulture);
+                object obj = ResourceManager.GetObject("ChinaBoundryBinary_Province_City", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
-        internal static byte[] chinaBoundryBinary {
+        internal static byte[] ChinaBoundryBinaryAll {
             get {
-                object obj = ResourceManager.GetObject("chinaBoundryBinary", resourceCulture);
+                object obj = ResourceManager.GetObject("ChinaBoundryBinaryAll", resourceCulture);
                 return ((byte[])(obj));
             }
         }

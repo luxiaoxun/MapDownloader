@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="chinaBoundry" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resource\chinaBoundry;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ChinaBoundryBinaryAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ChinaBoundryBinaryAll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="chinaBoundryBinary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ChinaBoundryBinary_Province_City" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\chinaBoundryBinary;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

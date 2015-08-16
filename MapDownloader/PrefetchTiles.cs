@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
@@ -19,16 +20,16 @@ namespace MapDownloader
         public event EventHandler<PrefetchTileEventArgs> PrefetchTileComplete;
         public event EventHandler<PrefetchTileEventArgs> PrefetchTileProgress;
 
-        private int retry=3;
-        public int Retry 
+        private int retry = 3;
+        public int Retry
         {
             get { return retry; }
             set { retry = value; }
         }
         private Dictionary<int, List<GPoint>> zoomGPointDic = new Dictionary<int, List<GPoint>>();
 
-        private ulong totalTiles = 0;
-        private ulong overallCompleted = 0;
+        private ulong currentZoomTiles = 0;
+        private ulong currentZoomCompleted = 0;
         private int overallProgress = 0;
         private int currentZoom;
 
@@ -43,7 +44,7 @@ namespace MapDownloader
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
         }
 
-        public bool IsBusy 
+        public bool IsBusy
         {
             get { return worker.IsBusy; }
         }
@@ -101,8 +102,8 @@ namespace MapDownloader
                 worker.CancelAsync();
             }
 
-            totalTiles = 0;
-            overallCompleted = 0;
+            currentZoomTiles = 0;
+            currentZoomCompleted = 0;
             overallProgress = 0;
         }
 
@@ -112,78 +113,104 @@ namespace MapDownloader
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
             WorkerArgs args = (WorkerArgs)e.Argument;
-            List<GPoint> list = new List<GPoint>();
+            //List<GPoint> list = new List<GPoint>();
 
             GMapProvider provider = args.Provider;
-
-            // Get the tiles we need to download
-            //for (int z = args.MinZoom; z <= args.MaxZoom; z++)
-            //{
-            //    List<GPoint> gPoints = provider.Projection.GetAreaTileList(args.Area, z, 0);
-            //    if (!zoomGPointDic.ContainsKey(z))
-            //    {
-            //        zoomGPointDic.Add(z, gPoints);
-            //        totalTiles += (ulong)gPoints.Count;
-            //    }
-            //}
-
             for (int z = args.MinZoom; z <= args.MaxZoom; z++)
             {
                 if (worker.CancellationPending)
                     break;
 
-                if (list != null)
-                {
-                    list.Clear();
-                    list = null;
-                }
+                //if (list != null)
+                //{
+                //    list.Clear();
+                //    list = null;
+                //}
 
                 currentZoom = z;
-                overallCompleted = 0;
-                totalTiles = 0;
-                list = provider.Projection.GetAreaTileList(args.Area, z, 0);
-
-                //if (zoomGPointDic.ContainsKey(z) && zoomGPointDic[z].Count>0)
-                //{
-                //    list = zoomGPointDic[z];
-                //}
-                //else
-                //{
-                //    continue;
-                //}
-                Shuffle<GPoint>(list);
-
-                int numfiles = list.Count;
-                totalTiles = (ulong)numfiles;
-
-                // Download all tiles in the list
+                currentZoomCompleted = 0;
+                currentZoomTiles = 0;
+                RectLatLng rect = args.Area;
                 int retryCount = 0;
-                for (int i = 0; i < numfiles; i++)
-                {
-                    if (worker.CancellationPending)
-                        break;
 
-                    // Download the tile
-                    // Retry if there is a failure
-                    if (CacheTiles(z, list[i], provider))
-                        retryCount = 0;
-                    else
+                GPoint topLeft = provider.Projection.FromPixelToTileXY(provider.Projection.FromLatLngToPixel(rect.LocationTopLeft, z));
+                GPoint rightBottom = provider.Projection.FromPixelToTileXY(provider.Projection.FromLatLngToPixel(rect.LocationRightBottom, z));
+
+                long begin_x = topLeft.X;
+                long end_x = rightBottom.X;
+                long begin_y = topLeft.Y;
+                long end_y = rightBottom.Y;
+
+                currentZoomTiles = (ulong)((end_x - begin_x + 1) * (end_y - begin_y + 1));
+
+                for (long x = begin_x; x <= end_x; ++x)
+                {
+                    for (long y = begin_y; y <= end_y; ++y)
                     {
-                        if (++retryCount <= retry)
+                        if (worker.CancellationPending)
+                            break;
+                        if (x > 0 && y > 0)
                         {
-                            i--;
-                            System.Threading.Thread.Sleep(1000);
-                            continue;
+                            GPoint p = new GPoint(x, y);
+                            // Download the tile
+                            // Retry if there is a failure
+                            if (CacheTiles(z, p, provider))
+                                retryCount = 0;
+                            else
+                            {
+                                if (++retryCount <= retry)
+                                {
+                                    y--;
+                                    System.Threading.Thread.Sleep(100);
+                                    continue;
+                                }
+                                else
+                                    retryCount = 0;
+                            }
                         }
-                        else
-                            retryCount = 0;
+                        // Report progress
+                        currentZoomCompleted++;
+                        overallProgress = Convert.ToInt32(currentZoomCompleted * 100 / currentZoomTiles);
+                        PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
+                        worker.ReportProgress(overallProgress, progressArgs);
                     }
-                    // Report progress
-                    overallCompleted++;
-                    overallProgress = Convert.ToInt32(overallCompleted * 100 / totalTiles);
-                    PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(totalTiles, overallCompleted, currentZoom);
-                    worker.ReportProgress(overallProgress, progressArgs);
                 }
+
+                //list = provider.Projection.GetAreaTileList(args.Area, z, 0);
+
+                ////Shuffle<GPoint>(list);
+
+                //int numfiles = list.Count;
+                //currentZoomTiles = (ulong)numfiles;
+
+                //// Download all tiles in the list
+
+                //for (int i = 0; i < numfiles; i++)
+                //{
+                //    if (worker.CancellationPending)
+                //        break;
+
+                //    // Download the tile
+                //    // Retry if there is a failure
+                //    if (CacheTiles(z, list[i], provider))
+                //        retryCount = 0;
+                //    else
+                //    {
+                //        if (++retryCount <= retry)
+                //        {
+                //            i--;
+                //            System.Threading.Thread.Sleep(100);
+                //            continue;
+                //        }
+                //        else
+                //            retryCount = 0;
+                //    }
+                //    // Report progress
+                //    currentZoomCompleted++;
+                //    overallProgress = Convert.ToInt32(currentZoomCompleted * 100 / currentZoomTiles);
+                //    PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
+                //    worker.ReportProgress(overallProgress, progressArgs);
+                //}
             }
 
             if (worker.CancellationPending)
@@ -236,7 +263,7 @@ namespace MapDownloader
             FileStream fs = new FileStream(dir + "C" + col + ".png", FileMode.Create, FileAccess.Write);
             BinaryWriter sw = new BinaryWriter(fs);
             //读出图片字节数组至byte[]
-            byte[] imageByte = img.Data.ToArray();
+            byte[] imageByte = img.Data.ToArray();
             sw.Write(imageByte);
             sw.Close();
             fs.Close();
@@ -251,14 +278,13 @@ namespace MapDownloader
 
                 //img = GMaps.Instance.GetImageFrom(pr, p, zoom, out ex);
                 img = pr.GetTileImage(p, zoom);
-
                 if (img != null)
                 {
                     GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, p, zoom);
                     // if the tile path is not null, write the tile to disk
                     if (tilePath != null)
                     {
-                        WriteTileToDisk(img,zoom,p);
+                        WriteTileToDisk(img, zoom, p);
                     }
                     img.Dispose();
                     img = null;
@@ -302,7 +328,7 @@ namespace MapDownloader
             ProgressValue = value;
         }
 
-        public PrefetchTileEventArgs(ulong allNum,ulong comNum,int zoom)
+        public PrefetchTileEventArgs(ulong allNum, ulong comNum, int zoom)
         {
             TileAllNum = allNum;
             TileCompleteNum = comNum;
