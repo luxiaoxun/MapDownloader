@@ -20,9 +20,7 @@ namespace GMapProvidersExt.Tencent
         private readonly Guid id =new Guid("8e3e6b8b-59f0-4fca-b6b0-66e63acc3665");
         public static readonly SoSoMapProvider Instance;
         private readonly string KEY;
-        private object lockObj;
         private readonly string name;
-        public bool RunPoiQuery;
         private int succeedCount;
 
         // Methods
@@ -33,12 +31,10 @@ namespace GMapProvidersExt.Tencent
 
         private SoSoMapProvider()
         {
-            this.KEY = "QFOBZ-PG4R4-FKTUX-XTTGJ-P6NZV-IFBD3";
-            //this.id = new Guid("8e3e6b8b-59f0-4fca-b6b0-66e63acc3665");
+            //this.KEY = "QFOBZ-PG4R4-FKTUX-XTTGJ-P6NZV-IFBD3";
+            this.KEY = "C7PBZ-6QFWJ-EAFFB-F7WK7-THHJO-T6FI3";
             this.name = "SoSoMap";
             this.cnName = "搜搜街道地图";
-            this.lockObj = new object();
-            this.RunPoiQuery = true;
         }
 
         private string GetCitySerchKey(JObject cityJson)
@@ -74,28 +70,11 @@ namespace GMapProvidersExt.Tencent
             return RectLatLng.FromLTRB(center.Lng - (num3 / 2.0), center.Lat + (num3 / 2.0), center.Lng + (num3 / 2.0), center.Lat - (num3 / 2.0));
         }
 
-        public Placemark GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
-        {
-            status = GeoCoderStatusCode.G_GEO_SUCCESS;
-            List<Placemark> placemarksByLocation = this.GetPlacemarksByLocation(location);
-            if ((placemarksByLocation != null) && (placemarksByLocation.Count > 0))
-            {
-                return new Placemark(placemarksByLocation[0]);
-            }
-            return null;
-        }
-
-        public GeoCoderStatusCode GetPlacemarks(PointLatLng location, out List<Placemark> placemarkList)
-        {
-            placemarkList = this.GetPlacemarksByLocation(location);
-            return GeoCoderStatusCode.G_GEO_SUCCESS;
-        }
-
         public List<Placemark> GetPlacemarksByKeywords(string keywords)
         {
             List<Placemark> list = new List<Placemark>();
             string content = HttpUtil.Request(string.Format("http://api.map.qq.com/?qt=poi&wd={0}&pn=1&rn=10&c=1&output=jsonp&fr=mapapi&cb=SOSOMapLoader.search_service_0", HttpUtility.UrlEncode(keywords)), "gb2312", "get", "", "text/htm");
-            JObject obj3 = (JObject)JObject.Parse(this.GetSOSOGeocodJSON(content))["detail"];
+            JObject obj3 = (JObject)JObject.Parse(this.GetJsonContent(content))["detail"];
             if ((obj3["area"] != null) && (obj3["result"] == null))
             {
                 list.Add(this.ParseCity(obj3["city"] as JObject));
@@ -164,12 +143,8 @@ namespace GMapProvidersExt.Tencent
             string nearby, string key, int pageIndex, QueryProgressDelegate queryProgressEvent, ref int count)
         {
             List<Placemark> list = new List<Placemark>();
-            //if (this.succeedCount <= 5000)//最多5000个
+            //if (this.succeedCount <= 5000) //最多5000个
             {
-                if (!this.RunPoiQuery)
-                {
-                    return list;
-                }
                 if (string.IsNullOrEmpty(key))
                 {
                     key = this.KEY;
@@ -189,15 +164,15 @@ namespace GMapProvidersExt.Tencent
                 {
                     format = string.Format(format, new object[] { keyWordUrlEncode, nearby, pageNum, pageIndex, key, "nearby" });
                 }
-                string url = string.Format("http://apis.map.qq.com/{0}/{1}/{2}/{3}/{4}", new object[] { keyWordUrlEncode, HttpUtility.UrlEncode(region), rectangle, nearby, pageIndex });
-                string cacheResult = Singleton<Cache>.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(360.0));
+                string cacheUrl = string.Format("http://apis.map.qq.com/{0}/{1}/{2}/{3}/{4}", new object[] { keyWordUrlEncode, HttpUtility.UrlEncode(region), rectangle, nearby, pageIndex });
+                string cacheResult = Singleton<Cache>.Instance.GetContent(cacheUrl, CacheType.UrlCache, TimeSpan.FromHours(360.0));
                 if (string.IsNullOrEmpty(cacheResult))
                 {
                     cacheResult = HttpUtil.Request(format, "utf-8", "get", "", "text/htm");
                     Thread.Sleep(200);
                     if (!string.IsNullOrEmpty(cacheResult))
                     {
-                        Singleton<Cache>.Instance.SaveContent(url, CacheType.UrlCache, cacheResult);
+                        Singleton<Cache>.Instance.SaveContent(cacheUrl, CacheType.UrlCache, cacheResult);
                     }
                 }
                 if (string.IsNullOrEmpty(cacheResult))
@@ -261,26 +236,62 @@ namespace GMapProvidersExt.Tencent
             return list;
         }
 
-        private List<Placemark> GetPlacemarksByLocation(PointLatLng location)
+        private string GetJsonContent(string content)
+        {
+            int index = content.IndexOf('(');
+            string str = content.Substring(index + 1).Trim();
+            if (str.EndsWith(")"))
+            {
+                str = str.Substring(0, str.Length - 1);
+            }
+            return str;
+        }
+
+        public Placemark GetCenterNameByLocation(PointLatLng location)
+        {
+            Placemark place = new Placemark();
+            place.Address = "";
+            try
+            {
+                string content = HttpUtil.Request(string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat), "gb2312", "get", "", "text/htm");
+                JObject jsonObj = JObject.Parse(this.GetJsonContent(content))["detail"] as JObject;
+                List<Placemark> list = new List<Placemark>();
+                if (jsonObj["results"] != null)
+                {
+                    JArray array = jsonObj["results"] as JArray;
+                    if (array != null && array.Count > 0)
+                    {
+                        string address = array[0]["name"].ToString();
+                        place.Address = address;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return place;
+        }
+
+        private List<Placemark> GetPlacemarksByLocationBack(PointLatLng location)
         {
             string content = HttpUtil.Request(string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat), "gb2312", "get", "", "text/htm");
-            JObject obj3 = JObject.Parse(this.GetSOSOGeocodJSON(content))["detail"] as JObject;
+            JObject jsonObj = JObject.Parse(this.GetJsonContent(content))["detail"] as JObject;
             List<Placemark> list = new List<Placemark>();
-            if (obj3["results"] != null)
+            if (jsonObj["results"] != null)
             {
-                JArray array = obj3["results"] as JArray;
+                JArray array = jsonObj["results"] as JArray;
                 for (int i = 0; i < array.Count; i++)
                 {
                     Placemark placemark;
-                    JObject obj4 = array[i] as JObject;
-                    string address = obj4["name"].ToString();
-                    if (obj4["addr"] != null)
+                    JObject objResult = array[i] as JObject;
+                    string address = objResult["name"].ToString();
+                    if (objResult["addr"] != null)
                     {
-                        address = address + "(" + obj4["addr"].ToString() + ")";
+                        address = address + "(" + objResult["addr"].ToString() + ")";
                     }
                     placemark = new Placemark(address);
-                    placemark.Point = new PointLatLng(double.Parse(obj4["pointy"].ToString()),
-                        double.Parse(obj4["pointx"].ToString()));
+                    placemark.Point = new PointLatLng(double.Parse(objResult["pointy"].ToString()),
+                        double.Parse(objResult["pointx"].ToString()));
                     placemark.LatLonBox = this.GetLatLngBox(placemark.Point, "11");
                     
                     list.Add(placemark);
@@ -289,27 +300,82 @@ namespace GMapProvidersExt.Tencent
             return list;
         }
 
-        GMap.NET.Placemark? GeocodingProvider.GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
+        private List<Placemark> GetPlacemarksByLocation(PointLatLng location)
         {
-            throw new NotImplementedException();
+            List<Placemark> list = new List<Placemark>();
+            try
+            {
+                string content = HttpUtil.Request(string.Format("http://apis.map.qq.com/ws/geocoder/v1/?location={0}&get_poi={1}&key={2}", location.Lat+","+location.Lng,0,KEY), "utf-8", "get", "", "text/htm");
+                JObject jsonObj = JObject.Parse(content);
+                if (jsonObj != null && jsonObj["result"] != null)
+                {
+                    Placemark place = new Placemark();
+                    JObject locaton = jsonObj["result"]["location"] as JObject;
+                    if (locaton != null)
+                    {
+                        double lat = double.Parse(locaton["lat"].ToString());
+                        double lng = double.Parse(locaton["lng"].ToString());
+                        PointLatLng p = new PointLatLng(lat, lng);
+                        place.Point = p;
+                    }
+                    place.Address = jsonObj["result"]["address"].ToString();
+                    list.Add(place);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return list;
         }
 
-        PointLatLng? GeocodingProvider.GetPoint(GMap.NET.Placemark placemark, out GeoCoderStatusCode status)
+        private List<PointLatLng> GetPointsByPlacemark(Placemark placemark)
         {
-            throw new NotImplementedException();
+            List<PointLatLng> list = new List<PointLatLng>();
+            try
+            {
+                string content = HttpUtil.Request(string.Format("http://apis.map.qq.com/ws/geocoder/v1/?region={0}&address={1}&key={2}", placemark.CityName, placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                JObject jsonObj = JObject.Parse(content);
+                if (jsonObj!=null && jsonObj["result"] != null)
+                {
+                    JObject locaton = jsonObj["result"]["location"] as JObject;
+                    if (locaton != null)
+                    {
+                        double lat = double.Parse(locaton["lat"].ToString());
+                        double lng = double.Parse(locaton["lng"].ToString());
+                        PointLatLng p = new PointLatLng(lat, lng);
+                        list.Add(p);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
         }
 
-        public GeoCoderStatusCode GetPlacemarks(PointLatLng location, out List<GMap.NET.Placemark> placemarkList)
+        #region GeocodingProvider Members
+
+        public Placemark? GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
         {
-            throw new NotImplementedException();
+            List<Placemark> placemarksByLocation = this.GetPlacemarksByLocation(location);
+            if ((placemarksByLocation != null) && (placemarksByLocation.Count > 0))
+            {
+                status = GeoCoderStatusCode.G_GEO_SUCCESS;
+                return new Placemark(placemarksByLocation[0]);
+            }
+            status = GeoCoderStatusCode.Unknow;
+            return null;
         }
 
-        public GeoCoderStatusCode GetPoints(GMap.NET.Placemark placemark, out List<PointLatLng> pointList)
+        public GeoCoderStatusCode GetPlacemarks(PointLatLng location, out List<Placemark> placemarkList)
         {
-            throw new NotImplementedException();
+            placemarkList = this.GetPlacemarksByLocation(location);
+            return GeoCoderStatusCode.G_GEO_SUCCESS;
         }
 
-        public PointLatLng? GetPoint(Placemark placemark, out GeoCoderStatusCode status)
+        public GeoCoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)
         {
             throw new Exception("未实现");
         }
@@ -321,24 +387,24 @@ namespace GMapProvidersExt.Tencent
 
         public GeoCoderStatusCode GetPoints(Placemark placemark, out List<PointLatLng> pointList)
         {
-            throw new Exception("未实现");
+            pointList = this.GetPointsByPlacemark(placemark);
+            return GeoCoderStatusCode.G_GEO_SUCCESS;
         }
 
-        public GeoCoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)
+        public PointLatLng? GetPoint(Placemark placemark, out GeoCoderStatusCode status)
         {
-            throw new Exception("未实现");
-        }
-
-        private string GetSOSOGeocodJSON(string content)
-        {
-            int index = content.IndexOf('(');
-            string str = content.Substring(index + 1).Trim();
-            if (str.EndsWith(")"))
+            List<PointLatLng> points = this.GetPointsByPlacemark(placemark);
+            if (points != null && points.Count > 0)
             {
-                str = str.Substring(0, str.Length - 1);
+                status = GeoCoderStatusCode.G_GEO_SUCCESS;
+                return points[0];
             }
-            return str;
+
+            status = GeoCoderStatusCode.Unknow;
+            return null;
         }
+
+        #endregion
 
         public override PureImage GetTileImage(GPoint pos, int zoom)
         {

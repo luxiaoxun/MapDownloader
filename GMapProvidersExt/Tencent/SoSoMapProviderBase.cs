@@ -23,8 +23,8 @@ namespace GMapProvidersExt.Tencent
 
         public SoSoMapProviderBase()
         {
-            base.MaxZoom = 0x12;
-            base.MinZoom = 0;
+            base.MaxZoom = 18;
+            base.MinZoom = 1;
             base.RefererUrl = "http://map.soso.com/";
         }
 

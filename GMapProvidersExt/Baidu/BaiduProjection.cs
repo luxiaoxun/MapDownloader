@@ -10,34 +10,17 @@ namespace GMapProvidersExt.Baidu
     public class BaiduProjection : PureProjection
     {
         // Fields
-        public static readonly BaiduProjection Instance;
-        private static readonly double MaxLatitude;
-        private static readonly double MaxLongitude;
-        private static readonly double MinLatitude;
-        private static readonly double MinLongitude;
-        private readonly GSize tileSize;
-
-        // Methods
-        static BaiduProjection()
-        {
-            Instance = new BaiduProjection();
-            MinLatitude = -85.05112878;
-            MaxLatitude = 85.05112878;
-            MinLongitude = -180.0;
-            MaxLongitude = 180.0;
-        }
-
-        private BaiduProjection()
-        {
-            this.tileSize = new GSize(0x100, 0x100);
-        }
+        public static readonly BaiduProjection Instance = new BaiduProjection();
+        private static readonly double MinLatitude = -85.05112878;
+        private static readonly double MaxLatitude = 85.05112878;
+        private static readonly double MinLongitude = -180.0;
+        private static readonly double MaxLongitude = 180.0;
+        private readonly GSize tileSize = new GSize(256, 256);
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
         {
-            //Point2D pointd = LonLat2Mercator(new Point2D(lng, lat));
-            PointLatLng p = LonLat2Mercator(lng, lat);
+            PointLatLng p = LonLatToMercator(lng, lat);
             p.Lat -= 20000.0;
-            this.GetTileMatrixMinXY(zoom);
             double levelResolution = this.GetLevelResolution(zoom);
             long x = (long)((p.Lng - this.BaiduProjectedOrigin.Lng) / levelResolution);
             return new GPoint(x, (long)((this.BaiduProjectedOrigin.Lat - p.Lat) / levelResolution));
@@ -52,24 +35,24 @@ namespace GMapProvidersExt.Baidu
             double num4 = num2 + this.BaiduProjectedOrigin.Lng;
             double num5 = this.BaiduProjectedOrigin.Lat - num3;
             num5 += 20000.0;
-            PointLatLng lng = this.MercatorToLonLat(num4, num5);
-            if (lng.Lat < MinLatitude)
+            PointLatLng p = this.MercatorToLonLat(num4, num5);
+            if (p.Lat < MinLatitude)
             {
-                lng.Lat = MinLatitude;
+                p.Lat = MinLatitude;
             }
-            if (lng.Lat > MaxLatitude)
+            if (p.Lat > MaxLatitude)
             {
-                lng.Lat = MaxLatitude;
+                p.Lat = MaxLatitude;
             }
-            if (lng.Lng < MinLongitude)
+            if (p.Lng < MinLongitude)
             {
-                lng.Lng = MinLongitude;
+                p.Lng = MinLongitude;
             }
-            if (lng.Lng > MaxLongitude)
+            if (p.Lng > MaxLongitude)
             {
-                lng.Lng = MaxLongitude;
+                p.Lng = MaxLongitude;
             }
-            return lng;
+            return p;
         }
 
         public override double GetGroundResolution(int zoom, double latitude)
@@ -92,14 +75,7 @@ namespace GMapProvidersExt.Baidu
             return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Left, this.ProjectedBounds.Top, this.GetLevelResolution(zoom), 0x100, 0x100);
         }
 
-        //private static Point2D LonLat2Mercator(Point2D lonLat)
-        //{
-        //    double x = ((lonLat.X * 3.1415926535897931) * 6378137.0) / 180.0;
-        //    double num2 = Math.Log(Math.Tan(((90.0 + lonLat.Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-        //    return new Point2D(x, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
-        //}
-
-        private static PointLatLng LonLat2Mercator(double X, double Y)
+        private static PointLatLng LonLatToMercator(double X, double Y)
         {
             double x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
             double num2 = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
@@ -131,14 +107,6 @@ namespace GMapProvidersExt.Baidu
             }
         }
 
-        //private Point2D BaiduProjectedOrigin
-        //{
-        //    get
-        //    {
-        //        return new Point2D(-this.GetLevelResolution(1) * 256.0, this.GetLevelResolution(1) * 256.0);
-        //    }
-        //}
-
         private PointLatLng BaiduProjectedOrigin
         {
             get
@@ -162,14 +130,6 @@ namespace GMapProvidersExt.Baidu
                 return 0.0033528106647474627;
             }
         }
-
-        //private BoundingBox ProjectedBounds
-        //{
-        //    get
-        //    {
-        //        return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, null);
-        //    }
-        //}
 
         private BoundingBox ProjectedBounds
         {

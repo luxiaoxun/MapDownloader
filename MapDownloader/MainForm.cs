@@ -74,11 +74,14 @@ namespace MapDownloader
             mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; //缓存位置
 
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
-            mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
             mapControl.Position = new PointLatLng(32.043, 118.773);
             mapControl.MinZoom = 1;
             mapControl.MaxZoom = 18;
-            mapControl.Zoom = 6;
+            mapControl.Zoom = 9;
+            //mapControl.EmptyMapBackground = Color.Black;
+            //mapControl.FillEmptyTiles = true;
 
             mapControl.Overlays.Add(polygonsOverlay);
             mapControl.Overlays.Add(regionOverlay);
@@ -92,12 +95,42 @@ namespace MapDownloader
             this.mapControl.OnPolygonClick += new PolygonClick(mapControl_OnPolygonClick);
             this.mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
             this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
-
+            this.mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
+            this.mapControl.OnPositionChanged += new PositionChanged(mapControl_OnPositionChanged);
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
         }
 
         #region 地图控件事件
+
+        void mapControl_OnPositionChanged(PointLatLng point)
+        {
+            BackgroundWorker centerPositionWorker = new BackgroundWorker();
+            centerPositionWorker.DoWork +=new DoWorkEventHandler(centerPositionWorker_DoWork);
+            centerPositionWorker.RunWorkerCompleted +=new RunWorkerCompletedEventHandler(centerPositionWorker_RunWorkerCompleted);
+            centerPositionWorker.RunWorkerAsync(point);
+        }
+
+        void centerPositionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Placemark place = (Placemark)e.Result;
+            this.toolStripStatusCenter.Text = place.Address;
+        }
+
+        void centerPositionWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            PointLatLng p = (PointLatLng)e.Argument;
+            Placemark centerPosPlace = SoSoMapProvider.Instance.GetCenterNameByLocation(p);
+            e.Result = centerPosPlace;
+        }
+
+        void mapControl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                this.contextMenuStripLocation.Show(Cursor.Position);
+            }
+        }
 
         void mapControl_OnMarkerLeave(GMapMarker item)
         {
@@ -137,13 +170,12 @@ namespace MapDownloader
                 isLeftButtonDown = true;
             }
 
-            //Test
-            //if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            //{
-            //    PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
-            //    Guid id = Guid.NewGuid();
-            //    JsonHelper.JsonSerializeToFile(p, this.mapControl.MapProvider.Name + id.ToString() + ".txt", Encoding.UTF8);
-            //}
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
+                Guid id = Guid.NewGuid();
+                JsonHelper.JsonSerializeToFile(p, this.mapControl.MapProvider.Name + id.ToString() + ".txt", Encoding.UTF8);
+            }
         }
 
         //Mouse move 事件
@@ -639,6 +671,51 @@ namespace MapDownloader
             }
         }
 
+        private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentAreaPolygon != null)
+            {
+                DownloadMap(currentAreaPolygon);
+            }
+            else
+            {
+                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
+            }
+        }
+
+        private void 允许编辑ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.允许编辑ToolStripMenuItem.Enabled = false;
+            MapRoute route = currentAreaPolygon;
+            this.currentDragableNodes = new List<GMapMarkerEllipse>();
+            for (int i = 0; i < route.Points.Count; i++)
+            {
+                GMapMarkerEllipse item = new GMapMarkerEllipse(route.Points[i])
+                {
+                    Pen = new Pen(Color.Blue)
+                };
+                item.Pen.Width = 2f;
+                item.Pen.DashStyle = DashStyle.Solid;
+                item.Fill = new SolidBrush(Color.FromArgb(0xff, Color.AliceBlue));
+                item.Tag = i;
+                this.currentDragableNodes.Add(item);
+                this.regionOverlay.Markers.Add(item);
+            }
+        }
+
+        private void 停止编辑ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.允许编辑ToolStripMenuItem.Enabled = true;
+            if (currentDragableNodes == null) return;
+            for (int i = 0; i < currentDragableNodes.Count; ++i)
+            {
+                if (this.regionOverlay.Markers.Contains(currentDragableNodes[i]))
+                {
+                    this.regionOverlay.Markers.Remove(currentDragableNodes[i]);
+                }
+            }
+        }
+
         #endregion
 
         #region 拼接大图
@@ -678,6 +755,15 @@ namespace MapDownloader
 
         #region 地图切换
 
+        private PointLatLng GetNewMapPosition(GMapProvider from, GMapProvider to)
+        {
+            PointLatLng pos = this.mapControl.Position;
+            int zoom = (int)this.mapControl.Zoom;
+            GPoint gpoint = from.Projection.FromLatLngToPixel(pos, zoom);
+
+            return to.Projection.FromPixelToLatLng(gpoint, zoom);
+        }
+
         //Google地图
         private void 普通地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -703,6 +789,7 @@ namespace MapDownloader
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            //this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider1.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -718,7 +805,11 @@ namespace MapDownloader
         //高德地图
         private void 普通地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
+            //PointLatLng p = GetNewMapPosition(this.mapControl.MapProvider, GMapProvidersExt.AMap.AMapProvider.Instance);
+            //PointLatLng p = this.mapControl.Position;
+            //GPoint posPixel = this.mapControl.PositionPixel;
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
+            //this.mapControl.Position = this.mapControl.MapProvider.Projection.FromPixelToLatLng(posPixel, (int)this.mapControl.Zoom);
         }
 
         private void 卫星地图ToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -799,18 +890,22 @@ namespace MapDownloader
         //天地图
         private void 街道地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno3857.Instance;
-            //this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituMapProvider3857.Instance;
+            //PointLatLng p = GetNewMapPosition(this.mapControl.MapProvider, GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno3857.Instance);
+            //PointLatLng p = this.mapControl.Position;
+            //GPoint posPixel = this.mapControl.PositionPixel;
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno.Instance;
+            //this.mapControl.Position = p;
+            //this.mapControl.Position = this.mapControl.MapProvider.Projection.FromPixelToLatLng(posPixel, (int)this.mapControl.Zoom);
         }
 
         private void 卫星地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider3857.Instance;
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider.Instance;
         }
 
         private void 混合地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno3857.Instance;
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno.Instance;
         }
 
         private void 街道地图WGS84ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -939,51 +1034,6 @@ namespace MapDownloader
         }
 
         #endregion
-
-        private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (currentAreaPolygon != null)
-            {
-                DownloadMap(currentAreaPolygon);
-            }
-            else
-            {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
-            }
-        }
-
-        private void 允许编辑ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.允许编辑ToolStripMenuItem.Enabled = false;
-            MapRoute route = currentAreaPolygon;
-            this.currentDragableNodes = new List<GMapMarkerEllipse>();
-            for (int i = 0; i < route.Points.Count; i++)
-            {
-                GMapMarkerEllipse item = new GMapMarkerEllipse(route.Points[i])
-                {
-                    Pen = new Pen(Color.Blue)
-                };
-                item.Pen.Width = 2f;
-                item.Pen.DashStyle = DashStyle.Solid;
-                item.Fill = new SolidBrush(Color.FromArgb(0xff, Color.AliceBlue));
-                item.Tag = i;
-                this.currentDragableNodes.Add(item);
-                this.regionOverlay.Markers.Add(item);
-            }
-        }
-
-        private void 停止编辑ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.允许编辑ToolStripMenuItem.Enabled = true;
-            if (currentDragableNodes == null) return;
-            for (int i = 0; i < currentDragableNodes.Count; ++i)
-            {
-                if (this.regionOverlay.Markers.Contains(currentDragableNodes[i]))
-                {
-                    this.regionOverlay.Markers.Remove(currentDragableNodes[i]);
-                }
-            }
-        }
 
         #region KML GPX 操作
 
@@ -1258,7 +1308,7 @@ namespace MapDownloader
 
         #region POI查询
 
-        List<GMapProvidersExt.Placemark> poisQueryResult = new List<GMapProvidersExt.Placemark>();
+        List<Placemark> poisQueryResult = new List<Placemark>();
         int poiQueryCount = 0;
 
         private void queryProgressEvent(long completedCount, long total)
@@ -1270,7 +1320,7 @@ namespace MapDownloader
         {
             if (poisQueryResult != null && poisQueryResult.Count > 0)
             {
-                foreach (GMapProvidersExt.Placemark place in poisQueryResult)
+                foreach (Placemark place in poisQueryResult)
                 {
                     GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
                     marker.ToolTipText = place.Name+"\r\n"+place.Address+"\r\n"+place.Category;
@@ -1344,31 +1394,71 @@ namespace MapDownloader
             }
         }
 
-        //关键字查询
-        private void buttonAddressSearch_Click(object sender, EventArgs e)
+        //关键字POI查询
+        private void buttonPOISearch_Click(object sender, EventArgs e)
         {
-            string address = this.textBoxAddress.Text.Trim();
-            if (!string.IsNullOrEmpty(address))
+            string keywords = this.textBoxPOIkeyword.Text.Trim();
+            if (!string.IsNullOrEmpty(keywords))
             {
                 this.poiOverlay.Markers.Clear();
-                List<GMapProvidersExt.Placemark> queryResult = SoSoMapProvider.Instance.GetPlacemarksByKeywords(address);
+                this.listBoxAddress.Items.Clear();
+                List<Placemark> queryResult = SoSoMapProvider.Instance.GetPlacemarksByKeywords(keywords);
                 if (queryResult != null && queryResult.Count > 0)
                 {
-                    foreach (GMapProvidersExt.Placemark place in queryResult)
+                    foreach (Placemark place in queryResult)
                     {
                         GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
                         marker.ToolTipText = place.Name + "\r\n" + place.Address + "\r\n" + place.Category;
                         this.poiOverlay.Markers.Add(marker);
+                        this.listBoxAddress.Items.Add(place.Address);
                     }
-                    this.listBoxAddress.Items.AddRange(queryResult.ToArray());
-                    this.listBoxAddress.DisplayMember = "Address";
                 }
             }
         }
 
         #endregion
 
-        
+        #region 地址解析与逆解析
 
+        //地址解析
+        private void buttonAddressSearch_Click(object sender, EventArgs e)
+        {
+            string address = this.textBoxAddress.Text.Trim();
+            if (!string.IsNullOrEmpty(address))
+            {
+                this.poiOverlay.Markers.Clear();
+                Placemark placemark = new Placemark(address);
+                if (currentAreaPolygon != null)
+                {
+                    placemark.CityName = currentAreaPolygon.Name;
+                }
+                List<PointLatLng> points = new List<PointLatLng>();
+                GeoCoderStatusCode statusCode = SoSoMapProvider.Instance.GetPoints(placemark, out points);
+                if (statusCode == GeoCoderStatusCode.G_GEO_SUCCESS)
+                {
+                    foreach (PointLatLng p in points)
+                    {
+                        GMarkerGoogle marker = new GMarkerGoogle(p, GMarkerGoogleType.blue_dot);
+                        marker.ToolTipText = placemark.Address;
+                        this.poiOverlay.Markers.Add(marker);
+                        this.mapControl.Position = p;
+                        //this.listBoxAddress.Items.Add(place.Address);
+                    }
+                }
+            }
+        }
+
+        private void 搜索该点的地址ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PointLatLng p = this.mapControl.FromLocalToLatLng(Cursor.Position.X, Cursor.Position.Y);
+            GeoCoderStatusCode statusCode;
+            Placemark? place = SoSoMapProvider.Instance.GetPlacemark(p, out statusCode);
+            if (place.HasValue)
+            {
+                CommonTools.PromptingMessage.PromptMessage(this, place.Value.Address);
+            }
+        }
+
+        #endregion 
     }
 }

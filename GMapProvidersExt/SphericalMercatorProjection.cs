@@ -12,8 +12,8 @@ namespace GMapProvidersExt
         // Fields
         public static readonly SphericalMercatorProjection Instance;
         private static readonly double MaxLatitude;
-        private static readonly double MaxLongitude;
         private static readonly double MinLatitude;
+        private static readonly double MaxLongitude;
         private static readonly double MinLongitude;
         private readonly GSize tileSize;
 
@@ -31,8 +31,7 @@ namespace GMapProvidersExt
 
         private SphericalMercatorProjection()
         {
-            this.tileSize = new GSize(0x100L, 0x100L);
-            //EpsgCode = 0xf11;
+            this.tileSize = new GSize(256, 256);
             EpsgCode = 3857;
         }
 
@@ -64,7 +63,7 @@ namespace GMapProvidersExt
             double y = projectedPoint.Y;
             point.X = (long)Math.Round((double)((x - this.MercatorOrigin.Lng) / this.GetLevelResolution(zoom)));
             point.Y = (long)Math.Round((double)((this.MercatorOrigin.Lat - y) / this.GetLevelResolution(zoom)));
-            return new GPoint{ X = this.getCorrectPixel(point.X), Y = this.getCorrectPixel(point.Y) };
+            return new GPoint{ X = this.GetCorrectPixel(point.X), Y = this.GetCorrectPixel(point.Y) };
         }
 
         public override PointLatLng FromPixelToLatLng(long x, long y, int zoom)
@@ -94,7 +93,7 @@ namespace GMapProvidersExt
             return point;
         }
 
-        private long getCorrectPixel(long p)
+        private long GetCorrectPixel(long p)
         {
             if ((p % this.TileSize.Width) == 0L)
             {

@@ -61,6 +61,13 @@
             this.普通地图中文ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.搜狗ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.普通地图ToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.天地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.街道地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.卫星地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.混合地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.街道地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.卫星地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.混合地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.画图工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.矩形ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.圆形ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,9 +89,12 @@
             this.panelTool = new System.Windows.Forms.Panel();
             this.groupBoxAddress = new System.Windows.Forms.GroupBox();
             this.listBoxAddress = new System.Windows.Forms.ListBox();
-            this.textBoxAddress = new System.Windows.Forms.TextBox();
-            this.buttonAddressSearch = new DevComponents.DotNetBar.ButtonX();
+            this.textBoxPOIkeyword = new System.Windows.Forms.TextBox();
+            this.buttonPOISearch = new DevComponents.DotNetBar.ButtonX();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonAddressSearch = new DevComponents.DotNetBar.ButtonX();
+            this.textBoxAddress = new System.Windows.Forms.TextBox();
             this.gbMapImage = new System.Windows.Forms.GroupBox();
             this.buttonMapImage = new DevComponents.DotNetBar.ButtonX();
             this.textBoxImageZoom = new System.Windows.Forms.TextBox();
@@ -110,7 +120,6 @@
             this.buttonItemReadGpx = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.mapControl = new MapDownloader.MapControl();
             this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -119,19 +128,17 @@
             this.pOI查询ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripDrawPolygon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pOI查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.天地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.街道地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.卫星地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.混合地图球面墨卡托ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.街道地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.卫星地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.混合地图WGS84ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripLocation = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.搜索该点的地址ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusCenter = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mapControl = new MapDownloader.MapControl();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
             this.xPanderPanel1.SuspendLayout();
             this.panelTool.SuspendLayout();
             this.groupBoxAddress.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.gbMapImage.SuspendLayout();
             this.gbMapDownloader.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -141,6 +148,7 @@
             this.panelMap.SuspendLayout();
             this.contextMenuStripSelectedArea.SuspendLayout();
             this.contextMenuStripDrawPolygon.SuspendLayout();
+            this.contextMenuStripLocation.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -179,7 +187,7 @@
             this.混合地图ToolStripMenuItem,
             this.地形图ToolStripMenuItem});
             this.谷歌ToolStripMenuItem.Name = "谷歌ToolStripMenuItem";
-            this.谷歌ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.谷歌ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.谷歌ToolStripMenuItem.Text = "谷歌";
             // 
             // 普通地图ToolStripMenuItem
@@ -217,7 +225,7 @@
             this.卫星地图ToolStripMenuItem1,
             this.混合地图ToolStripMenuItem1});
             this.百度ToolStripMenuItem.Name = "百度ToolStripMenuItem";
-            this.百度ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.百度ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.百度ToolStripMenuItem.Text = "百度";
             // 
             // 普通地图ToolStripMenuItem1
@@ -248,7 +256,7 @@
             this.卫星地图ToolStripMenuItem2,
             this.混合地图ToolStripMenuItem2});
             this.高德ToolStripMenuItem.Name = "高德ToolStripMenuItem";
-            this.高德ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.高德ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.高德ToolStripMenuItem.Text = "高德";
             // 
             // 普通地图ToolStripMenuItem2
@@ -280,7 +288,7 @@
             this.混合地图ToolStripMenuItem3,
             this.地形地图ToolStripMenuItem});
             this.腾讯ToolStripMenuItem.Name = "腾讯ToolStripMenuItem";
-            this.腾讯ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.腾讯ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.腾讯ToolStripMenuItem.Text = "腾讯";
             // 
             // 普通地图ToolStripMenuItem3
@@ -318,7 +326,7 @@
             this.卫星地图ToolStripMenuItem4,
             this.混合地图ToolStripMenuItem4});
             this.hereToolStripMenuItem.Name = "hereToolStripMenuItem";
-            this.hereToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hereToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.hereToolStripMenuItem.Text = "Here";
             // 
             // 普通地图ToolStripMenuItem4
@@ -350,7 +358,7 @@
             this.混合地图ToolStripMenuItem5,
             this.普通地图中文ToolStripMenuItem});
             this.必应ToolStripMenuItem.Name = "必应ToolStripMenuItem";
-            this.必应ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.必应ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.必应ToolStripMenuItem.Text = "必应";
             // 
             // 普通地图ToolStripMenuItem5
@@ -386,7 +394,7 @@
             this.搜狗ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.普通地图ToolStripMenuItem6});
             this.搜狗ToolStripMenuItem.Name = "搜狗ToolStripMenuItem";
-            this.搜狗ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.搜狗ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.搜狗ToolStripMenuItem.Text = "搜狗";
             // 
             // 普通地图ToolStripMenuItem6
@@ -395,6 +403,61 @@
             this.普通地图ToolStripMenuItem6.Size = new System.Drawing.Size(124, 22);
             this.普通地图ToolStripMenuItem6.Text = "普通地图";
             this.普通地图ToolStripMenuItem6.Click += new System.EventHandler(this.普通地图ToolStripMenuItem6_Click);
+            // 
+            // 天地图ToolStripMenuItem
+            // 
+            this.天地图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.街道地图球面墨卡托ToolStripMenuItem,
+            this.卫星地图球面墨卡托ToolStripMenuItem,
+            this.混合地图球面墨卡托ToolStripMenuItem,
+            this.街道地图WGS84ToolStripMenuItem,
+            this.卫星地图WGS84ToolStripMenuItem,
+            this.混合地图WGS84ToolStripMenuItem});
+            this.天地图ToolStripMenuItem.Name = "天地图ToolStripMenuItem";
+            this.天地图ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.天地图ToolStripMenuItem.Text = "天地图";
+            // 
+            // 街道地图球面墨卡托ToolStripMenuItem
+            // 
+            this.街道地图球面墨卡托ToolStripMenuItem.Name = "街道地图球面墨卡托ToolStripMenuItem";
+            this.街道地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.街道地图球面墨卡托ToolStripMenuItem.Text = "街道地图(球面墨卡托)";
+            this.街道地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.街道地图球面墨卡托ToolStripMenuItem_Click);
+            // 
+            // 卫星地图球面墨卡托ToolStripMenuItem
+            // 
+            this.卫星地图球面墨卡托ToolStripMenuItem.Name = "卫星地图球面墨卡托ToolStripMenuItem";
+            this.卫星地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.卫星地图球面墨卡托ToolStripMenuItem.Text = "卫星地图(球面墨卡托)";
+            this.卫星地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.卫星地图球面墨卡托ToolStripMenuItem_Click);
+            // 
+            // 混合地图球面墨卡托ToolStripMenuItem
+            // 
+            this.混合地图球面墨卡托ToolStripMenuItem.Name = "混合地图球面墨卡托ToolStripMenuItem";
+            this.混合地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.混合地图球面墨卡托ToolStripMenuItem.Text = "混合地图(球面墨卡托)";
+            this.混合地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.混合地图球面墨卡托ToolStripMenuItem_Click);
+            // 
+            // 街道地图WGS84ToolStripMenuItem
+            // 
+            this.街道地图WGS84ToolStripMenuItem.Name = "街道地图WGS84ToolStripMenuItem";
+            this.街道地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.街道地图WGS84ToolStripMenuItem.Text = "街道地图(WGS84)";
+            this.街道地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.街道地图WGS84ToolStripMenuItem_Click);
+            // 
+            // 卫星地图WGS84ToolStripMenuItem
+            // 
+            this.卫星地图WGS84ToolStripMenuItem.Name = "卫星地图WGS84ToolStripMenuItem";
+            this.卫星地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.卫星地图WGS84ToolStripMenuItem.Text = "卫星地图(WGS84)";
+            this.卫星地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.卫星地图WGS84ToolStripMenuItem_Click);
+            // 
+            // 混合地图WGS84ToolStripMenuItem
+            // 
+            this.混合地图WGS84ToolStripMenuItem.Name = "混合地图WGS84ToolStripMenuItem";
+            this.混合地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.混合地图WGS84ToolStripMenuItem.Text = "混合地图(WGS84)";
+            this.混合地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.混合地图WGS84ToolStripMenuItem_Click);
             // 
             // 画图工具ToolStripMenuItem
             // 
@@ -495,7 +558,8 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusTip,
             this.toolStripStatusDownload,
-            this.toolStripStatusPOIDownload});
+            this.toolStripStatusPOIDownload,
+            this.toolStripStatusCenter});
             this.statusStrip1.Location = new System.Drawing.Point(0, 583);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(919, 22);
@@ -576,6 +640,7 @@
             // 
             this.panelTool.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panelTool.Controls.Add(this.groupBoxAddress);
+            this.panelTool.Controls.Add(this.groupBox1);
             this.panelTool.Controls.Add(this.gbMapImage);
             this.panelTool.Controls.Add(this.gbMapDownloader);
             this.panelTool.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -587,16 +652,16 @@
             // groupBoxAddress
             // 
             this.groupBoxAddress.Controls.Add(this.listBoxAddress);
-            this.groupBoxAddress.Controls.Add(this.textBoxAddress);
-            this.groupBoxAddress.Controls.Add(this.buttonAddressSearch);
+            this.groupBoxAddress.Controls.Add(this.textBoxPOIkeyword);
+            this.groupBoxAddress.Controls.Add(this.buttonPOISearch);
             this.groupBoxAddress.Controls.Add(this.label1);
             this.groupBoxAddress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxAddress.Location = new System.Drawing.Point(0, 248);
+            this.groupBoxAddress.Location = new System.Drawing.Point(0, 259);
             this.groupBoxAddress.Name = "groupBoxAddress";
-            this.groupBoxAddress.Size = new System.Drawing.Size(249, 260);
-            this.groupBoxAddress.TabIndex = 6;
+            this.groupBoxAddress.Size = new System.Drawing.Size(249, 249);
+            this.groupBoxAddress.TabIndex = 8;
             this.groupBoxAddress.TabStop = false;
-            this.groupBoxAddress.Text = "地址定位";
+            this.groupBoxAddress.Text = "POI查询";
             // 
             // listBoxAddress
             // 
@@ -607,33 +672,64 @@
             this.listBoxAddress.Size = new System.Drawing.Size(213, 184);
             this.listBoxAddress.TabIndex = 3;
             // 
-            // textBoxAddress
+            // textBoxPOIkeyword
             // 
-            this.textBoxAddress.Location = new System.Drawing.Point(45, 25);
-            this.textBoxAddress.Name = "textBoxAddress";
-            this.textBoxAddress.Size = new System.Drawing.Size(139, 21);
-            this.textBoxAddress.TabIndex = 2;
+            this.textBoxPOIkeyword.Location = new System.Drawing.Point(55, 25);
+            this.textBoxPOIkeyword.Name = "textBoxPOIkeyword";
+            this.textBoxPOIkeyword.Size = new System.Drawing.Size(129, 21);
+            this.textBoxPOIkeyword.TabIndex = 2;
+            // 
+            // buttonPOISearch
+            // 
+            this.buttonPOISearch.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.buttonPOISearch.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.buttonPOISearch.Location = new System.Drawing.Point(193, 23);
+            this.buttonPOISearch.Name = "buttonPOISearch";
+            this.buttonPOISearch.Size = new System.Drawing.Size(46, 23);
+            this.buttonPOISearch.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
+            this.buttonPOISearch.TabIndex = 1;
+            this.buttonPOISearch.Text = "查询";
+            this.buttonPOISearch.Click += new System.EventHandler(this.buttonPOISearch_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "关键字：";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonAddressSearch);
+            this.groupBox1.Controls.Add(this.textBoxAddress);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(0, 202);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(249, 57);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "地址解析";
             // 
             // buttonAddressSearch
             // 
             this.buttonAddressSearch.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonAddressSearch.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonAddressSearch.Location = new System.Drawing.Point(192, 24);
+            this.buttonAddressSearch.Location = new System.Drawing.Point(188, 20);
             this.buttonAddressSearch.Name = "buttonAddressSearch";
             this.buttonAddressSearch.Size = new System.Drawing.Size(46, 23);
             this.buttonAddressSearch.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
-            this.buttonAddressSearch.TabIndex = 1;
-            this.buttonAddressSearch.Text = "查询";
+            this.buttonAddressSearch.TabIndex = 4;
+            this.buttonAddressSearch.Text = "定位";
             this.buttonAddressSearch.Click += new System.EventHandler(this.buttonAddressSearch_Click);
             // 
-            // label1
+            // textBoxAddress
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "地址：";
+            this.textBoxAddress.Location = new System.Drawing.Point(15, 20);
+            this.textBoxAddress.Name = "textBoxAddress";
+            this.textBoxAddress.Size = new System.Drawing.Size(167, 21);
+            this.textBoxAddress.TabIndex = 3;
             // 
             // gbMapImage
             // 
@@ -641,9 +737,9 @@
             this.gbMapImage.Controls.Add(this.textBoxImageZoom);
             this.gbMapImage.Controls.Add(this.label4);
             this.gbMapImage.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbMapImage.Location = new System.Drawing.Point(0, 153);
+            this.gbMapImage.Location = new System.Drawing.Point(0, 141);
             this.gbMapImage.Name = "gbMapImage";
-            this.gbMapImage.Size = new System.Drawing.Size(249, 95);
+            this.gbMapImage.Size = new System.Drawing.Size(249, 61);
             this.gbMapImage.TabIndex = 5;
             this.gbMapImage.TabStop = false;
             this.gbMapImage.Text = "拼接大图";
@@ -652,7 +748,7 @@
             // 
             this.buttonMapImage.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonMapImage.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonMapImage.Location = new System.Drawing.Point(118, 37);
+            this.buttonMapImage.Location = new System.Drawing.Point(125, 23);
             this.buttonMapImage.Name = "buttonMapImage";
             this.buttonMapImage.Size = new System.Drawing.Size(55, 23);
             this.buttonMapImage.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
@@ -662,7 +758,7 @@
             // 
             // textBoxImageZoom
             // 
-            this.textBoxImageZoom.Location = new System.Drawing.Point(64, 38);
+            this.textBoxImageZoom.Location = new System.Drawing.Point(71, 24);
             this.textBoxImageZoom.Name = "textBoxImageZoom";
             this.textBoxImageZoom.Size = new System.Drawing.Size(35, 21);
             this.textBoxImageZoom.TabIndex = 3;
@@ -671,7 +767,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 41);
+            this.label4.Location = new System.Drawing.Point(24, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 2;
@@ -688,7 +784,7 @@
             this.gbMapDownloader.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbMapDownloader.Location = new System.Drawing.Point(0, 0);
             this.gbMapDownloader.Name = "gbMapDownloader";
-            this.gbMapDownloader.Size = new System.Drawing.Size(249, 153);
+            this.gbMapDownloader.Size = new System.Drawing.Size(249, 141);
             this.gbMapDownloader.TabIndex = 4;
             this.gbMapDownloader.TabStop = false;
             // 
@@ -709,7 +805,7 @@
             this.groupBox2.Controls.Add(this.radioButtonDisk);
             this.groupBox2.Controls.Add(this.radioButtonMySQL);
             this.groupBox2.Controls.Add(this.radioButtonSQLite);
-            this.groupBox2.Location = new System.Drawing.Point(18, 14);
+            this.groupBox2.Location = new System.Drawing.Point(17, 14);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(221, 90);
             this.groupBox2.TabIndex = 9;
@@ -934,32 +1030,6 @@
             this.panelMap.Size = new System.Drawing.Size(658, 531);
             this.panelMap.TabIndex = 12;
             // 
-            // mapControl
-            // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(658, 531);
-            this.mapControl.TabIndex = 0;
-            this.mapControl.Zoom = 0D;
-            // 
             // contextMenuStripSelectedArea
             // 
             this.contextMenuStripSelectedArea.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1011,69 +1081,59 @@
             this.contextMenuStripDrawPolygon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pOI查询ToolStripMenuItem});
             this.contextMenuStripDrawPolygon.Name = "contextMenuStripDrawPolygon";
-            this.contextMenuStripDrawPolygon.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStripDrawPolygon.Size = new System.Drawing.Size(122, 26);
             // 
             // pOI查询ToolStripMenuItem
             // 
             this.pOI查询ToolStripMenuItem.Name = "pOI查询ToolStripMenuItem";
-            this.pOI查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pOI查询ToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.pOI查询ToolStripMenuItem.Text = "POI查询";
             this.pOI查询ToolStripMenuItem.Click += new System.EventHandler(this.pOI查询ToolStripMenuItem_Click_1);
             // 
-            // 天地图ToolStripMenuItem
+            // contextMenuStripLocation
             // 
-            this.天地图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.街道地图球面墨卡托ToolStripMenuItem,
-            this.卫星地图球面墨卡托ToolStripMenuItem,
-            this.混合地图球面墨卡托ToolStripMenuItem,
-            this.街道地图WGS84ToolStripMenuItem,
-            this.卫星地图WGS84ToolStripMenuItem,
-            this.混合地图WGS84ToolStripMenuItem});
-            this.天地图ToolStripMenuItem.Name = "天地图ToolStripMenuItem";
-            this.天地图ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.天地图ToolStripMenuItem.Text = "天地图";
+            this.contextMenuStripLocation.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.搜索该点的地址ToolStripMenuItem});
+            this.contextMenuStripLocation.Name = "contextMenuStripLocation";
+            this.contextMenuStripLocation.Size = new System.Drawing.Size(161, 26);
             // 
-            // 街道地图球面墨卡托ToolStripMenuItem
+            // 搜索该点的地址ToolStripMenuItem
             // 
-            this.街道地图球面墨卡托ToolStripMenuItem.Name = "街道地图球面墨卡托ToolStripMenuItem";
-            this.街道地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.街道地图球面墨卡托ToolStripMenuItem.Text = "街道地图(球面墨卡托)";
-            this.街道地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.街道地图球面墨卡托ToolStripMenuItem_Click);
+            this.搜索该点的地址ToolStripMenuItem.Name = "搜索该点的地址ToolStripMenuItem";
+            this.搜索该点的地址ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.搜索该点的地址ToolStripMenuItem.Text = "搜索该点的地址";
+            this.搜索该点的地址ToolStripMenuItem.Click += new System.EventHandler(this.搜索该点的地址ToolStripMenuItem_Click);
             // 
-            // 卫星地图球面墨卡托ToolStripMenuItem
+            // toolStripStatusCenter
             // 
-            this.卫星地图球面墨卡托ToolStripMenuItem.Name = "卫星地图球面墨卡托ToolStripMenuItem";
-            this.卫星地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.卫星地图球面墨卡托ToolStripMenuItem.Text = "卫星地图(球面墨卡托)";
-            this.卫星地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.卫星地图球面墨卡托ToolStripMenuItem_Click);
+            this.toolStripStatusCenter.Name = "toolStripStatusCenter";
+            this.toolStripStatusCenter.Size = new System.Drawing.Size(0, 17);
             // 
-            // 混合地图球面墨卡托ToolStripMenuItem
+            // mapControl
             // 
-            this.混合地图球面墨卡托ToolStripMenuItem.Name = "混合地图球面墨卡托ToolStripMenuItem";
-            this.混合地图球面墨卡托ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.混合地图球面墨卡托ToolStripMenuItem.Text = "混合地图(球面墨卡托)";
-            this.混合地图球面墨卡托ToolStripMenuItem.Click += new System.EventHandler(this.混合地图球面墨卡托ToolStripMenuItem_Click);
-            // 
-            // 街道地图WGS84ToolStripMenuItem
-            // 
-            this.街道地图WGS84ToolStripMenuItem.Name = "街道地图WGS84ToolStripMenuItem";
-            this.街道地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.街道地图WGS84ToolStripMenuItem.Text = "街道地图(WGS84)";
-            this.街道地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.街道地图WGS84ToolStripMenuItem_Click);
-            // 
-            // 卫星地图WGS84ToolStripMenuItem
-            // 
-            this.卫星地图WGS84ToolStripMenuItem.Name = "卫星地图WGS84ToolStripMenuItem";
-            this.卫星地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.卫星地图WGS84ToolStripMenuItem.Text = "卫星地图(WGS84)";
-            this.卫星地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.卫星地图WGS84ToolStripMenuItem_Click);
-            // 
-            // 混合地图WGS84ToolStripMenuItem
-            // 
-            this.混合地图WGS84ToolStripMenuItem.Name = "混合地图WGS84ToolStripMenuItem";
-            this.混合地图WGS84ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.混合地图WGS84ToolStripMenuItem.Text = "混合地图(WGS84)";
-            this.混合地图WGS84ToolStripMenuItem.Click += new System.EventHandler(this.混合地图WGS84ToolStripMenuItem_Click);
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(658, 531);
+            this.mapControl.TabIndex = 0;
+            this.mapControl.Zoom = 0D;
             // 
             // MainForm
             // 
@@ -1103,6 +1163,8 @@
             this.panelTool.ResumeLayout(false);
             this.groupBoxAddress.ResumeLayout(false);
             this.groupBoxAddress.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.gbMapImage.ResumeLayout(false);
             this.gbMapImage.PerformLayout();
             this.gbMapDownloader.ResumeLayout(false);
@@ -1115,6 +1177,7 @@
             this.panelMap.ResumeLayout(false);
             this.contextMenuStripSelectedArea.ResumeLayout(false);
             this.contextMenuStripDrawPolygon.ResumeLayout(false);
+            this.contextMenuStripLocation.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1194,11 +1257,6 @@
         private DevComponents.DotNetBar.ButtonItem buttonItemReadKML;
         private System.Windows.Forms.ToolStripMenuItem pOI查询ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusPOIDownload;
-        private System.Windows.Forms.GroupBox groupBoxAddress;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxAddress;
-        private DevComponents.DotNetBar.ButtonX buttonAddressSearch;
-        private System.Windows.Forms.ListBox listBoxAddress;
         private System.Windows.Forms.ToolStripMenuItem 必应ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 普通地图ToolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem 卫星地图ToolStripMenuItem5;
@@ -1218,6 +1276,17 @@
         private System.Windows.Forms.ToolStripMenuItem 街道地图WGS84ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 卫星地图WGS84ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 混合地图WGS84ToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBoxAddress;
+        private DevComponents.DotNetBar.ButtonX buttonAddressSearch;
+        private System.Windows.Forms.GroupBox groupBoxAddress;
+        private System.Windows.Forms.ListBox listBoxAddress;
+        private System.Windows.Forms.TextBox textBoxPOIkeyword;
+        private DevComponents.DotNetBar.ButtonX buttonPOISearch;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripLocation;
+        private System.Windows.Forms.ToolStripMenuItem 搜索该点的地址ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusCenter;
     }
 }
 

@@ -60,7 +60,8 @@ namespace GMapProvidersExt.Baidu
             {
                 str2 = "M" + str2.Substring(1);
             }
-            return string.Format(BaiduMapProviderBase.UrlFormat, new object[] { GMapProvider.GetServerNum(pos, BaiduMapProviderBase.maxServer) + 1, str, str2, zoom });
+            int serverNum = GMapProvider.GetServerNum(pos, BaiduMapProviderBase.maxServer) + 1;
+            return string.Format(BaiduMapProviderBase.UrlFormat, new object[] { serverNum, str, str2, zoom });
         }
 
         // Properties

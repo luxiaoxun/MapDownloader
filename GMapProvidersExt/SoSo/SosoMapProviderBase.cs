@@ -12,7 +12,8 @@ namespace GMapProvidersExt.SoSo
     {
         public SosoMapProviderBase()
         {
-            MaxZoom = null;
+            MaxZoom = 18;
+            MinZoom = 1;
             RefererUrl = "http://map.soso.com";
             //Copyright = string.Format("©{0} Tencent Corporation, ©{0} NAVTEQ, ©{0} Image courtesy of NASA", DateTime.Today.Year);    
         }

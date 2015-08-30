@@ -27,8 +27,8 @@ namespace GMapProvidersExt.Baidu
 
         public BaiduMapProviderBase()
         {
-            base.MaxZoom = 0x13;
-            base.MinZoom = 1;
+            base.MaxZoom = 18;
+            base.MinZoom = 3;
             base.RefererUrl = string.Format("http://q{0}.baidu.com/", maxServer.ToString());
             base.Copyright = string.Format("\x00a9 Baidu! Inc. - Map data & Imagery \x00a9{0} NAVTEQ", DateTime.Today.Year);
         }
