@@ -170,12 +170,13 @@ namespace MapDownloader
                 isLeftButtonDown = true;
             }
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
-                Guid id = Guid.NewGuid();
-                JsonHelper.JsonSerializeToFile(p, this.mapControl.MapProvider.Name + id.ToString() + ".txt", Encoding.UTF8);
-            }
+            //Get Mouse down PointLatLng
+            //if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            //{
+            //    PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
+            //    Guid id = Guid.NewGuid();
+            //    JsonHelper.JsonSerializeToFile(p, this.mapControl.MapProvider.Name + id.ToString() + ".txt", Encoding.UTF8);
+            //}
         }
 
         //Mouse move 事件
@@ -606,10 +607,13 @@ namespace MapDownloader
 
         private void ResetToServerAndCacheMode()
         {
-            this.mapControl.Manager.Mode = AccessMode.ServerAndCache;
-            this.serverAndCacheToolStripMenuItem.Checked = true;
-            this.本地缓存ToolStripMenuItem.Checked = false;
-            this.在线服务ToolStripMenuItem.Checked = false;
+            if (this.mapControl.Manager.Mode != AccessMode.ServerAndCache)
+            {
+                this.mapControl.Manager.Mode = AccessMode.ServerAndCache;
+                this.serverAndCacheToolStripMenuItem.Checked = true;
+                this.本地缓存ToolStripMenuItem.Checked = false;
+                this.在线服务ToolStripMenuItem.Checked = false;
+            }
         }
 
         private void DownloadMap(GMapPolygon polygon)
@@ -725,6 +729,24 @@ namespace MapDownloader
             if (currentDrawPolygon != null)
             {
                 RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDrawPolygon);
+                try
+                {
+                    ResetToServerAndCacheMode();
+                    int zoom = int.Parse(this.textBoxImageZoom.Text);
+                    //int retry = this.mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 1; //是否重试
+                    TileImageConnector tileImage = new TileImageConnector();
+                    tileImage.Retry = retryNum;
+                    tileImage.ImageTileComplete += new EventHandler(tileImage_ImageTileComplete);
+                    tileImage.Start(this.mapControl.MapProvider, area, zoom);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else if (currentAreaPolygon != null)
+            {
+                RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
                 try
                 {
                     ResetToServerAndCacheMode();
@@ -923,6 +945,37 @@ namespace MapDownloader
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno4326.Instance;
         }
 
+        //ArcGIS地图
+        private void arcGIS街道地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISMapProvider.Instance;
+        }
+
+        private void arcGIS街道地图无POIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISMapProviderNoPoi.Instance;
+        }
+
+        private void arcGIS街道地图冷色版ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISColdMapProvider.Instance;
+        }
+
+        private void arcGIS街道地图灰色版ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISGrayMapProvider.Instance;
+        }
+
+        private void arcGIS街道地图暖色版ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISWarmMapProvider.Instance;
+        }
+
+        private void arcGIS卫星地图无偏移ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISSatelliteMapProvider.Instance;
+        }
+
         #endregion
 
         #region 画图工具
@@ -962,7 +1015,7 @@ namespace MapDownloader
         {
             try
             {
-                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null))
+                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null || e.Route!=null))
                 {
                     switch (e.DrawingMode)
                     {
@@ -1460,5 +1513,112 @@ namespace MapDownloader
         }
 
         #endregion 
+
+        #region 导入数据
+
+        private List<RouteMapData> GetRouteMapData(DataTable dt)
+        {
+            if (dt == null) return null;
+            List<RouteMapData> signalMapdatas = new List<RouteMapData>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                RouteMapData data = new RouteMapData();
+                double lng;
+                bool ret1 = double.TryParse(dr["Longitude"].ToString(), out lng);
+                if (ret1)
+                {
+                    if (lng > 180 || lng < -180) continue;
+                    data.Lng = lng;
+                }
+
+                double lat;
+                bool ret2 = double.TryParse(dr["Latitude"].ToString(), out lat);
+                if (ret2)
+                {
+                    if (lat > 90 || lng < -90) continue;
+                    data.Lat = lat;
+                }
+
+                if (!ret1 || !ret2) continue;
+
+                data.Lng = double.Parse(dr["Longitude"].ToString());
+                data.Lat = double.Parse(dr["Latitude"].ToString());
+                //data.Datetime = DateTime.Parse(dr["Time"].ToString());
+                data.Datetime = dr["Time"].ToString();
+
+                Dictionary<string, double> kvdata = new Dictionary<string, double>();
+
+                //跳过前3列得到后面的信号值
+                for (int i = 3; i < dt.Columns.Count; ++i)
+                {
+                    string colName = dt.Columns[i].ColumnName;
+                    if (!kvdata.ContainsKey(colName))
+                    {
+                        if (dr[colName] != null)
+                        {
+                            double d;
+                            bool ret = double.TryParse(dr[colName].ToString(), out d);
+                            if (ret)
+                            {
+                                kvdata.Add(colName, d);
+                            }
+                            else
+                            {
+                                kvdata.Add(colName, 0);
+                            }
+                        }
+                        else
+                        {
+                            kvdata.Add(colName, 0);
+                        }
+                    }
+                }
+
+                data.SignalDataDictionary = kvdata;
+                signalMapdatas.Add(data);
+            }
+
+            return signalMapdatas;
+        }
+
+        private void 导入路径ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openDlg = new OpenFileDialog();
+                openDlg.Filter = "Excel File (*.xls)|*.xls|(*.xlsx)|*.xlsx";
+                openDlg.FilterIndex = 1;
+                openDlg.RestoreDirectory = true;
+                if (openDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    DataTable dt = ExcelHelper.ExcelToDataTable(openDlg.FileName, null, true);
+                    List<RouteMapData> signalMapdatas = GetRouteMapData(dt);
+                    if (signalMapdatas != null && signalMapdatas.Count > 0)
+                    {
+                        GMapOverlay overlay = new GMapOverlay(openDlg.SafeFileName);
+                        foreach (RouteMapData signalMapdata in signalMapdatas)
+                        {
+                            double x;
+                            double y;
+                            GMapPositionFix.CoordinateTransform.ConvertWgs84ToGcj02(signalMapdata.Lng, signalMapdata.Lat, out x, out y);
+                            signalMapdata.Lng = x;
+                            signalMapdata.Lat = y;
+                            PointLatLng p = new PointLatLng(signalMapdata.Lat, signalMapdata.Lng);
+                            RouteDataMarker marker = new RouteDataMarker(p, signalMapdata);
+                            //marker.RouteDataColorList = routeDataColorList;
+                            //marker.CheckedKey = checkedKey;
+                            overlay.Markers.Add(marker);
+                        }
+                        this.mapControl.Overlays.Add(overlay);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

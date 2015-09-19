@@ -11,7 +11,7 @@ namespace GMapProvidersExt.TianDitu
     {
         // Fields
         private string cnName;
-        private Guid id = new Guid("B8A31747-2D7E-4EE3-9E71-4A314F26E6CC");
+        private Guid id = new Guid("5CCE1E7D-41EE-4AD0-B250-5CDEB0DC787B");
         public static readonly TiandituSatelliteMapProvider Instance;
         private string name;
 

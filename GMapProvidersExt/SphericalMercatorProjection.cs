@@ -35,32 +35,12 @@ namespace GMapProvidersExt
             EpsgCode = 3857;
         }
 
-        private Point2D LonLat2Mercator(double x, double y)
-        {
-            double num = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
-            double num2 = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-            return new Point2D(num, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
-        }
-
-        public Point2D GetProjectedPoint(PointLatLng pointLatLng)
-        {
-            if (this.EpsgCode == 0x10e6)
-            {
-                return new Point2D(pointLatLng.Lng, pointLatLng.Lat);
-            }
-            if (this.EpsgCode == 0xf11)
-            {
-                return LonLat2Mercator(pointLatLng.Lng, pointLatLng.Lat);
-            }
-            return pointLatLng.TransformFromWGS84(ProjectionUtil.GetWKTFromEpsgCode(this.EpsgCode));
-        }
-
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
         {
             GPoint point = new GPoint();
-            Point2D projectedPoint = GetProjectedPoint(new PointLatLng(lat, lng));
-            double x = projectedPoint.X;
-            double y = projectedPoint.Y;
+            PointLatLng projectedPoint = GetProjectedPoint(new PointLatLng(lat, lng));
+            double x = projectedPoint.Lng;
+            double y = projectedPoint.Lat;
             point.X = (long)Math.Round((double)((x - this.MercatorOrigin.Lng) / this.GetLevelResolution(zoom)));
             point.Y = (long)Math.Round((double)((this.MercatorOrigin.Lat - y) / this.GetLevelResolution(zoom)));
             return new GPoint{ X = this.GetCorrectPixel(point.X), Y = this.GetCorrectPixel(point.Y) };
@@ -121,6 +101,41 @@ namespace GMapProvidersExt
         public override GSize GetTileMatrixMinXY(int zoom)
         {
             return new GSize(0L, 0L);
+        }
+
+        public PointLatLng GetProjectedPoint(PointLatLng pointLatLng)
+        {
+            if (EpsgCode == 3857)
+            {
+                return LonLatToMercator(pointLatLng.Lng, pointLatLng.Lat);
+            }
+
+            //if (this.EpsgCode == 0x10e6)
+            //{
+            //    return new Point2D(pointLatLng.Lng, pointLatLng.Lat);
+            //}
+            //if (this.EpsgCode == 0xf11)
+            //{
+            //    return LonLat2Mercator(pointLatLng.Lng, pointLatLng.Lat);
+            //}
+            //return pointLatLng.TransformFromWGS84(ProjectionUtil.GetWKTFromEpsgCode(this.EpsgCode));
+
+            return new PointLatLng(pointLatLng.Lng, pointLatLng.Lat);
+        }
+
+        //private PointLatLng LonLat2Mercator(double x, double y)
+        //{
+        //    double num = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
+        //    double num2 = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+        //    return new PointLatLng(num, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
+        //}
+
+        private PointLatLng LonLatToMercator(double X, double Y)
+        {
+            double x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
+            double num2 = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+            double y = ((num2 * 3.1415926535897931) * 6378137.0) / 180.0;
+            return new PointLatLng(y, x);
         }
 
         private PointLatLng MercatorToLonLat(double x, double y)

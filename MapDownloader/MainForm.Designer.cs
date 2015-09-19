@@ -80,10 +80,13 @@
             this.serverAndCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.在线服务ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.本地缓存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.数据操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.导入路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusTip = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusDownload = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusPOIDownload = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusCenter = new System.Windows.Forms.ToolStripStatusLabel();
             this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
             this.xPanderPanel1 = new BSE.Windows.Forms.XPanderPanel();
             this.panelTool = new System.Windows.Forms.Panel();
@@ -120,6 +123,7 @@
             this.buttonItemReadGpx = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
+            this.mapControl = new MapDownloader.MapControl();
             this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,8 +134,13 @@
             this.pOI查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripLocation = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.搜索该点的地址ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripStatusCenter = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mapControl = new MapDownloader.MapControl();
+            this.arcGISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS街道地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS街道地图无POIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS街道地图灰色版ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS街道地图冷色版ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS街道地图暖色版ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.arcGIS卫星地图无偏移ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -157,7 +166,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.地图切换ToolStripMenuItem,
             this.画图工具ToolStripMenuItem,
-            this.地图访问ToolStripMenuItem});
+            this.地图访问ToolStripMenuItem,
+            this.数据操作ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(919, 25);
@@ -174,7 +184,8 @@
             this.hereToolStripMenuItem,
             this.必应ToolStripMenuItem,
             this.搜狗ToolStripMenuItem,
-            this.天地图ToolStripMenuItem});
+            this.天地图ToolStripMenuItem,
+            this.arcGISToolStripMenuItem});
             this.地图切换ToolStripMenuItem.Name = "地图切换ToolStripMenuItem";
             this.地图切换ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.地图切换ToolStripMenuItem.Text = "地图切换";
@@ -187,7 +198,7 @@
             this.混合地图ToolStripMenuItem,
             this.地形图ToolStripMenuItem});
             this.谷歌ToolStripMenuItem.Name = "谷歌ToolStripMenuItem";
-            this.谷歌ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.谷歌ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.谷歌ToolStripMenuItem.Text = "谷歌";
             // 
             // 普通地图ToolStripMenuItem
@@ -225,7 +236,7 @@
             this.卫星地图ToolStripMenuItem1,
             this.混合地图ToolStripMenuItem1});
             this.百度ToolStripMenuItem.Name = "百度ToolStripMenuItem";
-            this.百度ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.百度ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.百度ToolStripMenuItem.Text = "百度";
             // 
             // 普通地图ToolStripMenuItem1
@@ -256,7 +267,7 @@
             this.卫星地图ToolStripMenuItem2,
             this.混合地图ToolStripMenuItem2});
             this.高德ToolStripMenuItem.Name = "高德ToolStripMenuItem";
-            this.高德ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.高德ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.高德ToolStripMenuItem.Text = "高德";
             // 
             // 普通地图ToolStripMenuItem2
@@ -288,7 +299,7 @@
             this.混合地图ToolStripMenuItem3,
             this.地形地图ToolStripMenuItem});
             this.腾讯ToolStripMenuItem.Name = "腾讯ToolStripMenuItem";
-            this.腾讯ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.腾讯ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.腾讯ToolStripMenuItem.Text = "腾讯";
             // 
             // 普通地图ToolStripMenuItem3
@@ -326,7 +337,7 @@
             this.卫星地图ToolStripMenuItem4,
             this.混合地图ToolStripMenuItem4});
             this.hereToolStripMenuItem.Name = "hereToolStripMenuItem";
-            this.hereToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.hereToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.hereToolStripMenuItem.Text = "Here";
             // 
             // 普通地图ToolStripMenuItem4
@@ -358,7 +369,7 @@
             this.混合地图ToolStripMenuItem5,
             this.普通地图中文ToolStripMenuItem});
             this.必应ToolStripMenuItem.Name = "必应ToolStripMenuItem";
-            this.必应ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.必应ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.必应ToolStripMenuItem.Text = "必应";
             // 
             // 普通地图ToolStripMenuItem5
@@ -394,7 +405,7 @@
             this.搜狗ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.普通地图ToolStripMenuItem6});
             this.搜狗ToolStripMenuItem.Name = "搜狗ToolStripMenuItem";
-            this.搜狗ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.搜狗ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.搜狗ToolStripMenuItem.Text = "搜狗";
             // 
             // 普通地图ToolStripMenuItem6
@@ -414,7 +425,7 @@
             this.卫星地图WGS84ToolStripMenuItem,
             this.混合地图WGS84ToolStripMenuItem});
             this.天地图ToolStripMenuItem.Name = "天地图ToolStripMenuItem";
-            this.天地图ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.天地图ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.天地图ToolStripMenuItem.Text = "天地图";
             // 
             // 街道地图球面墨卡托ToolStripMenuItem
@@ -553,6 +564,21 @@
             this.本地缓存ToolStripMenuItem.Text = "本地缓存";
             this.本地缓存ToolStripMenuItem.Click += new System.EventHandler(this.本地缓存ToolStripMenuItem_Click);
             // 
+            // 数据操作ToolStripMenuItem
+            // 
+            this.数据操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.导入路径ToolStripMenuItem});
+            this.数据操作ToolStripMenuItem.Name = "数据操作ToolStripMenuItem";
+            this.数据操作ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.数据操作ToolStripMenuItem.Text = "数据操作";
+            // 
+            // 导入路径ToolStripMenuItem
+            // 
+            this.导入路径ToolStripMenuItem.Name = "导入路径ToolStripMenuItem";
+            this.导入路径ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.导入路径ToolStripMenuItem.Text = "导入路径";
+            this.导入路径ToolStripMenuItem.Click += new System.EventHandler(this.导入路径ToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -583,6 +609,11 @@
             this.toolStripStatusPOIDownload.Name = "toolStripStatusPOIDownload";
             this.toolStripStatusPOIDownload.Size = new System.Drawing.Size(89, 17);
             this.toolStripStatusPOIDownload.Text = "POI下载进度：";
+            // 
+            // toolStripStatusCenter
+            // 
+            this.toolStripStatusCenter.Name = "toolStripStatusCenter";
+            this.toolStripStatusCenter.Size = new System.Drawing.Size(0, 17);
             // 
             // xPanderPanelList1
             // 
@@ -1030,6 +1061,32 @@
             this.panelMap.Size = new System.Drawing.Size(658, 531);
             this.panelMap.TabIndex = 12;
             // 
+            // mapControl
+            // 
+            this.mapControl.Bearing = 0F;
+            this.mapControl.CanDragMap = true;
+            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.mapControl.GrayScaleMode = false;
+            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.mapControl.LevelsKeepInMemmory = 5;
+            this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.MarkersEnabled = true;
+            this.mapControl.MaxZoom = 2;
+            this.mapControl.MinZoom = 2;
+            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.mapControl.Name = "mapControl";
+            this.mapControl.NegativeMode = false;
+            this.mapControl.PolygonsEnabled = true;
+            this.mapControl.RetryLoadTile = 0;
+            this.mapControl.RoutesEnabled = true;
+            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.mapControl.ShowTileGridLines = false;
+            this.mapControl.Size = new System.Drawing.Size(658, 531);
+            this.mapControl.TabIndex = 0;
+            this.mapControl.Zoom = 0D;
+            // 
             // contextMenuStripSelectedArea
             // 
             this.contextMenuStripSelectedArea.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1104,36 +1161,60 @@
             this.搜索该点的地址ToolStripMenuItem.Text = "搜索该点的地址";
             this.搜索该点的地址ToolStripMenuItem.Click += new System.EventHandler(this.搜索该点的地址ToolStripMenuItem_Click);
             // 
-            // toolStripStatusCenter
+            // arcGISToolStripMenuItem
             // 
-            this.toolStripStatusCenter.Name = "toolStripStatusCenter";
-            this.toolStripStatusCenter.Size = new System.Drawing.Size(0, 17);
+            this.arcGISToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.arcGIS街道地图ToolStripMenuItem,
+            this.arcGIS街道地图无POIToolStripMenuItem,
+            this.arcGIS街道地图灰色版ToolStripMenuItem,
+            this.arcGIS街道地图冷色版ToolStripMenuItem,
+            this.arcGIS街道地图暖色版ToolStripMenuItem,
+            this.arcGIS卫星地图无偏移ToolStripMenuItem});
+            this.arcGISToolStripMenuItem.Name = "arcGISToolStripMenuItem";
+            this.arcGISToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.arcGISToolStripMenuItem.Text = "ArcGIS";
             // 
-            // mapControl
+            // arcGIS街道地图ToolStripMenuItem
             // 
-            this.mapControl.Bearing = 0F;
-            this.mapControl.CanDragMap = true;
-            this.mapControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapControl.EmptyTileColor = System.Drawing.Color.Navy;
-            this.mapControl.GrayScaleMode = false;
-            this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.mapControl.LevelsKeepInMemmory = 5;
-            this.mapControl.Location = new System.Drawing.Point(0, 0);
-            this.mapControl.MarkersEnabled = true;
-            this.mapControl.MaxZoom = 2;
-            this.mapControl.MinZoom = 2;
-            this.mapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.mapControl.Name = "mapControl";
-            this.mapControl.NegativeMode = false;
-            this.mapControl.PolygonsEnabled = true;
-            this.mapControl.RetryLoadTile = 0;
-            this.mapControl.RoutesEnabled = true;
-            this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(658, 531);
-            this.mapControl.TabIndex = 0;
-            this.mapControl.Zoom = 0D;
+            this.arcGIS街道地图ToolStripMenuItem.Name = "arcGIS街道地图ToolStripMenuItem";
+            this.arcGIS街道地图ToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS街道地图ToolStripMenuItem.Text = "ArcGIS街道地图";
+            this.arcGIS街道地图ToolStripMenuItem.Click += new System.EventHandler(this.arcGIS街道地图ToolStripMenuItem_Click);
+            // 
+            // arcGIS街道地图无POIToolStripMenuItem
+            // 
+            this.arcGIS街道地图无POIToolStripMenuItem.Name = "arcGIS街道地图无POIToolStripMenuItem";
+            this.arcGIS街道地图无POIToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS街道地图无POIToolStripMenuItem.Text = "ArcGIS街道地图(无POI)";
+            this.arcGIS街道地图无POIToolStripMenuItem.Click += new System.EventHandler(this.arcGIS街道地图无POIToolStripMenuItem_Click);
+            // 
+            // arcGIS街道地图灰色版ToolStripMenuItem
+            // 
+            this.arcGIS街道地图灰色版ToolStripMenuItem.Name = "arcGIS街道地图灰色版ToolStripMenuItem";
+            this.arcGIS街道地图灰色版ToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS街道地图灰色版ToolStripMenuItem.Text = "ArcGIS街道地图(灰色版)";
+            this.arcGIS街道地图灰色版ToolStripMenuItem.Click += new System.EventHandler(this.arcGIS街道地图灰色版ToolStripMenuItem_Click);
+            // 
+            // arcGIS街道地图冷色版ToolStripMenuItem
+            // 
+            this.arcGIS街道地图冷色版ToolStripMenuItem.Name = "arcGIS街道地图冷色版ToolStripMenuItem";
+            this.arcGIS街道地图冷色版ToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS街道地图冷色版ToolStripMenuItem.Text = "ArcGIS街道地图(冷色版)";
+            this.arcGIS街道地图冷色版ToolStripMenuItem.Click += new System.EventHandler(this.arcGIS街道地图冷色版ToolStripMenuItem_Click);
+            // 
+            // arcGIS街道地图暖色版ToolStripMenuItem
+            // 
+            this.arcGIS街道地图暖色版ToolStripMenuItem.Name = "arcGIS街道地图暖色版ToolStripMenuItem";
+            this.arcGIS街道地图暖色版ToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS街道地图暖色版ToolStripMenuItem.Text = "ArcGIS街道地图(暖色版)";
+            this.arcGIS街道地图暖色版ToolStripMenuItem.Click += new System.EventHandler(this.arcGIS街道地图暖色版ToolStripMenuItem_Click);
+            // 
+            // arcGIS卫星地图无偏移ToolStripMenuItem
+            // 
+            this.arcGIS卫星地图无偏移ToolStripMenuItem.Name = "arcGIS卫星地图无偏移ToolStripMenuItem";
+            this.arcGIS卫星地图无偏移ToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.arcGIS卫星地图无偏移ToolStripMenuItem.Text = "ArcGIS卫星地图(无偏移)";
+            this.arcGIS卫星地图无偏移ToolStripMenuItem.Click += new System.EventHandler(this.arcGIS卫星地图无偏移ToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1287,6 +1368,15 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLocation;
         private System.Windows.Forms.ToolStripMenuItem 搜索该点的地址ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusCenter;
+        private System.Windows.Forms.ToolStripMenuItem 数据操作ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 导入路径ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGISToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS街道地图ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS街道地图无POIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS街道地图灰色版ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS街道地图冷色版ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS街道地图暖色版ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem arcGIS卫星地图无偏移ToolStripMenuItem;
     }
 }
 

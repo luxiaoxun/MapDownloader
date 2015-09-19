@@ -5,10 +5,19 @@ using System.Text;
 
 namespace GMapPositionFix
 {
+    /// <summary>
+    /// 各坐标系统转换 
+    /// WGS84坐标系：即地球坐标系，国际上通用的坐标系。设备一般包含GPS芯片或者北斗芯片获取的经纬度为WGS84地理坐标系, 
+    /// 谷歌地图采用的是WGS84地理坐标系（中国范围除外）; 
+    /// GCJ02坐标系：即火星坐标系，是由中国国家测绘局制订的地理信息系统的坐标系统。由WGS84坐标系经加密后的坐标系。 
+    /// 高德地图、腾讯地图、谷歌中国地图采用的是GCJ02地理坐标系; 
+    /// BD09坐标系：即百度坐标系，GCJ02坐标系经加密后的坐标系; 
+    /// 搜狗坐标系、图吧坐标系等，估计也是在GCJ02基础上加密而成的。
+    /// </summary>
     public static class CoordinateTransform
     {
         /// <summary>
-        /// Check if coordinate is beyond the scope of china or not
+        /// 检查坐标是否在中国范围内
         /// </summary>
         /// <param name="lat">latitude 纬度</param>
         /// <param name="lng">longitude 经度</param>
@@ -29,13 +38,13 @@ namespace GMapPositionFix
         /// <param name="latMars">火星坐标纬度latitude</param>
         /// <param name="lngWgs">WGS经度</param>
         /// <param name="latWgs">WGS纬度</param>
-        public static void ConvertMarsToWGS(double lngMars, double latMars, out double lngWgs, out double latWgs)
+        public static void ConvertGcj02ToWgs84(double lngMars, double latMars, out double lngWgs, out double latWgs)
         {
             lngWgs = lngMars;
             latWgs = latMars;
             double lngtry = lngMars;
             double lattry = latMars;
-            ConvertWGSToMars(lngMars, latMars, out lngtry, out lattry);
+            ConvertWgs84ToGcj02(lngMars, latMars, out lngtry, out lattry);
             double dx = lngtry - lngMars;
             double dy = lattry - latMars;
 
@@ -50,7 +59,7 @@ namespace GMapPositionFix
         /// <param name="latWgs">WGS纬度</param>
         /// <param name="lngMars">火星坐标经度</param>
         /// <param name="latMars">火星坐标纬度</param>
-        public static void ConvertWGSToMars(double lngWgs, double latWgs, out double lngMars, out double latMars)
+        public static void ConvertWgs84ToGcj02(double lngWgs, double latWgs, out double lngMars, out double latMars)
         {
             lngMars = lngWgs;
             latMars = latWgs;
@@ -102,10 +111,10 @@ namespace GMapPositionFix
         /// <param name="latMars"></param>
         /// <param name="lngBaidu"></param>
         /// <param name="latBaidu"></param>
-        public static void ConvertMarsToBD09(double lngMars, double latMars, out double lngBaidu, out double latBaidu)
+        public static void ConvertGcj02ToBd09(double lngMars, double latMars, out double lngBaidu, out double latBaidu)
         {
             const double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-
+            //const double x_pi = 3.14159265358979324;
             double x = lngMars;
             double y = latMars;
             double z = Math.Sqrt(x * x + y * y) + 0.00002 * Math.Sin(y * x_pi);
@@ -121,7 +130,7 @@ namespace GMapPositionFix
         /// <param name="latBaidu"></param>
         /// <param name="lngMars"></param>
         /// <param name="latMars"></param>
-        public static void ConvertBD09ToMars(double lngBaidu, double latBaidu, out double lngMars, out double latMars)
+        public static void ConvertBd09ToGcj02(double lngBaidu, double latBaidu, out double lngMars, out double latMars)
         {
             const double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
 
@@ -140,12 +149,12 @@ namespace GMapPositionFix
         /// <param name="latWgs"></param>
         /// <param name="lngBaidu"></param>
         /// <param name="latBaidu"></param>
-        public static void ConvertWGSToBD09(double lngWgs, double latWgs, out double lngBaidu, out double latBaidu)
+        public static void ConvertWgs84ToBd09(double lngWgs, double latWgs, out double lngBaidu, out double latBaidu)
         {
             double lng;
             double lat;
-            ConvertWGSToMars(lngWgs, latWgs, out lng, out lat);
-            ConvertMarsToBD09(lng, lat, out lngBaidu, out latBaidu);
+            ConvertWgs84ToGcj02(lngWgs, latWgs, out lng, out lat);
+            ConvertGcj02ToBd09(lng, lat, out lngBaidu, out latBaidu);
         }
 
         /// <summary>
@@ -155,12 +164,12 @@ namespace GMapPositionFix
         /// <param name="latBaidu"></param>
         /// <param name="lngWgs"></param>
         /// <param name="latWgs"></param>
-        public static void ConvertBD09ToWGS(double lngBaidu, double latBaidu,out double lngWgs, out double latWgs)
+        public static void ConvertBd09ToWgs84(double lngBaidu, double latBaidu,out double lngWgs, out double latWgs)
         {
             double lng;
             double lat;
-            ConvertBD09ToMars(lngBaidu, latBaidu, out lng, out lat);
-            ConvertMarsToWGS(lng, lat, out lngWgs, out latWgs);
+            ConvertBd09ToGcj02(lngBaidu, latBaidu, out lng, out lat);
+            ConvertGcj02ToWgs84(lng, lat, out lngWgs, out latWgs);
         }
     }
 }

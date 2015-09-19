@@ -53,6 +53,13 @@
     <Compile Include="AMap\AMapProvider.cs" />
     <Compile Include="AMap\AMapProviderBase.cs" />
     <Compile Include="AMap\AMapSateliteProvider.cs" />
+    <Compile Include="ArcGIS\ArcGISColdMapProvider.cs" />
+    <Compile Include="ArcGIS\ArcGISGrayMapProvider.cs" />
+    <Compile Include="ArcGIS\ArcGISMapProvider.cs" />
+    <Compile Include="ArcGIS\ArcGISMapProviderBase.cs" />
+    <Compile Include="ArcGIS\ArcGISMapProviderNoPoi.cs" />
+    <Compile Include="ArcGIS\ArcGISSatelliteMapProvider.cs" />
+    <Compile Include="ArcGIS\ArcGISWarmMapProvider.cs" />
     <Compile Include="Baidu\BaiduHybridMapProvider.cs" />
     <Compile Include="Baidu\BaiduMapProvider.cs" />
     <Compile Include="Baidu\BaiduMapProvider1.cs" />

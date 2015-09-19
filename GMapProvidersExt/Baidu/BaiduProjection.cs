@@ -29,13 +29,13 @@ namespace GMapProvidersExt.Baidu
         public override PointLatLng FromPixelToLatLng(long x, long y, int zoom)
         {
             double levelResolution = this.GetLevelResolution(zoom);
-            double num2 = x * levelResolution;
-            double num3 = y * levelResolution;
-            this.GetTileMatrixMinXY(zoom);
-            double num4 = num2 + this.BaiduProjectedOrigin.Lng;
-            double num5 = this.BaiduProjectedOrigin.Lat - num3;
-            num5 += 20000.0;
-            PointLatLng p = this.MercatorToLonLat(num4, num5);
+            double x_level = x * levelResolution;
+            double y_level = y * levelResolution;
+            //this.GetTileMatrixMinXY(zoom);
+            double m_x = x_level + this.BaiduProjectedOrigin.Lng;
+            double m_y = this.BaiduProjectedOrigin.Lat - y_level;
+            m_y += 20000.0;
+            PointLatLng p = this.MercatorToLonLat(m_x, m_y);
             if (p.Lat < MinLatitude)
             {
                 p.Lat = MinLatitude;
@@ -62,7 +62,7 @@ namespace GMapProvidersExt.Baidu
 
         public double GetLevelResolution(int level)
         {
-            return Math.Pow(2.0, (double)(0x12 - level));
+            return Math.Pow(2.0, (double)(18 - level));
         }
 
         public override GSize GetTileMatrixMaxXY(int zoom)
@@ -75,11 +75,11 @@ namespace GMapProvidersExt.Baidu
             return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Left, this.ProjectedBounds.Top, this.GetLevelResolution(zoom), 0x100, 0x100);
         }
 
-        private static PointLatLng LonLatToMercator(double X, double Y)
+        private PointLatLng LonLatToMercator(double X, double Y)
         {
             double x = ((X * 3.1415926535897931) * 6378137.0) / 180.0;
-            double num2 = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-            double y = ((num2 * 3.1415926535897931) * 6378137.0) / 180.0;
+            double num = Math.Log(Math.Tan(((90.0 + Y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+            double y = ((num * 3.1415926535897931) * 6378137.0) / 180.0;
             return new PointLatLng(y, x);
         }
 
@@ -90,12 +90,12 @@ namespace GMapProvidersExt.Baidu
             return new PointLatLng(57.295779513082323 * ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966), lng);
         }
 
-        public static GSize GetTile(double originX, double originY, double x, double y, double resolution, int tileWidth = 0x100, int tileHeight = 0x100)
+        public GSize GetTile(double originX, double originY, double x, double y, double resolution, int tileWidth = 0x100, int tileHeight = 0x100)
         {
-            double d = (x - originX) / (tileWidth * resolution);
-            double num2 = (originY - y) / (tileHeight * resolution);
-            long width = (long)Math.Floor(d);
-            return new GSize(width, (long)Math.Floor(num2));
+            double w = (x - originX) / (tileWidth * resolution);
+            double h = (originY - y) / (tileHeight * resolution);
+            long width = (long)Math.Floor(w);
+            return new GSize(width, (long)Math.Floor(h));
         }
 
         // Properties

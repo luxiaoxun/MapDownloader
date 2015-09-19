@@ -65,10 +65,31 @@ namespace GMapProvidersExt.Baidu
             return new GSize(0, 0);
         }
 
+        public override GSize GetTileMatrixMaxXY(int zoom)
+        {
+            long xy = (1 << zoom);
+            return new GSize(xy - 1, xy - 1);
+        }
+
+        //private PointLatLng BaiduProjectedOrigin
+        //{
+        //    get
+        //    {
+        //        return new PointLatLng(this.GetLevelResolution(1) * 256.0, -this.GetLevelResolution(1) * 256.0);
+        //    }
+        //}
+
         //public override GSize GetTileMatrixMaxXY(int zoom)
         //{
-        //    long xy = (1 << zoom);
-        //    return new GSize(xy - 1, xy - 1);
+        //    return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Right, this.ProjectedBounds.Bottom, this.GetLevelResolution(zoom), 0x100, 0x100);
+        //}
+
+        //public static GSize GetTile(double originX, double originY, double x, double y, double resolution, int tileWidth = 0x100, int tileHeight = 0x100)
+        //{
+        //    double d = (x - originX) / (tileWidth * resolution);
+        //    double num2 = (originY - y) / (tileHeight * resolution);
+        //    long width = (long)Math.Floor(d);
+        //    return new GSize(width, (long)Math.Floor(num2));
         //}
 
         //private PointLatLng BaiduProjectedOrigin
@@ -79,39 +100,18 @@ namespace GMapProvidersExt.Baidu
         //    }
         //}
 
-        public override GSize GetTileMatrixMaxXY(int zoom)
-        {
-            return GetTile(this.BaiduProjectedOrigin.Lng, this.BaiduProjectedOrigin.Lat, this.ProjectedBounds.Right, this.ProjectedBounds.Bottom, this.GetLevelResolution(zoom), 0x100, 0x100);
-        }
-
-        public static GSize GetTile(double originX, double originY, double x, double y, double resolution, int tileWidth = 0x100, int tileHeight = 0x100)
-        {
-            double d = (x - originX) / (tileWidth * resolution);
-            double num2 = (originY - y) / (tileHeight * resolution);
-            long width = (long)Math.Floor(d);
-            return new GSize(width, (long)Math.Floor(num2));
-        }
-
-        private PointLatLng BaiduProjectedOrigin
-        {
-            get
-            {
-                return new PointLatLng(this.GetLevelResolution(1) * 256.0, -this.GetLevelResolution(1) * 256.0);
-            }
-        }
-
         public double GetLevelResolution(int level)
         {
             return Math.Pow(2.0, (double)(0x12 - level));
         }
 
-        private BoundingBox ProjectedBounds
-        {
-            get
-            {
-                return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis);
-            }
-        }
+        //private BoundingBox ProjectedBounds
+        //{
+        //    get
+        //    {
+        //        return new BoundingBox(-3.1415926535897931 * this.Axis, -3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis, 3.1415926535897931 * this.Axis);
+        //    }
+        //}
 
         //以下是根据百度地图JavaScript API破解得到 百度坐标<->墨卡托坐标 转换算法
         private static double[] array1 = { 75, 60, 45, 30, 15, 0 };
@@ -158,41 +158,40 @@ namespace GMapProvidersExt.Baidu
             return new GPoint((long)res[0], (long)res[1]);
         }
 
-        private PointLatLng PointLatLng2Mercator(double lat, double lng)
-        {
-            double[] arr = null;
-            double n_lat = lat > 74 ? 74 : lat;
-            n_lat = n_lat < -74 ? -74 : n_lat;
+        //private PointLatLng PointLatLng2Mercator(double lat, double lng)
+        //{
+        //    double[] arr = null;
+        //    double n_lat = lat > 74 ? 74 : lat;
+        //    n_lat = n_lat < -74 ? -74 : n_lat;
 
-            for (var i = 0; i < array1.Length; i++)
-            {
-                if (lat >= array1[i])
-                {
-                    arr = array2[i];
-                    break;
-                }
-            }
-            if (arr == null)
-            {
-                for (var i = array1.Length - 1; i >= 0; i--)
-                {
-                    if (lat <= -array1[i])
-                    {
-                        arr = array2[i];
-                        break;
-                    }
-                }
-            }
-            double[] res = Convertor(lng, lat, arr);
-            return new PointLatLng((long)res[1], (long)res[0]);
-        }
+        //    for (var i = 0; i < array1.Length; i++)
+        //    {
+        //        if (lat >= array1[i])
+        //        {
+        //            arr = array2[i];
+        //            break;
+        //        }
+        //    }
+        //    if (arr == null)
+        //    {
+        //        for (var i = array1.Length - 1; i >= 0; i--)
+        //        {
+        //            if (lat <= -array1[i])
+        //            {
+        //                arr = array2[i];
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    double[] res = Convertor(lng, lat, arr);
+        //    return new PointLatLng((long)res[0], (long)res[1]);
+        //}
 
         private PointLatLng Mercator2LatLng(GPoint p)
         {
             double[] arr = null;
             double x = Math.Abs(p.X);
             double y = Math.Abs(p.Y);
-            //PointF np = new PointF(Math.Abs(p.X), Math.Abs(p.Y));
             for (var i = 0; i < array3.Length; i++)
             {
                 if (y >= array3[i])
@@ -205,23 +204,23 @@ namespace GMapProvidersExt.Baidu
             return new PointLatLng(res[1], res[0]);
         }
 
-        private PointLatLng Mercator2LatLng(double x,double y)
-        {
-            double[] arr = null;
-            double X = Math.Abs(x);
-            double Y = Math.Abs(y);
-            //PointF np = new PointF(Math.Abs(p.X), Math.Abs(p.Y));
-            for (var i = 0; i < array3.Length; i++)
-            {
-                if (Y >= array3[i])
-                {
-                    arr = array4[i];
-                    break;
-                }
-            }
-            double[] res = Convertor(X, Y, arr);
-            return new PointLatLng(res[1], res[0]);
-        }
+        //private PointLatLng Mercator2LatLng(double x,double y)
+        //{
+        //    double[] arr = null;
+        //    double X = Math.Abs(x);
+        //    double Y = Math.Abs(y);
+        //    //PointF np = new PointF(Math.Abs(p.X), Math.Abs(p.Y));
+        //    for (var i = 0; i < array3.Length; i++)
+        //    {
+        //        if (Y >= array3[i])
+        //        {
+        //            arr = array4[i];
+        //            break;
+        //        }
+        //    }
+        //    double[] res = Convertor(X, Y, arr);
+        //    return new PointLatLng(res[1], res[0]);
+        //}
 
         private double[] Convertor(double x, double y, double[] param)
         {

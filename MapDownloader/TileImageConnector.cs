@@ -82,7 +82,7 @@ namespace MapDownloader
                 RectLatLng area = args.Area;
                 int zoom = args.Zoom;
                 List<GPoint> tileArea = this.provider.Projection.GetAreaTileList(area, zoom, 0);
-                string bigImage = zoom + "-" + Guid.NewGuid().ToString() + "-.png";
+                string bigImage = zoom + "-" + Guid.NewGuid().ToString() + ".jpg";
 
                 // current area
                 GPoint topLeftPx = this.provider.Projection.FromLatLngToPixel(area.LocationTopLeft, zoom);

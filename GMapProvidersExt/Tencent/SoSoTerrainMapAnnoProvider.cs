@@ -11,7 +11,7 @@ namespace GMapProvidersExt.Tencent
     {
         // Fields
         private readonly string cnName;
-        private readonly Guid id = new Guid("0a5a2c45-22d4-41a8-bb6b-2bde05a57b7a");
+        private readonly Guid id = new Guid("B6756768-9B73-49E6-9902-F4FC713B37CB");
         public static readonly SoSoTerrainMapAnnoProvider Instance;
         private readonly string name;
         private GMapProvider[] overlays;

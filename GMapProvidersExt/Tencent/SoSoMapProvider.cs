@@ -17,7 +17,7 @@ namespace GMapProvidersExt.Tencent
     {
         // Fields
         private readonly string cnName;
-        private readonly Guid id =new Guid("8e3e6b8b-59f0-4fca-b6b0-66e63acc3665");
+        private readonly Guid id = new Guid("3C1FF6D8-F8AD-4A98-811A-027FB23314BB");
         public static readonly SoSoMapProvider Instance;
         private readonly string KEY;
         private readonly string name;
@@ -31,7 +31,6 @@ namespace GMapProvidersExt.Tencent
 
         private SoSoMapProvider()
         {
-            //this.KEY = "QFOBZ-PG4R4-FKTUX-XTTGJ-P6NZV-IFBD3";
             this.KEY = "C7PBZ-6QFWJ-EAFFB-F7WK7-THHJO-T6FI3";
             this.name = "SoSoMap";
             this.cnName = "搜搜街道地图";

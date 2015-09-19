@@ -119,6 +119,8 @@
     <Compile Include="PrefetchTiles.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteDataMarker.cs" />
+    <Compile Include="RouteMapData.cs" />
     <Compile Include="TileImageConnector.cs" />
     <EmbeddedResource Include="MapControl.resx">
       <DependentUpon>MapControl.cs</DependentUpon>
@@ -208,6 +210,10 @@
     <ProjectReference Include="..\GMapPolygonLib\GMapPolygonLib.csproj">
       <Project>{22E05880-ED51-420F-A61F-A5B7CDB32FBC}</Project>
       <Name>GMapPolygonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
+      <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>
+      <Name>GMapPositionFix</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>

@@ -11,7 +11,7 @@ namespace GMapProvidersExt.TianDitu
     {
         // Fields
         private readonly string cnName;
-        private readonly Guid id = new Guid("127f0a15-356f-4b0d-a41f-3dff713c5a36");
+        private readonly Guid id = new Guid("82EDBDFB-E8CD-40F9-8F6F-7FFE5EE5CC66");
         public static readonly TiandituMapProviderWithAnno Instance;
         private readonly string name;
         private GMapProvider[] overlays;
