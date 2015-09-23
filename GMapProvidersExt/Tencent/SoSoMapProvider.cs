@@ -262,6 +262,7 @@ namespace GMapProvidersExt.Tencent
                     {
                         string address = array[0]["name"].ToString();
                         place.Address = address;
+                        place.CityName = array[0]["c"].ToString();
                     }
                 }
             }

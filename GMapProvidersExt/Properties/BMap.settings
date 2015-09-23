@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="GMapProvidersExt" GeneratedClassName="BMap">
+  <Profiles />
+  <Settings>
+    <Setting Name="ServiceAK" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TMzlZXetCzK9t9fSdKO7v35T</Value>
+    </Setting>
+    <Setting Name="ServiceSK" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="VerificationMode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LoadMapMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="MapCachePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

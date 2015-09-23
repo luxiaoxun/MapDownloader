@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MapDownloader.Properties {
+namespace GMapProvidersExt.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MapDownloader.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MapDownloader.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GMapProvidersExt.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,41 +57,6 @@ namespace MapDownloader.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        internal static byte[] ChinaBoundryBinary_Province_City {
-            get {
-                object obj = ResourceManager.GetObject("ChinaBoundryBinary_Province_City", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static byte[] ChinaBoundryBinaryAll {
-            get {
-                object obj = ResourceManager.GetObject("ChinaBoundryBinaryAll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap MapMarker_Bubble_Azure {
-            get {
-                object obj = ResourceManager.GetObject("MapMarker_Bubble_Azure", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap MapMarker_Bubble_Chartreuse {
-            get {
-                object obj = ResourceManager.GetObject("MapMarker_Bubble_Chartreuse", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap MapMarker_Bubble_Pink {
-            get {
-                object obj = ResourceManager.GetObject("MapMarker_Bubble_Pink", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

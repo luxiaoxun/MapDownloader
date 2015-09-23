@@ -97,17 +97,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PoiKeyWordForm.cs">
       <SubType>Form</SubType>
@@ -122,11 +122,11 @@
     <Compile Include="RouteDataMarker.cs" />
     <Compile Include="RouteMapData.cs" />
     <Compile Include="TileImageConnector.cs" />
-    <EmbeddedResource Include="MapControl.resx">
-      <DependentUpon>MapControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapControl.resx">
+      <DependentUpon>MapControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PoiKeyWordForm.resx">
       <DependentUpon>PoiKeyWordForm.cs</DependentUpon>
@@ -176,6 +176,9 @@
     <EmbeddedResource Include="leafletjs\dist\proj4leaflet.js" />
     <EmbeddedResource Include="leafletjs\gmap.html" />
     <Content Include="picture\location.png" />
+    <Content Include="picture\MapMarker_Bubble_Azure.png" />
+    <Content Include="picture\MapMarker_Bubble_Chartreuse.png" />
+    <Content Include="picture\MapMarker_Bubble_Pink.png" />
     <Content Include="picture\system.ico" />
   </ItemGroup>
   <ItemGroup>

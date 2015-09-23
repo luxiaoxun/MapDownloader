@@ -48,6 +48,7 @@
     <Compile Include="GMapFlashMarkerScopePie.cs" />
     <Compile Include="GMapBaloonToolTip.cs" />
     <Compile Include="GMapGifMarker.cs" />
+    <Compile Include="GMapImageMarker.cs" />
     <Compile Include="GMapLineArrowMarker.cs" />
     <Compile Include="GMapCircleMarker.cs" />
     <Compile Include="GMapCircleMarker2.cs" />

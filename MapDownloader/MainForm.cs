@@ -55,6 +55,12 @@ namespace MapDownloader
         private GMapAreaPolygon currentAreaPolygon;
         private GMapPolygon currentDrawPolygon;
 
+        private PointLatLng routeStartPoint = PointLatLng.Empty;
+        private PointLatLng routeEndPoint = PointLatLng.Empty;
+        private GPoint leftClickPoint = GPoint.Empty;
+        private GMapOverlay routeOverlay = new GMapOverlay("routeOverlay");
+        private string currentCenterCityName = "南京市";
+
         public MainForm()
         {
             InitializeComponent();
@@ -86,7 +92,9 @@ namespace MapDownloader
             mapControl.Overlays.Add(polygonsOverlay);
             mapControl.Overlays.Add(regionOverlay);
             mapControl.Overlays.Add(poiOverlay);
+            mapControl.Overlays.Add(routeOverlay);
 
+            this.mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
             this.mapControl.MouseMove += new MouseEventHandler(mapControl_MouseMove);
             this.mapControl.MouseDown += new MouseEventHandler(mapControl_MouseDown);
             this.mapControl.MouseUp += new MouseEventHandler(mapControl_MouseUp);
@@ -95,8 +103,8 @@ namespace MapDownloader
             this.mapControl.OnPolygonClick += new PolygonClick(mapControl_OnPolygonClick);
             this.mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
             this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
-            this.mapControl.MouseClick += new MouseEventHandler(mapControl_MouseClick);
             this.mapControl.OnPositionChanged += new PositionChanged(mapControl_OnPositionChanged);
+            
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
         }
@@ -115,6 +123,7 @@ namespace MapDownloader
         {
             Placemark place = (Placemark)e.Result;
             this.toolStripStatusCenter.Text = place.Address;
+            currentCenterCityName = place.CityName;
         }
 
         void centerPositionWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -128,6 +137,7 @@ namespace MapDownloader
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
+                leftClickPoint = new GPoint(e.X, e.Y);
                 this.contextMenuStripLocation.Show(Cursor.Position);
             }
         }
@@ -1048,16 +1058,6 @@ namespace MapDownloader
             }
         }
 
-        private void 清除所有画图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.polygonsOverlay.Clear();
-        }
-
-        private void 清除边界ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.regionOverlay.Polygons.Clear();
-        }
-
         #endregion
 
         #region 地图访问模式
@@ -1503,12 +1503,14 @@ namespace MapDownloader
 
         private void 搜索该点的地址ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PointLatLng p = this.mapControl.FromLocalToLatLng(Cursor.Position.X, Cursor.Position.Y);
+            PointLatLng p = this.mapControl.FromLocalToLatLng((int)leftClickPoint.X, (int)leftClickPoint.Y);
             GeoCoderStatusCode statusCode;
             Placemark? place = SoSoMapProvider.Instance.GetPlacemark(p, out statusCode);
             if (place.HasValue)
             {
-                CommonTools.PromptingMessage.PromptMessage(this, place.Value.Address);
+                GMapImageMarker placeMarker = new GMapImageMarker(p, Properties.Resources.MapMarker_Bubble_Azure, place.Value.Address);
+                this.routeOverlay.Markers.Add(placeMarker);
+                //CommonTools.PromptingMessage.PromptMessage(this, place.Value.Address);
             }
         }
 
@@ -1620,5 +1622,49 @@ namespace MapDownloader
         }
 
         #endregion
+
+        #region 路径导航
+
+        private void 以此为起点ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            routeStartPoint = this.mapControl.FromLocalToLatLng((int)leftClickPoint.X, (int)leftClickPoint.Y);
+            GMapImageMarker marker = new GMapImageMarker(routeStartPoint, Properties.Resources.MapMarker_Bubble_Pink);
+            this.routeOverlay.Markers.Add(marker);
+        }
+
+        private void 以此为终点ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            routeEndPoint = this.mapControl.FromLocalToLatLng((int)leftClickPoint.X, (int)leftClickPoint.Y);
+            GMapImageMarker marker = new GMapImageMarker(routeEndPoint, Properties.Resources.MapMarker_Bubble_Chartreuse);
+            this.routeOverlay.Markers.Add(marker);
+
+            if (routeStartPoint != PointLatLng.Empty)
+            {
+                MapRoute route = GMapProvidersExt.AMap.AMapProvider.Instance.GetRoute(routeStartPoint, routeEndPoint, currentCenterCityName);
+                GMapRoute mapRoute = new GMapRoute(route.Points, "");
+                if (mapRoute != null)
+                {
+                    this.routeOverlay.Routes.Add(mapRoute);
+                    this.mapControl.ZoomAndCenterRoute(mapRoute);
+                }
+            }
+        }
+
+        #endregion
+
+        private void 清除画图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.polygonsOverlay.Clear();
+        }
+
+        private void 清楚边界ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.regionOverlay.Polygons.Clear();
+        }
+
+        private void 清楚路径ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.routeOverlay.Clear();
+        }
     }
 }

@@ -85,7 +85,6 @@
     <Content Include="Lib\NPOI.OOXML.dll" />
     <Content Include="Lib\NPOI.OpenXml4Net.dll" />
     <Content Include="Lib\NPOI.OpenXmlFormats.dll" />
-    <Content Include="Lib\NPOI.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

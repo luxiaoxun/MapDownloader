@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
@@ -68,9 +69,26 @@
     <Compile Include="Baidu\BaiduProjection1.cs" />
     <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
     <Compile Include="Baidu\BaiduProjection.cs" />
+    <Compile Include="Baidu\HTTPService\AKSNCaculater.cs" />
+    <Compile Include="Baidu\HTTPService\CoordinateTransService.cs" />
+    <Compile Include="Baidu\HTTPService\DirectionService.cs" />
+    <Compile Include="Baidu\HTTPService\GeocodingService.cs" />
+    <Compile Include="Baidu\HTTPService\IPService.cs" />
+    <Compile Include="Baidu\HTTPService\LoadMapMode.cs" />
+    <Compile Include="Baidu\HTTPService\MapMode.cs" />
+    <Compile Include="Baidu\HTTPService\MapService.cs" />
+    <Compile Include="Baidu\HTTPService\PlaceService.cs" />
+    <Compile Include="Baidu\HTTPService\PlaceSuggestionService.cs" />
+    <Compile Include="Baidu\HTTPService\ServiceBase.cs" />
+    <Compile Include="Baidu\HTTPService\VerificationMode.cs" />
     <Compile Include="Bing\BingChinaMapProvider.cs" />
     <Compile Include="Bing\BingMapProvider.cs" />
     <Compile Include="Bing\BingMapProviderBase.cs" />
+    <Compile Include="Properties\BMap.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>BMap.settings</DependentUpon>
+    </Compile>
     <Compile Include="CoordinateTransformUtil.cs" />
     <Compile Include="Here\NokiaHybridMapProvider.cs" />
     <Compile Include="Here\NokiaMapProvider.cs" />
@@ -79,6 +97,11 @@
     <Compile Include="MapUnit.cs" />
     <Compile Include="ProjectionUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SogouProjection.cs" />
     <Compile Include="Sogou\SogouMapProvider.cs" />
     <Compile Include="Sogou\SogouMapProviderBase.cs" />
@@ -126,7 +149,19 @@
       <Name>NetUtil</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\BMap.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>BMap.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
