@@ -10,45 +10,34 @@ namespace GMapProvidersExt.Baidu
 {
     public abstract class BaiduMapProviderBase1 : GMapProvider
     {
-        // Fields
-        private static bool init;
-        public static readonly int maxServer;
-        private GMapProvider[] overlays;
-        public static readonly string UrlFormat;
-
-        // Methods
-        static BaiduMapProviderBase1()
-        {
-            maxServer = 9;
-            UrlFormat = "http://online{0}.map.bdimg.com/tile/?qt=tile&x={1}&y={2}&z={3}&styles=pl&udt=20150213";
-            init = false;
-        }
+        private string ClientKey = "1308e84a0e8a1fc2115263a4b3cf87f1";
 
         public BaiduMapProviderBase1()
         {
-            base.MaxZoom = 18;
-            base.MinZoom = 2;
-            base.RefererUrl = string.Format("http://q{0}.baidu.com/", maxServer.ToString());
-            base.Copyright = string.Format("\x00a9 Baidu! Inc. - Map data & Imagery \x00a9{0} NAVTEQ", DateTime.Today.Year);
+            MinZoom = 3;
+            MaxZoom = 19;
+            RefererUrl = "http://map.baidu.com";
+            Copyright = string.Format("©{0} Baidu Corporation, ©{0} NAVTEQ, ©{0} Image courtesy of NASA", DateTime.Today.Year);
         }
 
+        /// <summary>
+        /// 地图坐标投影 这个必须要修改
+        /// </summary>
+        public override PureProjection Projection
+        {
+            get { return BaiduProjection1.Instance; }
+        }
+
+        private GMapProvider[] overlays;
         public override GMapProvider[] Overlays
         {
             get
             {
-                if (this.overlays == null)
+                if (overlays == null)
                 {
-                    this.overlays = new GMapProvider[] { this };
+                    overlays = new GMapProvider[] { this };
                 }
-                return this.overlays;
-            }
-        }
-
-        public override PureProjection Projection
-        {
-            get
-            {
-                return BaiduProjection1.Instance;
+                return overlays;
             }
         }
     }

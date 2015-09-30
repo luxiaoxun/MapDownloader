@@ -545,35 +545,35 @@
             // 矩形ToolStripMenuItem
             // 
             this.矩形ToolStripMenuItem.Name = "矩形ToolStripMenuItem";
-            this.矩形ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.矩形ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.矩形ToolStripMenuItem.Text = "矩形";
             this.矩形ToolStripMenuItem.Click += new System.EventHandler(this.矩形ToolStripMenuItem_Click);
             // 
             // 圆形ToolStripMenuItem
             // 
             this.圆形ToolStripMenuItem.Name = "圆形ToolStripMenuItem";
-            this.圆形ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.圆形ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.圆形ToolStripMenuItem.Text = "圆形";
             this.圆形ToolStripMenuItem.Click += new System.EventHandler(this.圆形ToolStripMenuItem_Click);
             // 
             // 多边形ToolStripMenuItem
             // 
             this.多边形ToolStripMenuItem.Name = "多边形ToolStripMenuItem";
-            this.多边形ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.多边形ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.多边形ToolStripMenuItem.Text = "多边形";
             this.多边形ToolStripMenuItem.Click += new System.EventHandler(this.多边形ToolStripMenuItem_Click);
             // 
             // 线段ToolStripMenuItem
             // 
             this.线段ToolStripMenuItem.Name = "线段ToolStripMenuItem";
-            this.线段ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.线段ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.线段ToolStripMenuItem.Text = "线段";
             this.线段ToolStripMenuItem.Click += new System.EventHandler(this.线段ToolStripMenuItem_Click);
             // 
             // 折线段ToolStripMenuItem
             // 
             this.折线段ToolStripMenuItem.Name = "折线段ToolStripMenuItem";
-            this.折线段ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.折线段ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.折线段ToolStripMenuItem.Text = "折线段";
             this.折线段ToolStripMenuItem.Click += new System.EventHandler(this.折线段ToolStripMenuItem_Click);
             // 

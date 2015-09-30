@@ -31,6 +31,7 @@ namespace MapDownloader
     public partial class MainForm : DevComponents.DotNetBar.Office2007Form
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
+
         //private string conString = @"Server=127.0.0.1;Port=3306;Database=mapcache;Uid=root;Pwd=admin;";
         private static string conStringFormat = "Server={0};Port={1};Database={2};Uid={3};Pwd={4};";
         private static string conString;
@@ -80,8 +81,8 @@ namespace MapDownloader
             mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; //缓存位置
 
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
-            //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
-            mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
+            mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider1.Instance;
+            //mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
             mapControl.Position = new PointLatLng(32.043, 118.773);
             mapControl.MinZoom = 1;
             mapControl.MaxZoom = 18;
@@ -563,14 +564,6 @@ namespace MapDownloader
             if (this.radioButtonMySQL.Checked)
             {
                 mapControl.Manager.PrimaryCache = mysqlCache;
-                //if (mysqlCache.Initialized)
-                //{
-                    
-                //}
-                //else
-                //{
-                //    MessageBox.Show("MySQL数据库连接错误！请检查配置是否正确？", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //}
             }
         }
 
@@ -1479,7 +1472,7 @@ namespace MapDownloader
             string address = this.textBoxAddress.Text.Trim();
             if (!string.IsNullOrEmpty(address))
             {
-                this.poiOverlay.Markers.Clear();
+                this.routeOverlay.Markers.Clear();
                 Placemark placemark = new Placemark(address);
                 if (currentAreaPolygon != null)
                 {
@@ -1493,9 +1486,8 @@ namespace MapDownloader
                     {
                         GMarkerGoogle marker = new GMarkerGoogle(p, GMarkerGoogleType.blue_dot);
                         marker.ToolTipText = placemark.Address;
-                        this.poiOverlay.Markers.Add(marker);
+                        this.routeOverlay.Markers.Add(marker);
                         this.mapControl.Position = p;
-                        //this.listBoxAddress.Items.Add(place.Address);
                     }
                 }
             }
@@ -1652,19 +1644,27 @@ namespace MapDownloader
 
         #endregion
 
+        #region 清除图层
+
         private void 清除画图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.polygonsOverlay.Clear();
+            currentDrawPolygon = null;
         }
 
         private void 清楚边界ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.regionOverlay.Polygons.Clear();
+            currentAreaPolygon = null;
         }
 
         private void 清楚路径ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.routeOverlay.Clear();
         }
+        
+        #endregion
+
+        
     }
 }
