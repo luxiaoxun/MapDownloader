@@ -11,7 +11,7 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
 
-namespace MapDownloader
+namespace GMapDownloader
 {
     public class PrefetchTiles
     {

@@ -34,6 +34,7 @@ namespace GMap.NET
       public PointLatLng Point;
       public string Name;
       public string CountryCode;
+      public string ProvinceName;
       public string CityName;
       public string Tel;
       public string Category;
@@ -60,7 +61,8 @@ namespace GMap.NET
          LatLonBox = RectLatLng.Empty;
          Name = string.Empty;
          CountryCode = string.Empty;
-         CityName = string.Empty; ;
+         ProvinceName = string.Empty;
+         CityName = string.Empty;
          Tel = string.Empty;
          Category = string.Empty;
       }
@@ -69,6 +71,7 @@ namespace GMap.NET
       {
           this.Address = oth.Address;
           this.Category = oth.Category;
+          this.ProvinceName = oth.ProvinceName;
           this.CityName = oth.CityName;
           this.CountryCode = oth.CountryCode;
           this.LatLonBox = oth.LatLonBox;

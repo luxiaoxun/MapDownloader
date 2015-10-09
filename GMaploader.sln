@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapDrawTools", "GMapDrawTo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapCommonType", "GMapCommonType\GMapCommonType.csproj", "{B004E87D-FE07-433C-812C-341D16164A40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDownloader", "MapDownloader\MapDownloader.csproj", "{FC90F9EA-0578-4DE6-AAF9-102F6032E730}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapDownloader", "MapDownloader\GMapDownloader.csproj", "{FC90F9EA-0578-4DE6-AAF9-102F6032E730}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapUtil", "GMapUtil\GMapUtil.csproj", "{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}"
 EndProject

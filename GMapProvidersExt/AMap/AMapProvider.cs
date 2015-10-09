@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GMapProvidersExt.AMap
 {
-    public class AMapProvider : AMapProviderBase, RoutingProvider
+    public class AMapProvider : AMapProviderBase, RoutingProvider,GeocodingProvider
     {
         private readonly string KEY = "26144cb5dbe74ea6c1410777feb646de";
         
@@ -45,7 +45,154 @@ namespace GMapProvidersExt.AMap
             Instance = new AMapProvider();
         }
 
-        #region GMapRoutingProvider Members
+        public Placemark GetCenterNameByLocation(PointLatLng location)
+        {
+            GeoCoderStatusCode statusCode = new GeoCoderStatusCode();
+            Placemark? place = this.GetPlacemark(location, out statusCode);
+            return place.Value;
+        }
+
+        #region GeocodingProvider Members
+
+        private List<Placemark> GetPlacemarksByLocation(PointLatLng location)
+        {
+            List<Placemark> list = new List<Placemark>();
+            try
+            {
+                string content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/regeo?output=json&location={0}&key={1}", location.Lng + "," + location.Lat,KEY), "utf-8", "get", "", "text/htm");
+                JObject jsonObj = JObject.Parse(content);
+                if (jsonObj != null && jsonObj["info"].ToString() == "OK")
+                {
+                    JObject regeocode = jsonObj["regeocode"] as JObject;
+                    if (regeocode != null)
+                    {
+                        Placemark place = new Placemark();
+                        place.Address = regeocode["formatted_address"].ToString();
+                        JObject addressComponent = regeocode["addressComponent"] as JObject;
+                        if (addressComponent != null)
+                        {
+                            place.ProvinceName = addressComponent["province"].ToString();
+                            place.CityName = addressComponent["city"].ToString();
+                            place.DistrictName = addressComponent["district"].ToString();
+                        }
+                        JObject streetNumber = regeocode["streetNumber"] as JObject;
+                        if(streetNumber!=null)
+                        {
+                            place.StreetNumber = streetNumber["street"].ToString() + streetNumber["number"].ToString();
+                            string loc = streetNumber["location"].ToString();
+                            string[] points = loc.Split(',');
+                            if (points != null && points.Length == 2)
+                            {
+                                double lat = double.Parse(points[1]);
+                                double lng = double.Parse(points[0]);
+                                PointLatLng p = new PointLatLng(lat, lng);
+                                place.Point = p;
+                            }
+                        }
+                        list.Add(place);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return list;
+        }
+
+        private List<PointLatLng> GetPointsByPlacemark(Placemark placemark)
+        {
+            List<PointLatLng> list = new List<PointLatLng>();
+            try
+            {
+                string content = "";
+                if (placemark.CityName != null)
+                {
+                    content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/geo?city={0}&address={1}&output=json&key={2}", placemark.CityName, placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                }
+                else
+                {
+                    content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/geo?address={0}&output=json&key={1}", placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                }
+                JObject jsonObj = JObject.Parse(content);
+                if (jsonObj != null && jsonObj["info"].ToString() == "OK")
+                {
+                    int count = int.Parse(jsonObj["count"].ToString());
+                    JArray geocodes = jsonObj["geocodes"] as JArray;
+                    if (geocodes != null)
+                    {
+                        foreach (JObject geo in geocodes)
+                        {
+                            string location = geo["location"].ToString();
+                            string[] points = location.Split(',');
+                            if (points != null && points.Length == 2)
+                            {
+                                double lat = double.Parse(points[1]);
+                                double lng = double.Parse(points[0]);
+                                PointLatLng p = new PointLatLng(lat, lng);
+                                list.Add(p);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return list;
+        }
+
+        public GeoCoderStatusCode GetPoints(string keywords, out List<PointLatLng> pointList)
+        {
+            throw new Exception("未实现");
+        }
+
+        public PointLatLng? GetPoint(string keywords, out GeoCoderStatusCode status)
+        {
+            throw new Exception("未实现");
+        }
+
+        public GeoCoderStatusCode GetPoints(Placemark placemark, out List<PointLatLng> pointList)
+        {
+            pointList = this.GetPointsByPlacemark(placemark);
+            return GeoCoderStatusCode.G_GEO_SUCCESS;
+        }
+
+        public PointLatLng? GetPoint(Placemark placemark, out GeoCoderStatusCode status)
+        {
+            List<PointLatLng> points = this.GetPointsByPlacemark(placemark);
+            if (points != null && points.Count > 0)
+            {
+                status = GeoCoderStatusCode.G_GEO_SUCCESS;
+                return points[0];
+            }
+
+            status = GeoCoderStatusCode.Unknow;
+            return null;
+        }
+
+        public GeoCoderStatusCode GetPlacemarks(PointLatLng location, out List<Placemark> placemarkList)
+        {
+            placemarkList = this.GetPlacemarksByLocation(location);
+            return GeoCoderStatusCode.G_GEO_SUCCESS;
+        }
+
+        public Placemark? GetPlacemark(PointLatLng location, out GeoCoderStatusCode status)
+        {
+            List<Placemark> placemarksByLocation = this.GetPlacemarksByLocation(location);
+            if (placemarksByLocation != null && placemarksByLocation.Count > 0)
+            {
+                status = GeoCoderStatusCode.G_GEO_SUCCESS;
+                return new Placemark(placemarksByLocation[0]);
+            }
+            status = GeoCoderStatusCode.Unknow;
+            return null;
+        }
+
+        #endregion
+
+        #region RoutingProvider Members
 
         public GMapRoute GetRoute(PointLatLng start, PointLatLng end,string cityName)
         {

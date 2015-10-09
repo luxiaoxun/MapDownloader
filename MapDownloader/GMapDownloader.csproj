@@ -8,8 +8,8 @@
     <ProjectGuid>{FC90F9EA-0578-4DE6-AAF9-102F6032E730}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapDownloader</RootNamespace>
-    <AssemblyName>MapDownloader</AssemblyName>
+    <RootNamespace>GMapDownloader</RootNamespace>
+    <AssemblyName>GMapDownloader</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

@@ -1,4 +1,4 @@
-﻿namespace MapDownloader
+﻿namespace GMapDownloader
 {
     partial class MainForm
     {
@@ -132,7 +132,7 @@
             this.buttonItemReadGpx = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.mapControl = new MapDownloader.MapControl();
+            this.mapControl = new GMapDownloader.MapControl();
             this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();

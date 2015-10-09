@@ -1,4 +1,4 @@
-﻿namespace MapDownloader
+﻿namespace GMapDownloader
 {
     partial class PoiKeyWordForm
     {

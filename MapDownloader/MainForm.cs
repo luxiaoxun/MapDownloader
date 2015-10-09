@@ -25,8 +25,9 @@ using GMapDrawTools;
 using GMapCommonType;
 using GMapProvidersExt;
 using GMapProvidersExt.Tencent;
+using GMapProvidersExt.AMap;
 
-namespace MapDownloader
+namespace GMapDownloader
 {
     public partial class MainForm : DevComponents.DotNetBar.Office2007Form
     {
@@ -353,7 +354,7 @@ namespace MapDownloader
                 {
                     if (f.Contains("leafletjs"))
                     {
-                        var fName = f.Replace("MapDownloader.", string.Empty);
+                        var fName = f.Replace("GMapDownloader.", string.Empty);
                         fName = fName.Replace(".", "\\");
                         var ll = fName.LastIndexOf("\\");
                         var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
@@ -1474,12 +1475,14 @@ namespace MapDownloader
             {
                 this.routeOverlay.Markers.Clear();
                 Placemark placemark = new Placemark(address);
+                placemark.CityName = currentCenterCityName;
                 if (currentAreaPolygon != null)
                 {
                     placemark.CityName = currentAreaPolygon.Name;
                 }
                 List<PointLatLng> points = new List<PointLatLng>();
-                GeoCoderStatusCode statusCode = SoSoMapProvider.Instance.GetPoints(placemark, out points);
+                //GeoCoderStatusCode statusCode = SoSoMapProvider.Instance.GetPoints(placemark, out points);
+                GeoCoderStatusCode statusCode = AMapProvider.Instance.GetPoints(placemark, out points);
                 if (statusCode == GeoCoderStatusCode.G_GEO_SUCCESS)
                 {
                     foreach (PointLatLng p in points)
@@ -1497,7 +1500,8 @@ namespace MapDownloader
         {
             PointLatLng p = this.mapControl.FromLocalToLatLng((int)leftClickPoint.X, (int)leftClickPoint.Y);
             GeoCoderStatusCode statusCode;
-            Placemark? place = SoSoMapProvider.Instance.GetPlacemark(p, out statusCode);
+            //Placemark? place = SoSoMapProvider.Instance.GetPlacemark(p, out statusCode);
+            Placemark? place = AMapProvider.Instance.GetPlacemark(p, out statusCode);
             if (place.HasValue)
             {
                 GMapImageMarker placeMarker = new GMapImageMarker(p, Properties.Resources.MapMarker_Bubble_Azure, place.Value.Address);
