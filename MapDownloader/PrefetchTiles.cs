@@ -166,7 +166,6 @@ namespace GMapDownloader
                                     if (++retryCount <= retry)
                                     {
                                         y--;
-                                        System.Threading.Thread.Sleep(100);
                                         continue;
                                     }
                                     else

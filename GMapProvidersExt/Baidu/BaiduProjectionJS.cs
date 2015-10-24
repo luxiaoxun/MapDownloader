@@ -6,7 +6,7 @@ using GMap.NET;
 
 namespace GMapProvidersExt.Baidu
 {
-    public class BaiduProjection1 : PureProjection
+    public class BaiduProjectionJS : PureProjection
     {
         // 百度经纬度 -> 百度墨卡托 -> 像素坐标
         public static readonly BaiduProjection Instance = new BaiduProjection();

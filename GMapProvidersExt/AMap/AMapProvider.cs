@@ -13,7 +13,9 @@ namespace GMapProvidersExt.AMap
     public class AMapProvider : AMapProviderBase, RoutingProvider,GeocodingProvider
     {
         private readonly string KEY = "26144cb5dbe74ea6c1410777feb646de";
-        
+        private int succeedCount;
+        public delegate void QueryProgressDelegate(long completedCount, long total);
+
         public static readonly AMapProvider Instance;
    
         private readonly Guid id = new Guid("EF3DD303-3F74-4938-BF40-232D0595EE88");
@@ -51,6 +53,92 @@ namespace GMapProvidersExt.AMap
             Placemark? place = this.GetPlacemark(location, out statusCode);
             return place.Value;
         }
+
+        public GeoCoderStatusCode GetPlacemarksByKeywords(string keywords, string region, string rectangle,
+            QueryProgressDelegate queryProgressEvent, out List<Placemark> placemarkList, ref int count)
+        {
+            this.succeedCount = 0;
+            placemarkList = this.GetPlacemarksByKeywords(keywords, region, rectangle, 1, queryProgressEvent, ref count);
+            return GeoCoderStatusCode.G_GEO_SUCCESS;
+        }
+
+        private List<Placemark> GetPlacemarksByKeywords(string keywords, string region, string rectangle,
+            int pageIndex, QueryProgressDelegate queryProgressEvent, ref int totalCount)
+        {
+            List<Placemark> list = new List<Placemark>();
+            int pageSize = 50;
+            string keyWordUrlEncode = HttpUtility.UrlEncode(keywords);
+            string format = "http://restapi.amap.com/v3/place/text?&keywords={0}&city={1}&key={2}&output=json&offset={3}&page={4}";
+            //http://restapi.amap.com/v3/place/text?&keywords=%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6&city=beijing&output=json&offset=5&page=1&key=26144cb5dbe74ea6c1410777feb646de&extensions=base
+            if (!string.IsNullOrEmpty(region))
+            {
+                format = string.Format(format, new object[] { keyWordUrlEncode, HttpUtility.UrlEncode(region), KEY, pageSize, pageIndex });
+            }
+            //Get Cache Json Result if exist
+            //string cacheUrl = string.Format("http://restapi.amap.com/v3/place/text/{0}/{1}/{2}/{3}", new object[] { keyWordUrlEncode, HttpUtility.UrlEncode(region), pageIndex, pageSize });
+            //string cacheResult = Singleton<Cache>.Instance.GetContent(cacheUrl, CacheType.UrlCache, TimeSpan.FromHours(360.0));
+            //if (string.IsNullOrEmpty(cacheResult))
+            //{
+            //    cacheResult = HttpUtil.RequestByJSON(format, "get", "");
+            //    if (!string.IsNullOrEmpty(cacheResult))
+            //    {
+            //        Singleton<Cache>.Instance.SaveContent(cacheUrl, CacheType.UrlCache, cacheResult);
+            //    }
+            //}
+            //if (string.IsNullOrEmpty(cacheResult))
+            //{
+            //    return list;
+            //}
+            string cacheResult = HttpUtil.Request(format, "utf-8");
+            JObject jsonResult = JObject.Parse(cacheResult);
+            string info = (string)jsonResult["info"];
+            if (info == "OK")
+            {
+                if (pageIndex == 1)
+                {
+                    string countStr = (string)jsonResult["count"];
+                    totalCount = int.Parse(countStr);
+                }
+                if (totalCount <= 0) return list;
+
+                JArray results = (JArray)jsonResult["pois"];
+                if (results != null && results.Count > 0)
+                {
+                    for (int i = 0; i < results.Count; ++i)
+                    {
+                        JObject obj = results[i] as JObject;
+                        string name = obj["name"].ToString();
+                        string address = obj["address"].ToString();
+                        string location = obj["location"].ToString();
+                        string[] points = location.Split(',');
+                        if (points != null && points.Length == 2)
+                        {
+                            double lat = double.Parse(points[1]);
+                            double lng = double.Parse(points[0]);
+                            Placemark item = new Placemark(address);
+                            item.Point = new PointLatLng(lat, lng);
+                            item.Name = name;
+                            list.Add(item);
+                            ++this.succeedCount;
+                            if (queryProgressEvent != null)
+                            {
+                                queryProgressEvent((long)this.succeedCount, (long)totalCount);
+                            }
+                        }
+
+                    }
+                }
+                int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));
+                if (pageIndex < allPageNum)
+                {
+                    list.AddRange(this.GetPlacemarksByKeywords(keywords, region, rectangle, pageIndex + 1, queryProgressEvent, ref totalCount));
+                }
+
+            }
+
+            return list;
+        }
+
 
         #region GeocodingProvider Members
 

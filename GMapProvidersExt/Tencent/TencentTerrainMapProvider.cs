@@ -7,23 +7,23 @@ using GMap.NET.MapProviders;
 
 namespace GMapProvidersExt.Tencent
 {
-    public class SoSoTerrainMapProvider : SoSoMapProviderBase
+    public class TencentTerrainMapProvider : TencentMapProviderBase
     {
         // Fields
         private readonly string cnName;
         private readonly Guid id = new Guid("B6756768-9B73-49E6-9902-F4FC713B37CB");
-        public static readonly SoSoTerrainMapProvider Instance;
+        public static readonly TencentTerrainMapProvider Instance;
         private readonly string name;
         public static string UrlFormat;
 
         // Methods
-        static SoSoTerrainMapProvider()
+        static TencentTerrainMapProvider()
         {
             UrlFormat = "http://p{0}.map.gtimg.com/{1}/{2}.{3}";
-            Instance = new SoSoTerrainMapProvider();
+            Instance = new TencentTerrainMapProvider();
         }
 
-        private SoSoTerrainMapProvider()
+        private TencentTerrainMapProvider()
         {
             this.name = "SoSoTerrainMap";
             this.cnName = "腾讯地形地图（无注记）";
@@ -33,7 +33,7 @@ namespace GMapProvidersExt.Tencent
         {
             try
             {
-                string url = string.Format(UrlFormat, new object[] { GMapProvider.GetServerNum(pos, SoSoMapProviderBase.maxServer), "demTiles", base.GetSosoMapTileNo(pos, zoom), "jpg" });
+                string url = string.Format(UrlFormat, new object[] { GMapProvider.GetServerNum(pos, TencentMapProviderBase.maxServer), "demTiles", base.GetSosoMapTileNo(pos, zoom), "jpg" });
                 return base.GetTileImageUsingHttp(url);
             }
             catch (Exception ex)

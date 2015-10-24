@@ -26,6 +26,7 @@ using GMapCommonType;
 using GMapProvidersExt;
 using GMapProvidersExt.Tencent;
 using GMapProvidersExt.AMap;
+using GMapProvidersExt.Baidu;
 
 namespace GMapDownloader
 {
@@ -54,9 +55,10 @@ namespace GMapDownloader
         private bool isLeftButtonDown = false;
         private GMapMarkerEllipse currentDragableNode = null;
         private List<GMapMarkerEllipse> currentDragableNodes;
-        private GMapAreaPolygon currentAreaPolygon;
-        private GMapPolygon currentDrawPolygon;
+        private GMapAreaPolygon currentAreaPolygon; //区域边界多边形
+        private GMapPolygon currentDrawPolygon; //画图多边形
 
+        private bool allowRouting = false;
         private PointLatLng routeStartPoint = PointLatLng.Empty;
         private PointLatLng routeEndPoint = PointLatLng.Empty;
         private GPoint leftClickPoint = GPoint.Empty;
@@ -71,6 +73,8 @@ namespace GMapDownloader
 
             InitUI();
 
+            InitPOISearch();
+
             InitMySQLConString();
         }
 
@@ -82,8 +86,8 @@ namespace GMapDownloader
             mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; //缓存位置
 
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
-            mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider1.Instance;
-            //mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
+            //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
             mapControl.Position = new PointLatLng(32.043, 118.773);
             mapControl.MinZoom = 1;
             mapControl.MaxZoom = 18;
@@ -106,9 +110,23 @@ namespace GMapDownloader
             this.mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
             this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
             this.mapControl.OnPositionChanged += new PositionChanged(mapControl_OnPositionChanged);
+            this.mapControl.OnMapZoomChanged += new MapZoomChanged(mapControl_OnMapZoomChanged);
             
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
+        }
+
+        void mapControl_OnMapZoomChanged()
+        {
+            if (this.mapControl.Zoom >= 14)
+            {
+                //Allow routing on map
+                allowRouting = true;
+            }
+            else
+            {
+                allowRouting = false;
+            }
         }
 
         #region 地图控件事件
@@ -123,15 +141,22 @@ namespace GMapDownloader
 
         void centerPositionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Placemark place = (Placemark)e.Result;
-            this.toolStripStatusCenter.Text = place.Address;
-            currentCenterCityName = place.CityName;
+            try
+            {
+                Placemark place = (Placemark)e.Result;
+                this.toolStripStatusCenter.Text = place.ProvinceName+","+place.CityName+","+place.DistrictName;
+                currentCenterCityName = place.CityName;
+            }
+            catch (Exception ignore)
+            {
+            }
         }
 
         void centerPositionWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             PointLatLng p = (PointLatLng)e.Argument;
-            Placemark centerPosPlace = SoSoMapProvider.Instance.GetCenterNameByLocation(p);
+            //Placemark centerPosPlace = SoSoMapProvider.Instance.GetCenterNameByLocation(p);
+            Placemark centerPosPlace = AMapProvider.Instance.GetCenterNameByLocation(p);
             e.Result = centerPosPlace;
         }
 
@@ -140,7 +165,10 @@ namespace GMapDownloader
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 leftClickPoint = new GPoint(e.X, e.Y);
-                this.contextMenuStripLocation.Show(Cursor.Position);
+                if (allowRouting)
+                {
+                    this.contextMenuStripLocation.Show(Cursor.Position);
+                }
             }
         }
 
@@ -258,14 +286,15 @@ namespace GMapDownloader
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (item is GMapAreaPolygon && currentAreaPolygon != null)
+                if (item is GMapAreaPolygon)
                 {
+                    currentAreaPolygon = item as GMapAreaPolygon;
                     this.contextMenuStripSelectedArea.Show(Cursor.Position);
                 }
                 if (item is GMapDrawRectangle || item is GMapDrawPolygon)
                 {
                     currentDrawPolygon = item;
-                    this.contextMenuStripDrawPolygon.Show(Cursor.Position);
+                    //this.contextMenuStripDrawPolygon.Show(Cursor.Position);
                 }
             }
         }
@@ -448,14 +477,8 @@ namespace GMapDownloader
             loadChinaWorker.RunWorkerAsync();
         }
 
-        void loadChinaWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void InitCountryTree()
         {
-            if (china == null)
-            {
-                log.Warn("加载中国省市边界失败！");
-                return;
-            }
-
             try
             {
                 foreach (var provice in china.Province)
@@ -484,6 +507,19 @@ namespace GMapDownloader
             }
 
             this.advTreeChina.NodeClick += new DevComponents.AdvTree.TreeNodeMouseEventHandler(advTreeChina_NodeClick);
+        }
+
+        void loadChinaWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (china == null)
+            {
+                log.Error("加载中国省市边界失败！");
+                return;
+            }
+
+            InitPOICountrySearchCondition();
+
+            InitCountryTree();
         }
 
         void advTreeChina_NodeClick(object sender, DevComponents.AdvTree.TreeNodeMouseEventArgs e)
@@ -531,11 +567,6 @@ namespace GMapDownloader
 
         void loadChinaWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //string file = System.Windows.Forms.Application.StartupPath + "\\chinaBoundry";
-            //if (System.IO.File.Exists(file))
-            //{
-            //    china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonFile(file);
-            //}
             try
             {
                 //byte[] buffer = Properties.Resources.ChinaBoundryBinary_Province_City;
@@ -815,7 +846,6 @@ namespace GMapDownloader
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
-            //this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider1.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -851,23 +881,25 @@ namespace GMapDownloader
         //SoSo地图
         private void 普通地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
+            this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapProvider.Instance;
             //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
-            this.mapControl.MapProvider = GMapProvidersExt.Tencent.SoSoMapProvider.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapSateliteProvider.Instance;
+            this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapSateliteProvider.Instance;
+            //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapSateliteProvider.Instance;
         }
 
         private void 混合地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
+            this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapHybridProvider.Instance;
+            //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
         }
 
         private void 地形地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mapControl.MapProvider = SoSoTerrainMapAnnoProvider.Instance;
+            this.mapControl.MapProvider = TencentTerrainMapAnnoProvider.Instance;
         }
 
         //Here地图
@@ -1360,7 +1392,7 @@ namespace GMapDownloader
 
         private void queryProgressEvent(long completedCount, long total)
         {
-            this.toolStripStatusPOIDownload.Text = string.Format("已找到：{0}条POI，还在查询中...", completedCount);
+            this.toolStripStatusPOIDownload.Text = string.Format("已找到{0}条POI，还在查询中...", completedCount);
         }
         
         void poiWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1385,58 +1417,24 @@ namespace GMapDownloader
                 string regionName = argument.Region;
                 string poiQueryRectangleStr = argument.Rectangle;
                 string keyWords = argument.KeyWord;
-                SoSoMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr,
-                    "", "", this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
-            }
-        }
-
-        //边界“POI查询”
-        private void pOI查询ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            PoiKeyWordForm poiKeyWord = new PoiKeyWordForm();
-            if (poiKeyWord.ShowDialog() == DialogResult.OK)
-            {
-                string keyWord = poiKeyWord.GetKeyWord();
-                this.poiOverlay.Markers.Clear();
-                if (currentAreaPolygon != null)
+                int mapIndex = argument.MapIndex;
+                this.poisQueryResult.Clear();
+                this.poiQueryCount = 0;
+                switch (mapIndex)
                 {
-                    POISearchArgument argument = new POISearchArgument();
-                    argument.KeyWord = keyWord;
-                    argument.Region = currentAreaPolygon.Name;
-                    RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
-                    argument.Rectangle = string.Format("{0},{1},{2},{3}",
-                        new object[] { rect.LocationRightBottom.Lat, rect.LocationTopLeft.Lng, rect.LocationTopLeft.Lat, rect.LocationRightBottom.Lng });
-                    
-                    toolStripStatusPOIDownload.Visible = true;
-                    BackgroundWorker poiWorker = new BackgroundWorker();
-                    poiWorker.DoWork += new DoWorkEventHandler(poiWorker_DoWork);
-                    poiWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiWorker_RunWorkerCompleted);
-                    poiWorker.RunWorkerAsync(argument);
-                }
-            }
-        }
-
-        //画图“POI查询”
-        private void pOI查询ToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            PoiKeyWordForm poiKeyWord = new PoiKeyWordForm();
-            if (poiKeyWord.ShowDialog() == DialogResult.OK)
-            {
-                string keyWord = poiKeyWord.GetKeyWord();
-                this.poiOverlay.Markers.Clear();
-                if (currentDrawPolygon != null)
-                {
-                    POISearchArgument argument = new POISearchArgument();
-                    argument.KeyWord = keyWord;
-                    argument.Region = "";
-                    RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDrawPolygon);
-                    argument.Rectangle = string.Format("{0},{1},{2},{3}", 
-                        new object[] { rect.LocationRightBottom.Lat, rect.LocationTopLeft.Lng, rect.LocationTopLeft.Lat, rect.LocationRightBottom.Lng });
-                    toolStripStatusPOIDownload.Visible = true;
-                    BackgroundWorker poiWorker = new BackgroundWorker();
-                    poiWorker.DoWork += new DoWorkEventHandler(poiWorker_DoWork);
-                    poiWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiWorker_RunWorkerCompleted);
-                    poiWorker.RunWorkerAsync(argument);
+                    //百度
+                    case 0:
+                        BaiduMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr, this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+                        break;
+                    //高德
+                    case 1:
+                        AMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr, this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+                        break;
+                    //腾讯
+                    case 2:
+                        TencentMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr,
+                        "", this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+                        break;
                 }
             }
         }
@@ -1444,22 +1442,83 @@ namespace GMapDownloader
         //关键字POI查询
         private void buttonPOISearch_Click(object sender, EventArgs e)
         {
-            string keywords = this.textBoxPOIkeyword.Text.Trim();
-            if (!string.IsNullOrEmpty(keywords))
+            City city = this.comboBoxCity.SelectedItem as City;
+            if (city == null)
             {
-                this.poiOverlay.Markers.Clear();
-                this.listBoxAddress.Items.Clear();
-                List<Placemark> queryResult = SoSoMapProvider.Instance.GetPlacemarksByKeywords(keywords);
-                if (queryResult != null && queryResult.Count > 0)
+                CommonTools.PromptingMessage.PromptMessage(this, "请选择POI查询的城市！");
+                return;
+            }
+            string searchCity = city.name;
+
+            string keywords = this.textBoxPOIkeyword.Text.Trim();
+            if (string.IsNullOrEmpty(keywords))
+            {
+                CommonTools.PromptingMessage.PromptMessage(this, "请输入POI查询的关键字！");
+                return;
+            }
+
+            int selectMapIndex = this.comboBoxPOIMap.SelectedIndex;
+            GetPOIFromMap(searchCity, keywords, selectMapIndex);
+        }
+
+        private void GetPOIFromMap(string cityName, string keywords, int mapIndex)
+        {
+            this.poiOverlay.Markers.Clear();
+            this.listBoxAddress.Items.Clear();
+            POISearchArgument argument = new POISearchArgument();
+            argument.KeyWord = keywords;
+            argument.Region = cityName;
+            argument.MapIndex = mapIndex;
+            if (currentDrawPolygon != null)
+            {
+                RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDrawPolygon);
+                argument.Rectangle = string.Format("{0},{1},{2},{3}",
+                    new object[] { rect.LocationRightBottom.Lat, rect.LocationTopLeft.Lng, rect.LocationTopLeft.Lat, rect.LocationRightBottom.Lng });
+            }
+
+            toolStripStatusPOIDownload.Visible = true;
+            BackgroundWorker poiWorker = new BackgroundWorker();
+            poiWorker.DoWork += new DoWorkEventHandler(poiWorker_DoWork);
+            poiWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiWorker_RunWorkerCompleted);
+            poiWorker.RunWorkerAsync(argument);
+        }
+
+        private void InitPOISearch()
+        {
+            if (!isCountryLoad)
+            {
+                InitChinaRegion();
+                isCountryLoad = true;
+            }
+            this.comboBoxPOIMap.SelectedIndex = 0;
+        }
+
+        private void InitPOICountrySearchCondition()
+        {
+            if (china != null)
+            {
+                foreach (var provice in china.Province)
                 {
-                    foreach (Placemark place in queryResult)
-                    {
-                        GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
-                        marker.ToolTipText = place.Name + "\r\n" + place.Address + "\r\n" + place.Category;
-                        this.poiOverlay.Markers.Add(marker);
-                        this.listBoxAddress.Items.Add(place.Address);
-                    }
+                    this.comboBoxProvince.Items.Add(provice);
                 }
+                this.comboBoxProvince.DisplayMember = "name";
+                this.comboBoxProvince.SelectedIndex = 0;
+                this.comboBoxProvince.SelectedValueChanged += ComboBoxProvince_SelectedValueChanged;
+            }
+        }
+
+        private void ComboBoxProvince_SelectedValueChanged(object sender, EventArgs e)
+        {
+            Province province = this.comboBoxProvince.SelectedItem as Province;
+            if (province != null)
+            {
+                this.comboBoxCity.Items.Clear();
+                foreach (var city in province.City)
+                {
+                    this.comboBoxCity.Items.Add(city);
+                }
+                this.comboBoxCity.DisplayMember = "name";
+                this.comboBoxCity.SelectedIndex = 0;
             }
         }
 
@@ -1666,9 +1725,13 @@ namespace GMapDownloader
         {
             this.routeOverlay.Clear();
         }
-        
+
+        private void 清除POIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.poiOverlay.Clear();
+        }
+
         #endregion
 
-        
     }
 }

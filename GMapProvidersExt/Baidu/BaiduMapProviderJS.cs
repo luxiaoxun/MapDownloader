@@ -7,9 +7,9 @@ using GMap.NET.MapProviders;
 
 namespace GMapProvidersExt.Baidu
 {
-    public class BaiduMapProvider1 : BaiduMapProviderBase1
+    public class BaiduMapProviderJS : BaiduMapProviderBaseJS
     {
-        public static readonly BaiduMapProvider1 Instance;
+        public static readonly BaiduMapProviderJS Instance;
 
         readonly Guid id = new Guid("608748FC-5FDD-4d3a-9027-356F24A755E5");
         public override Guid Id
@@ -23,15 +23,22 @@ namespace GMapProvidersExt.Baidu
             get { return name; }
         }
 
-        static BaiduMapProvider1()
+        static BaiduMapProviderJS()
         {
-            Instance = new BaiduMapProvider1();
+            Instance = new BaiduMapProviderJS();
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)
         {
-            string url = MakeTileImageUrl(pos, zoom, LanguageStr);
-            return GetTileImageUsingHttp(url);
+            try
+            {
+                string url = MakeTileImageUrl(pos, zoom, LanguageStr);
+                return GetTileImageUsingHttp(url);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         private string MakeTileImageUrl(GPoint pos, int zoom, string language)

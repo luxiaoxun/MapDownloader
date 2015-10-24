@@ -12,5 +12,7 @@ namespace GMapDownloader
         public string Rectangle { set; get; }
 
         public string KeyWord { set; get; }
+
+        public int MapIndex { set; get; }
     }
 }

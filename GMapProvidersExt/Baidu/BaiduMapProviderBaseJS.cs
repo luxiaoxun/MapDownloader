@@ -8,11 +8,11 @@ using GMap.NET.MapProviders;
 
 namespace GMapProvidersExt.Baidu
 {
-    public abstract class BaiduMapProviderBase1 : GMapProvider
+    public abstract class BaiduMapProviderBaseJS : GMapProvider
     {
         private string ClientKey = "1308e84a0e8a1fc2115263a4b3cf87f1";
 
-        public BaiduMapProviderBase1()
+        public BaiduMapProviderBaseJS()
         {
             MinZoom = 3;
             MaxZoom = 19;
@@ -25,7 +25,7 @@ namespace GMapProvidersExt.Baidu
         /// </summary>
         public override PureProjection Projection
         {
-            get { return BaiduProjection1.Instance; }
+            get { return BaiduProjectionJS.Instance; }
         }
 
         private GMapProvider[] overlays;

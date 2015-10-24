@@ -89,6 +89,7 @@
             this.清除画图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清楚边界ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.清楚路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清除POIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.导入路径ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -100,6 +101,12 @@
             this.xPanderPanel1 = new BSE.Windows.Forms.XPanderPanel();
             this.panelTool = new System.Windows.Forms.Panel();
             this.groupBoxAddress = new System.Windows.Forms.GroupBox();
+            this.comboBoxPOIMap = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxCity = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBoxProvince = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.listBoxAddress = new System.Windows.Forms.ListBox();
             this.textBoxPOIkeyword = new System.Windows.Forms.TextBox();
             this.buttonPOISearch = new DevComponents.DotNetBar.ButtonX();
@@ -138,9 +145,6 @@
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.允许编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.停止编辑ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pOI查询ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStripDrawPolygon = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pOI查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripLocation = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.搜索该点的地址ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.以此为起点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -160,7 +164,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).BeginInit();
             this.panelMap.SuspendLayout();
             this.contextMenuStripSelectedArea.SuspendLayout();
-            this.contextMenuStripDrawPolygon.SuspendLayout();
             this.contextMenuStripLocation.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -613,7 +616,8 @@
             this.图层管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.清除画图ToolStripMenuItem,
             this.清楚边界ToolStripMenuItem,
-            this.清楚路径ToolStripMenuItem});
+            this.清楚路径ToolStripMenuItem,
+            this.清除POIToolStripMenuItem});
             this.图层管理ToolStripMenuItem.Name = "图层管理ToolStripMenuItem";
             this.图层管理ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.图层管理ToolStripMenuItem.Text = "图层清理";
@@ -621,23 +625,30 @@
             // 清除画图ToolStripMenuItem
             // 
             this.清除画图ToolStripMenuItem.Name = "清除画图ToolStripMenuItem";
-            this.清除画图ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清除画图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清除画图ToolStripMenuItem.Text = "清除画图";
             this.清除画图ToolStripMenuItem.Click += new System.EventHandler(this.清除画图ToolStripMenuItem_Click);
             // 
             // 清楚边界ToolStripMenuItem
             // 
             this.清楚边界ToolStripMenuItem.Name = "清楚边界ToolStripMenuItem";
-            this.清楚边界ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清楚边界ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清楚边界ToolStripMenuItem.Text = "清除边界";
             this.清楚边界ToolStripMenuItem.Click += new System.EventHandler(this.清楚边界ToolStripMenuItem_Click);
             // 
             // 清楚路径ToolStripMenuItem
             // 
             this.清楚路径ToolStripMenuItem.Name = "清楚路径ToolStripMenuItem";
-            this.清楚路径ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清楚路径ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.清楚路径ToolStripMenuItem.Text = "清除路径";
             this.清楚路径ToolStripMenuItem.Click += new System.EventHandler(this.清楚路径ToolStripMenuItem_Click);
+            // 
+            // 清除POIToolStripMenuItem
+            // 
+            this.清除POIToolStripMenuItem.Name = "清除POIToolStripMenuItem";
+            this.清除POIToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.清除POIToolStripMenuItem.Text = "清除POI";
+            this.清除POIToolStripMenuItem.Click += new System.EventHandler(this.清除POIToolStripMenuItem_Click);
             // 
             // 数据操作ToolStripMenuItem
             // 
@@ -757,6 +768,12 @@
             // 
             // groupBoxAddress
             // 
+            this.groupBoxAddress.Controls.Add(this.comboBoxPOIMap);
+            this.groupBoxAddress.Controls.Add(this.label7);
+            this.groupBoxAddress.Controls.Add(this.comboBoxCity);
+            this.groupBoxAddress.Controls.Add(this.label6);
+            this.groupBoxAddress.Controls.Add(this.comboBoxProvince);
+            this.groupBoxAddress.Controls.Add(this.label5);
             this.groupBoxAddress.Controls.Add(this.listBoxAddress);
             this.groupBoxAddress.Controls.Add(this.textBoxPOIkeyword);
             this.groupBoxAddress.Controls.Add(this.buttonPOISearch);
@@ -769,18 +786,76 @@
             this.groupBoxAddress.TabStop = false;
             this.groupBoxAddress.Text = "POI查询";
             // 
+            // comboBoxPOIMap
+            // 
+            this.comboBoxPOIMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPOIMap.FormattingEnabled = true;
+            this.comboBoxPOIMap.Items.AddRange(new object[] {
+            "百度地图",
+            "高德地图",
+            "腾讯地图"});
+            this.comboBoxPOIMap.Location = new System.Drawing.Point(71, 47);
+            this.comboBoxPOIMap.Name = "comboBoxPOIMap";
+            this.comboBoxPOIMap.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxPOIMap.TabIndex = 9;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(13, 51);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(59, 12);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "POI图源：";
+            // 
+            // comboBoxCity
+            // 
+            this.comboBoxCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCity.FormattingEnabled = true;
+            this.comboBoxCity.Location = new System.Drawing.Point(157, 18);
+            this.comboBoxCity.Name = "comboBoxCity";
+            this.comboBoxCity.Size = new System.Drawing.Size(86, 20);
+            this.comboBoxCity.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(132, 21);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "市：";
+            // 
+            // comboBoxProvince
+            // 
+            this.comboBoxProvince.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxProvince.FormattingEnabled = true;
+            this.comboBoxProvince.Location = new System.Drawing.Point(36, 18);
+            this.comboBoxProvince.Name = "comboBoxProvince";
+            this.comboBoxProvince.Size = new System.Drawing.Size(89, 20);
+            this.comboBoxProvince.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 21);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(29, 12);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "省：";
+            // 
             // listBoxAddress
             // 
             this.listBoxAddress.FormattingEnabled = true;
             this.listBoxAddress.ItemHeight = 12;
-            this.listBoxAddress.Location = new System.Drawing.Point(24, 64);
+            this.listBoxAddress.Location = new System.Drawing.Point(24, 124);
             this.listBoxAddress.Name = "listBoxAddress";
-            this.listBoxAddress.Size = new System.Drawing.Size(213, 184);
+            this.listBoxAddress.Size = new System.Drawing.Size(213, 124);
             this.listBoxAddress.TabIndex = 3;
             // 
             // textBoxPOIkeyword
             // 
-            this.textBoxPOIkeyword.Location = new System.Drawing.Point(55, 25);
+            this.textBoxPOIkeyword.Location = new System.Drawing.Point(55, 78);
             this.textBoxPOIkeyword.Name = "textBoxPOIkeyword";
             this.textBoxPOIkeyword.Size = new System.Drawing.Size(129, 21);
             this.textBoxPOIkeyword.TabIndex = 2;
@@ -789,7 +864,7 @@
             // 
             this.buttonPOISearch.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonPOISearch.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonPOISearch.Location = new System.Drawing.Point(193, 23);
+            this.buttonPOISearch.Location = new System.Drawing.Point(193, 76);
             this.buttonPOISearch.Name = "buttonPOISearch";
             this.buttonPOISearch.Size = new System.Drawing.Size(46, 23);
             this.buttonPOISearch.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
@@ -800,7 +875,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 30);
+            this.label1.Location = new System.Drawing.Point(9, 83);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 0;
@@ -1168,10 +1243,9 @@
             this.下载地图ToolStripMenuItem,
             this.下载KMLToolStripMenuItem,
             this.允许编辑ToolStripMenuItem,
-            this.停止编辑ToolStripMenuItem,
-            this.pOI查询ToolStripMenuItem1});
+            this.停止编辑ToolStripMenuItem});
             this.contextMenuStripSelectedArea.Name = "contextMenuStripSelectedArea";
-            this.contextMenuStripSelectedArea.Size = new System.Drawing.Size(127, 114);
+            this.contextMenuStripSelectedArea.Size = new System.Drawing.Size(127, 92);
             // 
             // 下载地图ToolStripMenuItem
             // 
@@ -1200,27 +1274,6 @@
             this.停止编辑ToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.停止编辑ToolStripMenuItem.Text = "停止编辑";
             this.停止编辑ToolStripMenuItem.Click += new System.EventHandler(this.停止编辑ToolStripMenuItem_Click);
-            // 
-            // pOI查询ToolStripMenuItem1
-            // 
-            this.pOI查询ToolStripMenuItem1.Name = "pOI查询ToolStripMenuItem1";
-            this.pOI查询ToolStripMenuItem1.Size = new System.Drawing.Size(126, 22);
-            this.pOI查询ToolStripMenuItem1.Text = "POI查询";
-            this.pOI查询ToolStripMenuItem1.Click += new System.EventHandler(this.pOI查询ToolStripMenuItem1_Click);
-            // 
-            // contextMenuStripDrawPolygon
-            // 
-            this.contextMenuStripDrawPolygon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pOI查询ToolStripMenuItem});
-            this.contextMenuStripDrawPolygon.Name = "contextMenuStripDrawPolygon";
-            this.contextMenuStripDrawPolygon.Size = new System.Drawing.Size(122, 26);
-            // 
-            // pOI查询ToolStripMenuItem
-            // 
-            this.pOI查询ToolStripMenuItem.Name = "pOI查询ToolStripMenuItem";
-            this.pOI查询ToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-            this.pOI查询ToolStripMenuItem.Text = "POI查询";
-            this.pOI查询ToolStripMenuItem.Click += new System.EventHandler(this.pOI查询ToolStripMenuItem_Click_1);
             // 
             // contextMenuStripLocation
             // 
@@ -1293,7 +1346,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bar1)).EndInit();
             this.panelMap.ResumeLayout(false);
             this.contextMenuStripSelectedArea.ResumeLayout(false);
-            this.contextMenuStripDrawPolygon.ResumeLayout(false);
             this.contextMenuStripLocation.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1371,7 +1423,6 @@
         private System.Windows.Forms.ToolStripMenuItem 混合地图ToolStripMenuItem4;
         private DevComponents.DotNetBar.ButtonItem buttonItemReadGpx;
         private DevComponents.DotNetBar.ButtonItem buttonItemReadKML;
-        private System.Windows.Forms.ToolStripMenuItem pOI查询ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusPOIDownload;
         private System.Windows.Forms.ToolStripMenuItem 必应ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 普通地图ToolStripMenuItem5;
@@ -1382,8 +1433,6 @@
         private System.Windows.Forms.ToolStripMenuItem 普通地图ToolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem 地形图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 地形地图ToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripDrawPolygon;
-        private System.Windows.Forms.ToolStripMenuItem pOI查询ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 天地图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 街道地图球面墨卡托ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 卫星地图球面墨卡托ToolStripMenuItem;
@@ -1417,6 +1466,13 @@
         private System.Windows.Forms.ToolStripMenuItem 清除画图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清楚边界ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清楚路径ToolStripMenuItem;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBoxProvince;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBoxCity;
+        private System.Windows.Forms.ComboBox comboBoxPOIMap;
+        private System.Windows.Forms.ToolStripMenuItem 清除POIToolStripMenuItem;
     }
 }
 

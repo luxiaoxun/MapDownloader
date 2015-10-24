@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GMap.NET;
-using GMapCommonType;
 
 namespace GMapProvidersExt
 {
@@ -16,8 +15,6 @@ namespace GMapProvidersExt
         private static readonly double MaxLongitude;
         private static readonly double MinLongitude;
         private readonly GSize tileSize;
-
-        public int EpsgCode;
 
         // Methods
         static SphericalMercatorProjection()
@@ -32,7 +29,6 @@ namespace GMapProvidersExt
         private SphericalMercatorProjection()
         {
             this.tileSize = new GSize(256, 256);
-            EpsgCode = 3857;
         }
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)
@@ -105,30 +101,8 @@ namespace GMapProvidersExt
 
         public PointLatLng GetProjectedPoint(PointLatLng pointLatLng)
         {
-            if (EpsgCode == 3857)
-            {
-                return LonLatToMercator(pointLatLng.Lng, pointLatLng.Lat);
-            }
-
-            //if (this.EpsgCode == 0x10e6)
-            //{
-            //    return new Point2D(pointLatLng.Lng, pointLatLng.Lat);
-            //}
-            //if (this.EpsgCode == 0xf11)
-            //{
-            //    return LonLat2Mercator(pointLatLng.Lng, pointLatLng.Lat);
-            //}
-            //return pointLatLng.TransformFromWGS84(ProjectionUtil.GetWKTFromEpsgCode(this.EpsgCode));
-
-            return new PointLatLng(pointLatLng.Lng, pointLatLng.Lat);
+            return LonLatToMercator(pointLatLng.Lng, pointLatLng.Lat);
         }
-
-        //private PointLatLng LonLat2Mercator(double x, double y)
-        //{
-        //    double num = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
-        //    double num2 = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
-        //    return new PointLatLng(num, ((num2 * 3.1415926535897931) * 6378137.0) / 180.0);
-        //}
 
         private PointLatLng LonLatToMercator(double X, double Y)
         {

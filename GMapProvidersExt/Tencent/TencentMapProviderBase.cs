@@ -7,21 +7,19 @@ using GMap.NET.MapProviders;
 
 namespace GMapProvidersExt.Tencent
 {
-    public abstract class SoSoMapProviderBase : GMapProvider
+    public abstract class TencentMapProviderBase : GMapProvider
     {
         // Fields
         public static readonly int maxServer;
         private GMapProvider[] overlays;
-        public static string UrlFormat;
 
         // Methods
-        static SoSoMapProviderBase()
+        static TencentMapProviderBase()
         {
             maxServer = 3;
-            UrlFormat = "http://p{0}.map.soso.com/{1}/{2}.{3}";
         }
 
-        public SoSoMapProviderBase()
+        public TencentMapProviderBase()
         {
             base.MaxZoom = 18;
             base.MinZoom = 1;

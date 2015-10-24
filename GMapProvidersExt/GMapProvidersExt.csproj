@@ -63,24 +63,12 @@
     <Compile Include="ArcGIS\ArcGISWarmMapProvider.cs" />
     <Compile Include="Baidu\BaiduHybridMapProvider.cs" />
     <Compile Include="Baidu\BaiduMapProvider.cs" />
-    <Compile Include="Baidu\BaiduMapProvider1.cs" />
+    <Compile Include="Baidu\BaiduMapProviderJS.cs" />
     <Compile Include="Baidu\BaiduMapProviderBase.cs" />
-    <Compile Include="Baidu\BaiduMapProviderBase1.cs" />
-    <Compile Include="Baidu\BaiduProjection1.cs" />
+    <Compile Include="Baidu\BaiduMapProviderBaseJS.cs" />
+    <Compile Include="Baidu\BaiduProjectionJS.cs" />
     <Compile Include="Baidu\BaiduSatelliteMapProvider.cs" />
     <Compile Include="Baidu\BaiduProjection.cs" />
-    <Compile Include="Baidu\HTTPService\AKSNCaculater.cs" />
-    <Compile Include="Baidu\HTTPService\CoordinateTransService.cs" />
-    <Compile Include="Baidu\HTTPService\DirectionService.cs" />
-    <Compile Include="Baidu\HTTPService\GeocodingService.cs" />
-    <Compile Include="Baidu\HTTPService\IPService.cs" />
-    <Compile Include="Baidu\HTTPService\LoadMapMode.cs" />
-    <Compile Include="Baidu\HTTPService\MapMode.cs" />
-    <Compile Include="Baidu\HTTPService\MapService.cs" />
-    <Compile Include="Baidu\HTTPService\PlaceService.cs" />
-    <Compile Include="Baidu\HTTPService\PlaceSuggestionService.cs" />
-    <Compile Include="Baidu\HTTPService\ServiceBase.cs" />
-    <Compile Include="Baidu\HTTPService\VerificationMode.cs" />
     <Compile Include="Bing\BingChinaMapProvider.cs" />
     <Compile Include="Bing\BingMapProvider.cs" />
     <Compile Include="Bing\BingMapProviderBase.cs" />
@@ -89,7 +77,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>BMap.settings</DependentUpon>
     </Compile>
-    <Compile Include="CoordinateTransformUtil.cs" />
     <Compile Include="Here\NokiaHybridMapProvider.cs" />
     <Compile Include="Here\NokiaMapProvider.cs" />
     <Compile Include="Here\NokiaMapProviderBase.cs" />
@@ -105,15 +92,17 @@
     <Compile Include="SogouProjection.cs" />
     <Compile Include="Sogou\SogouMapProvider.cs" />
     <Compile Include="Sogou\SogouMapProviderBase.cs" />
-    <Compile Include="Tencent\SoSoMapProvider.cs" />
-    <Compile Include="Tencent\SoSoMapProviderBase.cs" />
+    <Compile Include="Tencent\TencentMapHybridProvider.cs" />
+    <Compile Include="Tencent\TencentMapProvider.cs" />
+    <Compile Include="Tencent\TencentMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapHybridProvider.cs" />
     <Compile Include="SoSo\SosoMapProvider.cs" />
     <Compile Include="SoSo\SosoMapProviderBase.cs" />
     <Compile Include="SoSo\SosoMapSateliteProvider.cs" />
     <Compile Include="SphericalMercatorProjection.cs" />
-    <Compile Include="Tencent\SoSoTerrainMapAnnoProvider.cs" />
-    <Compile Include="Tencent\SoSoTerrainMapProvider.cs" />
+    <Compile Include="Tencent\TencentMapSateliteProvider.cs" />
+    <Compile Include="Tencent\TencentTerrainMapAnnoProvider.cs" />
+    <Compile Include="Tencent\TencentTerrainMapProvider.cs" />
     <Compile Include="TianDitu\TiandituMapProvider.cs" />
     <Compile Include="TianDitu\TiandituMapProvider4326.cs" />
     <Compile Include="TianDitu\TiandituMapProviderWithAnno.cs" />
@@ -135,10 +124,6 @@
     <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
       <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
       <Name>GMap.NET.WindowsForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GMapCommonType\GMapCommonType.csproj">
-      <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
-      <Name>GMapCommonType</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
       <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>

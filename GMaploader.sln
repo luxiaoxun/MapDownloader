@@ -45,8 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{210BD892-5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapDrawTools", "GMapDrawTools\GMapDrawTools.csproj", "{A846C026-69E9-4A27-A40C-6237E3D0BFB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapCommonType", "GMapCommonType\GMapCommonType.csproj", "{B004E87D-FE07-433C-812C-341D16164A40}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapDownloader", "MapDownloader\GMapDownloader.csproj", "{FC90F9EA-0578-4DE6-AAF9-102F6032E730}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapUtil", "GMapUtil\GMapUtil.csproj", "{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}"
@@ -56,6 +54,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetUtil", "NetUtil\NetUtil.csproj", "{0B25DE8C-3747-4FD5-90A6-789FE09B1816}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetUtilTest", "NetUtilTest\NetUtilTest.csproj", "{7A6DC60F-9671-43E6-BF6E-4A92295D758E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapCommonType", "GMapCommonType\GMapCommonType.csproj", "{B004E87D-FE07-433C-812C-341D16164A40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -247,16 +247,6 @@ Global
 		{A846C026-69E9-4A27-A40C-6237E3D0BFB2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A846C026-69E9-4A27-A40C-6237E3D0BFB2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A846C026-69E9-4A27-A40C-6237E3D0BFB2}.Release|x86.ActiveCfg = Release|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B004E87D-FE07-433C-812C-341D16164A40}.Release|x86.ActiveCfg = Release|Any CPU
 		{FC90F9EA-0578-4DE6-AAF9-102F6032E730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC90F9EA-0578-4DE6-AAF9-102F6032E730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC90F9EA-0578-4DE6-AAF9-102F6032E730}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -311,6 +301,16 @@ Global
 		{7A6DC60F-9671-43E6-BF6E-4A92295D758E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7A6DC60F-9671-43E6-BF6E-4A92295D758E}.Release|x86.ActiveCfg = Release|x86
 		{7A6DC60F-9671-43E6-BF6E-4A92295D758E}.Release|x86.Build.0 = Release|x86
+		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B004E87D-FE07-433C-812C-341D16164A40}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
