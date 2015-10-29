@@ -1,4 +1,4 @@
-﻿namespace GMapDownloader
+﻿namespace MapDownloader
 {
     partial class MainForm
     {
@@ -100,18 +100,23 @@
             this.xPanderPanelList1 = new BSE.Windows.Forms.XPanderPanelList();
             this.xPanderPanel1 = new BSE.Windows.Forms.XPanderPanel();
             this.panelTool = new System.Windows.Forms.Panel();
-            this.groupBoxAddress = new System.Windows.Forms.GroupBox();
+            this.groupBoxPOI = new System.Windows.Forms.GroupBox();
+            this.panelPOIResult = new System.Windows.Forms.Panel();
+            this.dataGridViewPOI = new System.Windows.Forms.DataGridView();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.addressDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.poiDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.panelPOI = new System.Windows.Forms.Panel();
             this.comboBoxPOIMap = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxCity = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBoxProvince = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.listBoxAddress = new System.Windows.Forms.ListBox();
             this.textBoxPOIkeyword = new System.Windows.Forms.TextBox();
             this.buttonPOISearch = new DevComponents.DotNetBar.ButtonX();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxAddress = new System.Windows.Forms.GroupBox();
             this.buttonAddressSearch = new DevComponents.DotNetBar.ButtonX();
             this.textBoxAddress = new System.Windows.Forms.TextBox();
             this.gbMapImage = new System.Windows.Forms.GroupBox();
@@ -139,7 +144,7 @@
             this.buttonItemReadGpx = new DevComponents.DotNetBar.ButtonItem();
             this.buttonItemReadKML = new DevComponents.DotNetBar.ButtonItem();
             this.panelMap = new System.Windows.Forms.Panel();
-            this.mapControl = new GMapDownloader.MapControl();
+            this.mapControl = new MapDownloader.MapControl();
             this.contextMenuStripSelectedArea = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.下载地图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.下载KMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,13 +154,18 @@
             this.搜索该点的地址ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.以此为起点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.以此为终点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
             this.xPanderPanel1.SuspendLayout();
             this.panelTool.SuspendLayout();
+            this.groupBoxPOI.SuspendLayout();
+            this.panelPOIResult.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPOI)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.poiDataBindingSource)).BeginInit();
+            this.panelPOI.SuspendLayout();
             this.groupBoxAddress.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.gbMapImage.SuspendLayout();
             this.gbMapDownloader.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -756,8 +766,8 @@
             // panelTool
             // 
             this.panelTool.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panelTool.Controls.Add(this.groupBoxPOI);
             this.panelTool.Controls.Add(this.groupBoxAddress);
-            this.panelTool.Controls.Add(this.groupBox1);
             this.panelTool.Controls.Add(this.gbMapImage);
             this.panelTool.Controls.Add(this.gbMapDownloader);
             this.panelTool.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -766,25 +776,74 @@
             this.panelTool.Size = new System.Drawing.Size(249, 508);
             this.panelTool.TabIndex = 6;
             // 
-            // groupBoxAddress
+            // groupBoxPOI
             // 
-            this.groupBoxAddress.Controls.Add(this.comboBoxPOIMap);
-            this.groupBoxAddress.Controls.Add(this.label7);
-            this.groupBoxAddress.Controls.Add(this.comboBoxCity);
-            this.groupBoxAddress.Controls.Add(this.label6);
-            this.groupBoxAddress.Controls.Add(this.comboBoxProvince);
-            this.groupBoxAddress.Controls.Add(this.label5);
-            this.groupBoxAddress.Controls.Add(this.listBoxAddress);
-            this.groupBoxAddress.Controls.Add(this.textBoxPOIkeyword);
-            this.groupBoxAddress.Controls.Add(this.buttonPOISearch);
-            this.groupBoxAddress.Controls.Add(this.label1);
-            this.groupBoxAddress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxAddress.Location = new System.Drawing.Point(0, 259);
-            this.groupBoxAddress.Name = "groupBoxAddress";
-            this.groupBoxAddress.Size = new System.Drawing.Size(249, 249);
-            this.groupBoxAddress.TabIndex = 8;
-            this.groupBoxAddress.TabStop = false;
-            this.groupBoxAddress.Text = "POI查询";
+            this.groupBoxPOI.Controls.Add(this.panelPOIResult);
+            this.groupBoxPOI.Controls.Add(this.panelPOI);
+            this.groupBoxPOI.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxPOI.Location = new System.Drawing.Point(0, 259);
+            this.groupBoxPOI.Name = "groupBoxPOI";
+            this.groupBoxPOI.Size = new System.Drawing.Size(249, 249);
+            this.groupBoxPOI.TabIndex = 8;
+            this.groupBoxPOI.TabStop = false;
+            this.groupBoxPOI.Text = "POI查询";
+            // 
+            // panelPOIResult
+            // 
+            this.panelPOIResult.Controls.Add(this.dataGridViewPOI);
+            this.panelPOIResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPOIResult.Location = new System.Drawing.Point(3, 117);
+            this.panelPOIResult.Name = "panelPOIResult";
+            this.panelPOIResult.Size = new System.Drawing.Size(243, 129);
+            this.panelPOIResult.TabIndex = 11;
+            // 
+            // dataGridViewPOI
+            // 
+            this.dataGridViewPOI.AutoGenerateColumns = false;
+            this.dataGridViewPOI.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPOI.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn,
+            this.addressDataGridViewTextBoxColumn});
+            this.dataGridViewPOI.DataSource = this.poiDataBindingSource;
+            this.dataGridViewPOI.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewPOI.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewPOI.Name = "dataGridViewPOI";
+            this.dataGridViewPOI.RowTemplate.Height = 23;
+            this.dataGridViewPOI.Size = new System.Drawing.Size(243, 129);
+            this.dataGridViewPOI.TabIndex = 0;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "名称";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            // 
+            // addressDataGridViewTextBoxColumn
+            // 
+            this.addressDataGridViewTextBoxColumn.DataPropertyName = "Address";
+            this.addressDataGridViewTextBoxColumn.HeaderText = "地址";
+            this.addressDataGridViewTextBoxColumn.Name = "addressDataGridViewTextBoxColumn";
+            // 
+            // poiDataBindingSource
+            // 
+            this.poiDataBindingSource.DataSource = typeof(MapDownloader.PoiData);
+            // 
+            // panelPOI
+            // 
+            this.panelPOI.Controls.Add(this.comboBoxPOIMap);
+            this.panelPOI.Controls.Add(this.label7);
+            this.panelPOI.Controls.Add(this.comboBoxCity);
+            this.panelPOI.Controls.Add(this.label6);
+            this.panelPOI.Controls.Add(this.comboBoxProvince);
+            this.panelPOI.Controls.Add(this.label5);
+            this.panelPOI.Controls.Add(this.textBoxPOIkeyword);
+            this.panelPOI.Controls.Add(this.buttonPOISearch);
+            this.panelPOI.Controls.Add(this.label1);
+            this.panelPOI.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelPOI.Location = new System.Drawing.Point(3, 17);
+            this.panelPOI.Name = "panelPOI";
+            this.panelPOI.Size = new System.Drawing.Size(243, 100);
+            this.panelPOI.TabIndex = 10;
             // 
             // comboBoxPOIMap
             // 
@@ -794,104 +853,95 @@
             "百度地图",
             "高德地图",
             "腾讯地图"});
-            this.comboBoxPOIMap.Location = new System.Drawing.Point(71, 47);
+            this.comboBoxPOIMap.Location = new System.Drawing.Point(64, 35);
             this.comboBoxPOIMap.Name = "comboBoxPOIMap";
             this.comboBoxPOIMap.Size = new System.Drawing.Size(121, 20);
-            this.comboBoxPOIMap.TabIndex = 9;
+            this.comboBoxPOIMap.TabIndex = 18;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(13, 51);
+            this.label7.Location = new System.Drawing.Point(6, 39);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(59, 12);
-            this.label7.TabIndex = 8;
+            this.label7.TabIndex = 17;
             this.label7.Text = "POI图源：";
             // 
             // comboBoxCity
             // 
             this.comboBoxCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCity.FormattingEnabled = true;
-            this.comboBoxCity.Location = new System.Drawing.Point(157, 18);
+            this.comboBoxCity.Location = new System.Drawing.Point(150, 6);
             this.comboBoxCity.Name = "comboBoxCity";
             this.comboBoxCity.Size = new System.Drawing.Size(86, 20);
-            this.comboBoxCity.TabIndex = 7;
+            this.comboBoxCity.TabIndex = 16;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(132, 21);
+            this.label6.Location = new System.Drawing.Point(125, 9);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 12);
-            this.label6.TabIndex = 6;
+            this.label6.TabIndex = 15;
             this.label6.Text = "市：";
             // 
             // comboBoxProvince
             // 
             this.comboBoxProvince.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxProvince.FormattingEnabled = true;
-            this.comboBoxProvince.Location = new System.Drawing.Point(36, 18);
+            this.comboBoxProvince.Location = new System.Drawing.Point(29, 6);
             this.comboBoxProvince.Name = "comboBoxProvince";
             this.comboBoxProvince.Size = new System.Drawing.Size(89, 20);
-            this.comboBoxProvince.TabIndex = 5;
+            this.comboBoxProvince.TabIndex = 14;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 21);
+            this.label5.Location = new System.Drawing.Point(8, 9);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 12);
-            this.label5.TabIndex = 4;
+            this.label5.TabIndex = 13;
             this.label5.Text = "省：";
-            // 
-            // listBoxAddress
-            // 
-            this.listBoxAddress.FormattingEnabled = true;
-            this.listBoxAddress.ItemHeight = 12;
-            this.listBoxAddress.Location = new System.Drawing.Point(24, 124);
-            this.listBoxAddress.Name = "listBoxAddress";
-            this.listBoxAddress.Size = new System.Drawing.Size(213, 124);
-            this.listBoxAddress.TabIndex = 3;
             // 
             // textBoxPOIkeyword
             // 
-            this.textBoxPOIkeyword.Location = new System.Drawing.Point(55, 78);
+            this.textBoxPOIkeyword.Location = new System.Drawing.Point(48, 66);
             this.textBoxPOIkeyword.Name = "textBoxPOIkeyword";
             this.textBoxPOIkeyword.Size = new System.Drawing.Size(129, 21);
-            this.textBoxPOIkeyword.TabIndex = 2;
+            this.textBoxPOIkeyword.TabIndex = 12;
             // 
             // buttonPOISearch
             // 
             this.buttonPOISearch.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonPOISearch.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonPOISearch.Location = new System.Drawing.Point(193, 76);
+            this.buttonPOISearch.Location = new System.Drawing.Point(186, 64);
             this.buttonPOISearch.Name = "buttonPOISearch";
             this.buttonPOISearch.Size = new System.Drawing.Size(46, 23);
             this.buttonPOISearch.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
-            this.buttonPOISearch.TabIndex = 1;
+            this.buttonPOISearch.TabIndex = 11;
             this.buttonPOISearch.Text = "查询";
             this.buttonPOISearch.Click += new System.EventHandler(this.buttonPOISearch_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 83);
+            this.label1.Location = new System.Drawing.Point(2, 71);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 10;
             this.label1.Text = "关键字：";
             // 
-            // groupBox1
+            // groupBoxAddress
             // 
-            this.groupBox1.Controls.Add(this.buttonAddressSearch);
-            this.groupBox1.Controls.Add(this.textBoxAddress);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(0, 202);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(249, 57);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "地址解析";
+            this.groupBoxAddress.Controls.Add(this.buttonAddressSearch);
+            this.groupBoxAddress.Controls.Add(this.textBoxAddress);
+            this.groupBoxAddress.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxAddress.Location = new System.Drawing.Point(0, 202);
+            this.groupBoxAddress.Name = "groupBoxAddress";
+            this.groupBoxAddress.Size = new System.Drawing.Size(249, 57);
+            this.groupBoxAddress.TabIndex = 7;
+            this.groupBoxAddress.TabStop = false;
+            this.groupBoxAddress.Text = "地址解析";
             // 
             // buttonAddressSearch
             // 
@@ -998,9 +1048,9 @@
             this.radioButtonDisk.AutoSize = true;
             this.radioButtonDisk.Location = new System.Drawing.Point(19, 68);
             this.radioButtonDisk.Name = "radioButtonDisk";
-            this.radioButtonDisk.Size = new System.Drawing.Size(71, 16);
+            this.radioButtonDisk.Size = new System.Drawing.Size(137, 16);
             this.radioButtonDisk.TabIndex = 11;
-            this.radioButtonDisk.Text = "本地磁盘";
+            this.radioButtonDisk.Text = "本地磁盘（png图片）";
             this.radioButtonDisk.UseVisualStyleBackColor = true;
             // 
             // radioButtonMySQL
@@ -1282,7 +1332,7 @@
             this.以此为起点ToolStripMenuItem,
             this.以此为终点ToolStripMenuItem});
             this.contextMenuStripLocation.Name = "contextMenuStripLocation";
-            this.contextMenuStripLocation.Size = new System.Drawing.Size(161, 92);
+            this.contextMenuStripLocation.Size = new System.Drawing.Size(161, 70);
             // 
             // 搜索该点的地址ToolStripMenuItem
             // 
@@ -1304,6 +1354,14 @@
             this.以此为终点ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.以此为终点ToolStripMenuItem.Text = "以此为终点";
             this.以此为终点ToolStripMenuItem.Click += new System.EventHandler(this.以此为终点ToolStripMenuItem_Click);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipText = "地图下载器";
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "地图下载器";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // MainForm
             // 
@@ -1331,10 +1389,14 @@
             this.xPanderPanelList1.ResumeLayout(false);
             this.xPanderPanel1.ResumeLayout(false);
             this.panelTool.ResumeLayout(false);
+            this.groupBoxPOI.ResumeLayout(false);
+            this.panelPOIResult.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPOI)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.poiDataBindingSource)).EndInit();
+            this.panelPOI.ResumeLayout(false);
+            this.panelPOI.PerformLayout();
             this.groupBoxAddress.ResumeLayout(false);
             this.groupBoxAddress.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.gbMapImage.ResumeLayout(false);
             this.gbMapImage.PerformLayout();
             this.gbMapDownloader.ResumeLayout(false);
@@ -1440,14 +1502,10 @@
         private System.Windows.Forms.ToolStripMenuItem 街道地图WGS84ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 卫星地图WGS84ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 混合地图WGS84ToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxAddress;
         private System.Windows.Forms.TextBox textBoxAddress;
         private DevComponents.DotNetBar.ButtonX buttonAddressSearch;
-        private System.Windows.Forms.GroupBox groupBoxAddress;
-        private System.Windows.Forms.ListBox listBoxAddress;
-        private System.Windows.Forms.TextBox textBoxPOIkeyword;
-        private DevComponents.DotNetBar.ButtonX buttonPOISearch;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBoxPOI;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLocation;
         private System.Windows.Forms.ToolStripMenuItem 搜索该点的地址ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusCenter;
@@ -1466,13 +1524,23 @@
         private System.Windows.Forms.ToolStripMenuItem 清除画图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清楚边界ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 清楚路径ToolStripMenuItem;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBoxProvince;
+        private System.Windows.Forms.ToolStripMenuItem 清除POIToolStripMenuItem;
+        private System.Windows.Forms.Panel panelPOIResult;
+        private System.Windows.Forms.Panel panelPOI;
+        private System.Windows.Forms.ComboBox comboBoxPOIMap;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxCity;
-        private System.Windows.Forms.ComboBox comboBoxPOIMap;
-        private System.Windows.Forms.ToolStripMenuItem 清除POIToolStripMenuItem;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox comboBoxProvince;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxPOIkeyword;
+        private DevComponents.DotNetBar.ButtonX buttonPOISearch;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridView dataGridViewPOI;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn addressDataGridViewTextBoxColumn;
+        private System.Windows.Forms.BindingSource poiDataBindingSource;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

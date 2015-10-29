@@ -100,7 +100,6 @@
             this.xPanderPanelChinaRegion = new BSE.Windows.Forms.XPanderPanel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.xPanderPanelMap = new BSE.Windows.Forms.XPanderPanel();
-            this.checkBoxTileHost = new System.Windows.Forms.CheckBox();
             this.buttonClearSArea = new System.Windows.Forms.Button();
             this.buttonPrefetchSArea = new System.Windows.Forms.Button();
             this.contextMenuStripMarker.SuspendLayout();
@@ -528,11 +527,12 @@
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelRoute.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelRoute.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
+            this.xPanderPanelRoute.Expand = true;
             this.xPanderPanelRoute.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelRoute.Image = null;
             this.xPanderPanelRoute.Name = "xPanderPanelRoute";
             this.xPanderPanelRoute.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelRoute.Size = new System.Drawing.Size(191, 25);
+            this.xPanderPanelRoute.Size = new System.Drawing.Size(191, 363);
             this.xPanderPanelRoute.TabIndex = 0;
             this.xPanderPanelRoute.Text = "Route";
             this.xPanderPanelRoute.ToolTipTextCloseIcon = null;
@@ -651,12 +651,11 @@
             this.xPanderPanelMarker.CustomColors.FlatCaptionGradientBegin = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(248)))));
             this.xPanderPanelMarker.CustomColors.FlatCaptionGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(252)))), ((int)(((byte)(252)))));
             this.xPanderPanelMarker.CustomColors.InnerBorderColor = System.Drawing.SystemColors.Window;
-            this.xPanderPanelMarker.Expand = true;
             this.xPanderPanelMarker.ForeColor = System.Drawing.SystemColors.ControlText;
             this.xPanderPanelMarker.Image = null;
             this.xPanderPanelMarker.Name = "xPanderPanelMarker";
             this.xPanderPanelMarker.PanelStyle = BSE.Windows.Forms.PanelStyle.Office2007;
-            this.xPanderPanelMarker.Size = new System.Drawing.Size(191, 363);
+            this.xPanderPanelMarker.Size = new System.Drawing.Size(191, 25);
             this.xPanderPanelMarker.TabIndex = 1;
             this.xPanderPanelMarker.Text = "Marker";
             this.xPanderPanelMarker.ToolTipTextCloseIcon = null;
@@ -978,7 +977,6 @@
             // xPanderPanelMap
             // 
             this.xPanderPanelMap.CaptionFont = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
-            this.xPanderPanelMap.Controls.Add(this.checkBoxTileHost);
             this.xPanderPanelMap.Controls.Add(this.buttonClearSArea);
             this.xPanderPanelMap.Controls.Add(this.buttonPrefetchSArea);
             this.xPanderPanelMap.CustomColors.BackColor = System.Drawing.SystemColors.Control;
@@ -1012,16 +1010,6 @@
             this.xPanderPanelMap.ToolTipTextCloseIcon = null;
             this.xPanderPanelMap.ToolTipTextExpandIconPanelCollapsed = null;
             this.xPanderPanelMap.ToolTipTextExpandIconPanelExpanded = null;
-            // 
-            // checkBoxTileHost
-            // 
-            this.checkBoxTileHost.AutoSize = true;
-            this.checkBoxTileHost.Location = new System.Drawing.Point(9, 117);
-            this.checkBoxTileHost.Name = "checkBoxTileHost";
-            this.checkBoxTileHost.Size = new System.Drawing.Size(198, 16);
-            this.checkBoxTileHost.TabIndex = 2;
-            this.checkBoxTileHost.Text = "TileHost - LeafletJS web demo";
-            this.checkBoxTileHost.UseVisualStyleBackColor = true;
             // 
             // buttonClearSArea
             // 
@@ -1081,7 +1069,6 @@
             this.groupBox3.ResumeLayout(false);
             this.xPanderPanelChinaRegion.ResumeLayout(false);
             this.xPanderPanelMap.ResumeLayout(false);
-            this.xPanderPanelMap.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1121,7 +1108,6 @@
         private BSE.Windows.Forms.XPanderPanel xPanderPanelMap;
         private System.Windows.Forms.Button buttonPrefetchSArea;
         private System.Windows.Forms.Button buttonClearSArea;
-        private System.Windows.Forms.CheckBox checkBoxTileHost;
         private System.Windows.Forms.CheckBox checkBoxMarker;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonStopBlink;

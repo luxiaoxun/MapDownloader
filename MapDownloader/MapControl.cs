@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public partial class MapControl : GMapControl
     {

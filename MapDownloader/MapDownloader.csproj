@@ -8,8 +8,8 @@
     <ProjectGuid>{FC90F9EA-0578-4DE6-AAF9-102F6032E730}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GMapDownloader</RootNamespace>
-    <AssemblyName>GMapDownloader</AssemblyName>
+    <RootNamespace>MapDownloader</RootNamespace>
+    <AssemblyName>MapDownloader</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -109,6 +109,7 @@
     <Compile Include="MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PoiData.cs" />
     <Compile Include="PoiKeyWordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,7 +117,7 @@
       <DependentUpon>PoiKeyWordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="POISearchArgument.cs" />
-    <Compile Include="PrefetchTiles.cs" />
+    <Compile Include="TileFetcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteDataMarker.cs" />
@@ -145,6 +146,7 @@
       <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="leafletjs\dist\images\locate.svg" />
+    <None Include="Properties\DataSources\PoiData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

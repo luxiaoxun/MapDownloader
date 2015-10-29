@@ -125,7 +125,6 @@ namespace GMapProvidersExt.AMap
                                 queryProgressEvent((long)this.succeedCount, (long)totalCount);
                             }
                         }
-
                     }
                 }
                 int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));

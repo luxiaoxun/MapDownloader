@@ -109,7 +109,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <EmbeddedResource Include="leafletjs\dist\images\locate.svg" />
     <None Include="Properties\DataSources\HistoryGeoData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -125,23 +124,6 @@
     <None Include="Resources\arrow.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="leafletjs\dist\images\layers.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\locate.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\locate_active.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\marker-icon%402x.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\marker-icon.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\marker-shadow.png" />
-    <EmbeddedResource Include="leafletjs\dist\images\spinner.gif" />
-    <EmbeddedResource Include="leafletjs\gmap.html" />
-    <EmbeddedResource Include="leafletjs\dist\leaflet-ie.css" />
-    <EmbeddedResource Include="leafletjs\dist\leaflet.css" />
-    <EmbeddedResource Include="leafletjs\dist\leaflet.js" />
-    <EmbeddedResource Include="leafletjs\dist\locate-ie.css" />
-    <EmbeddedResource Include="leafletjs\dist\locate.css" />
-    <EmbeddedResource Include="leafletjs\dist\locate.js" />
-    <EmbeddedResource Include="leafletjs\dist\mobile.css" />
-    <EmbeddedResource Include="leafletjs\dist\proj4js-compressed.js" />
-    <EmbeddedResource Include="leafletjs\dist\proj4leaflet.js" />
     <Content Include="Resources\ditu.PNG" />
     <Content Include="Resources\point_blue.png" />
     <Content Include="Resources\weixing.PNG" />

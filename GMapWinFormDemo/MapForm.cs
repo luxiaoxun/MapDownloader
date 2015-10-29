@@ -127,8 +127,6 @@ namespace GMapWinFormDemo
             }
             this.comboBoxRegion.SelectedValueChanged += new EventHandler(comboBoxRegion_SelectedValueChanged);
 
-            this.checkBoxTileHost.CheckedChanged += new EventHandler(checkBoxTileHost_CheckedChanged);
-
             InitHistoryLayerUI();
 
             this.checkBoxFollow.CheckedChanged += new EventHandler(checkBoxFollow_CheckedChanged);
@@ -193,29 +191,6 @@ namespace GMapWinFormDemo
                 return false;
             }
             return true;
-        }
-
-        // http://leafletjs.com/
-        // Leaflet is a modern open-source JavaScript library for mobile-friendly interactive maps
-        // Leaflet is designed with simplicity, performance and usability in mind. It works efficiently across all major desktop and mobile platforms out of the box
-        void checkBoxTileHost_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxTileHost.Checked)
-            {
-                try
-                {
-                    mapControl.Manager.EnableTileHost(8844);
-                    TryExtractLeafletjs();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("EnableTileHost: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                mapControl.Manager.DisableTileHost();
-            }
         }
 
         #endregion 

@@ -6,7 +6,7 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using System.Drawing;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public class RouteDataMarker : GMapMarker
     {

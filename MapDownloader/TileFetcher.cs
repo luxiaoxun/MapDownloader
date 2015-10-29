@@ -10,12 +10,13 @@ using log4net;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
+using GMap.NET.Projections;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
-    public class PrefetchTiles
+    public class TileFetcher
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(PrefetchTiles));
+        private static readonly ILog log = LogManager.GetLogger(typeof(TileFetcher));
 
         private BackgroundWorker worker = new BackgroundWorker();
 
@@ -37,8 +38,9 @@ namespace GMapDownloader
         private int currentZoom;
 
         private string tilePath;
+        private bool isGenGeoFile = false;
 
-        public PrefetchTiles()
+        public TileFetcher()
         {
             worker.WorkerReportsProgress = true;
             worker.WorkerSupportsCancellation = true;
@@ -51,8 +53,6 @@ namespace GMapDownloader
         {
             get { return worker.IsBusy; }
         }
-
-        GMapProvider provider;
 
         public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider)
         {
@@ -196,7 +196,6 @@ namespace GMapDownloader
             {
                 if (PrefetchTileProgress != null)
                 {
-                    //PrefetchTileProgress(this, new PrefetchTileEventArgs(totalTiles, overallCompleted,currentZoom));
                     PrefetchTileProgress(this, e.UserState as PrefetchTileEventArgs);
                 }
             }
@@ -216,6 +215,38 @@ namespace GMapDownloader
         #endregion
 
         #region Standalone Methods
+
+        private double[] GetCoordinatesFromAddress(long row, long col, int zoom)
+        {
+            MercatorProjection mp = new MercatorProjection();
+            double[] ret = new double[4];
+            GPoint tmp = mp.FromTileXYToPixel(new GPoint(col, row));
+            PointLatLng leftCenter = mp.FromPixelToLatLng(tmp, zoom);
+
+            PointLatLng leftCenter1 = mp.FromPixelToLatLng(new GPoint(tmp.X + 1, tmp.Y), zoom);
+            PointLatLng leftCenter2 = mp.FromPixelToLatLng(new GPoint(tmp.X, tmp.Y - 1), zoom);
+            ret[0] = leftCenter1.Lng - leftCenter.Lng;
+            ret[1] = leftCenter.Lat - leftCenter2.Lat;
+            ret[2] = leftCenter.Lng;
+            ret[3] = leftCenter.Lat;
+            return ret;
+        }
+
+        private void WriteGeoFileToDisk(PureImage img, int zoom, GPoint p)
+        {
+            DirectoryInfo dir = new DirectoryInfo(tilePath);
+            FileStream fs = new FileStream(dir + "//" + p.Y.ToString() + p.X.ToString() + ".jgw", FileMode.Create, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+            double[] ret = GetCoordinatesFromAddress(p.Y, p.X, zoom);
+            sw.WriteLine(ret[0].ToString("0.0000000000"));
+            sw.WriteLine("0.0000000000");
+            sw.WriteLine("0.0000000000");
+            sw.WriteLine(ret[1].ToString("0.0000000000"));
+            sw.WriteLine(ret[2].ToString("0.0000000000"));
+            sw.WriteLine(ret[3].ToString("0.0000000000"));
+            sw.Close();
+            fs.Close();
+        }
 
         private void WriteTileToDisk(PureImage img, int zoom, GPoint p)
         {
@@ -242,23 +273,25 @@ namespace GMapDownloader
             fs.Close();
         }
 
-        private bool CacheTiles(int zoom, GPoint p, GMapProvider provider)
+        private bool CacheTiles(int zoom, GPoint pos, GMapProvider provider)
         {
             foreach (var pr in provider.Overlays)
             {
-                //Exception ex;
                 PureImage img;
                 try
                 {
-                    //img = GMaps.Instance.GetImageFrom(pr, p, zoom, out ex);
-                    img = pr.GetTileImage(p, zoom);
+                    img = pr.GetTileImage(pos, zoom);
                     if (img != null)
                     {
-                        GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, p, zoom);
+                        GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, pos, zoom);
                         // if the tile path is not null, write the tile to disk
                         if (tilePath != null)
                         {
-                            WriteTileToDisk(img, zoom, p);
+                            WriteTileToDisk(img, zoom, pos);
+                            if (isGenGeoFile)
+                            {
+                                WriteGeoFileToDisk(img, zoom, pos);
+                            }
                         }
                         img.Dispose();
                         img = null;

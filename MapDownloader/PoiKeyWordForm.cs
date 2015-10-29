@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public partial class PoiKeyWordForm : Form
     {

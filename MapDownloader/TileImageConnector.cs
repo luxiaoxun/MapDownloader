@@ -9,7 +9,7 @@ using GMap.NET.WindowsForms;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public class TileImageConnector
     {
@@ -51,7 +51,7 @@ namespace GMapDownloader
             }
         }
 
-        private bool CacheTiles(int zoom, GPoint p, GMapProvider provider, Graphics gfx, GPoint topLeftPx, int padding)
+        private bool CacheTiles(int zoom, GPoint p, GMapProvider provider, Graphics gfx, GPoint topLeftPx)
         {
             foreach (var pr in provider.Overlays)
             {
@@ -61,8 +61,8 @@ namespace GMapDownloader
                 {
                     using (tile)
                     {
-                        long x = p.X * this.provider.Projection.TileSize.Width - topLeftPx.X + padding;
-                        long y = p.Y * this.provider.Projection.TileSize.Width - topLeftPx.Y + padding;
+                        long x = p.X * this.provider.Projection.TileSize.Width - topLeftPx.X;
+                        long y = p.Y * this.provider.Projection.TileSize.Width - topLeftPx.Y;
                         gfx.DrawImage(tile.Img, x, y, this.provider.Projection.TileSize.Width, this.provider.Projection.TileSize.Height);
                     }
                 }
@@ -89,8 +89,7 @@ namespace GMapDownloader
                 GPoint rightButtomPx = this.provider.Projection.FromLatLngToPixel(area.Bottom, area.Right, zoom);
                 GPoint pxDelta = new GPoint(rightButtomPx.X - topLeftPx.X, rightButtomPx.Y - topLeftPx.Y);
 
-                int padding = 22;
-                using (Bitmap bmpDestination = new Bitmap((int)(pxDelta.X + padding * 2), (int)(pxDelta.Y + padding * 2)))
+                using (Bitmap bmpDestination = new Bitmap((int)(pxDelta.X), (int)(pxDelta.Y)))
                 {
                     using (Graphics gfx = Graphics.FromImage(bmpDestination))
                     {
@@ -101,8 +100,8 @@ namespace GMapDownloader
                         int retryCount = 0;
                         for (int i = 0; i < all; ++i)
                         {
-                            GPoint p = tileArea[i];
-                            if (CacheTiles(zoom, p, provider,gfx,topLeftPx,padding))
+                            GPoint pos = tileArea[i];
+                            if (CacheTiles(zoom, pos, provider,gfx,topLeftPx))
                                 retryCount = 0;
                             else
                             {

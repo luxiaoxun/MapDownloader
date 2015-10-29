@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public class RouteMapData
     {

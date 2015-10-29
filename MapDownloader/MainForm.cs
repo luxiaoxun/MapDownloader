@@ -28,7 +28,7 @@ using GMapProvidersExt.Tencent;
 using GMapProvidersExt.AMap;
 using GMapProvidersExt.Baidu;
 
-namespace GMapDownloader
+namespace MapDownloader
 {
     public partial class MainForm : DevComponents.DotNetBar.Office2007Form
     {
@@ -84,7 +84,6 @@ namespace GMapDownloader
             mapControl.ShowCenter = false;
             mapControl.DragButton = System.Windows.Forms.MouseButtons.Left;
             mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; //缓存位置
-
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
             //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
             mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
@@ -316,9 +315,44 @@ namespace GMapDownloader
 
             this.buttonDownload.Click += new EventHandler(buttonDownload_Click);
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
+            this.SizeChanged += new EventHandler(MainForm_SizeChanged);
 
             this.checkBoxItemShowGrid.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxItemShowGrid_CheckedChanged);
             this.checkBoxCacheServer.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxCacheServer_CheckedChanged);
+            this.dataGridViewPOI.AutoSize = true;
+            this.dataGridViewPOI.RowPostPaint += new DataGridViewRowPostPaintEventHandler(dataGridViewPOI_RowPostPaint);
+        }
+
+        void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Visible = false;
+                this.notifyIcon1.Visible = true;
+            }
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Visible = true;
+                this.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        void dataGridViewPOI_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(e.RowBounds.Location.X,
+                e.RowBounds.Location.Y,
+                dataGridViewPOI.RowHeadersWidth - 4,
+                e.RowBounds.Height);
+
+            TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(),
+                dataGridViewPOI.RowHeadersDefaultCellStyle.Font,
+                rectangle,
+                dataGridViewPOI.RowHeadersDefaultCellStyle.ForeColor,
+                TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
         //初始化App config配置信息
@@ -370,7 +404,7 @@ namespace GMapDownloader
             }
         }
 
-        #region 离线服务
+        #region 离线Web服务
 
         bool TryExtractLeafletjs()
         {
@@ -383,7 +417,7 @@ namespace GMapDownloader
                 {
                     if (f.Contains("leafletjs"))
                     {
-                        var fName = f.Replace("GMapDownloader.", string.Empty);
+                        var fName = f.Replace("MapDownloader.", string.Empty);
                         fName = fName.Replace(".", "\\");
                         var ll = fName.LastIndexOf("\\");
                         var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
@@ -437,7 +471,7 @@ namespace GMapDownloader
             {
                 try
                 {
-                    mapControl.Manager.EnableTileHost(8844);
+                    mapControl.Manager.EnableTileHost(8899);
                     TryExtractLeafletjs();
                 }
                 catch (Exception ex)
@@ -665,7 +699,7 @@ namespace GMapDownloader
                     if (minZ <= maxZ)
                     {
                         ResetToServerAndCacheMode();
-                        PrefetchTiles prefetchTiles = new PrefetchTiles();
+                        TileFetcher prefetchTiles = new TileFetcher();
                         prefetchTiles.Retry = retryNum;
                         prefetchTiles.PrefetchTileStart += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileStart);
                         prefetchTiles.PrefetchTileProgress += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileProgress);
@@ -861,11 +895,7 @@ namespace GMapDownloader
         //高德地图
         private void 普通地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            //PointLatLng p = GetNewMapPosition(this.mapControl.MapProvider, GMapProvidersExt.AMap.AMapProvider.Instance);
-            //PointLatLng p = this.mapControl.Position;
-            //GPoint posPixel = this.mapControl.PositionPixel;
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
-            //this.mapControl.Position = this.mapControl.MapProvider.Projection.FromPixelToLatLng(posPixel, (int)this.mapControl.Zoom);
         }
 
         private void 卫星地图ToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -1387,6 +1417,7 @@ namespace GMapDownloader
 
         #region POI查询
 
+        List<PoiData> poiDataList = new List<PoiData>();
         List<Placemark> poisQueryResult = new List<Placemark>();
         int poiQueryCount = 0;
 
@@ -1404,7 +1435,15 @@ namespace GMapDownloader
                     GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
                     marker.ToolTipText = place.Name+"\r\n"+place.Address+"\r\n"+place.Category;
                     this.poiOverlay.Markers.Add(marker);
+                    PoiData poiData = new PoiData();
+                    poiData.Name = place.Name;
+                    poiData.Address = place.Address;
+                    poiData.Lat = place.Point.Lat;
+                    poiData.Lng = place.Point.Lng;
+                    this.poiDataList.Add(poiData);
                 }
+
+                this.dataGridViewPOI.DataSource = poiDataList;
             }
             this.toolStripStatusPOIDownload.Text = string.Format("共找到：{0}条POI数据", poisQueryResult.Count);
         }
@@ -1418,6 +1457,7 @@ namespace GMapDownloader
                 string poiQueryRectangleStr = argument.Rectangle;
                 string keyWords = argument.KeyWord;
                 int mapIndex = argument.MapIndex;
+                this.poiDataList.Clear();
                 this.poisQueryResult.Clear();
                 this.poiQueryCount = 0;
                 switch (mapIndex)
@@ -1464,7 +1504,8 @@ namespace GMapDownloader
         private void GetPOIFromMap(string cityName, string keywords, int mapIndex)
         {
             this.poiOverlay.Markers.Clear();
-            this.listBoxAddress.Items.Clear();
+            this.dataGridViewPOI.DataSource = null;
+            this.dataGridViewPOI.Update();
             POISearchArgument argument = new POISearchArgument();
             argument.KeyWord = keywords;
             argument.Region = cityName;
@@ -1502,7 +1543,7 @@ namespace GMapDownloader
                     this.comboBoxProvince.Items.Add(provice);
                 }
                 this.comboBoxProvince.DisplayMember = "name";
-                this.comboBoxProvince.SelectedIndex = 0;
+                //this.comboBoxProvince.SelectedIndex = 0;
                 this.comboBoxProvince.SelectedValueChanged += ComboBoxProvince_SelectedValueChanged;
             }
         }
