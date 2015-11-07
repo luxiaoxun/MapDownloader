@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
-using log4net;
 using GMap.NET;
-using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
-using GMap.NET.Projections;
+using log4net;
 
-namespace MapDownloader
+namespace GMapExport
 {
-    public class TileFetcher
+    public class TileFetcherExport
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(TileFetcher));
+        private static readonly ILog log = LogManager.GetLogger(typeof(TileFetcherExport));
 
         private BackgroundWorker worker = new BackgroundWorker();
 
@@ -30,17 +26,15 @@ namespace MapDownloader
             get { return retry; }
             set { retry = value; }
         }
-        private Dictionary<int, List<GPoint>> zoomGPointDic = new Dictionary<int, List<GPoint>>();
 
         private ulong currentZoomTiles = 0;
         private ulong currentZoomCompleted = 0;
         private int overallProgress = 0;
         private int currentZoom;
 
-        private string tilePath;
-        private bool isGenGeoFile = false;
+        private string tilePath = "D://GisMap";
 
-        public TileFetcher()
+        public TileFetcherExport()
         {
             worker.WorkerReportsProgress = true;
             worker.WorkerSupportsCancellation = true;
@@ -52,27 +46,6 @@ namespace MapDownloader
         public bool IsBusy
         {
             get { return worker.IsBusy; }
-        }
-
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider)
-        {
-            if (!worker.IsBusy)
-            {
-                WorkerArgs args = new WorkerArgs();
-                args.MinZoom = minZoom;
-                args.MaxZoom = maxZoom;
-                args.Area = area;
-                args.Provider = provider;
-
-                GMaps.Instance.UseMemoryCache = false;
-                GMaps.Instance.CacheOnIdleRead = false;
-
-                worker.RunWorkerAsync(args);
-                if (PrefetchTileStart != null)
-                {
-                    PrefetchTileStart(this, new PrefetchTileEventArgs(0));
-                }
-            }
         }
 
         public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, string path)
@@ -166,6 +139,7 @@ namespace MapDownloader
                                     if (++retryCount <= retry)
                                     {
                                         y--;
+                                        System.Threading.Thread.Sleep(100);
                                         continue;
                                     }
                                     else
@@ -196,6 +170,7 @@ namespace MapDownloader
             {
                 if (PrefetchTileProgress != null)
                 {
+                    //PrefetchTileProgress(this, new PrefetchTileEventArgs(totalTiles, overallCompleted,currentZoom));
                     PrefetchTileProgress(this, e.UserState as PrefetchTileEventArgs);
                 }
             }
@@ -216,43 +191,11 @@ namespace MapDownloader
 
         #region Standalone Methods
 
-        private double[] GetCoordinatesFromAddress(long row, long col, int zoom)
-        {
-            MercatorProjection mp = new MercatorProjection();
-            double[] ret = new double[4];
-            GPoint tmp = mp.FromTileXYToPixel(new GPoint(col, row));
-            PointLatLng leftCenter = mp.FromPixelToLatLng(tmp, zoom);
-
-            PointLatLng leftCenter1 = mp.FromPixelToLatLng(new GPoint(tmp.X + 1, tmp.Y), zoom);
-            PointLatLng leftCenter2 = mp.FromPixelToLatLng(new GPoint(tmp.X, tmp.Y - 1), zoom);
-            ret[0] = leftCenter1.Lng - leftCenter.Lng;
-            ret[1] = leftCenter.Lat - leftCenter2.Lat;
-            ret[2] = leftCenter.Lng;
-            ret[3] = leftCenter.Lat;
-            return ret;
-        }
-
-        private void WriteGeoFileToDisk(PureImage img, int zoom, GPoint p)
-        {
-            DirectoryInfo dir = new DirectoryInfo(tilePath);
-            FileStream fs = new FileStream(dir + "//" + p.Y.ToString() + p.X.ToString() + ".jgw", FileMode.Create, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
-            double[] ret = GetCoordinatesFromAddress(p.Y, p.X, zoom);
-            sw.WriteLine(ret[0].ToString("0.0000000000"));
-            sw.WriteLine("0.0000000000");
-            sw.WriteLine("0.0000000000");
-            sw.WriteLine(ret[1].ToString("0.0000000000"));
-            sw.WriteLine(ret[2].ToString("0.0000000000"));
-            sw.WriteLine(ret[3].ToString("0.0000000000"));
-            sw.Close();
-            fs.Close();
-        }
-
         private void WriteTileToDisk(PureImage img, int zoom, GPoint p)
         {
-            DirectoryInfo di = new DirectoryInfo(tilePath);
-            string zoomStr = string.Format("{0:D2}", zoom);
+            DirectoryInfo di = new DirectoryInfo(tilePath + "\\LayerLayers\\_alllayers");
 
+            string zoomStr = string.Format("{0:D2}", zoom);
             long x = p.X;
             long y = p.Y;
             string col = string.Format("{0:x8}", x).ToLower();
@@ -273,25 +216,23 @@ namespace MapDownloader
             fs.Close();
         }
 
-        private bool CacheTiles(int zoom, GPoint pos, GMapProvider provider)
+        private bool CacheTiles(int zoom, GPoint p, GMapProvider provider)
         {
             foreach (var pr in provider.Overlays)
             {
+                //Exception ex;
                 PureImage img;
                 try
                 {
-                    img = pr.GetTileImage(pos, zoom);
+                    //img = GMaps.Instance.GetImageFrom(pr, p, zoom, out ex);
+                    img = pr.GetTileImage(p, zoom);
                     if (img != null)
                     {
-                        GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, pos, zoom);
+                        // GMaps.Instance.PrimaryCache.PutImageToCache(img.Data.ToArray(), pr.DbId, p, zoom);
                         // if the tile path is not null, write the tile to disk
                         if (tilePath != null)
                         {
-                            WriteTileToDisk(img, zoom, pos);
-                            if (isGenGeoFile)
-                            {
-                                WriteGeoFileToDisk(img, zoom, pos);
-                            }
+                            WriteTileToDisk(img, zoom, p);
                         }
                         img.Dispose();
                         img = null;
@@ -323,41 +264,40 @@ namespace MapDownloader
             }
         }
         #endregion
-    }
 
-    public class PrefetchTileEventArgs : EventArgs
-    {
-        public int ProgressValue { set; get; }
-
-        public ulong TileAllNum { set; get; }
-
-        public ulong TileCompleteNum { set; get; }
-
-        public int CurrentDownloadZoom { set; get; }
-
-        public PrefetchTileEventArgs(int value)
+        public class PrefetchTileEventArgs : EventArgs
         {
-            ProgressValue = value;
+            public int ProgressValue { set; get; }
+
+            public ulong TileAllNum { set; get; }
+
+            public ulong TileCompleteNum { set; get; }
+
+            public int CurrentDownloadZoom { set; get; }
+
+            public PrefetchTileEventArgs(int value)
+            {
+                ProgressValue = value;
+            }
+
+            public PrefetchTileEventArgs(ulong allNum, ulong comNum, int zoom)
+            {
+                TileAllNum = allNum;
+                TileCompleteNum = comNum;
+                CurrentDownloadZoom = zoom;
+                ProgressValue = Convert.ToInt32(TileCompleteNum * 100 / TileAllNum); ;
+            }
         }
 
-        public PrefetchTileEventArgs(ulong allNum, ulong comNum, int zoom)
+        #region Internal Helper Classes
+
+        internal class WorkerArgs
         {
-            TileAllNum = allNum;
-            TileCompleteNum = comNum;
-            CurrentDownloadZoom = zoom;
-            ProgressValue = Convert.ToInt32(TileCompleteNum * 100 / TileAllNum); ;
+            public GMapProvider Provider;
+            public RectLatLng Area;
+            public int MinZoom;
+            public int MaxZoom;
         }
+        #endregion
     }
-
-    #region Internal Helper Classes
-
-    internal class WorkerArgs
-    {
-        public GMapProvider Provider;
-        public RectLatLng Area;
-        public int MinZoom;
-        public int MaxZoom;
-    }
-    #endregion
-
 }

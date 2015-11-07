@@ -8,25 +8,16 @@ namespace GMapCommonType
     public class Point2D : Geometry
     {
         // Fields
-        public static readonly Point2D Empty;
+        public static readonly Point2D Empty = new Point2D();
         public double X;
         public double Y;
 
-        // Methods
-        static Point2D()
-        {
-            //Class3.VhQqLwFzr0qRr();
-            Empty = new Point2D();
-        }
-
         public Point2D()
         {
-            //Class3.VhQqLwFzr0qRr();
         }
 
         public Point2D(double x, double y)
         {
-            //Class3.VhQqLwFzr0qRr();
             this.X = x;
             this.Y = y;
         }

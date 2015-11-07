@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapCommonType", "GMapCommo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapWinFormDemo", "GMapWinFormDemo\GMapWinFormDemo.csproj", "{693E1C26-AAA7-42F1-B319-77EB120B3F95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapExport", "GMapExport\GMapExport.csproj", "{46CEA87B-4D4E-43D6-9152-B79163BF7996}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -313,6 +315,16 @@ Global
 		{693E1C26-AAA7-42F1-B319-77EB120B3F95}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{693E1C26-AAA7-42F1-B319-77EB120B3F95}.Release|x86.ActiveCfg = Release|x86
 		{693E1C26-AAA7-42F1-B319-77EB120B3F95}.Release|x86.Build.0 = Release|x86
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

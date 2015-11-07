@@ -9,7 +9,7 @@ using GMap.NET.WindowsForms;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace MapDownloader
+namespace GMapExport
 {
     public class TileImageConnector
     {

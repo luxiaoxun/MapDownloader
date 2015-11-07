@@ -117,12 +117,10 @@
       <DependentUpon>PoiKeyWordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="POISearchArgument.cs" />
-    <Compile Include="TileFetcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteDataMarker.cs" />
     <Compile Include="RouteMapData.cs" />
-    <Compile Include="TileImageConnector.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,6 +205,10 @@
     <ProjectReference Include="..\GMapDrawTools\GMapDrawTools.csproj">
       <Project>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</Project>
       <Name>GMapDrawTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapExport\GMapExport.csproj">
+      <Project>{46CEA87B-4D4E-43D6-9152-B79163BF7996}</Project>
+      <Name>GMapExport</Name>
     </ProjectReference>
     <ProjectReference Include="..\GMapMarkerLib\GMapMarkerLib.csproj">
       <Project>{E25D9C8F-534F-4D86-BD45-9469AD9727E0}</Project>

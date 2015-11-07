@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46CEA87B-4D4E-43D6-9152-B79163BF7996}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GMapExport</RootNamespace>
+    <AssemblyName>GMapExport</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArcGISLayerConfig.cs" />
+    <Compile Include="ArcGISPrjTool.cs" />
+    <Compile Include="ArcGISTileSchema.cs" />
+    <Compile Include="EsriStorageFormat.cs" />
+    <Compile Include="ExportType.cs" />
+    <Compile Include="GridFormat.cs" />
+    <Compile Include="ImageFormat.cs" />
+    <Compile Include="LODInfo.cs" />
+    <Compile Include="PrefetchTileEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TileFetcher.cs" />
+    <Compile Include="TileFetcherExport.cs" />
+    <Compile Include="TileImageConnector.cs" />
+    <Compile Include="TilePackageWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
+      <Project>{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}</Project>
+      <Name>GMap.NET.WindowsForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapCommonType\GMapCommonType.csproj">
+      <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
+      <Name>GMapCommonType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
+      <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
+      <Name>GMapProvidersExt</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

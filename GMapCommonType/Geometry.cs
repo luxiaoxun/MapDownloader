@@ -8,12 +8,6 @@ namespace GMapCommonType
 {
     public abstract class Geometry
     {
-        // Methods
-        protected Geometry()
-        {
-            //Class3.VhQqLwFzr0qRr();
-        }
-
         public List<PointLatLng> ToPointLatLngs()
         {
             if (this.Points == null)

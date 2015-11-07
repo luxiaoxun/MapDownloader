@@ -8,15 +8,12 @@ namespace GMapCommonType
 {
     public class BoundingBox : Geometry
     {
-        // Methods
         public BoundingBox()
         {
-            //Class3.VhQqLwFzr0qRr();
         }
 
         public BoundingBox(double left, double bottom, double right, double top, string crs=null)
         {
-            //Class3.VhQqLwFzr0qRr();
             this.Left = left;
             this.Bottom = bottom;
             this.Right = right;

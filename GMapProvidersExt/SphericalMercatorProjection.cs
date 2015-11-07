@@ -9,26 +9,17 @@ namespace GMapProvidersExt
     public class SphericalMercatorProjection : PureProjection
     {
         // Fields
-        public static readonly SphericalMercatorProjection Instance;
-        private static readonly double MaxLatitude;
-        private static readonly double MinLatitude;
-        private static readonly double MaxLongitude;
-        private static readonly double MinLongitude;
+        public static readonly SphericalMercatorProjection Instance = new SphericalMercatorProjection();
+        private static readonly double MaxLatitude = 85.05112878;
+        private static readonly double MinLatitude = -85.05112878;
+        private static readonly double MaxLongitude = 180.0;
+        private static readonly double MinLongitude = -180.0;
         private readonly GSize tileSize;
 
-        // Methods
-        static SphericalMercatorProjection()
-        {
-            Instance = new SphericalMercatorProjection();
-            MinLatitude = -85.05112878;
-            MaxLatitude = 85.05112878;
-            MinLongitude = -180.0;
-            MaxLongitude = 180.0;
-        }
-
-        private SphericalMercatorProjection()
+        public SphericalMercatorProjection()
         {
             this.tileSize = new GSize(256, 256);
+            EpsgCode = 3857;
         }
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)

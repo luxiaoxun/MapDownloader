@@ -27,6 +27,7 @@ using GMapProvidersExt;
 using GMapProvidersExt.Tencent;
 using GMapProvidersExt.AMap;
 using GMapProvidersExt.Baidu;
+using GMapExport;
 
 namespace MapDownloader
 {
@@ -707,12 +708,12 @@ namespace MapDownloader
                         if (this.radioButtonDisk.Checked)
                         {
                             //切片存在本地磁盘上
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, tilePath);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, tilePath, retryNum);
                         }
                         else
                         {
                             //切片存在数据库中
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider);
+                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, retryNum);
                         }
                     }
                 }
@@ -1466,14 +1467,14 @@ namespace MapDownloader
                     case 0:
                         BaiduMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr, this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
                         break;
-                    //高德
-                    case 1:
-                        AMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr, this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
-                        break;
                     //腾讯
-                    case 2:
+                    case 1:
                         TencentMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr,
                         "", this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
+                        break;
+                    //高德
+                    case 2:
+                        AMapProvider.Instance.GetPlacemarksByKeywords(keyWords, regionName, poiQueryRectangleStr, this.queryProgressEvent, out this.poisQueryResult, ref this.poiQueryCount);
                         break;
                 }
             }

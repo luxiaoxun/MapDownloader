@@ -11,34 +11,19 @@ namespace GMapProvidersExt
     public class WGS84Projection : PureProjection
     {
         // Fields
-        public static readonly WGS84Projection Instance;
-        public readonly double MaxLatitude;
-        public readonly double MaxLongitude;
-        public readonly double MinLatitude;
-        public readonly double MinLongitude;
-        private static readonly double orignX;
-        private static readonly double orignY;
+        public static readonly WGS84Projection Instance = new WGS84Projection();
+        public readonly double MaxLatitude = 90;
+        public readonly double MaxLongitude = 180;
+        public readonly double MinLatitude = -90;
+        public readonly double MinLongitude = -180;
+        private static readonly double orignX = -180;
+        private static readonly double orignY = 90;
         private GSize tileSize;
 
-        public int EpsgCode;
-
-        // Methods
-        static WGS84Projection()
+        public WGS84Projection()
         {
-            Instance = new WGS84Projection();
-            orignX = -180.0;
-            orignY = 90.0;
-        }
-
-        protected WGS84Projection()
-        {
-            this.MinLatitude = -90.0;
-            this.MaxLatitude = 90.0;
-            this.MinLongitude = -180.0;
-            this.MaxLongitude = 180.0;
             this.tileSize = new GSize(0x100, 0x100);
-            EpsgCode = 0x10e6;
-            //base.Unit = MapUnit.Degree;
+            EpsgCode = 4326;
         }
 
         public override GPoint FromLatLngToPixel(double lat, double lng, int zoom)

@@ -273,6 +273,79 @@ namespace GMap.NET
          }
       }
 
+      public virtual PointLatLng TileOrigin
+      {
+          get
+          {
+              return new PointLatLng(this.Bounds.Lat, this.Bounds.Lng);
+          }
+      }
+
+      public double DPI = 96.0;
+
+      public int EpsgCode = 3857;
+      
+      /// <summary>
+      /// Get level resolution
+      /// </summary>
+      /// <param name="level"></param>
+      /// <returns></returns>
+      public virtual double GetLevelResolution(int level)
+      {
+          return (((3.1415926535897931 * this.Axis) * 2.0) / (Math.Pow(2.0, (double)level) * this.TileSize.Width));
+      }
+
+      /// <summary>
+      /// Get level scale
+      /// </summary>
+      /// <param name="level"></param>
+      /// <returns></returns>
+      public virtual double GetLevelScale(int level)
+      {
+          //if (this.Unit == MapUnit.Meter)
+          if (this.EpsgCode == 3857)
+          {
+              return ((this.DPI / 0.0254) * this.GetLevelResolution(level));
+          }
+          return (((((this.GetLevelResolution(level) * this.DPI) * 2.0) * 3.1415926535897931) * this.Axis) / 9.144);
+      }
+
+      //public virtual double GetLevelScale(int level, double dpi)
+      //{
+      //    //if (this.Unit == MapUnit.Meter)
+      //    if (this.EpsgCode == 3857)
+      //    {
+      //        return ((dpi / 0.0254) * this.GetLevelResolution(level));
+      //    }
+      //    return (((((this.GetLevelResolution(level) * dpi) * 2.0) * 3.1415926535897931) * this.Axis) / 9.144);
+      //}
+
+      public PointLatLng GetProjectedPoint(PointLatLng pointLatLng)
+      {
+          if (this.EpsgCode == 3857)
+          {
+              return LonLatToMercator(pointLatLng.Lng, pointLatLng.Lat);
+          }
+          //return pointLatLng.TransformFromWGS84(ProjectionUtil.GetWKTFromEpsgCode(this.EpsgCode));
+          //EpsgCode=4326
+          return new PointLatLng(pointLatLng.Lat, pointLatLng.Lng);
+      }
+
+      public PointLatLng LonLatToMercator(double x, double y)
+      {
+          double lng = ((x * 3.1415926535897931) * 6378137.0) / 180.0;
+          double num = Math.Log(Math.Tan(((90.0 + y) * 3.1415926535897931) / 360.0)) / 0.017453292519943295;
+          double lat = ((num * 3.1415926535897931) * 6378137.0) / 180.0;
+          return new PointLatLng(lat, lng);
+      }
+
+      public PointLatLng MercatorToLonLat(double x, double y)
+      {
+          double lng = (x / (3.1415926535897931 * this.Axis)) * 180.0;
+          y = (y / (3.1415926535897931 * this.Axis)) * 180.0;
+          return new PointLatLng(57.295779513082323 * ((2.0 * Math.Atan(Math.Exp((y * 3.1415926535897931) / 180.0))) - 1.5707963267948966), lng);
+      }
+
       #region -- math functions --
 
       /// <summary>
