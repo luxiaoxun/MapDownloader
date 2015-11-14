@@ -7,27 +7,10 @@ namespace GMapExport
 {
     public enum ExportType
     {
-        DEFAULTSPLICE,
-        GOOGLETILE,
-        ARCGISTILE,
-        TMSTILE,
-        MBTILES,
-        SQLITEDB,
-        ORUXMAPS,
-        BAIDUTILE,
-        ARCGISTPK_EXPOLDED,
-        GEOPACKAGE,
-        AZDB
+        DefaultXYTile,
+        DefaultYXTile,
+        ArcGISTile,
+        TMSTile,
+        BaiduTile
     }
-
-
-    public enum ResampleFormat
-    {
-        Cubic,
-        CubicSpline,
-        Bilinear,
-        NearestNeighbour
-    }
-
-
 }

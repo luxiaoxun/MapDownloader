@@ -45,6 +45,7 @@ namespace GMapProvidersExt.AMap
         static AMapProvider()
         {
             Instance = new AMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         public Placemark GetCenterNameByLocation(PointLatLng location)
@@ -118,6 +119,9 @@ namespace GMapProvidersExt.AMap
                             Placemark item = new Placemark(address);
                             item.Point = new PointLatLng(lat, lng);
                             item.Name = name;
+                            //item.ProvinceName = obj["pname"].ToString();
+                            //item.CityName = obj["cityname"].ToString();
+                            //item.Category = obj["type"].ToString();
                             list.Add(item);
                             ++this.succeedCount;
                             if (queryProgressEvent != null)

@@ -30,7 +30,7 @@ namespace GMap.NET
       public string CountryNameCode;
       public string HouseNo;
 
-       //Added for SoSo Map
+       //Added for Map
       public PointLatLng Point;
       public string Name;
       public string CountryCode;

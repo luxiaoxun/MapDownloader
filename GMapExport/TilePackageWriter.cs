@@ -37,8 +37,8 @@ namespace GMapExport
         public static string GetCDIFileContent(ArcGISTileSchema scheme, GMapProvider mapProvider = null)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            builder.Append("<EnvelopeN xsi:type='typens:EnvelopeN' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/10.0'>");
+            builder.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            builder.Append("<EnvelopeN xsi:type='typens:EnvelopeN' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:typens='http://www.esri.com/schemas/ArcGIS/10.1'>");
             builder.Append("<XMin>" + scheme.FullExtent.LowerCorner.X + "</XMin>");
             if ((mapProvider != null) && (((mapProvider is BaiduMapProvider) || (mapProvider is BaiduSatelliteMapProvider)) || (mapProvider is BaiduHybridMapProvider)))
             {
@@ -57,8 +57,8 @@ namespace GMapExport
         public static string GetConfigFileContent(ArcGISTileSchema scheme)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-            builder.Append("<CacheInfo xsi:type=\"typens:CacheInfo\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:typens=\"http://www.esri.com/schemas/ArcGIS/10.0\">");
+            builder.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            builder.Append("<CacheInfo xsi:type=\"typens:CacheInfo\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:typens=\"http://www.esri.com/schemas/ArcGIS/10.1\">");
             builder.Append("<TileCacheInfo xsi:type=\"typens:TileCacheInfo\">");
             builder.Append(ArcGISPrjTool.GetSpatialReferenceXML(scheme.WKID));
             builder.Append(string.Format("<TileOrigin xsi:type=\"typens:PointN\"><X>{0}</X><Y>{1}</Y></TileOrigin>", scheme.TileOrigin.Lng, scheme.TileOrigin.Lat));

@@ -281,6 +281,17 @@ namespace GMap.NET
           }
       }
 
+      public GPoint FromLatLngToTileXY(PointLatLng pointLatLng, int zoom)
+      {
+          return this.FromPixelToTileXY(this.FromLatLngToPixel(pointLatLng, zoom));
+      }
+
+      public GPoint FromLatLngToTileXY(double lat, double lng, int zoom)
+      {
+          GPoint p = this.FromLatLngToPixel(lat, lng, zoom);
+          return this.FromPixelToTileXY(p);
+      }
+
       public double DPI = 96.0;
 
       public int EpsgCode = 3857;

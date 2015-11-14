@@ -12,7 +12,8 @@ namespace GMapProvidersExt.AMap
     {
         public AMapProviderBase()
         {
-            MaxZoom = null;
+            MaxZoom = 18;
+            MinZoom = 1;
             RefererUrl = "http://www.amap.com/";
             //Copyright = string.Format("©{0} 高德 Corporation, ©{0} NAVTEQ, ©{0} Image courtesy of NASA", DateTime.Today.Year);    
         }

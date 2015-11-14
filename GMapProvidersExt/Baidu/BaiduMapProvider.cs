@@ -30,6 +30,7 @@ namespace GMapProvidersExt.Baidu
         static BaiduMapProvider()
         {
             Instance = new BaiduMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private BaiduMapProvider()

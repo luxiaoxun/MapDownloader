@@ -36,8 +36,8 @@ namespace MapDownloader
         private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
         //private string conString = @"Server=127.0.0.1;Port=3306;Database=mapcache;Uid=root;Pwd=admin;";
-        private static string conStringFormat = "Server={0};Port={1};Database={2};Uid={3};Pwd={4};";
-        private static string conString;
+        private string conStringFormat = "Server={0};Port={1};Database={2};Uid={3};Pwd={4};";
+        private string conString;
 
         private Draw draw;
         private GMapOverlay polygonsOverlay = new GMapOverlay("polygonsOverlay"); //放置polygon的图层
@@ -79,6 +79,42 @@ namespace MapDownloader
             InitMySQLConString();
         }
 
+        //初始化App config配置信息
+        private void InitMySQLConString()
+        {
+            try
+            {
+                string ip = ConfigHelper.GetAppConfig("MySQLServerIP");
+                string port = ConfigHelper.GetAppConfig("MySQLServerPort");
+                string dbName = ConfigHelper.GetAppConfig("Database");
+                string userID = ConfigHelper.GetAppConfig("UserID");
+                string password = ConfigHelper.GetAppConfig("Password");
+                string retryStr = ConfigHelper.GetAppConfig("Retry");
+                string center = ConfigHelper.GetAppConfig("MapCenter");
+                string[] centerPoints = center.Split(',');
+                if (centerPoints.Length == 2)
+                {
+                    if (mapControl != null)
+                    {
+                        mapControl.Position = new PointLatLng(double.Parse(centerPoints[1]), double.Parse(centerPoints[0]));
+                    }
+                }
+                retryNum = int.Parse(retryStr);
+
+                conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
+                if (mysqlCache != null)
+                {
+                    mysqlCache.ConnectionString = conString;
+                }
+
+                tilePath = ConfigHelper.GetAppConfig("TilePath");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+        }
+
         //初始化地图
         private void InitMap()
         {
@@ -116,6 +152,8 @@ namespace MapDownloader
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
         }
 
+        #region 地图控件事件
+
         void mapControl_OnMapZoomChanged()
         {
             if (this.mapControl.Zoom >= 14)
@@ -128,8 +166,6 @@ namespace MapDownloader
                 allowRouting = false;
             }
         }
-
-        #region 地图控件事件
 
         void mapControl_OnPositionChanged(PointLatLng point)
         {
@@ -227,8 +263,7 @@ namespace MapDownloader
                 PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
 
                 int zoom = (int)this.mapControl.Zoom;
-                double resolution = this.mapControl.MapProvider.Projection.GetGroundResolution(zoom, this.mapControl.Position.Lat);
-
+                double resolution = this.mapControl.MapProvider.Projection.GetLevelResolution(zoom);
                 this.toolStripStatusTip.Text = string.Format("显示级别：{0} 分辨率：{1:F3}米/像素 坐标：{2:F4},{3:F4}", zoom, resolution, p.Lng, p.Lat);
 
                 if (isLeftButtonDown && currentDragableNode != null)
@@ -306,6 +341,7 @@ namespace MapDownloader
         {
             ShowDownloadTip(false);
             this.toolStripStatusPOIDownload.Visible = false;
+            this.toolStripStatusExport.Visible = false;
 
             this.serverAndCacheToolStripMenuItem.Checked = true;
             this.xPanderPanel2.ExpandClick += new EventHandler<EventArgs>(xPanderPanel2_ExpandClick);
@@ -318,10 +354,9 @@ namespace MapDownloader
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
             this.SizeChanged += new EventHandler(MainForm_SizeChanged);
 
-            this.checkBoxItemShowGrid.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxItemShowGrid_CheckedChanged);
-            this.checkBoxCacheServer.CheckedChanged += new DevComponents.DotNetBar.CheckBoxChangeEventHandler(checkBoxCacheServer_CheckedChanged);
             this.dataGridViewPOI.AutoSize = true;
             this.dataGridViewPOI.RowPostPaint += new DataGridViewRowPostPaintEventHandler(dataGridViewPOI_RowPostPaint);
+            this.dataGridViewPOI.ContextMenuStrip = this.contextMenuStripPoi;
         }
 
         void MainForm_SizeChanged(object sender, EventArgs e)
@@ -356,138 +391,7 @@ namespace MapDownloader
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
-        //初始化App config配置信息
-        private void InitMySQLConString()
-        {
-            try
-            {
-                string ip = ConfigHelper.GetAppConfig("MySQLServerIP");
-                string port = ConfigHelper.GetAppConfig("MySQLServerPort");
-                string dbName = ConfigHelper.GetAppConfig("Database");
-                string userID = ConfigHelper.GetAppConfig("UserID");
-                string password = ConfigHelper.GetAppConfig("Password");
-                string retryStr = ConfigHelper.GetAppConfig("Retry");
-                string center = ConfigHelper.GetAppConfig("MapCenter");
-                string[] centerPoints = center.Split(',');
-                if (centerPoints.Length == 2)
-                {
-                    if (mapControl != null)
-                    {
-                        mapControl.Position = new PointLatLng(double.Parse(centerPoints[1]), double.Parse(centerPoints[0]));
-                    }
-                }
-                retryNum = int.Parse(retryStr);
-
-                conString = string.Format(conStringFormat, ip, port, dbName, userID, password);
-                if (mysqlCache != null)
-                {
-                    mysqlCache.ConnectionString = conString;
-                }
-
-                tilePath = ConfigHelper.GetAppConfig("TilePath");
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-            }
-        }
-
-        //是否显示网格
-        void checkBoxItemShowGrid_CheckedChanged(object sender, DevComponents.DotNetBar.CheckBoxChangeEventArgs e)
-        {
-            if (this.checkBoxItemShowGrid.Checked)
-            {
-                this.mapControl.ShowTileGridLines = true;
-            }
-            else
-            {
-                this.mapControl.ShowTileGridLines = false;
-            }
-        }
-
-        #region 离线Web服务
-
-        bool TryExtractLeafletjs()
-        {
-            try
-            {
-                string launch = string.Empty;
-
-                var x = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-                foreach (var f in x)
-                {
-                    if (f.Contains("leafletjs"))
-                    {
-                        var fName = f.Replace("MapDownloader.", string.Empty);
-                        fName = fName.Replace(".", "\\");
-                        var ll = fName.LastIndexOf("\\");
-                        var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
-
-                        //Demo.WindowsForms.leafletjs.dist.leaflet.js
-
-                        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(f))
-                        {
-                            string fileFullPath = mapControl.CacheLocation + name;
-
-                            if (fileFullPath.Contains("gmap.html"))
-                            {
-                                launch = fileFullPath;
-                            }
-
-                            var dir = Path.GetDirectoryName(fileFullPath);
-                            if (!Directory.Exists(dir))
-                            {
-                                Directory.CreateDirectory(dir);
-                            }
-
-                            using (FileStream fileStream = System.IO.File.Create(fileFullPath, (int)stream.Length))
-                            {
-                                // Fill the bytes[] array with the stream data
-                                byte[] bytesInStream = new byte[stream.Length];
-                                stream.Read(bytesInStream, 0, (int)bytesInStream.Length);
-
-                                // Use FileStream object to write to the specified file
-                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
-                            }
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(launch))
-                {
-                    System.Diagnostics.Process.Start(launch);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("TryExtractLeafletjs: " + ex);
-                return false;
-            }
-            return true;
-        }
-
-        void checkBoxCacheServer_CheckedChanged(object sender, DevComponents.DotNetBar.CheckBoxChangeEventArgs e)
-        {
-            if (checkBoxCacheServer.Checked)
-            {
-                try
-                {
-                    mapControl.Manager.EnableTileHost(8899);
-                    TryExtractLeafletjs();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("EnableTileHost: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                mapControl.Manager.DisableTileHost();
-            }
-        }
-
-        #endregion
-
+       
         #region 加载中国区域
 
         void xPanderPanel2_ExpandClick(object sender, EventArgs e)
@@ -646,7 +550,7 @@ namespace MapDownloader
 
         #region 地图下载
 
-        void obj_PrefetchTileProgress(object sender, PrefetchTileEventArgs e)
+        void obj_PrefetchTileProgress(object sender, TileFetcherEventArgs e)
         {
             if (e != null)
             {
@@ -654,7 +558,7 @@ namespace MapDownloader
             }
         }
 
-        void obj_PrefetchTileStart(object sender, PrefetchTileEventArgs e)
+        void obj_PrefetchTileStart(object sender, TileFetcherEventArgs e)
         {
             ShowDownloadTip(true);
         }
@@ -669,7 +573,7 @@ namespace MapDownloader
             this.toolStripStatusDownload.Text = string.Format("下载进度：级别{0}，{1}/{2}",zoom,comNum,allNum);
         }
 
-        void prefetchTiles_PrefetchTileComplete(object sender, PrefetchTileEventArgs e)
+        void prefetchTiles_PrefetchTileComplete(object sender, TileFetcherEventArgs e)
         {
             MessageBox.Show("地图下载完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             ShowDownloadTip(false);
@@ -702,9 +606,9 @@ namespace MapDownloader
                         ResetToServerAndCacheMode();
                         TileFetcher prefetchTiles = new TileFetcher();
                         prefetchTiles.Retry = retryNum;
-                        prefetchTiles.PrefetchTileStart += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileStart);
-                        prefetchTiles.PrefetchTileProgress += new EventHandler<PrefetchTileEventArgs>(obj_PrefetchTileProgress);
-                        prefetchTiles.PrefetchTileComplete += new EventHandler<PrefetchTileEventArgs>(prefetchTiles_PrefetchTileComplete);
+                        prefetchTiles.PrefetchTileStart += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileStart);
+                        prefetchTiles.PrefetchTileProgress += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileProgress);
+                        prefetchTiles.PrefetchTileComplete += new EventHandler<TileFetcherEventArgs>(prefetchTiles_PrefetchTileComplete);
                         if (this.radioButtonDisk.Checked)
                         {
                             //切片存在本地磁盘上
@@ -847,15 +751,6 @@ namespace MapDownloader
 
         #region 地图切换
 
-        private PointLatLng GetNewMapPosition(GMapProvider from, GMapProvider to)
-        {
-            PointLatLng pos = this.mapControl.Position;
-            int zoom = (int)this.mapControl.Zoom;
-            GPoint gpoint = from.Projection.FromLatLngToPixel(pos, zoom);
-
-            return to.Projection.FromPixelToLatLng(gpoint, zoom);
-        }
-
         //Google地图
         private void 普通地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -881,6 +776,7 @@ namespace MapDownloader
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            //this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProviderJS.Instance;
         }
 
         private void 卫星地图ToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1143,11 +1039,24 @@ namespace MapDownloader
             this.在线服务ToolStripMenuItem.Checked = false;
         }
 
+        private void 显示网格ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.显示网格ToolStripMenuItem.Checked = !this.显示网格ToolStripMenuItem.Checked;
+            if (this.显示网格ToolStripMenuItem.Checked)
+            {
+                this.mapControl.ShowTileGridLines = true;
+            }
+            else
+            {
+                this.mapControl.ShowTileGridLines = false;
+            }
+        }
+
         #endregion
 
         #region KML GPX 操作
 
-        private void buttonItemReadGpx_Click(object sender, EventArgs e)
+        private void 读取GPXToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (FileDialog dialog = new OpenFileDialog())
             {
@@ -1230,6 +1139,33 @@ namespace MapDownloader
             }
         }
 
+        private void 读取KMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (FileDialog dialog = new OpenFileDialog())
+                {
+                    dialog.CheckPathExists = true;
+                    dialog.CheckFileExists = false;
+                    dialog.AddExtension = true;
+                    dialog.ValidateNames = true;
+                    dialog.Title = "选择KML文件";
+                    dialog.FilterIndex = 1;
+                    dialog.RestoreDirectory = true;
+                    dialog.Filter = "KML文件 (*.kml)|*.kml|所有文件 (*.*)|*.*";
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        this.polygonsOverlay.Clear();
+                        InitKMLPlaceMarks(KmlUtil.GetPlaceMarksFromKmlFile(dialog.FileName));
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                CommonTools.PromptingMessage.ErrorMessage(this, "读取KML文件时出现异常");
+            }
+        }
+
         private void SaveKmlToFile(MapRoute item, string name, string fileName)
         {
             if (item is GMapRoute)
@@ -1247,7 +1183,6 @@ namespace MapDownloader
                 GMapPolygon polygon = (GMapPolygon)item;
                 KmlUtil.SavePolygon(polygon.Points, name, fileName);
             }
-
         }
 
         private void 下载KMLToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1387,40 +1322,15 @@ namespace MapDownloader
             this.mapControl.Position = new PointLatLng(envelope.Center.Y, envelope.Center.X);
         }
 
-        private void buttonItemReadKML_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (FileDialog dialog = new OpenFileDialog())
-                {
-                    dialog.CheckPathExists = true;
-                    dialog.CheckFileExists = false;
-                    dialog.AddExtension = true;
-                    dialog.ValidateNames = true;
-                    dialog.Title = "选择KML文件";
-                    dialog.FilterIndex = 1;
-                    dialog.RestoreDirectory = true;
-                    dialog.Filter = "KML文件 (*.kml)|*.kml|所有文件 (*.*)|*.*";
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        this.polygonsOverlay.Clear();
-                        InitKMLPlaceMarks(KmlUtil.GetPlaceMarksFromKmlFile(dialog.FileName));
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                CommonTools.PromptingMessage.ErrorMessage(this, "下载KML文件时出现异常");
-            }
-        }
-
         #endregion
 
         #region POI查询
 
-        List<PoiData> poiDataList = new List<PoiData>();
-        List<Placemark> poisQueryResult = new List<Placemark>();
-        int poiQueryCount = 0;
+        private List<PoiData> poiDataList = new List<PoiData>();
+        private List<Placemark> poisQueryResult = new List<Placemark>();
+        private int poiQueryCount = 0;
+        private string searchProvince;
+        private string searchCity;
 
         private void queryProgressEvent(long completedCount, long total)
         {
@@ -1439,6 +1349,8 @@ namespace MapDownloader
                     PoiData poiData = new PoiData();
                     poiData.Name = place.Name;
                     poiData.Address = place.Address;
+                    poiData.Province = searchProvince;
+                    poiData.City = searchCity;
                     poiData.Lat = place.Point.Lat;
                     poiData.Lng = place.Point.Lng;
                     this.poiDataList.Add(poiData);
@@ -1483,13 +1395,21 @@ namespace MapDownloader
         //关键字POI查询
         private void buttonPOISearch_Click(object sender, EventArgs e)
         {
+            Province province = this.comboBoxProvince.SelectedItem as Province;
+            if (province == null)
+            {
+                CommonTools.PromptingMessage.PromptMessage(this, "请选择POI查询的省份！");
+                return;
+            }
+            searchProvince = province.name;
+
             City city = this.comboBoxCity.SelectedItem as City;
             if (city == null)
             {
                 CommonTools.PromptingMessage.PromptMessage(this, "请选择POI查询的城市！");
                 return;
             }
-            string searchCity = city.name;
+            searchCity = city.name;
 
             string keywords = this.textBoxPOIkeyword.Text.Trim();
             if (string.IsNullOrEmpty(keywords))
@@ -1775,5 +1695,189 @@ namespace MapDownloader
 
         #endregion
 
+        #region 离线Web服务
+
+        bool TryExtractLeafletjs()
+        {
+            try
+            {
+                string launch = string.Empty;
+
+                var x = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+                foreach (var f in x)
+                {
+                    if (f.Contains("leafletjs"))
+                    {
+                        var fName = f.Replace("MapDownloader.", string.Empty);
+                        fName = fName.Replace(".", "\\");
+                        var ll = fName.LastIndexOf("\\");
+                        var name = fName.Substring(0, ll) + "." + fName.Substring(ll + 1, fName.Length - ll - 1);
+
+                        //Demo.WindowsForms.leafletjs.dist.leaflet.js
+
+                        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(f))
+                        {
+                            string fileFullPath = mapControl.CacheLocation + name;
+
+                            if (fileFullPath.Contains("gmap.html"))
+                            {
+                                launch = fileFullPath;
+                            }
+
+                            var dir = Path.GetDirectoryName(fileFullPath);
+                            if (!Directory.Exists(dir))
+                            {
+                                Directory.CreateDirectory(dir);
+                            }
+
+                            using (FileStream fileStream = System.IO.File.Create(fileFullPath, (int)stream.Length))
+                            {
+                                // Fill the bytes[] array with the stream data
+                                byte[] bytesInStream = new byte[stream.Length];
+                                stream.Read(bytesInStream, 0, (int)bytesInStream.Length);
+
+                                // Use FileStream object to write to the specified file
+                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);
+                            }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(launch))
+                {
+                    System.Diagnostics.Process.Start(launch);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("TryExtractLeafletjs: " + ex);
+                return false;
+            }
+            return true;
+        }
+
+        private void 离线Web服务ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.离线Web服务ToolStripMenuItem.Checked = !this.离线Web服务ToolStripMenuItem.Checked;
+            if (离线Web服务ToolStripMenuItem.Checked)
+            {
+                try
+                {
+                    mapControl.Manager.EnableTileHost(8899);
+                    TryExtractLeafletjs();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("EnableTileHost: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                mapControl.Manager.DisableTileHost();
+            }
+        }
+
+        #endregion
+
+        #region 导出切片
+
+        private void 导出地图切片ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ArcGISLayerConfigForm form = new ArcGISLayerConfigForm();
+            DialogResult res =  form.ShowDialog();
+            if (res == System.Windows.Forms.DialogResult.OK)
+            {
+                ExportParameter exportParameter = form.GetExportParameter();
+                TileExport tileExport = new TileExport();
+                tileExport.TileExportStart += new EventHandler<TileExportEventArgs>(tileExport_TileExportStart);
+                tileExport.TileExportComplete += new EventHandler<TileExportEventArgs>(tileExport_TileExportComplete);
+                tileExport.TileExportProgress += new EventHandler<TileExportEventArgs>(tileExport_TileExportProgress);
+                tileExport.Start(exportParameter, this.conString);
+            }
+        }
+
+        void tileExport_TileExportProgress(object sender, TileExportEventArgs e)
+        {
+            if (e != null)
+            {
+                this.toolStripStatusExport.Text = string.Format("正在导出第{0}级的切片...",e.CurrentExportZoom);
+            }
+        }
+
+        void tileExport_TileExportComplete(object sender, TileExportEventArgs e)
+        {
+            MessageBox.Show("切片导出完成！");
+            this.toolStripStatusExport.Visible = false;
+        }
+
+        void tileExport_TileExportStart(object sender, TileExportEventArgs e)
+        {
+            this.toolStripStatusExport.Visible = true;
+        }
+
+        #endregion
+
+        private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveDlg = new SaveFileDialog();
+                saveDlg.Filter = "Excel File (*.xls)|*.xls|(*.xlsx)|*.xlsx";
+                saveDlg.FilterIndex = 1;
+                saveDlg.RestoreDirectory = true;
+                if (saveDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string file = saveDlg.FileName;
+
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("名称", typeof(string));
+                    dt.Columns.Add("地址",typeof(string));
+                    dt.Columns.Add("省份", typeof(string));
+                    dt.Columns.Add("城市", typeof(string));
+                    dt.Columns.Add("经度", typeof(double));
+                    dt.Columns.Add("纬度", typeof(double));
+                    
+                    foreach (PoiData data in poiDataList)
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["名称"] = data.Name;
+                        dr["地址"] = data.Address;
+                        dr["省份"] = data.Province;
+                        dr["城市"] = data.City;
+                        dr["经度"] = data.Lng;
+                        dr["纬度"] = data.Lat;
+                        dt.Rows.Add(dr);
+                    }
+                    BackgroundWorker poiExportWorker = new BackgroundWorker();
+                    poiExportWorker.DoWork += new DoWorkEventHandler(poiExportWorker_DoWork);
+                    poiExportWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiExportWorker_RunWorkerCompleted);
+                    PoiExportParameter para = new PoiExportParameter();
+                    para.Path = file;
+                    para.Data = dt;
+                    poiExportWorker.RunWorkerAsync(para);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                MessageBox.Show("POI导出失败！");
+            }
+        }
+
+        void poiExportWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MessageBox.Show("POI导出完成！");
+        }
+
+        void poiExportWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (e != null)
+            {
+                PoiExportParameter para = e.Argument as PoiExportParameter;
+                DataTable dt = para.Data;
+                string file = para.Path;
+                ExcelHelper.DataTableToExcel(dt, file, null, true);
+            }
+        }
     }
 }

@@ -109,7 +109,15 @@
     <Compile Include="MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MySQLPoiCache.cs" />
     <Compile Include="PoiData.cs" />
+    <Compile Include="PoiExportParameter.cs" />
+    <Compile Include="PoiExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PoiExportForm.Designer.cs">
+      <DependentUpon>PoiExportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PoiKeyWordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MapControl.resx">
       <DependentUpon>MapControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PoiExportForm.resx">
+      <DependentUpon>PoiExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PoiKeyWordForm.resx">
       <DependentUpon>PoiKeyWordForm.cs</DependentUpon>

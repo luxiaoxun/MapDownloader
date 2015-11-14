@@ -181,6 +181,19 @@ namespace GMap.NET.MapProviders
             }
             return null;
         }
+
+        public static void AddMapProvider(GMapProvider provider)
+        {
+            if (!Hash.ContainsKey(provider.Id))
+            {
+                Hash.Add(provider.Id, provider);
+            }
+
+            if (!DbHash.ContainsKey(provider.DbId))
+            {
+                DbHash.Add(provider.DbId,provider);
+            }
+        }
     }
 
     /// <summary>

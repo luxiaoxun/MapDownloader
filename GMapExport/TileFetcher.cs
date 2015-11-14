@@ -20,9 +20,9 @@ namespace GMapExport
 
         private BackgroundWorker worker = new BackgroundWorker();
 
-        public event EventHandler<PrefetchTileEventArgs> PrefetchTileStart;
-        public event EventHandler<PrefetchTileEventArgs> PrefetchTileComplete;
-        public event EventHandler<PrefetchTileEventArgs> PrefetchTileProgress;
+        public event EventHandler<TileFetcherEventArgs> PrefetchTileStart;
+        public event EventHandler<TileFetcherEventArgs> PrefetchTileComplete;
+        public event EventHandler<TileFetcherEventArgs> PrefetchTileProgress;
 
         private int retry = 3;
         public int Retry
@@ -69,11 +69,12 @@ namespace GMapExport
                 GMaps.Instance.UseMemoryCache = false;
                 GMaps.Instance.CacheOnIdleRead = false;
 
-                worker.RunWorkerAsync(args);
                 if (PrefetchTileStart != null)
                 {
-                    PrefetchTileStart(this, new PrefetchTileEventArgs(0));
+                    PrefetchTileStart(this, new TileFetcherEventArgs(0));
                 }
+
+                worker.RunWorkerAsync(args);
             }
         }
 
@@ -87,7 +88,7 @@ namespace GMapExport
                 //Export layers for ArcGIS in local disk
                 if (path != null)
                 {
-                    ArcGISLayerConfig arcgisLayerConfig = new ArcGISLayerConfig(provider.Projection.Bounds, minZoom, maxZoom, provider, path);
+                    ExportLayerConfig arcgisLayerConfig = new ExportLayerConfig(provider.Projection.Bounds, minZoom, maxZoom, provider, path);
                     if (!arcgisLayerConfig.CreateArcGISMetaFile())
                     {
                         MessageBox.Show("创建ArcGIS图层描述文件失败！");
@@ -106,7 +107,7 @@ namespace GMapExport
                         worker.RunWorkerAsync(args);
                         if (PrefetchTileStart != null)
                         {
-                            PrefetchTileStart(this, new PrefetchTileEventArgs(0));
+                            PrefetchTileStart(this, new TileFetcherEventArgs(0));
                         }
                     }
                 }
@@ -183,7 +184,7 @@ namespace GMapExport
                             // Report progress
                             currentZoomCompleted++;
                             overallProgress = Convert.ToInt32(currentZoomCompleted * 100 / currentZoomTiles);
-                            PrefetchTileEventArgs progressArgs = new PrefetchTileEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
+                            TileFetcherEventArgs progressArgs = new TileFetcherEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
                             worker.ReportProgress(overallProgress, progressArgs);
                         }
                     }
@@ -204,7 +205,7 @@ namespace GMapExport
             {
                 if (PrefetchTileProgress != null)
                 {
-                    PrefetchTileProgress(this, e.UserState as PrefetchTileEventArgs);
+                    PrefetchTileProgress(this, e.UserState as TileFetcherEventArgs);
                 }
             }
         }
@@ -216,7 +217,7 @@ namespace GMapExport
 
             if (PrefetchTileComplete != null)
             {
-                PrefetchTileComplete(this, new PrefetchTileEventArgs(100));
+                PrefetchTileComplete(this, new TileFetcherEventArgs(100));
             }
         }
 
@@ -334,10 +335,9 @@ namespace GMapExport
                 deck[i] = t;
             }
         }
+       
         #endregion
     }
-
-    
 
     #region Internal Help Class
 

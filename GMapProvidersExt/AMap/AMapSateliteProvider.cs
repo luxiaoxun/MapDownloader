@@ -36,6 +36,7 @@ namespace GMapProvidersExt.AMap
         static AMapSateliteProvider()
         {
             Instance = new AMapSateliteProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

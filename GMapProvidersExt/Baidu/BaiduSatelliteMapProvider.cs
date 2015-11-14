@@ -24,6 +24,7 @@ namespace GMapProvidersExt.Baidu
         {
             UrlFormat = "http://shangetu{0}.map.bdimg.com/it/u=x={1};y={2};z={3};v={4};type={5}&fm={6}&udt=20140929";
             Instance = new BaiduSatelliteMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private BaiduSatelliteMapProvider()
