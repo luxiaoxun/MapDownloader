@@ -356,7 +356,7 @@ namespace MapDownloader
 
             this.dataGridViewPOI.AutoSize = true;
             this.dataGridViewPOI.RowPostPaint += new DataGridViewRowPostPaintEventHandler(dataGridViewPOI_RowPostPaint);
-            this.dataGridViewPOI.ContextMenuStrip = this.contextMenuStripPoi;
+            this.comboBoxPoiSave.SelectedIndex = 0;
         }
 
         void MainForm_SizeChanged(object sender, EventArgs e)
@@ -1427,6 +1427,7 @@ namespace MapDownloader
             this.poiOverlay.Markers.Clear();
             this.dataGridViewPOI.DataSource = null;
             this.dataGridViewPOI.Update();
+            this.poiDataList.Clear();
             POISearchArgument argument = new POISearchArgument();
             argument.KeyWord = keywords;
             argument.Region = cityName;
@@ -1817,56 +1818,75 @@ namespace MapDownloader
 
         #endregion
 
-        private void 导出ToolStripMenuItem_Click(object sender, EventArgs e)
+        #region POI导出
+
+        private void buttonXPoiSave_Click(object sender, EventArgs e)
         {
             try
             {
-                SaveFileDialog saveDlg = new SaveFileDialog();
-                saveDlg.Filter = "Excel File (*.xls)|*.xls|(*.xlsx)|*.xlsx";
-                saveDlg.FilterIndex = 1;
-                saveDlg.RestoreDirectory = true;
-                if (saveDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (poiDataList.Count <= 0)
                 {
-                    string file = saveDlg.FileName;
-
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add("名称", typeof(string));
-                    dt.Columns.Add("地址",typeof(string));
-                    dt.Columns.Add("省份", typeof(string));
-                    dt.Columns.Add("城市", typeof(string));
-                    dt.Columns.Add("经度", typeof(double));
-                    dt.Columns.Add("纬度", typeof(double));
-                    
-                    foreach (PoiData data in poiDataList)
+                    CommonTools.PromptingMessage.PromptMessage(this, "POI数据为空，无法保存！");
+                    return;
+                }
+                BackgroundWorker poiExportWorker = new BackgroundWorker();
+                poiExportWorker.DoWork += new DoWorkEventHandler(poiExportWorker_DoWork);
+                poiExportWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiExportWorker_RunWorkerCompleted);
+                
+                int selectIndex = this.comboBoxPoiSave.SelectedIndex;
+                if (selectIndex == 0)
+                {
+                    SaveFileDialog saveDlg = new SaveFileDialog();
+                    saveDlg.Filter = "Excel File (*.xls)|*.xls|(*.xlsx)|*.xlsx";
+                    saveDlg.FilterIndex = 1;
+                    saveDlg.RestoreDirectory = true;
+                    if (saveDlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        DataRow dr = dt.NewRow();
-                        dr["名称"] = data.Name;
-                        dr["地址"] = data.Address;
-                        dr["省份"] = data.Province;
-                        dr["城市"] = data.City;
-                        dr["经度"] = data.Lng;
-                        dr["纬度"] = data.Lat;
-                        dt.Rows.Add(dr);
+                        string file = saveDlg.FileName;
+
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("名称", typeof(string));
+                        dt.Columns.Add("地址", typeof(string));
+                        dt.Columns.Add("省份", typeof(string));
+                        dt.Columns.Add("城市", typeof(string));
+                        dt.Columns.Add("经度", typeof(double));
+                        dt.Columns.Add("纬度", typeof(double));
+
+                        foreach (PoiData data in poiDataList)
+                        {
+                            DataRow dr = dt.NewRow();
+                            dr["名称"] = data.Name;
+                            dr["地址"] = data.Address;
+                            dr["省份"] = data.Province;
+                            dr["城市"] = data.City;
+                            dr["经度"] = data.Lng;
+                            dr["纬度"] = data.Lat;
+                            dt.Rows.Add(dr);
+                        }
+                        PoiExportParameter para = new PoiExportParameter();
+                        para.Path = file;
+                        para.Data = dt;
+                        para.ExportType = selectIndex;
+                        poiExportWorker.RunWorkerAsync(para);
                     }
-                    BackgroundWorker poiExportWorker = new BackgroundWorker();
-                    poiExportWorker.DoWork += new DoWorkEventHandler(poiExportWorker_DoWork);
-                    poiExportWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiExportWorker_RunWorkerCompleted);
+                }
+                else if (selectIndex == 1)
+                {
                     PoiExportParameter para = new PoiExportParameter();
-                    para.Path = file;
-                    para.Data = dt;
+                    para.ExportType = selectIndex;
                     poiExportWorker.RunWorkerAsync(para);
                 }
             }
             catch (Exception ex)
             {
                 log.Error(ex);
-                MessageBox.Show("POI导出失败！");
+                MessageBox.Show("POI保存失败！");
             }
         }
 
         void poiExportWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show("POI导出完成！");
+            MessageBox.Show("POI保存完成！");
         }
 
         void poiExportWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -1874,10 +1894,31 @@ namespace MapDownloader
             if (e != null)
             {
                 PoiExportParameter para = e.Argument as PoiExportParameter;
-                DataTable dt = para.Data;
-                string file = para.Path;
-                ExcelHelper.DataTableToExcel(dt, file, null, true);
+                if (para.ExportType == 0)
+                {
+                    DataTable dt = para.Data;
+                    string file = para.Path;
+                    ExcelHelper.DataTableToExcel(dt, file, null, true);
+                }
+                else if (para.ExportType == 1)
+                {
+                    MySQLPoiCache mysqlPoiCache = new MySQLPoiCache(this.conString);
+                    bool isInitialized = mysqlPoiCache.Initialize();
+                    if (!isInitialized)
+                    {
+                        MessageBox.Show("数据库初始化失败！");
+                        return;
+                    }
+                    //Export data into database
+                    foreach (var data in poiDataList)
+                    {
+                        mysqlPoiCache.PutPoiDataToCache(data);
+                    }
+                }
             }
         }
+
+        #endregion 
+
     }
 }

@@ -155,8 +155,9 @@
             this.以此为起点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.以此为终点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.contextMenuStripPoi = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBoxPoiSave = new System.Windows.Forms.ComboBox();
+            this.buttonXPoiSave = new DevComponents.DotNetBar.ButtonX();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.xPanderPanelList1.SuspendLayout();
@@ -176,7 +177,6 @@
             this.panelMap.SuspendLayout();
             this.contextMenuStripSelectedArea.SuspendLayout();
             this.contextMenuStripLocation.SuspendLayout();
-            this.contextMenuStripPoi.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -833,9 +833,9 @@
             // 
             this.panelPOIResult.Controls.Add(this.dataGridViewPOI);
             this.panelPOIResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPOIResult.Location = new System.Drawing.Point(3, 117);
+            this.panelPOIResult.Location = new System.Drawing.Point(3, 144);
             this.panelPOIResult.Name = "panelPOIResult";
-            this.panelPOIResult.Size = new System.Drawing.Size(243, 129);
+            this.panelPOIResult.Size = new System.Drawing.Size(243, 102);
             this.panelPOIResult.TabIndex = 11;
             // 
             // dataGridViewPOI
@@ -851,7 +851,7 @@
             this.dataGridViewPOI.Name = "dataGridViewPOI";
             this.dataGridViewPOI.ReadOnly = true;
             this.dataGridViewPOI.RowTemplate.Height = 23;
-            this.dataGridViewPOI.Size = new System.Drawing.Size(243, 129);
+            this.dataGridViewPOI.Size = new System.Drawing.Size(243, 102);
             this.dataGridViewPOI.TabIndex = 0;
             // 
             // nameDataGridViewTextBoxColumn
@@ -874,6 +874,9 @@
             // 
             // panelPOI
             // 
+            this.panelPOI.Controls.Add(this.buttonXPoiSave);
+            this.panelPOI.Controls.Add(this.comboBoxPoiSave);
+            this.panelPOI.Controls.Add(this.label8);
             this.panelPOI.Controls.Add(this.comboBoxPOIMap);
             this.panelPOI.Controls.Add(this.label7);
             this.panelPOI.Controls.Add(this.comboBoxCity);
@@ -886,7 +889,7 @@
             this.panelPOI.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelPOI.Location = new System.Drawing.Point(3, 17);
             this.panelPOI.Name = "panelPOI";
-            this.panelPOI.Size = new System.Drawing.Size(243, 100);
+            this.panelPOI.Size = new System.Drawing.Size(243, 127);
             this.panelPOI.TabIndex = 10;
             // 
             // comboBoxPOIMap
@@ -949,16 +952,16 @@
             // 
             // textBoxPOIkeyword
             // 
-            this.textBoxPOIkeyword.Location = new System.Drawing.Point(48, 66);
+            this.textBoxPOIkeyword.Location = new System.Drawing.Point(61, 66);
             this.textBoxPOIkeyword.Name = "textBoxPOIkeyword";
-            this.textBoxPOIkeyword.Size = new System.Drawing.Size(129, 21);
+            this.textBoxPOIkeyword.Size = new System.Drawing.Size(124, 21);
             this.textBoxPOIkeyword.TabIndex = 12;
             // 
             // buttonPOISearch
             // 
             this.buttonPOISearch.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
             this.buttonPOISearch.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonPOISearch.Location = new System.Drawing.Point(186, 64);
+            this.buttonPOISearch.Location = new System.Drawing.Point(192, 64);
             this.buttonPOISearch.Name = "buttonPOISearch";
             this.buttonPOISearch.Size = new System.Drawing.Size(46, 23);
             this.buttonPOISearch.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
@@ -969,7 +972,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(2, 71);
+            this.label1.Location = new System.Drawing.Point(8, 71);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 10;
@@ -1364,19 +1367,38 @@
             this.notifyIcon1.Text = "地图下载器";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // contextMenuStripPoi
+            // label8
             // 
-            this.contextMenuStripPoi.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导出ToolStripMenuItem});
-            this.contextMenuStripPoi.Name = "contextMenuStripPoi";
-            this.contextMenuStripPoi.Size = new System.Drawing.Size(153, 48);
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(4, 99);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(59, 12);
+            this.label8.TabIndex = 19;
+            this.label8.Text = "POI保存：";
             // 
-            // 导出ToolStripMenuItem
+            // comboBoxPoiSave
             // 
-            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.导出ToolStripMenuItem.Text = "导出";
-            this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItem_Click);
+            this.comboBoxPoiSave.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPoiSave.FormattingEnabled = true;
+            this.comboBoxPoiSave.Items.AddRange(new object[] {
+            "Excel存储",
+            "MySQL存储"});
+            this.comboBoxPoiSave.Location = new System.Drawing.Point(64, 95);
+            this.comboBoxPoiSave.Name = "comboBoxPoiSave";
+            this.comboBoxPoiSave.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxPoiSave.TabIndex = 20;
+            // 
+            // buttonXPoiSave
+            // 
+            this.buttonXPoiSave.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
+            this.buttonXPoiSave.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
+            this.buttonXPoiSave.Location = new System.Drawing.Point(192, 93);
+            this.buttonXPoiSave.Name = "buttonXPoiSave";
+            this.buttonXPoiSave.Size = new System.Drawing.Size(46, 23);
+            this.buttonXPoiSave.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
+            this.buttonXPoiSave.TabIndex = 21;
+            this.buttonXPoiSave.Text = "保存";
+            this.buttonXPoiSave.Click += new System.EventHandler(this.buttonXPoiSave_Click);
             // 
             // MainForm
             // 
@@ -1422,7 +1444,6 @@
             this.panelMap.ResumeLayout(false);
             this.contextMenuStripSelectedArea.ResumeLayout(false);
             this.contextMenuStripLocation.ResumeLayout(false);
-            this.contextMenuStripPoi.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1555,8 +1576,9 @@
         private System.Windows.Forms.ToolStripMenuItem 显示网格ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 导出地图切片ToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusExport;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripPoi;
-        private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox comboBoxPoiSave;
+        private DevComponents.DotNetBar.ButtonX buttonXPoiSave;
     }
 }
 

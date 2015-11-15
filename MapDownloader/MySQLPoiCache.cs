@@ -11,6 +11,11 @@ namespace MapDownloader
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MySQLPoiCache));
 
+        public MySQLPoiCache(string connString)
+        {
+            this.ConnectionString = connString;
+        }
+
         private string connectionString = string.Empty;
         public string ConnectionString
         {
@@ -63,15 +68,18 @@ namespace MapDownloader
                         // different connections so the multi-thread inserts and selects don't collide on open readers.
                         using(var connCreate = new MySqlConnection(connectionString))
                         {
+                            connCreate.Open();
+
                             using (MySqlCommand cmd = new MySqlCommand(
                                @" CREATE TABLE IF NOT EXISTS `gmappoicache` (
-                             `id` int(11) NOT NULL AUTO_INCREMENT,
+                             `id` bigint NOT NULL AUTO_INCREMENT,
                              `name` varchar(100) NOT NULL,
                              `address` varchar(200) NOT NULL,
-                             `longitude` double(0) NOT NULL,
-                             `latitude` double(0) NOT NULL,
-                             PRIMARY KEY (`id`),
-                               UNIQUE KEY(`name`)
+                             `province` varchar(20) NOT NULL,
+                             `city` varchar(20) NOT NULL,
+                             `longitude` double NOT NULL,
+                             `latitude` double NOT NULL,
+                             PRIMARY KEY (`id`)
                            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;", connCreate))
                             {
                                 cmd.ExecuteNonQuery();
@@ -91,28 +99,37 @@ namespace MapDownloader
             }
         }
 
-        public bool PutPoiDataToCache()
+        public bool PutPoiDataToCache(PoiData data)
         {
             try
             {
-                using (var connGet = new MySqlConnection(connectionString))
+                if (!Initialized)
                 {
-                    using (MySqlCommand cmd = connGet.CreateCommand())
+                    this.Initialize();
+                }
+
+                using (var connPut = new MySqlConnection(connectionString))
+                {
+                    connPut.Open();
+
+                    using (MySqlCommand cmd = connPut.CreateCommand())
                     {
                         cmd.CommandText =
-                            "INSERT INTO `gmappoicache` ( id, name, address, longitude, latitude ) VALUES ( @id, @name, @address, @longitude, @latitude )";
+                            "INSERT INTO `gmappoicache` ( name, address,province,city, longitude, latitude ) VALUES ( @name, @address,@province, @city, @longitude, @latitude )";
 
-                        cmd.Parameters.Add("@id", MySqlDbType.Int32);
                         cmd.Parameters.Add("@name", MySqlDbType.String);
                         cmd.Parameters.Add("@address", MySqlDbType.String);
+                        cmd.Parameters.Add("@province", MySqlDbType.String);
+                        cmd.Parameters.Add("@city", MySqlDbType.String);
                         cmd.Parameters.Add("@longitude", MySqlDbType.Double);
                         cmd.Parameters.Add("@latitude", MySqlDbType.Double);
 
-                        cmd.Parameters["@id"].Value = 1;
-                        cmd.Parameters["@name"].Value = "aaaa";
-                        cmd.Parameters["@address"].Value = "bbbb";
-                        cmd.Parameters["@longitude"].Value = 128.23565;
-                        cmd.Parameters["@latitude"].Value = 32.1235456;
+                        cmd.Parameters["@name"].Value = data.Name;
+                        cmd.Parameters["@address"].Value = data.Address;
+                        cmd.Parameters["@province"].Value = data.Province;
+                        cmd.Parameters["@city"].Value = data.City;
+                        cmd.Parameters["@longitude"].Value = data.Lng;
+                        cmd.Parameters["@latitude"].Value = data.Lat;
                         cmd.ExecuteNonQuery();
                     }
                 }

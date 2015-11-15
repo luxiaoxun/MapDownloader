@@ -11,5 +11,8 @@ namespace MapDownloader
         public DataTable Data { set; get; }
 
         public string Path { set; get;}
+
+        public int ExportType { set; get; }
+
     }
 }
