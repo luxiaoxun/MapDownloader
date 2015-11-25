@@ -221,6 +221,10 @@
       <Project>{46CEA87B-4D4E-43D6-9152-B79163BF7996}</Project>
       <Name>GMapExport</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapHeat\GMapHeat.csproj">
+      <Project>{66C1D358-1909-45D4-8532-9EADAE71958C}</Project>
+      <Name>GMapHeat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapMarkerLib\GMapMarkerLib.csproj">
       <Project>{E25D9C8F-534F-4D86-BD45-9469AD9727E0}</Project>
       <Name>GMapMarkerLib</Name>

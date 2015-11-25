@@ -11,16 +11,25 @@ namespace GMapProvidersExt.Baidu
     {
         public static readonly BaiduMapProviderJS Instance;
 
-        readonly Guid id = new Guid("608748FC-5FDD-4d3a-9027-356F24A755E5");
+        private readonly Guid id = new Guid("608748FC-5FDD-4d3a-9027-356F24A755E5");
         public override Guid Id
         {
             get { return id; }
         }
 
-        readonly string name = "BaiduMap";
+        private readonly string name = "BaiduMap";
         public override string Name
         {
             get { return name; }
+        }
+
+        private readonly string cnName = "百度普通地图";
+        public string CnName
+        {
+            get
+            {
+                return this.cnName;
+            }
         }
 
         static BaiduMapProviderJS()

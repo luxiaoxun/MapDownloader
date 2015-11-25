@@ -28,6 +28,7 @@ using GMapProvidersExt.Tencent;
 using GMapProvidersExt.AMap;
 using GMapProvidersExt.Baidu;
 using GMapExport;
+using GMapHeat;
 
 namespace MapDownloader
 {
@@ -180,7 +181,7 @@ namespace MapDownloader
             try
             {
                 Placemark place = (Placemark)e.Result;
-                this.toolStripStatusCenter.Text = place.ProvinceName+","+place.CityName+","+place.DistrictName;
+                this.toolStripStatusCenter.Text = place.ProvinceName + "," + place.CityName + "," + place.DistrictName;
                 currentCenterCityName = place.CityName;
             }
             catch (Exception ignore)
@@ -391,7 +392,6 @@ namespace MapDownloader
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
 
-       
         #region 加载中国区域
 
         void xPanderPanel2_ExpandClick(object sender, EventArgs e)
@@ -1919,6 +1919,75 @@ namespace MapDownloader
         }
 
         #endregion 
+
+        private List<PointLatLng> GetRandomPoint()
+        {
+            Random rand = new Random();
+            List<PointLatLng> points = new List<PointLatLng>();
+            int pointNum = 500;
+            for (int i = 0; i < pointNum; ++i)
+            {
+                double x = 118 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
+                double y = 32 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
+                points.Add( new PointLatLng(y, x));
+            }
+
+            return points;
+        }
+
+        private void 热力图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int zoom = (int)this.mapControl.Zoom;
+            
+            List<PointLatLng> ps = GetRandomPoint();
+            foreach(var p in ps)
+            {
+                GMapPointMarker pointmarker = new GMapPointMarker(p);
+                this.poiOverlay.Markers.Add(pointmarker);
+            }
+            RectLatLng rect = GMapUtils.GetPointsMaxRect(ps);
+            GPoint plt = this.mapControl.MapProvider.Projection.FromLatLngToPixel(rect.LocationTopLeft, zoom);
+            GPoint prb = this.mapControl.MapProvider.Projection.FromLatLngToPixel(rect.LocationRightBottom, zoom);
+
+            List<HeatPoint> hps = new List<HeatPoint>();
+            foreach (var p in ps)
+            {
+                GPoint gp = this.mapControl.MapProvider.Projection.FromLatLngToPixel(p, zoom);
+                HeatPoint hp = new HeatPoint();
+                hp.X = gp.X - plt.X;
+                hp.Y = gp.Y - plt.Y;
+                hp.W = 1.0f;
+                hps.Add(hp);
+            }
+
+            int width = (int)(prb.X - plt.X);
+            int height = (int)(prb.Y - plt.Y);
+
+            var hmMaker = new HeatMapMaker
+            {
+                Width = width,
+                Height = height,
+                Radius = 10,
+                ColorRamp = ColorRamp.RAINBOW,
+                HeatPoints = hps,
+                Opacity = 111
+            };
+            Bitmap bitmap = hmMaker.MakeHeatMap();
+            GMapHeatImage marker = new GMapHeatImage(rect.LocationTopLeft, bitmap);
+            this.poiOverlay.Markers.Add(marker);
+        }
+
+        private void 地图截屏ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Image img = this.mapControl.ToImage();
+            SaveFileDialog openDialog = new SaveFileDialog();
+            openDialog.Filter = "(*.png)|*.png|(*.jpg)|*.jpg|(*.bmp)|*.bmp";
+            if (openDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string fileName = openDialog.FileName;
+                img.Save(fileName);
+            }
+        }
 
     }
 }

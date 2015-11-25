@@ -39,7 +39,7 @@ namespace GMapProvidersExt.Baidu
             this.type = "web";
             this.fm = "44";
             this.name = "BaiduMap";
-            this.cnName = "百度地图";
+            this.cnName = "百度普通地图";
         }
 
         public GeoCoderStatusCode GetPlacemarksByKeywords(string keywords, string region, string rectangle,

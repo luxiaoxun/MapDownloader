@@ -6,6 +6,8 @@ namespace GMap.NET
    /// </summary>
    public struct Placemark
    {
+       public static readonly Placemark Empty = new Placemark();
+
       /// <summary>
       /// the address
       /// </summary>

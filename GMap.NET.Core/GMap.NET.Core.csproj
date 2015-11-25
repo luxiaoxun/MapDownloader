@@ -195,6 +195,7 @@
     <Compile Include="GMap.NET\GDirections.cs" />
     <Compile Include="GMap.NET\DirectionsProvider.cs" />
     <Compile Include="GMap.NET\GeocodingProvider.cs" />
+    <Compile Include="GMap.NET\GPoint.cs" />
     <Compile Include="GMap.NET\RoutingProvider.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="GMap.NET.CacheProviders\MsSQLCePureImageCache.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="GMap.NET\MapRoute.cs" />
     <None Include="GMap.NET\MapType.cs" />
     <Compile Include="GMap.NET.CacheProviders\MsSQLPureImageCache.cs" />
-    <Compile Include="GMap.NET\GPoint.cs" />
     <Compile Include="GMap.NET\PureImageCache.cs" />
     <Compile Include="GMap.NET\GRect.cs" />
     <Compile Include="GMap.NET\Singleton.cs" />

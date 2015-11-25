@@ -14,7 +14,7 @@ namespace GMap.NET
       private double lat;
       private double lng;
 
-      bool NotEmpty;
+      private bool NotEmpty;
 
       public PointLatLng(double lat, double lng)
       {

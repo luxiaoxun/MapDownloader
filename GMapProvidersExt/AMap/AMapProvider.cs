@@ -52,7 +52,12 @@ namespace GMapProvidersExt.AMap
         {
             GeoCoderStatusCode statusCode = new GeoCoderStatusCode();
             Placemark? place = this.GetPlacemark(location, out statusCode);
-            return place.Value;
+            if (place.HasValue)
+            {
+                return place.Value;
+            }
+
+            return Placemark.Empty;
         }
 
         public GeoCoderStatusCode GetPlacemarksByKeywords(string keywords, string region, string rectangle,

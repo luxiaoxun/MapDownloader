@@ -825,6 +825,64 @@ namespace GMapUtil
             return (test1 <= 0) && (test2 <= 0);
         }
 
+        public static RectLatLng GetRegionMaxRect(GMapPolygon polygon)
+        {
+            double latMin = 90;
+            double latMax = -90;
+            double lngMin = 180;
+            double lngMax = -180;
+            foreach (var point in polygon.Points)
+            {
+                if (point.Lat < latMin)
+                {
+                    latMin = point.Lat;
+                }
+                if (point.Lat > latMax)
+                {
+                    latMax = point.Lat;
+                }
+                if (point.Lng < lngMin)
+                {
+                    lngMin = point.Lng;
+                }
+                if (point.Lng > lngMax)
+                {
+                    lngMax = point.Lng;
+                }
+            }
+
+            return new RectLatLng(latMax, lngMin, lngMax - lngMin, latMax - latMin);
+        }
+
+        public static RectLatLng GetPointsMaxRect(IList<PointLatLng> points)
+        {
+            double latMin = 90;
+            double latMax = -90;
+            double lngMin = 180;
+            double lngMax = -180;
+            foreach (var point in points)
+            {
+                if (point.Lat < latMin)
+                {
+                    latMin = point.Lat;
+                }
+                if (point.Lat > latMax)
+                {
+                    latMax = point.Lat;
+                }
+                if (point.Lng < lngMin)
+                {
+                    lngMin = point.Lng;
+                }
+                if (point.Lng > lngMax)
+                {
+                    lngMax = point.Lng;
+                }
+            }
+
+            return new RectLatLng(latMax, lngMin, lngMax - lngMin, latMax - latMin);
+        }
+
         // Get routes from Shape File 
         //public static List<GMapRoute> GetRoutesFromShapefile(String filename)
         //{
