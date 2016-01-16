@@ -166,6 +166,15 @@ namespace MapDownloader
             {
                 allowRouting = false;
             }
+
+            if (heatMarker != null)
+            {
+                var tl = mapControl.FromLatLngToLocal(heatRect.LocationTopLeft);
+                var br = mapControl.FromLatLngToLocal(heatRect.LocationRightBottom);
+
+                heatMarker.Position = heatRect.LocationTopLeft;
+                heatMarker.Size = new System.Drawing.Size((int)(br.X - tl.X), (int)(br.Y - tl.Y));
+            }
         }
 
         void mapControl_OnPositionChanged(PointLatLng point)
@@ -346,10 +355,9 @@ namespace MapDownloader
 
             this.serverAndCacheToolStripMenuItem.Checked = true;
             this.xPanderPanel2.ExpandClick += new EventHandler<EventArgs>(xPanderPanel2_ExpandClick);
-
-            this.radioButtonMySQL.CheckedChanged += new EventHandler(radioButtonMySQL_CheckedChanged);
-            this.radioButtonSQLite.CheckedChanged += new EventHandler(radioButtonSQLite_CheckedChanged);
-            this.radioButtonDisk.CheckedChanged += new EventHandler(radioButtonDisk_CheckedChanged);
+            
+            this.comboBoxStore.SelectedIndex = 0;
+            this.comboBoxStore.SelectedIndexChanged += new EventHandler(comboBoxStore_SelectedIndexChanged);
 
             this.buttonDownload.Click += new EventHandler(buttonDownload_Click);
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
@@ -522,27 +530,20 @@ namespace MapDownloader
 
         #region 存储方式
 
-        void radioButtonSQLite_CheckedChanged(object sender, EventArgs e)
+        void comboBoxStore_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.radioButtonSQLite.Checked)
+            int storeType = this.comboBoxStore.SelectedIndex;
+            switch (storeType)
             {
-                mapControl.Manager.PrimaryCache = sqliteCache;
-            }
-        }
-
-        void radioButtonMySQL_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.radioButtonMySQL.Checked)
-            {
-                mapControl.Manager.PrimaryCache = mysqlCache;
-            }
-        }
-
-        void radioButtonDisk_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.radioButtonDisk.Checked)
-            {
-                mapControl.Manager.PrimaryCache = sqliteCache;
+                case 0:
+                    mapControl.Manager.PrimaryCache = sqliteCache;
+                    break;
+                case 1:
+                    mapControl.Manager.PrimaryCache = mysqlCache;
+                    break;
+                default:
+                    mapControl.Manager.PrimaryCache = sqliteCache;
+                    break;
             }
         }
 
@@ -609,14 +610,14 @@ namespace MapDownloader
                         prefetchTiles.PrefetchTileStart += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileStart);
                         prefetchTiles.PrefetchTileProgress += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileProgress);
                         prefetchTiles.PrefetchTileComplete += new EventHandler<TileFetcherEventArgs>(prefetchTiles_PrefetchTileComplete);
-                        if (this.radioButtonDisk.Checked)
+                        if (this.comboBoxStore.SelectedIndex==2)
                         {
-                            //切片存在本地磁盘上
+                            //切片存在本地磁盘上(切片)
                             prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, tilePath, retryNum);
                         }
                         else
                         {
-                            //切片存在数据库中
+                            //切片存在数据库中（MySQL或SQLite，根据PrimaryCache来决定）
                             prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, retryNum);
                         }
                     }
@@ -1935,6 +1936,9 @@ namespace MapDownloader
             return points;
         }
 
+        GMapHeatImage heatMarker = null;
+        RectLatLng heatRect = RectLatLng.Empty;
+
         private void 热力图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int zoom = (int)this.mapControl.Zoom;
@@ -1943,11 +1947,13 @@ namespace MapDownloader
             foreach(var p in ps)
             {
                 GMapPointMarker pointmarker = new GMapPointMarker(p);
-                this.poiOverlay.Markers.Add(pointmarker);
+                //this.poiOverlay.Markers.Add(pointmarker);
             }
-            RectLatLng rect = GMapUtils.GetPointsMaxRect(ps);
-            GPoint plt = this.mapControl.MapProvider.Projection.FromLatLngToPixel(rect.LocationTopLeft, zoom);
-            GPoint prb = this.mapControl.MapProvider.Projection.FromLatLngToPixel(rect.LocationRightBottom, zoom);
+
+            //热力图范围
+            heatRect = GMapUtils.GetPointsMaxRect(ps);
+            GPoint plt = this.mapControl.MapProvider.Projection.FromLatLngToPixel(heatRect.LocationTopLeft, zoom);
+            GPoint prb = this.mapControl.MapProvider.Projection.FromLatLngToPixel(heatRect.LocationRightBottom, zoom);
 
             List<HeatPoint> hps = new List<HeatPoint>();
             foreach (var p in ps)
@@ -1973,8 +1979,8 @@ namespace MapDownloader
                 Opacity = 111
             };
             Bitmap bitmap = hmMaker.MakeHeatMap();
-            GMapHeatImage marker = new GMapHeatImage(rect.LocationTopLeft, bitmap);
-            this.poiOverlay.Markers.Add(marker);
+            heatMarker = new GMapHeatImage(heatRect.LocationTopLeft, bitmap);
+            this.poiOverlay.Markers.Add(heatMarker);
         }
 
         private void 地图截屏ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1987,6 +1993,12 @@ namespace MapDownloader
                 string fileName = openDialog.FileName;
                 img.Save(fileName);
             }
+        }
+
+        private void arcGISTileToBundleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ArcGISTileToBundleForm tileToBundleForm = new ArcGISTileToBundleForm();
+            tileToBundleForm.ShowDialog();
         }
 
     }

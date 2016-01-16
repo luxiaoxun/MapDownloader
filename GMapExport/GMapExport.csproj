@@ -66,6 +66,12 @@
     <Compile Include="EsriStorageFormat.cs" />
     <Compile Include="ExportParameter.cs" />
     <Compile Include="ExportType.cs" />
+    <Compile Include="ArcGISTileToBundleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArcGISTileToBundleForm.designer.cs">
+      <DependentUpon>ArcGISTileToBundleForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GridFormat.cs" />
     <Compile Include="ImageFormat.cs" />
     <Compile Include="LODInfo.cs" />
@@ -98,6 +104,9 @@
   <ItemGroup>
     <EmbeddedResource Include="ArcGISLayerConfigForm.resx">
       <DependentUpon>ArcGISLayerConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ArcGISTileToBundleForm.resx">
+      <DependentUpon>ArcGISTileToBundleForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -149,7 +149,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 13;
-            this.label5.Text = "导出路径：";
+            this.label5.Text = "导出格式：";
             // 
             // comboBoxExportType
             // 
