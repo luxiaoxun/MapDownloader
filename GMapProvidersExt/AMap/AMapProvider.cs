@@ -95,55 +95,60 @@ namespace GMapProvidersExt.AMap
             //{
             //    return list;
             //}
-            string cacheResult = HttpUtil.Request(format, "utf-8");
-            JObject jsonResult = JObject.Parse(cacheResult);
-            string info = (string)jsonResult["info"];
-            if (info == "OK")
+            try
             {
-                if (pageIndex == 1)
+                string cacheResult = HttpUtil.Request(format, "utf-8");
+                JObject jsonResult = JObject.Parse(cacheResult);
+                string info = (string)jsonResult["info"];
+                if (info == "OK")
                 {
-                    string countStr = (string)jsonResult["count"];
-                    totalCount = int.Parse(countStr);
-                }
-                if (totalCount <= 0) return list;
-
-                JArray results = (JArray)jsonResult["pois"];
-                if (results != null && results.Count > 0)
-                {
-                    for (int i = 0; i < results.Count; ++i)
+                    if (pageIndex == 1)
                     {
-                        JObject obj = results[i] as JObject;
-                        string name = obj["name"].ToString();
-                        string address = obj["address"].ToString();
-                        string location = obj["location"].ToString();
-                        string[] points = location.Split(',');
-                        if (points != null && points.Length == 2)
+                        string countStr = (string)jsonResult["count"];
+                        totalCount = int.Parse(countStr);
+                    }
+                    if (totalCount <= 0) return list;
+
+                    JArray results = (JArray)jsonResult["pois"];
+                    if (results != null && results.Count > 0)
+                    {
+                        for (int i = 0; i < results.Count; ++i)
                         {
-                            double lat = double.Parse(points[1]);
-                            double lng = double.Parse(points[0]);
-                            Placemark item = new Placemark(address);
-                            item.Point = new PointLatLng(lat, lng);
-                            item.Name = name;
-                            //item.ProvinceName = obj["pname"].ToString();
-                            //item.CityName = obj["cityname"].ToString();
-                            //item.Category = obj["type"].ToString();
-                            list.Add(item);
-                            ++this.succeedCount;
-                            if (queryProgressEvent != null)
+                            JObject obj = results[i] as JObject;
+                            string name = obj["name"].ToString();
+                            string address = obj["address"].ToString();
+                            string location = obj["location"].ToString();
+                            string[] points = location.Split(',');
+                            if (points != null && points.Length == 2)
                             {
-                                queryProgressEvent((long)this.succeedCount, (long)totalCount);
+                                double lat = double.Parse(points[1]);
+                                double lng = double.Parse(points[0]);
+                                Placemark item = new Placemark(address);
+                                item.Point = new PointLatLng(lat, lng);
+                                item.Name = name;
+                                //item.ProvinceName = obj["pname"].ToString();
+                                //item.CityName = obj["cityname"].ToString();
+                                //item.Category = obj["type"].ToString();
+                                list.Add(item);
+                                ++this.succeedCount;
+                                if (queryProgressEvent != null)
+                                {
+                                    queryProgressEvent((long)this.succeedCount, (long)totalCount);
+                                }
                             }
                         }
                     }
-                }
-                int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));
-                if (pageIndex < allPageNum)
-                {
-                    list.AddRange(this.GetPlacemarksByKeywords(keywords, region, rectangle, pageIndex + 1, queryProgressEvent, ref totalCount));
-                }
+                    int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));
+                    if (pageIndex < allPageNum)
+                    {
+                        list.AddRange(this.GetPlacemarksByKeywords(keywords, region, rectangle, pageIndex + 1, queryProgressEvent, ref totalCount));
+                    }
 
+                }
             }
-
+            catch (Exception ex)
+            {
+            }
             return list;
         }
 
@@ -155,7 +160,8 @@ namespace GMapProvidersExt.AMap
             List<Placemark> list = new List<Placemark>();
             try
             {
-                string content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/regeo?output=json&location={0}&key={1}", location.Lng + "," + location.Lat,KEY), "utf-8", "get", "", "text/htm");
+                string reqUrl = string.Format("http://restapi.amap.com/v3/geocode/regeo?output=json&location={0}&key={1}", location.Lng + "," + location.Lat,KEY);
+                string content = HttpUtil.Request(reqUrl, "utf-8", "get", "", "text/html");
                 JObject jsonObj = JObject.Parse(content);
                 if (jsonObj != null && jsonObj["info"].ToString() == "OK")
                 {

@@ -213,6 +213,10 @@
       <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
       <Name>GMapCommonType</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapDownload\GMapDownload.csproj">
+      <Project>{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}</Project>
+      <Name>GMapDownload</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapDrawTools\GMapDrawTools.csproj">
       <Project>{A846C026-69E9-4A27-A40C-6237E3D0BFB2}</Project>
       <Name>GMapDrawTools</Name>

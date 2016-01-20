@@ -9,14 +9,17 @@ namespace NetUtil
     public static class HttpUtil
     {
         // Methods
-        public static string Request(string url, string charset = "gb2312", string method = "get", string entity = "", string conentType = "text/htm")
+        public static string Request(string url, string charset = "gb2312", string method = "get", string entity = "", string conentType = "text/html")
         {
             WebClient client = new WebClient
             {
                 Headers = new WebHeaderCollection()
             };
             client.Headers.Add("Content-Type", conentType + ";charset=utf-8");
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36 SE 2.X MetaSr 1.0");
+            client.Headers.Add("Accept-Encoding","gzip,deflate,sdch");
+            client.Headers.Add("Accept-Language", "zh-CN,zh;q=0.8");
+            client.Headers.Add("Cache-Control","max-age=0");
             Encoding encoding = Encoding.GetEncoding(charset);
             if (method.ToLower().Equals("get"))
             {

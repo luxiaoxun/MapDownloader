@@ -78,46 +78,50 @@ namespace GMapProvidersExt.Baidu
             //{
             //    return list;
             //}
-            string cacheResult = HttpUtil.Request(format, "utf-8");
-            JObject jsonResult = JObject.Parse(cacheResult);
-            string message = (string)jsonResult["message"];
-            if (message == "ok")
+            try
             {
-                if (pageIndex == 0)
+                string cacheResult = HttpUtil.Request(format, "utf-8");
+                JObject jsonResult = JObject.Parse(cacheResult);
+                string message = (string)jsonResult["message"];
+                if (message == "ok")
                 {
-                    totalCount = int.Parse((string)jsonResult["total"]);
-                }
-                if (totalCount <= 0) return list;
-
-                JArray results = (JArray)jsonResult["results"];
-                if (results != null && results.Count > 0)
-                {
-                    for (int i = 0; i < results.Count; ++i)
+                    if (pageIndex == 0)
                     {
-                        JObject obj = results[i] as JObject;
-                        string name = obj["name"].ToString();
-                        string address = obj["address"].ToString();
-                        double lat = double.Parse(obj["location"]["lat"].ToString());
-                        double lng = double.Parse(obj["location"]["lng"].ToString());
-                        Placemark item = new Placemark(address);
-                        item.Point = new PointLatLng(lat, lng);
-                        item.Name = name;
-                        list.Add(item);
-                        ++this.succeedCount;
-                        if (queryProgressEvent != null)
+                        totalCount = int.Parse((string)jsonResult["total"]);
+                    }
+                    if (totalCount <= 0) return list;
+
+                    JArray results = (JArray)jsonResult["results"];
+                    if (results != null && results.Count > 0)
+                    {
+                        for (int i = 0; i < results.Count; ++i)
                         {
-                            queryProgressEvent((long)this.succeedCount, (long)totalCount);
+                            JObject obj = results[i] as JObject;
+                            string name = obj["name"].ToString();
+                            string address = obj["address"].ToString();
+                            double lat = double.Parse(obj["location"]["lat"].ToString());
+                            double lng = double.Parse(obj["location"]["lng"].ToString());
+                            Placemark item = new Placemark(address);
+                            item.Point = new PointLatLng(lat, lng);
+                            item.Name = name;
+                            list.Add(item);
+                            ++this.succeedCount;
+                            if (queryProgressEvent != null)
+                            {
+                                queryProgressEvent((long)this.succeedCount, (long)totalCount);
+                            }
                         }
                     }
+                    int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));
+                    if (pageIndex < allPageNum)
+                    {
+                        list.AddRange(this.GetPlacemarksByKeywords(keywords, region, rectangle, pageIndex + 1, queryProgressEvent, ref totalCount));
+                    }
                 }
-                int allPageNum = (int)Math.Ceiling((double)(((double)totalCount) / ((double)pageSize)));
-                if (pageIndex < allPageNum)
-                {
-                    list.AddRange(this.GetPlacemarksByKeywords(keywords, region, rectangle, pageIndex + 1, queryProgressEvent, ref totalCount));
-                }
-
             }
-
+            catch (Exception ex)
+            {
+            }
             return list;
         }
 

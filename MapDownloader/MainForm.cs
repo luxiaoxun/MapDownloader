@@ -29,6 +29,7 @@ using GMapProvidersExt.AMap;
 using GMapProvidersExt.Baidu;
 using GMapExport;
 using GMapHeat;
+using GMapDownload;
 
 namespace MapDownloader
 {
@@ -52,13 +53,13 @@ namespace MapDownloader
         private int retryNum = 3;
         private string tilePath = "D:\\GisMap";
         private SQLitePureImageCache sqliteCache = new SQLitePureImageCache();
-        private MySQLPureImageCache mysqlCache = new MySQLPureImageCache();
+        private MySQLPureImageCacheMulti mysqlCache = new MySQLPureImageCacheMulti();
 
         private bool isLeftButtonDown = false;
         private GMapMarkerEllipse currentDragableNode = null;
         private List<GMapMarkerEllipse> currentDragableNodes;
         private GMapAreaPolygon currentAreaPolygon; //区域边界多边形
-        private GMapPolygon currentDrawPolygon; //画图多边形
+        //private GMapPolygon currentDrawPolygon; //画图多边形
 
         private bool allowRouting = false;
         private PointLatLng routeStartPoint = PointLatLng.Empty;
@@ -148,9 +149,26 @@ namespace MapDownloader
             this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
             this.mapControl.OnPositionChanged += new PositionChanged(mapControl_OnPositionChanged);
             this.mapControl.OnMapZoomChanged += new MapZoomChanged(mapControl_OnMapZoomChanged);
+            this.mapControl.OnPolygonDoubleClick += new PolygonDoubleClick(mapControl_OnPolygonDoubleClick);
             
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
+        }
+
+        //双击多边形下载地图
+        void mapControl_OnPolygonDoubleClick(GMapPolygon item, MouseEventArgs e)
+        {
+            if (item is GMapAreaPolygon)
+            {
+                if (currentAreaPolygon != null)
+                {
+                    DownloadMap(currentAreaPolygon);
+                }
+                else
+                {
+                    CommonTools.PromptingMessage.PromptMessage(this, "请先用画图工具画下载的区域多边形或选择省市区域！");
+                }
+            }
         }
 
         #region 地图控件事件
@@ -336,11 +354,11 @@ namespace MapDownloader
                     currentAreaPolygon = item as GMapAreaPolygon;
                     this.contextMenuStripSelectedArea.Show(Cursor.Position);
                 }
-                if (item is GMapDrawRectangle || item is GMapDrawPolygon)
-                {
-                    currentDrawPolygon = item;
-                    //this.contextMenuStripDrawPolygon.Show(Cursor.Position);
-                }
+                //if (item is GMapDrawRectangle || item is GMapDrawPolygon)
+                //{
+                //    currentDrawPolygon = item;
+                //    //this.contextMenuStripDrawPolygon.Show(Cursor.Position);
+                //}
             }
         }
 
@@ -359,7 +377,6 @@ namespace MapDownloader
             this.comboBoxStore.SelectedIndex = 0;
             this.comboBoxStore.SelectedIndexChanged += new EventHandler(comboBoxStore_SelectedIndexChanged);
 
-            this.buttonDownload.Click += new EventHandler(buttonDownload_Click);
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
             this.SizeChanged += new EventHandler(MainForm_SizeChanged);
 
@@ -503,9 +520,11 @@ namespace MapDownloader
                     {
                         GMapAreaPolygon areaPolygon = new GMapAreaPolygon(polygon.Points, name);
                         currentAreaPolygon = areaPolygon;
-                        regionOverlay.Polygons.Clear();
-                        regionOverlay.Polygons.Add(areaPolygon);
                         RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
+                        GMapTextMarker textMarker = new GMapTextMarker(rect.LocationMiddle, "双击下载");
+                        regionOverlay.Clear();
+                        regionOverlay.Polygons.Add(areaPolygon);
+                        regionOverlay.Markers.Add(textMarker);
                         this.mapControl.SetZoomToFitRect(rect);
                     }
                 }
@@ -551,33 +570,10 @@ namespace MapDownloader
 
         #region 地图下载
 
-        void obj_PrefetchTileProgress(object sender, TileFetcherEventArgs e)
-        {
-            if (e != null)
-            {
-                UpdateDownloadBar(e.ProgressValue,e.TileAllNum,e.TileCompleteNum,e.CurrentDownloadZoom);
-            }
-        }
-
-        void obj_PrefetchTileStart(object sender, TileFetcherEventArgs e)
-        {
-            ShowDownloadTip(true);
-        }
-
         private void ShowDownloadTip(bool isVisible)
         {
             this.toolStripStatusDownload.Visible = isVisible;
-        }
-
-        private void UpdateDownloadBar(int value, ulong allNum, ulong comNum, int zoom)
-        {
-            this.toolStripStatusDownload.Text = string.Format("下载进度：级别{0}，{1}/{2}",zoom,comNum,allNum);
-        }
-
-        void prefetchTiles_PrefetchTileComplete(object sender, TileFetcherEventArgs e)
-        {
-            MessageBox.Show("地图下载完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            ShowDownloadTip(false);
+            this.toolStripProgressBarDownload.Visible = isVisible;
         }
 
         private void ResetToServerAndCacheMode()
@@ -598,68 +594,65 @@ namespace MapDownloader
                 RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
                 try
                 {
-                    int minZ = int.Parse(this.textBoxMinZoom.Text);
-                    int maxZ = int.Parse(this.textBoxMaxZoom.Text);
-                    minZ = minZ <= 0 ? 1 : minZ;
-                    maxZ = maxZ >= mapControl.MaxZoom ? mapControl.MaxZoom : maxZ;
-                    if (minZ <= maxZ)
+                    DownloadCfgForm downloadCfgForm = new DownloadCfgForm(area,this.mapControl.MapProvider);
+                    if (downloadCfgForm.ShowDialog() == DialogResult.OK)
                     {
+                        TileDownloaderArgs downloaderArgs = downloadCfgForm.GetDownloadTileGPoints();
                         ResetToServerAndCacheMode();
-                        TileFetcher prefetchTiles = new TileFetcher();
-                        prefetchTiles.Retry = retryNum;
-                        prefetchTiles.PrefetchTileStart += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileStart);
-                        prefetchTiles.PrefetchTileProgress += new EventHandler<TileFetcherEventArgs>(obj_PrefetchTileProgress);
-                        prefetchTiles.PrefetchTileComplete += new EventHandler<TileFetcherEventArgs>(prefetchTiles_PrefetchTileComplete);
+                        TileDownloader tileDownloader = new TileDownloader(5);
                         if (this.comboBoxStore.SelectedIndex==2)
                         {
-                            //切片存在本地磁盘上(切片)
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, tilePath, retryNum);
+                            tileDownloader.TilePath = this.tilePath;
                         }
-                        else
-                        {
-                            //切片存在数据库中（MySQL或SQLite，根据PrimaryCache来决定）
-                            prefetchTiles.Start(area, minZ, maxZ, mapControl.MapProvider, retryNum);
-                        }
+                        tileDownloader.Retry = retryNum;
+                        tileDownloader.PrefetchTileStart += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileStart);
+                        tileDownloader.PrefetchTileProgress += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileProgress);
+                        tileDownloader.PrefetchTileComplete += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileComplete);
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    log.Error(ex);
                 }
             }
             else
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
+                CommonTools.PromptingMessage.PromptMessage(this, "请先用画图工具画下载的区域多边形或选择省市区域！");
             }
         }
 
-        //下载地图
-        private void buttonDownload_Click(object sender, EventArgs e)
+        void tileDownloader_PrefetchTileComplete(object sender, TileDownloadEventArgs e)
         {
-            if (currentDrawPolygon != null)
+            MessageBox.Show("地图下载完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            ShowDownloadTip(false);
+        }
+
+        private delegate void UpdateDownloadProress(int completedCount, int total);
+
+        private void UpdateDownloadBar(int completedCount, int total)
+        {
+            int value = completedCount * 100 / total;
+            this.toolStripStatusDownload.Text = string.Format("下载进度：{0}/{1}", completedCount, total);
+            this.toolStripProgressBarDownload.Value = value;
+        }
+
+        void tileDownloader_PrefetchTileProgress(object sender, TileDownloadEventArgs e)
+        {
+            if (e != null)
             {
-                DownloadMap(currentDrawPolygon);
+                this.Invoke(new UpdateDownloadProress(UpdateDownloadBar), e.TileCompleteNum,e.TileAllNum);
             }
-            else if (currentAreaPolygon != null)
-            {
-                DownloadMap(currentAreaPolygon);
-            }
-            else
-            {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
-            }
+        }
+
+        void tileDownloader_PrefetchTileStart(object sender, TileDownloadEventArgs e)
+        {
+            ShowDownloadTip(true);
         }
 
         private void 下载地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentAreaPolygon != null)
-            {
-                DownloadMap(currentAreaPolygon);
-            }
-            else
-            {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
-            }
+            DownloadMap(currentAreaPolygon);
         }
 
         private void 允许编辑ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -701,9 +694,9 @@ namespace MapDownloader
 
         void buttonMapImage_Click(object sender, EventArgs e)
         {
-            if (currentDrawPolygon != null)
+            if (currentAreaPolygon != null)
             {
-                RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDrawPolygon);
+                RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
                 try
                 {
                     ResetToServerAndCacheMode();
@@ -981,15 +974,16 @@ namespace MapDownloader
             {
                 if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null || e.Route!=null))
                 {
+                    GMapPolygon drawPolygon = null;
                     switch (e.DrawingMode)
                     {
                         case DrawingMode.Polygon:
-                            polygonsOverlay.Polygons.Add(e.Polygon);
-                            currentDrawPolygon = e.Polygon;
+                            //polygonsOverlay.Polygons.Add(e.Polygon);
+                            drawPolygon = e.Polygon;
                             break;
                         case DrawingMode.Rectangle:
-                            polygonsOverlay.Polygons.Add(e.Rectangle);
-                            currentDrawPolygon = e.Rectangle;
+                            //polygonsOverlay.Polygons.Add(e.Rectangle);
+                            drawPolygon = e.Rectangle;
                             break;
                         case DrawingMode.Circle:
                             polygonsOverlay.Markers.Add(e.Circle);
@@ -1003,6 +997,18 @@ namespace MapDownloader
                         default:
                             draw.IsEnable = false;
                             break;
+                    }
+
+                    if (drawPolygon != null)
+                    {
+                        GMapAreaPolygon areaPolygon = new GMapAreaPolygon(drawPolygon.Points, "下载区域");
+                        currentAreaPolygon = areaPolygon;
+                        RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
+                        GMapTextMarker textMarker = new GMapTextMarker(rect.LocationMiddle, "双击下载");
+                        regionOverlay.Clear();
+                        regionOverlay.Polygons.Add(areaPolygon);
+                        regionOverlay.Markers.Add(textMarker);
+                        this.mapControl.SetZoomToFitRect(rect);
                     }
                 }
             }
@@ -1433,9 +1439,9 @@ namespace MapDownloader
             argument.KeyWord = keywords;
             argument.Region = cityName;
             argument.MapIndex = mapIndex;
-            if (currentDrawPolygon != null)
+            if (currentAreaPolygon != null)
             {
-                RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentDrawPolygon);
+                RectLatLng rect = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
                 argument.Rectangle = string.Format("{0},{1},{2},{3}",
                     new object[] { rect.LocationRightBottom.Lat, rect.LocationTopLeft.Lng, rect.LocationTopLeft.Lat, rect.LocationRightBottom.Lng });
             }
@@ -1676,12 +1682,11 @@ namespace MapDownloader
         private void 清除画图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.polygonsOverlay.Clear();
-            currentDrawPolygon = null;
         }
 
         private void 清楚边界ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.regionOverlay.Polygons.Clear();
+            this.regionOverlay.Clear();
             currentAreaPolygon = null;
         }
 

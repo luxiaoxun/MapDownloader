@@ -132,11 +132,8 @@
             this.textBoxImageZoom = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.gbMapDownloader = new System.Windows.Forms.GroupBox();
-            this.buttonDownload = new DevComponents.DotNetBar.ButtonX();
-            this.textBoxMaxZoom = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBoxMinZoom = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.comboBoxStore = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.xPanderPanel2 = new BSE.Windows.Forms.XPanderPanel();
             this.advTreeChina = new DevComponents.AdvTree.AdvTree();
             this.nodeConnector1 = new DevComponents.AdvTree.NodeConnector();
@@ -153,8 +150,7 @@
             this.以此为起点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.以此为终点ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.label9 = new System.Windows.Forms.Label();
-            this.comboBoxStore = new System.Windows.Forms.ComboBox();
+            this.toolStripProgressBarDownload = new System.Windows.Forms.ToolStripProgressBar();
             this.mapControl = new MapDownloader.MapControl();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.addressDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -630,28 +626,28 @@
             // 清除画图ToolStripMenuItem
             // 
             this.清除画图ToolStripMenuItem.Name = "清除画图ToolStripMenuItem";
-            this.清除画图ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.清除画图ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.清除画图ToolStripMenuItem.Text = "清除画图";
             this.清除画图ToolStripMenuItem.Click += new System.EventHandler(this.清除画图ToolStripMenuItem_Click);
             // 
             // 清楚边界ToolStripMenuItem
             // 
             this.清楚边界ToolStripMenuItem.Name = "清楚边界ToolStripMenuItem";
-            this.清楚边界ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.清楚边界ToolStripMenuItem.Text = "清除边界";
+            this.清楚边界ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.清楚边界ToolStripMenuItem.Text = "清除下载边界";
             this.清楚边界ToolStripMenuItem.Click += new System.EventHandler(this.清楚边界ToolStripMenuItem_Click);
             // 
             // 清楚路径ToolStripMenuItem
             // 
             this.清楚路径ToolStripMenuItem.Name = "清楚路径ToolStripMenuItem";
-            this.清楚路径ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.清楚路径ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.清楚路径ToolStripMenuItem.Text = "清除路径";
             this.清楚路径ToolStripMenuItem.Click += new System.EventHandler(this.清楚路径ToolStripMenuItem_Click);
             // 
             // 清除POIToolStripMenuItem
             // 
             this.清除POIToolStripMenuItem.Name = "清除POIToolStripMenuItem";
-            this.清除POIToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.清除POIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.清除POIToolStripMenuItem.Text = "清除POI";
             this.清除POIToolStripMenuItem.Click += new System.EventHandler(this.清除POIToolStripMenuItem_Click);
             // 
@@ -738,6 +734,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusTip,
             this.toolStripStatusDownload,
+            this.toolStripProgressBarDownload,
             this.toolStripStatusPOIDownload,
             this.toolStripStatusCenter,
             this.toolStripStatusExport});
@@ -846,9 +843,9 @@
             this.groupBoxPOI.Controls.Add(this.panelPOIResult);
             this.groupBoxPOI.Controls.Add(this.panelPOI);
             this.groupBoxPOI.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxPOI.Location = new System.Drawing.Point(0, 196);
+            this.groupBoxPOI.Location = new System.Drawing.Point(0, 164);
             this.groupBoxPOI.Name = "groupBoxPOI";
-            this.groupBoxPOI.Size = new System.Drawing.Size(249, 312);
+            this.groupBoxPOI.Size = new System.Drawing.Size(249, 344);
             this.groupBoxPOI.TabIndex = 8;
             this.groupBoxPOI.TabStop = false;
             this.groupBoxPOI.Text = "POI查询";
@@ -859,7 +856,7 @@
             this.panelPOIResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPOIResult.Location = new System.Drawing.Point(3, 144);
             this.panelPOIResult.Name = "panelPOIResult";
-            this.panelPOIResult.Size = new System.Drawing.Size(243, 165);
+            this.panelPOIResult.Size = new System.Drawing.Size(243, 197);
             this.panelPOIResult.TabIndex = 11;
             // 
             // dataGridViewPOI
@@ -875,7 +872,7 @@
             this.dataGridViewPOI.Name = "dataGridViewPOI";
             this.dataGridViewPOI.ReadOnly = true;
             this.dataGridViewPOI.RowTemplate.Height = 23;
-            this.dataGridViewPOI.Size = new System.Drawing.Size(243, 165);
+            this.dataGridViewPOI.Size = new System.Drawing.Size(243, 197);
             this.dataGridViewPOI.TabIndex = 0;
             // 
             // panelPOI
@@ -1022,7 +1019,7 @@
             this.groupBoxAddress.Controls.Add(this.buttonAddressSearch);
             this.groupBoxAddress.Controls.Add(this.textBoxAddress);
             this.groupBoxAddress.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxAddress.Location = new System.Drawing.Point(0, 139);
+            this.groupBoxAddress.Location = new System.Drawing.Point(0, 107);
             this.groupBoxAddress.Name = "groupBoxAddress";
             this.groupBoxAddress.Size = new System.Drawing.Size(249, 57);
             this.groupBoxAddress.TabIndex = 7;
@@ -1054,7 +1051,7 @@
             this.gbMapImage.Controls.Add(this.textBoxImageZoom);
             this.gbMapImage.Controls.Add(this.label4);
             this.gbMapImage.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbMapImage.Location = new System.Drawing.Point(0, 78);
+            this.gbMapImage.Location = new System.Drawing.Point(0, 46);
             this.gbMapImage.Name = "gbMapImage";
             this.gbMapImage.Size = new System.Drawing.Size(249, 61);
             this.gbMapImage.TabIndex = 5;
@@ -1094,63 +1091,34 @@
             // 
             this.gbMapDownloader.Controls.Add(this.comboBoxStore);
             this.gbMapDownloader.Controls.Add(this.label9);
-            this.gbMapDownloader.Controls.Add(this.buttonDownload);
-            this.gbMapDownloader.Controls.Add(this.textBoxMaxZoom);
-            this.gbMapDownloader.Controls.Add(this.label3);
-            this.gbMapDownloader.Controls.Add(this.textBoxMinZoom);
-            this.gbMapDownloader.Controls.Add(this.label2);
             this.gbMapDownloader.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbMapDownloader.Location = new System.Drawing.Point(0, 0);
             this.gbMapDownloader.Name = "gbMapDownloader";
-            this.gbMapDownloader.Size = new System.Drawing.Size(249, 78);
+            this.gbMapDownloader.Size = new System.Drawing.Size(249, 46);
             this.gbMapDownloader.TabIndex = 4;
             this.gbMapDownloader.TabStop = false;
             // 
-            // buttonDownload
+            // comboBoxStore
             // 
-            this.buttonDownload.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
-            this.buttonDownload.ColorTable = DevComponents.DotNetBar.eButtonColor.OrangeWithBackground;
-            this.buttonDownload.Location = new System.Drawing.Point(174, 41);
-            this.buttonDownload.Name = "buttonDownload";
-            this.buttonDownload.Size = new System.Drawing.Size(51, 23);
-            this.buttonDownload.Style = DevComponents.DotNetBar.eDotNetBarStyle.OfficeMobile2014;
-            this.buttonDownload.TabIndex = 10;
-            this.buttonDownload.Text = "下载";
-            this.buttonDownload.Tooltip = "将地图数据下载到所选数据库";
+            this.comboBoxStore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxStore.FormattingEnabled = true;
+            this.comboBoxStore.Items.AddRange(new object[] {
+            "SQLite数据库",
+            "MySQL数据库",
+            "本地磁盘（切片）"});
+            this.comboBoxStore.Location = new System.Drawing.Point(72, 15);
+            this.comboBoxStore.Name = "comboBoxStore";
+            this.comboBoxStore.Size = new System.Drawing.Size(121, 20);
+            this.comboBoxStore.TabIndex = 12;
             // 
-            // textBoxMaxZoom
+            // label9
             // 
-            this.textBoxMaxZoom.Location = new System.Drawing.Point(120, 41);
-            this.textBoxMaxZoom.Name = "textBoxMaxZoom";
-            this.textBoxMaxZoom.Size = new System.Drawing.Size(35, 21);
-            this.textBoxMaxZoom.TabIndex = 4;
-            this.textBoxMaxZoom.Text = "18";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(90, 45);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(23, 12);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "---";
-            // 
-            // textBoxMinZoom
-            // 
-            this.textBoxMinZoom.Location = new System.Drawing.Point(49, 41);
-            this.textBoxMinZoom.Name = "textBoxMinZoom";
-            this.textBoxMinZoom.Size = new System.Drawing.Size(35, 21);
-            this.textBoxMinZoom.TabIndex = 2;
-            this.textBoxMinZoom.Text = "1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 45);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 12);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Zoom：";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 18);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(65, 12);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "存储方式：";
             // 
             // xPanderPanel2
             // 
@@ -1337,27 +1305,10 @@
             this.notifyIcon1.Text = "地图下载器";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // label9
+            // toolStripProgressBarDownload
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(8, 18);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 12);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "存储方式：";
-            // 
-            // comboBoxStore
-            // 
-            this.comboBoxStore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxStore.FormattingEnabled = true;
-            this.comboBoxStore.Items.AddRange(new object[] {
-            "SQLite数据库",
-            "MySQL数据库",
-            "本地磁盘（切片）"});
-            this.comboBoxStore.Location = new System.Drawing.Point(72, 15);
-            this.comboBoxStore.Name = "comboBoxStore";
-            this.comboBoxStore.Size = new System.Drawing.Size(121, 20);
-            this.comboBoxStore.TabIndex = 12;
+            this.toolStripProgressBarDownload.Name = "toolStripProgressBarDownload";
+            this.toolStripProgressBarDownload.Size = new System.Drawing.Size(100, 16);
             // 
             // mapControl
             // 
@@ -1479,10 +1430,6 @@
         private System.Windows.Forms.TextBox textBoxImageZoom;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gbMapDownloader;
-        private System.Windows.Forms.TextBox textBoxMaxZoom;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxMinZoom;
-        private System.Windows.Forms.Label label2;
         private DevComponents.DotNetBar.ExpandableSplitter expandableSplitter1;
         private System.Windows.Forms.ToolStripMenuItem 画图工具ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 矩形ToolStripMenuItem;
@@ -1497,7 +1444,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusDownload;
         private System.Windows.Forms.Panel panelMap;
         private MapControl mapControl;
-        private DevComponents.DotNetBar.ButtonX buttonDownload;
         private DevComponents.DotNetBar.ButtonX buttonMapImage;
         private BSE.Windows.Forms.XPanderPanel xPanderPanel2;
         private DevComponents.AdvTree.AdvTree advTreeChina;
@@ -1581,6 +1527,7 @@
         private System.Windows.Forms.ToolStripMenuItem arcGISTileToBundleToolStripMenuItem;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox comboBoxStore;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarDownload;
     }
 }
 

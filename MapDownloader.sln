@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapService", "GMapService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapHeat", "GMapHeat\GMapHeat.csproj", "{66C1D358-1909-45D4-8532-9EADAE71958C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapDownload", "GMapDownload\GMapDownload.csproj", "{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,6 +351,16 @@ Global
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Release|x86.ActiveCfg = Release|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F0FBF1C6-DCC6-4790-83B8-917DB5E46BCF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
