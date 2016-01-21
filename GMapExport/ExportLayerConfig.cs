@@ -126,6 +126,10 @@ namespace GMapExport
             {
                 arcGisTileSchema.PacketSize = 0;
             }
+            else if (storageFormat == EsriStorageFormat.esriMapCacheStorageModeCompact)
+            {
+                arcGisTileSchema.PacketSize = 128;
+            }
             arcGisTileSchema.StorageFormat = storageFormat;
             arcGisTileSchema.TileOrigin = this.mapProvider.Projection.GetProjectedPoint(this.mapProvider.Projection.TileOrigin);
             arcGisTileSchema.TileCols = (int)this.mapProvider.Projection.TileSize.Width;

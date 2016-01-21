@@ -97,7 +97,7 @@ namespace GMapProvidersExt.AMap
             //}
             try
             {
-                string cacheResult = HttpUtil.Request(format, "utf-8");
+                string cacheResult = HttpUtil.GetData(format);
                 JObject jsonResult = JObject.Parse(cacheResult);
                 string info = (string)jsonResult["info"];
                 if (info == "OK")
@@ -161,7 +161,7 @@ namespace GMapProvidersExt.AMap
             try
             {
                 string reqUrl = string.Format("http://restapi.amap.com/v3/geocode/regeo?output=json&location={0}&key={1}", location.Lng + "," + location.Lat,KEY);
-                string content = HttpUtil.Request(reqUrl, "utf-8", "get", "", "text/html");
+                string content = HttpUtil.GetData(reqUrl);
                 JObject jsonObj = JObject.Parse(content);
                 if (jsonObj != null && jsonObj["info"].ToString() == "OK")
                 {
@@ -210,11 +210,11 @@ namespace GMapProvidersExt.AMap
                 string content = "";
                 if (placemark.CityName != null)
                 {
-                    content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/geo?city={0}&address={1}&output=json&key={2}", placemark.CityName, placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                    content = HttpUtil.GetData(string.Format("http://restapi.amap.com/v3/geocode/geo?city={0}&address={1}&output=json&key={2}", placemark.CityName, placemark.Address, KEY));
                 }
                 else
                 {
-                    content = HttpUtil.Request(string.Format("http://restapi.amap.com/v3/geocode/geo?address={0}&output=json&key={1}", placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                    content = HttpUtil.GetData(string.Format("http://restapi.amap.com/v3/geocode/geo?address={0}&output=json&key={1}", placemark.Address, KEY));
                 }
                 JObject jsonObj = JObject.Parse(content);
                 if (jsonObj != null && jsonObj["info"].ToString() == "OK")
@@ -303,7 +303,7 @@ namespace GMapProvidersExt.AMap
             string destination = string.Format("{0},{1}", end.Lng, end.Lat);
             string city = HttpUtility.UrlEncode(cityName);
             string url = string.Format("http://restapi.amap.com/v3/direction/transit/integrated?origin={0}&destination={1}&city={2}&output=json&key={3}", origin, destination, city, KEY);
-            string result = HttpUtil.Request(url, "utf-8");
+            string result = HttpUtil.GetData(url);
             if (!string.IsNullOrEmpty(result))
             {
                 JObject resJosn = JObject.Parse(result);
@@ -361,7 +361,7 @@ namespace GMapProvidersExt.AMap
         public MapRoute GetRoute(PointLatLng start, PointLatLng end, bool avoidHighways, bool walkingMode, int Zoom)
         {
             string url = MakeRouteUrl(start,end);
-            string result = HttpUtil.Request(url, "utf-8");
+            string result = HttpUtil.GetData(url);
             List<PointLatLng> points = new List<PointLatLng>();
             MapRoute route = points != null ? new MapRoute(points, "") : null;
             return route;

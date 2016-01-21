@@ -101,7 +101,7 @@ namespace GMapProvidersExt.Tencent
             //string cacheResult = Singleton<Cache>.Instance.GetContent(cacheUrl, CacheType.UrlCache, TimeSpan.FromHours(360.0));
             //if (string.IsNullOrEmpty(cacheResult))
             //{
-            //    cacheResult = HttpUtil.Request(format, "utf-8", "get", "", "text/htm");
+            //    cacheResult = HttpUtil.GetData(format, "utf-8", "get", "", "text/htm");
             //    Thread.Sleep(200);
             //    if (!string.IsNullOrEmpty(cacheResult))
             //    {
@@ -112,7 +112,7 @@ namespace GMapProvidersExt.Tencent
             //{
             //    return list;
             //}
-            string cacheResult = HttpUtil.Request(format, "utf-8");
+            string cacheResult = HttpUtil.GetData(format);
             JObject result = JObject.Parse(cacheResult);
             string status = (string)result["status"];
             string message = (string)result["message"];
@@ -174,7 +174,8 @@ namespace GMapProvidersExt.Tencent
             place.Address = "";
             try
             {
-                string content = HttpUtil.Request(string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat), "gb2312", "get", "", "text/htm");
+                string url = string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat);
+                string content = HttpUtil.GetData(url);
                 string jsonContent = this.GetJsonContent(content);
                 JObject jsonObj = JObject.Parse(jsonContent)["detail"] as JObject;
                 List<Placemark> list = new List<Placemark>();
@@ -201,7 +202,8 @@ namespace GMapProvidersExt.Tencent
 
         private List<Placemark> GetPlacemarksByLocationBack(PointLatLng location)
         {
-            string content = HttpUtil.Request(string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat), "gb2312", "get", "", "text/htm");
+            string url = string.Format("http://api.map.qq.com/rgeoc/?lnglat={0}%2C{1}&output=jsonp&fr=mapapi&cb=SOSOMapLoader.geocoder0", location.Lng, location.Lat);
+            string content = HttpUtil.GetData(url);
             string jsonContent = this.GetJsonContent(content);
             JObject jsonObj = JObject.Parse(jsonContent)["detail"] as JObject;
             List<Placemark> list = new List<Placemark>();
@@ -233,7 +235,8 @@ namespace GMapProvidersExt.Tencent
             List<Placemark> list = new List<Placemark>();
             try
             {
-                string content = HttpUtil.Request(string.Format("http://apis.map.qq.com/ws/geocoder/v1/?location={0}&get_poi={1}&key={2}", location.Lat + "," + location.Lng, 0, KEY), "utf-8", "get", "", "text/htm");
+                string url = string.Format("http://apis.map.qq.com/ws/geocoder/v1/?location={0}&get_poi={1}&key={2}", location.Lat + "," + location.Lng, 0, KEY);
+                string content = HttpUtil.GetData(url);
                 JObject jsonObj = JObject.Parse(content);
                 if (jsonObj != null && jsonObj["result"] != null)
                 {
@@ -262,7 +265,8 @@ namespace GMapProvidersExt.Tencent
             List<PointLatLng> list = new List<PointLatLng>();
             try
             {
-                string content = HttpUtil.Request(string.Format("http://apis.map.qq.com/ws/geocoder/v1/?region={0}&address={1}&key={2}", placemark.CityName, placemark.Address, KEY), "utf-8", "get", "", "text/htm");
+                string url = string.Format("http://apis.map.qq.com/ws/geocoder/v1/?region={0}&address={1}&key={2}", placemark.CityName, placemark.Address, KEY);
+                string content = HttpUtil.GetData(url);
                 JObject jsonObj = JObject.Parse(content);
                 if (jsonObj != null && jsonObj["result"] != null)
                 {

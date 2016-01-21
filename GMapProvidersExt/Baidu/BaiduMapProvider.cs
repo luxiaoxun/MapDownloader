@@ -68,7 +68,7 @@ namespace GMapProvidersExt.Baidu
             //string cacheResult = Singleton<Cache>.Instance.GetContent(cacheUrl, CacheType.UrlCache, TimeSpan.FromHours(360.0));
             //if (string.IsNullOrEmpty(cacheResult))
             //{
-            //    cacheResult = HttpUtil.RequestByJSON(format, "get", "");
+            //    cacheResult = HttpUtil.GetData(format);
             //    if (!string.IsNullOrEmpty(cacheResult))
             //    {
             //        Singleton<Cache>.Instance.SaveContent(cacheUrl, CacheType.UrlCache, cacheResult);
@@ -80,7 +80,7 @@ namespace GMapProvidersExt.Baidu
             //}
             try
             {
-                string cacheResult = HttpUtil.Request(format, "utf-8");
+                string cacheResult = HttpUtil.GetData(format);
                 JObject jsonResult = JObject.Parse(cacheResult);
                 string message = (string)jsonResult["message"];
                 if (message == "ok")

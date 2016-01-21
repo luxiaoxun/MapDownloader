@@ -12,7 +12,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.MapProviders;
 using GMap.NET.Projections;
 
-namespace GMapExport
+namespace GMapDownload
 {
     public class TileFetcher
     {
@@ -20,9 +20,9 @@ namespace GMapExport
 
         private BackgroundWorker worker = new BackgroundWorker();
 
-        public event EventHandler<TileFetcherEventArgs> PrefetchTileStart;
-        public event EventHandler<TileFetcherEventArgs> PrefetchTileComplete;
-        public event EventHandler<TileFetcherEventArgs> PrefetchTileProgress;
+        public event EventHandler<TileDownloadEventArgs> PrefetchTileStart;
+        public event EventHandler<TileDownloadEventArgs> PrefetchTileComplete;
+        public event EventHandler<TileDownloadEventArgs> PrefetchTileProgress;
 
         private int retry = 3;
         public int Retry
@@ -30,15 +30,20 @@ namespace GMapExport
             get { return retry; }
             set { retry = value; }
         }
-        private Dictionary<int, List<GPoint>> zoomGPointDic = new Dictionary<int, List<GPoint>>();
-
-        private ulong currentZoomTiles = 0;
-        private ulong currentZoomCompleted = 0;
-        private int overallProgress = 0;
-        private int currentZoom;
 
         private string tilePath;
+        public string TilePath
+        {
+            get { return tilePath; }
+            set { tilePath = value; }
+        }
+
         private bool isGenGeoFile = false;
+        public bool IsGenGeoFile
+        {
+            get { return isGenGeoFile; }
+            set { isGenGeoFile = value; }
+        }
 
         public TileFetcher()
         {
@@ -71,46 +76,10 @@ namespace GMapExport
 
                 if (PrefetchTileStart != null)
                 {
-                    PrefetchTileStart(this, new TileFetcherEventArgs(0));
+                    PrefetchTileStart(this, new TileDownloadEventArgs(0));
                 }
 
                 worker.RunWorkerAsync(args);
-            }
-        }
-
-        public void Start(RectLatLng area, int minZoom, int maxZoom, GMapProvider provider, string path, int retryNum)
-        {
-            this.tilePath = path;
-            this.Retry = retryNum;
-
-            if (!worker.IsBusy)
-            {
-                //Export layers for ArcGIS in local disk
-                if (path != null)
-                {
-                    ExportLayerConfig arcgisLayerConfig = new ExportLayerConfig(provider.Projection.Bounds, minZoom, maxZoom, provider, path);
-                    if (!arcgisLayerConfig.CreateArcGISMetaFile())
-                    {
-                        MessageBox.Show("创建ArcGIS图层描述文件失败！");
-                    }
-                    else
-                    {
-                        WorkerArgs args = new WorkerArgs();
-                        args.MinZoom = minZoom;
-                        args.MaxZoom = maxZoom;
-                        args.Area = area;
-                        args.Provider = provider;
-
-                        GMaps.Instance.UseMemoryCache = false;
-                        GMaps.Instance.CacheOnIdleRead = false;
-
-                        worker.RunWorkerAsync(args);
-                        if (PrefetchTileStart != null)
-                        {
-                            PrefetchTileStart(this, new TileFetcherEventArgs(0));
-                        }
-                    }
-                }
             }
         }
 
@@ -120,10 +89,6 @@ namespace GMapExport
             {
                 worker.CancelAsync();
             }
-
-            currentZoomTiles = 0;
-            currentZoomCompleted = 0;
-            overallProgress = 0;
         }
 
         #region Background Worker
@@ -136,6 +101,12 @@ namespace GMapExport
                 WorkerArgs args = (WorkerArgs)e.Argument;
 
                 GMapProvider provider = args.Provider;
+
+                int currentZoomTiles = 0;
+                int currentZoomCompleted = 0;
+                int overallProgress = 0;
+                int currentZoom;
+
                 for (int z = args.MinZoom; z <= args.MaxZoom; z++)
                 {
                     if (worker.CancellationPending)
@@ -155,7 +126,7 @@ namespace GMapExport
                     long begin_y = topLeft.Y;
                     long end_y = rightBottom.Y;
 
-                    currentZoomTiles = (ulong)((end_x - begin_x + 1) * (end_y - begin_y + 1));
+                    currentZoomTiles = (int)((end_x - begin_x + 1) * (end_y - begin_y + 1));
 
                     for (long x = begin_x; x <= end_x; ++x)
                     {
@@ -183,8 +154,8 @@ namespace GMapExport
                             }
                             // Report progress
                             currentZoomCompleted++;
-                            overallProgress = Convert.ToInt32(currentZoomCompleted * 100 / currentZoomTiles);
-                            TileFetcherEventArgs progressArgs = new TileFetcherEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
+                            overallProgress = (currentZoomCompleted * 100 / currentZoomTiles);
+                            TileDownloadEventArgs progressArgs = new TileDownloadEventArgs(currentZoomTiles, currentZoomCompleted, currentZoom);
                             worker.ReportProgress(overallProgress, progressArgs);
                         }
                     }
@@ -205,7 +176,7 @@ namespace GMapExport
             {
                 if (PrefetchTileProgress != null)
                 {
-                    PrefetchTileProgress(this, e.UserState as TileFetcherEventArgs);
+                    PrefetchTileProgress(this, e.UserState as TileDownloadEventArgs);
                 }
             }
         }
@@ -217,7 +188,7 @@ namespace GMapExport
 
             if (PrefetchTileComplete != null)
             {
-                PrefetchTileComplete(this, new TileFetcherEventArgs(100));
+                PrefetchTileComplete(this, new TileDownloadEventArgs(100));
             }
         }
 

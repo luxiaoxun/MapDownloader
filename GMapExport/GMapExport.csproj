@@ -76,9 +76,7 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="LODInfo.cs" />
     <Compile Include="TileExportEventArgs.cs" />
-    <Compile Include="TileFetcherEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TileFetcher.cs" />
     <Compile Include="TileExport.cs" />
     <Compile Include="TileImageConnector.cs" />
     <Compile Include="TilePackageWriter.cs" />
