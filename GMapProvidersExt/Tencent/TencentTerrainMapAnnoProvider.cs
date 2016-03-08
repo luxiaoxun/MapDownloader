@@ -22,6 +22,7 @@ namespace GMapProvidersExt.Tencent
         {
             UrlFormat = "http://rt{0}.map.gtimg.com/realtimerender?z={1}&x={2}&y={3}&type=vector&style=1&v=1.1";
             Instance = new TencentTerrainMapAnnoProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private TencentTerrainMapAnnoProvider()

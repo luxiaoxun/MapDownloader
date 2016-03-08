@@ -26,6 +26,7 @@ namespace GMapProvidersExt.Tencent
         static TencentMapProvider()
         {
             Instance = new TencentMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private TencentMapProvider()

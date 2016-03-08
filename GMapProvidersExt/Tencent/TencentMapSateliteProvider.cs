@@ -39,6 +39,7 @@ namespace GMapProvidersExt.Tencent
         {
             
             Instance = new TencentMapSateliteProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

@@ -36,6 +36,7 @@ namespace GMapProvidersExt.SoSo
         static SosoMapSateliteProvider()
         {
             Instance = new SosoMapSateliteProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         public override PureImage GetTileImage(GPoint pos, int zoom)

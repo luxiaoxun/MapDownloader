@@ -89,6 +89,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Ship\ShipMapProvider.cs" />
+    <Compile Include="Ship\ShipMapProviderBase.cs" />
+    <Compile Include="Ship\ShipMapTileProvider.cs" />
     <Compile Include="SogouProjection.cs" />
     <Compile Include="Sogou\SogouMapProvider.cs" />
     <Compile Include="Sogou\SogouMapProviderBase.cs" />

@@ -39,6 +39,7 @@ namespace GMapProvidersExt.SoSo
         static SosoMapHybridProvider()
         {
             Instance = new SosoMapHybridProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         GMapProvider[] overlays;

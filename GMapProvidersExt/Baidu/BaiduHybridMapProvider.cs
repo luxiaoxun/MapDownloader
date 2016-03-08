@@ -20,6 +20,7 @@ namespace GMapProvidersExt.Baidu
         {
             HybridUrlFormat = "http://online{0}.map.bdimg.com/tile/?qt=tile&x={1}&y={2}&z={3}&styles=sl&v={4}&udt=20140314";
             Instance = new BaiduHybridMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private BaiduHybridMapProvider()

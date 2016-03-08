@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
 using System.Reflection;
+using System.Net;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
@@ -378,29 +379,10 @@ namespace MapDownloader
             this.comboBoxStore.SelectedIndexChanged += new EventHandler(comboBoxStore_SelectedIndexChanged);
 
             this.buttonMapImage.Click += new EventHandler(buttonMapImage_Click);
-            this.SizeChanged += new EventHandler(MainForm_SizeChanged);
 
             this.dataGridViewPOI.AutoSize = true;
             this.dataGridViewPOI.RowPostPaint += new DataGridViewRowPostPaintEventHandler(dataGridViewPOI_RowPostPaint);
             this.comboBoxPoiSave.SelectedIndex = 0;
-        }
-
-        void MainForm_SizeChanged(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Visible = false;
-                this.notifyIcon1.Visible = true;
-            }
-        }
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Visible = true;
-                this.WindowState = FormWindowState.Maximized;
-            }
         }
 
         void dataGridViewPOI_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -745,7 +727,29 @@ namespace MapDownloader
 
         #region 地图切换
 
+        //船舶地图
+        private void 船舶ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.Ship.ShipMapProvider.Instance;
+        }
+
         //Google地图
+        private void 普通地图ToolStripMenuItem6_Click_1(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.GoogleMap;
+        }
+
+        private void 卫星地图ToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.GoogleSatelliteMap;
+        }
+
+        private void 混合地图ToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProviders.GoogleHybridMap;
+        }
+
+        //Google中国地图
         private void 普通地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProviders.GoogleChinaMap;
@@ -2004,6 +2008,28 @@ namespace MapDownloader
         {
             ArcGISTileToBundleForm tileToBundleForm = new ArcGISTileToBundleForm();
             tileToBundleForm.ShowDialog();
+        }
+
+        private void 代理设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProxyForm proxyForm = new ProxyForm();
+            DialogResult diaResult = proxyForm.ShowDialog();
+            if (diaResult == System.Windows.Forms.DialogResult.OK)
+            {
+                bool isProxyOn = proxyForm.CheckProxyOn();
+                if (isProxyOn)
+                {
+                    string ip = proxyForm.GetProxyIp();
+                    int port = proxyForm.GetProxyPort();
+                    // set your proxy here if need
+                    GMapProvider.IsSocksProxy = true;
+                    GMapProvider.WebProxy = new WebProxy(ip, port);
+                }
+                else
+                {
+                    GMapProvider.IsSocksProxy = false;
+                }
+            }
         }
 
     }

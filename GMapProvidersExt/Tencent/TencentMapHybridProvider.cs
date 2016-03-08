@@ -38,6 +38,7 @@ namespace GMapProvidersExt.Tencent
         static TencentMapHybridProvider()
         {
             Instance = new TencentMapHybridProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         GMapProvider[] overlays;

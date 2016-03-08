@@ -21,6 +21,7 @@ namespace GMapProvidersExt.Tencent
         {
             UrlFormat = "http://p{0}.map.gtimg.com/{1}/{2}.{3}";
             Instance = new TencentTerrainMapProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         private TencentTerrainMapProvider()

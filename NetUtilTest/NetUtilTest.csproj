@@ -89,6 +89,10 @@
       <Project>{01B49280-D6F4-467C-8337-CEA9824F36CE}</Project>
       <Name>GMapChinaRegion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapPositionFix\GMapPositionFix.csproj">
+      <Project>{3AA453EC-6552-431C-9190-68AE85A6B5C3}</Project>
+      <Name>GMapPositionFix</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapProvidersExt\GMapProvidersExt.csproj">
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
       <Name>GMapProvidersExt</Name>

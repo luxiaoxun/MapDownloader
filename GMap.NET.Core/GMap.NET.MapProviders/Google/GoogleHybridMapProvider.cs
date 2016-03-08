@@ -1,79 +1,78 @@
-﻿
-namespace GMap.NET.MapProviders
+﻿namespace GMap.NET.MapProviders
 {
-   using System;
+    using System;
 
-   /// <summary>
-   /// GoogleHybridMap provider
-   /// </summary>
-   public class GoogleHybridMapProvider : GoogleMapProviderBase
-   {
-      public static readonly GoogleHybridMapProvider Instance;
+    /// <summary>
+    /// GoogleHybridMap provider
+    /// </summary>
+    public class GoogleHybridMapProvider : GoogleMapProviderBase
+    {
+        public static readonly GoogleHybridMapProvider Instance;
 
-      GoogleHybridMapProvider()
-      {
-      }
+        GoogleHybridMapProvider()
+        {
+        }
 
-      static GoogleHybridMapProvider()
-      {
-         Instance = new GoogleHybridMapProvider();
-      }
+        static GoogleHybridMapProvider()
+        {
+            Instance = new GoogleHybridMapProvider();
+        }
 
-      public string Version = "h@249000000";
+        public string Version = "h@333000000";
 
-      #region GMapProvider Members
+        #region GMapProvider Members
 
-      readonly Guid id = new Guid("B076C255-6D12-4466-AAE0-4A73D20A7E6A");
-      public override Guid Id
-      {
-         get
-         {
-            return id;
-         }
-      }
-
-      readonly string name = "GoogleHybridMap";
-      public override string Name
-      {
-         get
-         {
-            return name;
-         }
-      }
-
-      GMapProvider[] overlays;
-      public override GMapProvider[] Overlays
-      {
-         get
-         {
-            if(overlays == null)
+        readonly Guid id = new Guid("B076C255-6D12-4466-AAE0-4A73D20A7E6A");
+        public override Guid Id
+        {
+            get
             {
-               overlays = new GMapProvider[] { GoogleSatelliteMapProvider.Instance, this };
+                return id;
             }
-            return overlays;
-         }
-      }
+        }
 
-      public override PureImage GetTileImage(GPoint pos, int zoom)
-      {
-         string url = MakeTileImageUrl(pos, zoom, LanguageStr);
+        readonly string name = "GoogleHybridMap";
+        public override string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
 
-         return GetTileImageUsingHttp(url);
-      }
+        GMapProvider[] overlays;
+        public override GMapProvider[] Overlays
+        {
+            get
+            {
+                if (overlays == null)
+                {
+                    overlays = new GMapProvider[] { GoogleSatelliteMapProvider.Instance, this };
+                }
+                return overlays;
+            }
+        }
 
-      #endregion
+        public override PureImage GetTileImage(GPoint pos, int zoom)
+        {
+            string url = MakeTileImageUrl(pos, zoom, LanguageStr);
 
-      string MakeTileImageUrl(GPoint pos, int zoom, string language)
-      {
-         string sec1 = string.Empty; // after &x=...
-         string sec2 = string.Empty; // after &zoom=...
-         GetSecureWords(pos, out sec1, out sec2);
+            return GetTileImageUsingHttp(url);
+        }
 
-         return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, language, pos.X, sec1, pos.Y, zoom, sec2, Server);
-      }
+        #endregion
 
-      static readonly string UrlFormatServer = "mt";
-      static readonly string UrlFormatRequest = "vt";
-      static readonly string UrlFormat = "http://{0}{1}.{10}/{2}/lyrs={3}&hl={4}&x={5}{6}&y={7}&z={8}&s={9}";
-   }
+        string MakeTileImageUrl(GPoint pos, int zoom, string language)
+        {
+            string sec1 = string.Empty; // after &x=...
+            string sec2 = string.Empty; // after &zoom=...
+            GetSecureWords(pos, out sec1, out sec2);
+
+            return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, language, pos.X, sec1, pos.Y, zoom, sec2, Server);
+        }
+
+        static readonly string UrlFormatServer = "mt";
+        static readonly string UrlFormatRequest = "vt";
+        static readonly string UrlFormat = "http://{0}{1}.{10}/maps/{2}/lyrs={3}&hl={4}&x={5}{6}&y={7}&z={8}&s={9}";
+    }
 }

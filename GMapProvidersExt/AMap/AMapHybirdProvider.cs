@@ -36,6 +36,7 @@ namespace GMapProvidersExt.AMap
         static AMapHybirdProvider()
         {
             Instance = new AMapHybirdProvider();
+            GMapProviders.AddMapProvider(Instance);
         }
 
         GMapProvider[] overlays;

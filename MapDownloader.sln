@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapChinaRegion", "GMapChin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapPositionFix", "GMapPositionFix\GMapPositionFix.csproj", "{3AA453EC-6552-431C-9190-68AE85A6B5C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapPositionFixTest", "GMapPositionFixTest\GMapPositionFixTest.csproj", "{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Windows.Forms", "BSE.Windows.Forms\BSE.Windows.Forms.csproj", "{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapTools", "GMapTools\GMapTools.csproj", "{ED39E8DA-A8F3-4906-BA24-90D09D0AF7CD}"
@@ -22,8 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickRabbitMQ", "QuickRabbitMQ\QuickRabbitMQ.csproj", "{71BF751C-FD42-4171-B98D-07A4356DC154}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQClient", "RabbitMQClient\RabbitMQClient.csproj", "{AD1FA7F5-7D7F-4909-A25A-CBB73765AD98}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexTestTool", "RegexTestTool\RegexTestTool.csproj", "{0DCD352F-7300-4196-8381-740F3E7BA788}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GMap.Net", "GMap.Net", "{FAEB9DD3-4A0B-47F7-A6C0-35D0AB7BBA5F}"
 EndProject
@@ -58,8 +54,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapWinFormDemo", "GMapWinFormDemo\GMapWinFormDemo.csproj", "{693E1C26-AAA7-42F1-B319-77EB120B3F95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapExport", "GMapExport\GMapExport.csproj", "{46CEA87B-4D4E-43D6-9152-B79163BF7996}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapService", "GMapService\GMapService.csproj", "{F4DE7A39-D030-4A07-82C7-28A03EB051A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMapHeat", "GMapHeat\GMapHeat.csproj", "{66C1D358-1909-45D4-8532-9EADAE71958C}"
 EndProject
@@ -125,16 +119,6 @@ Global
 		{3AA453EC-6552-431C-9190-68AE85A6B5C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3AA453EC-6552-431C-9190-68AE85A6B5C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3AA453EC-6552-431C-9190-68AE85A6B5C3}.Release|x86.ActiveCfg = Release|Any CPU
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Debug|x86.ActiveCfg = Debug|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Debug|x86.Build.0 = Debug|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Release|Any CPU.ActiveCfg = Release|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Release|x86.ActiveCfg = Release|x86
-		{C189D16C-4C0D-4FC8-9EAC-7AC062CAD2A7}.Release|x86.Build.0 = Release|x86
 		{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68DB802F-F9D8-47FE-BAA0-F73B247E5A47}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -185,16 +169,6 @@ Global
 		{AD1FA7F5-7D7F-4909-A25A-CBB73765AD98}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AD1FA7F5-7D7F-4909-A25A-CBB73765AD98}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AD1FA7F5-7D7F-4909-A25A-CBB73765AD98}.Release|x86.ActiveCfg = Release|Any CPU
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Debug|x86.ActiveCfg = Debug|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Debug|x86.Build.0 = Debug|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Release|Any CPU.ActiveCfg = Release|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Release|x86.ActiveCfg = Release|x86
-		{0DCD352F-7300-4196-8381-740F3E7BA788}.Release|x86.Build.0 = Release|x86
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0C39D9D-BED0-418B-9A5E-713176CAF40C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -331,16 +305,6 @@ Global
 		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{46CEA87B-4D4E-43D6-9152-B79163BF7996}.Release|x86.ActiveCfg = Release|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F4DE7A39-D030-4A07-82C7-28A03EB051A8}.Release|x86.ActiveCfg = Release|Any CPU
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66C1D358-1909-45D4-8532-9EADAE71958C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

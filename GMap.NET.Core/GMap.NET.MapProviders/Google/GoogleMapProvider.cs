@@ -1,5 +1,4 @@
-﻿
-namespace GMap.NET.MapProviders
+﻿namespace GMap.NET.MapProviders
 {
     using System;
     using GMap.NET.Projections;
@@ -14,6 +13,9 @@ namespace GMap.NET.MapProviders
     using System.Globalization;
     using System.Xml;
     using System.Text;
+#if PocketPC
+    using OpenNETCF.Security.Cryptography;
+#endif
 
     public abstract class GoogleMapProviderBase : GMapProvider, RoutingProvider, GeocodingProvider, DirectionsProvider
     {
@@ -33,10 +35,11 @@ namespace GMap.NET.MapProviders
         public string SecureWord = "Galileo";
 
         /// <summary>
-        /// API generated using http://greatmaps.codeplex.com/
-        /// from http://tinyurl.com/3q6zhcw
+        /// Your application's API key, obtained from the Google Developers Console.
+        /// This key identifies your application for purposes of quota management. 
+        /// Must provide either API key or Maps for Work credentials.
         /// </summary>
-        //public string APIKey = @"ABQIAAAAWaQgWiEBF3lW97ifKnAczhRAzBk5Igf8Z5n2W3hNnMT0j2TikxTLtVIGU7hCLLHMAuAMt-BO5UrEWA";
+        public string ApiKey = string.Empty;
 
         #region GMapProvider Members
         public override Guid Id
@@ -63,14 +66,14 @@ namespace GMap.NET.MapProviders
             }
         }
 
-        GMapProvider [] overlays;
-        public override GMapProvider [] Overlays
+        GMapProvider[] overlays;
+        public override GMapProvider[] Overlays
         {
             get
             {
                 if (overlays == null)
                 {
-                    overlays = new GMapProvider [] { this };
+                    overlays = new GMapProvider[] { this };
                 }
                 return overlays;
             }
@@ -89,7 +92,7 @@ namespace GMap.NET.MapProviders
         {
             if (!init && TryCorrectVersion)
             {
-                string url = string.Format("http://maps.{0}", Server);
+                string url = string.Format("https://maps.{0}/maps/api/js?client=google-maps-lite&amp;libraries=search&amp;language=en&amp;region=", ServerAPIs);
                 try
                 {
                     string html = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent(url, CacheType.UrlCache, TimeSpan.FromHours(8)) : string.Empty;
@@ -109,7 +112,7 @@ namespace GMap.NET.MapProviders
                     if (!string.IsNullOrEmpty(html))
                     {
                         #region -- match versions --
-                        Regex reg = new Regex(string.Format("\"*https?://mt\\D?\\d.{0}/vt/lyrs=m@(\\d*)", Server), RegexOptions.IgnoreCase);
+                        Regex reg = new Regex(string.Format(@"https?://mts?\d.{0}/maps/vt\?lyrs=m@(\d*)", Server), RegexOptions.IgnoreCase);
                         Match mat = reg.Match(html);
                         if (mat.Success)
                         {
@@ -117,13 +120,21 @@ namespace GMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 0)
                             {
-                                string ver = string.Format("m@{0}", gc [1].Value);
+                                string ver = string.Format("m@{0}", gc[1].Value);
                                 string old = GMapProviders.GoogleMap.Version;
 
                                 GMapProviders.GoogleMap.Version = ver;
                                 GMapProviders.GoogleChinaMap.Version = ver;
+
+                                string verh = string.Format("h@{0}", gc[1].Value);
+                                string oldh = GMapProviders.GoogleHybridMap.Version;
+
+                                GMapProviders.GoogleHybridMap.Version = verh;
+                                GMapProviders.GoogleChinaHybridMap.Version = verh;
 #if DEBUG
                                 Debug.WriteLine("GMapProviders.GoogleMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
+                                Debug.WriteLine("GMapProviders.GoogleHybridMap.Version: " + verh + ", " + (verh == oldh ? "OK" : "old: " + oldh + ", consider updating source"));
+
                                 if (Debugger.IsAttached && ver != old)
                                 {
                                     Thread.Sleep(1111);
@@ -132,7 +143,7 @@ namespace GMap.NET.MapProviders
                             }
                         }
 
-                        reg = new Regex(string.Format("\"*https?://mt\\D?\\d.{0}/vt/lyrs=h@(\\d*)", Server), RegexOptions.IgnoreCase);
+                        reg = new Regex(string.Format(@"https?://khms?\d.{0}/kh\?v=(\d*)", Server), RegexOptions.IgnoreCase);
                         mat = reg.Match(html);
                         if (mat.Success)
                         {
@@ -140,30 +151,7 @@ namespace GMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 0)
                             {
-                                string ver = string.Format("h@{0}", gc [1].Value);
-                                string old = GMapProviders.GoogleHybridMap.Version;
-
-                                GMapProviders.GoogleHybridMap.Version = ver;
-                                GMapProviders.GoogleChinaHybridMap.Version = ver;
-#if DEBUG
-                                Debug.WriteLine("GMapProviders.GoogleHybridMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
-                                if (Debugger.IsAttached && ver != old)
-                                {
-                                    Thread.Sleep(1111);
-                                }
-#endif
-                            }
-                        }
-
-                        reg = new Regex(string.Format("\"*https?://khm\\D?\\d.{0}/kh/v=(\\d*)", Server), RegexOptions.IgnoreCase);
-                        mat = reg.Match(html);
-                        if (mat.Success)
-                        {
-                            GroupCollection gc = mat.Groups;
-                            int count = gc.Count;
-                            if (count > 0)
-                            {
-                                string ver = gc [1].Value;
+                                string ver = gc[1].Value;
                                 string old = GMapProviders.GoogleSatelliteMap.Version;
 
                                 GMapProviders.GoogleSatelliteMap.Version = ver;
@@ -179,7 +167,7 @@ namespace GMap.NET.MapProviders
                             }
                         }
 
-                        reg = new Regex(string.Format("\"*https?://mt\\D?\\d.{0}/vt/lyrs=t@(\\d*),r@(\\d*)", Server), RegexOptions.IgnoreCase);
+                        reg = new Regex(string.Format(@"https?://mts?\d.{0}/maps/vt\?lyrs=t@(\d*),r@(\d*)", Server), RegexOptions.IgnoreCase);
                         mat = reg.Match(html);
                         if (mat.Success)
                         {
@@ -187,7 +175,7 @@ namespace GMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 1)
                             {
-                                string ver = string.Format("t@{0},r@{1}", gc [1].Value, gc [2].Value);
+                                string ver = string.Format("t@{0},r@{1}", gc[1].Value, gc[2].Value);
                                 string old = GMapProviders.GoogleTerrainMap.Version;
 
                                 GMapProviders.GoogleTerrainMap.Version = ver;
@@ -437,12 +425,12 @@ namespace GMap.NET.MapProviders
 
                             for (int i = 0; i < levels.Length; i++)
                             {
-                                int zi = pLevels.IndexOf(levels [i]);
+                                int zi = pLevels.IndexOf(levels[i]);
                                 if (zi > 0)
                                 {
                                     if (zi * numLevel > zoom)
                                     {
-                                        removedPoints.Add(points [i]);
+                                        removedPoints.Add(points[i]);
                                     }
                                 }
                             }
@@ -488,7 +476,7 @@ namespace GMap.NET.MapProviders
         {
             List<PointLatLng> pointList;
             status = GetPoints(keywords, out pointList);
-            return pointList != null && pointList.Count > 0 ? pointList [0] : (PointLatLng?)null;
+            return pointList != null && pointList.Count > 0 ? pointList[0] : (PointLatLng?)null;
         }
 
         /// <summary>
@@ -522,7 +510,7 @@ namespace GMap.NET.MapProviders
         {
             List<Placemark> pointList;
             status = GetPlacemarks(location, out pointList);
-            return pointList != null && pointList.Count > 0 ? pointList [0] : (Placemark?)null;
+            return pointList != null && pointList.Count > 0 ? pointList[0] : (Placemark?)null;
         }
 
         #region -- internals --
@@ -531,7 +519,7 @@ namespace GMap.NET.MapProviders
 
         string MakeGeocoderUrl(string keywords, string language)
         {
-            return string.Format(CultureInfo.InvariantCulture, GeocoderUrlFormat, ServerAPIs, keywords.Replace(' ', '+'), language);
+            return string.Format(CultureInfo.InvariantCulture, GeocoderUrlFormat, ServerAPIs, Uri.EscapeDataString(keywords).Replace(' ', '+'), language);
         }
 
         string MakeReverseGeocoderUrl(PointLatLng pt, string language)
@@ -552,7 +540,19 @@ namespace GMap.NET.MapProviders
 
                 if (string.IsNullOrEmpty(geo))
                 {
-                    geo = GetContentUsingHttp(url);
+                    string urls = url;
+
+                    // Must provide either API key or Maps for Work credentials.
+                    if (!string.IsNullOrEmpty(ClientId))
+                    {
+                        urls = GetSignedUri(url);
+                    }
+                    else if (!string.IsNullOrEmpty(ApiKey))
+                    {
+                        urls += "&key=" + ApiKey;
+                    }
+
+                    geo = GetContentUsingHttp(urls);
 
                     if (!string.IsNullOrEmpty(geo))
                     {
@@ -762,7 +762,19 @@ namespace GMap.NET.MapProviders
 
                 if (string.IsNullOrEmpty(reverse))
                 {
-                    reverse = GetContentUsingHttp(url);
+                    string urls = url;
+
+                    // Must provide either API key or Maps for Work credentials.
+                    if (!string.IsNullOrEmpty(ClientId))
+                    {
+                        urls = GetSignedUri(url);
+                    }
+                    else if (!string.IsNullOrEmpty(ApiKey))
+                    {
+                        urls += "&key=" + ApiKey;
+                    }
+
+                    reverse = GetContentUsingHttp(urls);
 
                     if (!string.IsNullOrEmpty(reverse))
                     {
@@ -1269,62 +1281,62 @@ namespace GMap.NET.MapProviders
                                                         switch (type)
                                                         {
                                                             case "street_address":
-                                                            {
-                                                                ret.StreetNumber = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.StreetNumber = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "route":
-                                                            {
-                                                                ret.ThoroughfareName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.ThoroughfareName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "postal_code":
-                                                            {
-                                                                ret.PostalCodeNumber = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.PostalCodeNumber = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "country":
-                                                            {
-                                                                ret.CountryName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.CountryName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "locality":
-                                                            {
-                                                                ret.LocalityName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.LocalityName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_2":
-                                                            {
-                                                              ret.DistrictName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.DistrictName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_1":
-                                                            {
-                                                                ret.AdministrativeAreaName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.AdministrativeAreaName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_3":
-                                                            {
-                                                                ret.SubAdministrativeAreaName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.SubAdministrativeAreaName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "neighborhood":
-                                                            {
-                                                                ret.Neighborhood = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.Neighborhood = nn.InnerText;
+                                                                }
+                                                                break;
                                                         }
                                                     }
                                                 }
-                                            }                                            
+                                            }
 
                                             placemarkList.Add(ret);
                                         }
@@ -1402,14 +1414,14 @@ namespace GMap.NET.MapProviders
             throw new NotImplementedException();
         }
 
-        public DirectionsStatusCode GetDirections(out GDirections direction, PointLatLng start, IEnumerable<PointLatLng> wayPoints, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
+        public DirectionsStatusCode GetDirections(out GDirections direction, PointLatLng start, IEnumerable<PointLatLng> wayPoints, PointLatLng end, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
         {
-            return GetDirectionsUrl(MakeDirectionsUrl(start, wayPoints, LanguageStr, avoidHighways, avoidTolls, walkingMode, sensor, metric), out direction);
+            return GetDirectionsUrl(MakeDirectionsUrl(start, wayPoints, end, LanguageStr, avoidHighways, avoidTolls, walkingMode, sensor, metric), out direction);
         }
 
-        public DirectionsStatusCode GetDirections(out GDirections direction, string start, IEnumerable<string> wayPoints, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
+        public DirectionsStatusCode GetDirections(out GDirections direction, string start, IEnumerable<string> wayPoints, string end, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
         {
-            return GetDirectionsUrl(MakeDirectionsUrl(start, wayPoints, LanguageStr, avoidHighways, avoidTolls, walkingMode, sensor, metric), out direction);
+            return GetDirectionsUrl(MakeDirectionsUrl(start, wayPoints, end, LanguageStr, avoidHighways, avoidTolls, walkingMode, sensor, metric), out direction);
         }
 
         #region -- internals --
@@ -1434,7 +1446,7 @@ namespace GMap.NET.MapProviders
             return string.Format(DirectionUrlFormatStr, start.Replace(' ', '+'), end.Replace(' ', '+'), sensor.ToString().ToLower(), language, av, mt, wk, ServerAPIs);
         }
 
-        string MakeDirectionsUrl(PointLatLng start, IEnumerable<PointLatLng> wayPoints, string language, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
+        string MakeDirectionsUrl(PointLatLng start, IEnumerable<PointLatLng> wayPoints, PointLatLng end, string language, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
         {
             string av = (avoidHighways ? "&avoid=highways" : string.Empty) + (avoidTolls ? "&avoid=tolls" : string.Empty); // 6
             string mt = "&units=" + (metric ? "metric" : "imperial"); // 7
@@ -1447,10 +1459,10 @@ namespace GMap.NET.MapProviders
                 wpLatLng += string.Format(CultureInfo.InvariantCulture, i++ == 0 ? "{0},{1}" : "|{0},{1}", wp.Lat, wp.Lng);
             }
 
-            return string.Format(CultureInfo.InvariantCulture, DirectionUrlFormatWaypoint, start.Lat, start.Lng, wpLatLng, sensor.ToString().ToLower(), language, av, mt, wk, ServerAPIs);
+            return string.Format(CultureInfo.InvariantCulture, DirectionUrlFormatWaypoint, start.Lat, start.Lng, wpLatLng, sensor.ToString().ToLower(), language, av, mt, wk, ServerAPIs, end.Lat, end.Lng);
         }
 
-        string MakeDirectionsUrl(string start, IEnumerable<string> wayPoints, string language, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
+        string MakeDirectionsUrl(string start, IEnumerable<string> wayPoints, string end, string language, bool avoidHighways, bool avoidTolls, bool walkingMode, bool sensor, bool metric)
         {
             string av = (avoidHighways ? "&avoid=highways" : string.Empty) + (avoidTolls ? "&avoid=tolls" : string.Empty); // 6
             string mt = "&units=" + (metric ? "metric" : "imperial"); // 7
@@ -1463,7 +1475,7 @@ namespace GMap.NET.MapProviders
                 wpLatLng += string.Format(CultureInfo.InvariantCulture, i++ == 0 ? "{0}" : "|{0}", wp.Replace(' ', '+'));
             }
 
-            return string.Format(CultureInfo.InvariantCulture, DirectionUrlFormatWaypointStr, start.Replace(' ', '+'), wpLatLng, sensor.ToString().ToLower(), language, av, mt, wk, ServerAPIs);
+            return string.Format(CultureInfo.InvariantCulture, DirectionUrlFormatWaypointStr, start.Replace(' ', '+'), wpLatLng, sensor.ToString().ToLower(), language, av, mt, wk, ServerAPIs, end.Replace(' ', '+'));
         }
 
         DirectionsStatusCode GetDirectionsUrl(string url, out GDirections direction)
@@ -1479,7 +1491,20 @@ namespace GMap.NET.MapProviders
 
                 if (string.IsNullOrEmpty(kml))
                 {
-                    kml = GetContentUsingHttp(url);
+                    string urls = url;
+
+                    // Must provide either API key or Maps for Work credentials.
+                    if (!string.IsNullOrEmpty(ClientId))
+                    {
+                        urls = GetSignedUri(url);
+                    }
+                    else if (!string.IsNullOrEmpty(ApiKey))
+                    {
+                        urls += "&key=" + ApiKey;
+                    }
+
+                    kml = GetContentUsingHttp(urls);
+
                     if (!string.IsNullOrEmpty(kml))
                     {
                         cache = true;
@@ -1995,62 +2020,110 @@ namespace GMap.NET.MapProviders
             return ret;
         }
 
-        static void DecodePointsInto(List<PointLatLng> list, string encodedPoints)
+        static void DecodePointsInto(List<PointLatLng> path, string encodedPath)
         {
-            // http://tinyurl.com/3ds3scr
-            // http://code.server.com/apis/maps/documentation/polylinealgorithm.html
-            //
-            string encoded = encodedPoints.Replace("\\\\", "\\");
+            // https://github.com/googlemaps/google-maps-services-java/blob/master/src/main/java/com/google/maps/internal/PolylineEncoding.java
+            int len = encodedPath.Length;
+            int index = 0;
+            int lat = 0;
+            int lng = 0;
+            while (index < len)
             {
-                int len = encoded.Length;
-                int index = 0;
-                double dlat = 0;
-                double dlng = 0;
-
-                while (index < len)
+                int result = 1;
+                int shift = 0;
+                int b;
+                do
                 {
-                    int b;
-                    int shift = 0;
-                    int result = 0;
+                    b = encodedPath[index++] - 63 - 1;
+                    result += b << shift;
+                    shift += 5;
+                } while (b >= 0x1f && index < len);
+                lat += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
 
+                result = 1;
+                shift = 0;
+
+                if (index < len)
+                {
                     do
                     {
-                        b = encoded [index++] - 63;
-                        result |= (b & 0x1f) << shift;
+                        b = encodedPath[index++] - 63 - 1;
+                        result += b << shift;
                         shift += 5;
-
-                    } while (b >= 0x20 && index < len);
-
-                    dlat += ((result & 1) == 1 ? ~(result >> 1) : (result >> 1));
-
-                    shift = 0;
-                    result = 0;
-
-                    if (index < len)
-                    {
-                        do
-                        {
-                            b = encoded [index++] - 63;
-                            result |= (b & 0x1f) << shift;
-                            shift += 5;
-                        }
-                        while (b >= 0x20 && index < len);
-
-                        dlng += ((result & 1) == 1 ? ~(result >> 1) : (result >> 1));
-
-                        list.Add(new PointLatLng(dlat * 1e-5, dlng * 1e-5));
-                    }
+                    } while (b >= 0x1f && index < len);
+                    lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
                 }
+
+                path.Add(new PointLatLng(lat * 1e-5, lng * 1e-5));
             }
         }
 
         static readonly string DirectionUrlFormatStr = "http://maps.{7}/maps/api/directions/xml?origin={0}&destination={1}&sensor={2}&language={3}{4}{5}{6}";
         static readonly string DirectionUrlFormatPoint = "http://maps.{9}/maps/api/directions/xml?origin={0},{1}&destination={2},{3}&sensor={4}&language={5}{6}{7}{8}";
-        static readonly string DirectionUrlFormatWaypoint = "http://maps.{8}/maps/api/directions/xml?origin={0},{1}&waypoints={2}&sensor={3}&language={4}{5}{6}{7}";
-        static readonly string DirectionUrlFormatWaypointStr = "http://maps.{7}/maps/api/directions/xml?origin={0}&waypoints={1}&sensor={2}&language={3}{4}{5}{6}";
+        static readonly string DirectionUrlFormatWaypoint = "http://maps.{8}/maps/api/directions/xml?origin={0},{1}&waypoints={2}&destination={9},{10}&sensor={3}&language={4}{5}{6}{7}";
+        static readonly string DirectionUrlFormatWaypointStr = "http://maps.{7}/maps/api/directions/xml?origin={0}&waypoints={1}&destination={8}&sensor={2}&language={3}{4}{5}{6}";
 
         #endregion
 
+        #endregion
+
+        #region -- Maps API for Work --
+        /// <summary>
+        /// https://developers.google.com/maps/documentation/business/webservices/auth#how_do_i_get_my_signing_key
+        /// To access the special features of the Google Maps API for Work you must provide a client ID
+        /// when accessing any of the API libraries or services.
+        /// When registering for Google Google Maps API for Work you will receive this client ID from Enterprise Support.
+        /// All client IDs begin with a gme- prefix. Your client ID is passed as the value of the client parameter.
+        /// Generally, you should store your private key someplace safe and read them into your code
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="privateKey"></param>
+        public void SetEnterpriseCredentials(string clientId, string privateKey)
+        {
+            privateKey = privateKey.Replace("-", "+").Replace("_", "/");
+            _privateKeyBytes = Convert.FromBase64String(privateKey);
+            _clientId = clientId;
+        }
+        private byte[] _privateKeyBytes;
+
+        private string _clientId = string.Empty;
+
+        /// <summary>
+        /// Your client ID. To access the special features of the Google Maps API for Work
+        /// you must provide a client ID when accessing any of the API libraries or services.
+        /// When registering for Google Google Maps API for Work you will receive this client ID
+        /// from Enterprise Support. All client IDs begin with a gme- prefix.
+        /// </summary>
+        public string ClientId
+        {
+            get
+            {
+                return _clientId;
+            }
+        }
+
+        string GetSignedUri(Uri uri)
+        {
+            var builder = new UriBuilder(uri);
+            builder.Query = builder.Query.Substring(1) + "&client=" + _clientId;
+            uri = builder.Uri;
+            string signature = GetSignature(uri);
+
+            return uri.Scheme + "://" + uri.Host + uri.LocalPath + uri.Query + "&signature=" + signature;
+        }
+
+        string GetSignedUri(string url)
+        {
+            return GetSignedUri(new Uri(url));
+        }
+
+        string GetSignature(Uri uri)
+        {
+            byte[] encodedPathQuery = Encoding.ASCII.GetBytes(uri.LocalPath + uri.Query);
+            var hashAlgorithm = new HMACSHA1(_privateKeyBytes);
+            byte[] hashed = hashAlgorithm.ComputeHash(encodedPathQuery);
+            return Convert.ToBase64String(hashed).Replace("+", "-").Replace("/", "_");
+        }
         #endregion
     }
 
@@ -2070,7 +2143,7 @@ namespace GMap.NET.MapProviders
             Instance = new GoogleMapProvider();
         }
 
-        public string Version = "m@249000000";
+        public string Version = "m@333000000";
 
         #region GMapProvider Members
 
@@ -2112,6 +2185,6 @@ namespace GMap.NET.MapProviders
 
         static readonly string UrlFormatServer = "mt";
         static readonly string UrlFormatRequest = "vt";
-        static readonly string UrlFormat = "http://{0}{1}.{10}/{2}/lyrs={3}&hl={4}&x={5}{6}&y={7}&z={8}&s={9}";
+        static readonly string UrlFormat = "http://{0}{1}.{10}/maps/{2}/lyrs={3}&hl={4}&x={5}{6}&y={7}&z={8}&s={9}";
     }
 }
