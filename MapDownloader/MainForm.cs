@@ -69,6 +69,9 @@ namespace MapDownloader
         private GMapOverlay routeOverlay = new GMapOverlay("routeOverlay");
         private string currentCenterCityName = "南京市";
 
+        //地图下载器，5个线程
+        private TileDownloader tileDownloader = new TileDownloader(5);
+
         public MainForm()
         {
             InitializeComponent();
@@ -209,7 +212,7 @@ namespace MapDownloader
             try
             {
                 Placemark place = (Placemark)e.Result;
-                this.toolStripStatusCenter.Text = place.ProvinceName + "," + place.CityName + "," + place.DistrictName;
+                this.toolStripStatusCenter.Text = "地图中心:"+place.ProvinceName + "," + place.CityName + "," + place.DistrictName;
                 currentCenterCityName = place.CityName;
             }
             catch (Exception ignore)
@@ -554,8 +557,8 @@ namespace MapDownloader
 
         private void ShowDownloadTip(bool isVisible)
         {
-            this.toolStripStatusDownload.Visible = isVisible;
             this.toolStripProgressBarDownload.Visible = isVisible;
+            this.toolStripStatusDownload.Visible = isVisible;
         }
 
         private void ResetToServerAndCacheMode()
@@ -573,29 +576,37 @@ namespace MapDownloader
         {
             if (polygon != null)
             {
-                RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
-                try
+                if (!tileDownloader.IsComplete)
                 {
-                    DownloadCfgForm downloadCfgForm = new DownloadCfgForm(area,this.mapControl.MapProvider);
-                    if (downloadCfgForm.ShowDialog() == DialogResult.OK)
-                    {
-                        TileDownloaderArgs downloaderArgs = downloadCfgForm.GetDownloadTileGPoints();
-                        ResetToServerAndCacheMode();
-                        TileDownloader tileDownloader = new TileDownloader(5);
-                        if (this.comboBoxStore.SelectedIndex==2)
-                        {
-                            tileDownloader.TilePath = this.tilePath;
-                        }
-                        tileDownloader.Retry = retryNum;
-                        tileDownloader.PrefetchTileStart += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileStart);
-                        tileDownloader.PrefetchTileProgress += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileProgress);
-                        tileDownloader.PrefetchTileComplete += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileComplete);
-                    }
+                    CommonTools.PromptingMessage.PromptMessage(this, "正在下载地图，等待下载完成！");
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.Message, "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    log.Error(ex);
+                    RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(polygon);
+                    try
+                    {
+                        DownloadCfgForm downloadCfgForm = new DownloadCfgForm(area, this.mapControl.MapProvider);
+                        if (downloadCfgForm.ShowDialog() == DialogResult.OK)
+                        {
+                            TileDownloaderArgs downloaderArgs = downloadCfgForm.GetDownloadTileGPoints();
+                            ResetToServerAndCacheMode();
+
+                            if (this.comboBoxStore.SelectedIndex == 2)
+                            {
+                                tileDownloader.TilePath = this.tilePath;
+                            }
+                            tileDownloader.Retry = retryNum;
+                            tileDownloader.PrefetchTileStart += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileStart);
+                            tileDownloader.PrefetchTileProgress += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileProgress);
+                            tileDownloader.PrefetchTileComplete += new EventHandler<TileDownloadEventArgs>(tileDownloader_PrefetchTileComplete);
+                            tileDownloader.StartDownload(downloaderArgs);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "异常", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        log.Error(ex);
+                    }
                 }
             }
             else
@@ -614,9 +625,12 @@ namespace MapDownloader
 
         private void UpdateDownloadBar(int completedCount, int total)
         {
-            int value = completedCount * 100 / total;
-            this.toolStripStatusDownload.Text = string.Format("下载进度：{0}/{1}", completedCount, total);
-            this.toolStripProgressBarDownload.Value = value;
+            if (this.toolStripProgressBarDownload.Visible)
+            {
+                int value = completedCount * 100 / total;
+                this.toolStripStatusDownload.Text = string.Format("下载进度：{0}/{1}", completedCount, total);
+                this.toolStripProgressBarDownload.Value = value;
+            }
         }
 
         void tileDownloader_PrefetchTileProgress(object sender, TileDownloadEventArgs e)
@@ -1539,7 +1553,6 @@ namespace MapDownloader
             {
                 GMapImageMarker placeMarker = new GMapImageMarker(p, Properties.Resources.MapMarker_Bubble_Azure, place.Value.Address);
                 this.routeOverlay.Markers.Add(placeMarker);
-                //CommonTools.PromptingMessage.PromptMessage(this, place.Value.Address);
             }
         }
 

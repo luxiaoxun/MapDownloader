@@ -36,13 +36,16 @@ namespace GMapDownload
 
         private GMapProvider provider;
         private int threadNum = 5;
-        private bool isComplete = false;
+        private bool isComplete = true;
         private Thread[] thread;
 
         private object locker = new object();
-        private volatile int downloadSize = 0;
-        private volatile int threadCompleteNum = 0;
-        private int allDownloadTileSize;
+        private volatile int downloadSize = 0; //完成数量
+
+        private object theradLock = new object();
+        private volatile int threadCompleteNum = 0; //完成线程数
+
+        private int allDownloadTileSize;  //总数
         private ConcurrentQueue<DownloadLevelTile> downloadFailedTiles = new ConcurrentQueue<DownloadLevelTile>();
 
         public TileDownloader(int threadNum)
@@ -51,16 +54,24 @@ namespace GMapDownload
             this.thread = new Thread[threadNum];
         }
 
+        public bool IsComplete
+        {
+            get { return isComplete; }
+        }
+
         public void StartDownload(TileDownloaderArgs tileDownloaderArgs)
         {
             GMaps.Instance.UseMemoryCache = false;
             GMaps.Instance.CacheOnIdleRead = false;
+            
+            isComplete = false;
+            threadCompleteNum = 0;
+            downloadSize = 0;
 
             provider = tileDownloaderArgs.MapProvider;
             List<DownloadLevelTile> downloadTiles = tileDownloaderArgs.DownloadTiles;
-            
+
             allDownloadTileSize = downloadTiles.Count;
-            int threadNum = 5;
             int singelNum = (int)(allDownloadTileSize / threadNum);
             int remainder = (int)(allDownloadTileSize % threadNum);
 
@@ -75,13 +86,13 @@ namespace GMapDownload
             }
             for (int i = 0; i < threadNum; i++)
             {
-                int startIndex = i*singelNum;
+                int startIndex = i * singelNum;
                 int endIndex = startIndex + singelNum - 1;
                 if (remainder != 0 && (threadNum - 1) == i)
                 {
-                    endIndex = downloadTiles.Count-1;
+                    endIndex = downloadTiles.Count - 1;
                 }
-                DownloadThreadArgs args = new DownloadThreadArgs(downloadTiles.GetRange(startIndex,endIndex-startIndex+1));
+                DownloadThreadArgs args = new DownloadThreadArgs(downloadTiles.GetRange(startIndex, endIndex - startIndex + 1));
                 thread[i] = new Thread(new ParameterizedThreadStart(Download));
                 thread[i].Start(args);
             }
@@ -91,7 +102,7 @@ namespace GMapDownload
         {
             if (PrefetchTileProgress != null)
             {
-                PrefetchTileProgress(null, new TileDownloadEventArgs(allDownloadTileSize,downloadSize));
+                PrefetchTileProgress(null, new TileDownloadEventArgs(allDownloadTileSize, downloadSize));
             }
         }
 
@@ -110,7 +121,7 @@ namespace GMapDownload
                 DownloadThreadArgs args = obj as DownloadThreadArgs;
                 List<DownloadLevelTile> threadDownloadLevelTiles = args.DownloadLevelTiles;
                 int retryCount = 0;
-                for(int i=0; i<threadDownloadLevelTiles.Count; ++i)
+                for (int i = 0; i < threadDownloadLevelTiles.Count; ++i)
                 {
                     GPoint p = threadDownloadLevelTiles[i].TilePoint;
                     int zoom = threadDownloadLevelTiles[i].TileZoom;
@@ -144,18 +155,17 @@ namespace GMapDownload
                     {
                         log.Error(exception);
                     }
-                    
                 }
 
-                lock (locker)
+                lock (theradLock)
                 {
                     ++threadCompleteNum;
-                }
-                if (threadCompleteNum == threadNum)
-                {
-                    DownloadFailedTiles();
-                    isComplete = true;
-                    ReportComplete();
+                    if (threadCompleteNum == threadNum)
+                    {
+                        DownloadFailedTiles();
+                        isComplete = true;
+                        ReportComplete();
+                    }
                 }
             }
             catch (Exception ex)
@@ -234,15 +244,15 @@ namespace GMapDownload
 
         private void WriteTileToDisk(PureImage img, int zoom, GPoint p)
         {
-            DirectoryInfo di = new DirectoryInfo(tilePath);
-            string zoomStr = string.Format("{0:D2}", zoom);
+            DirectoryInfo di = new DirectoryInfo(tilePath + "/_alllayers");
 
+            string zoomStr = string.Format("{0:D2}", zoom);
             long x = p.X;
             long y = p.Y;
             string col = string.Format("{0:x8}", x).ToLower();
             string row = string.Format("{0:x8}", y).ToLower();
 
-            string dir = di.FullName + "//" + "L" + zoomStr + "//" + "R" + row + "//";
+            string dir = di.FullName + "/L" + zoomStr + "/R" + row + "//";
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

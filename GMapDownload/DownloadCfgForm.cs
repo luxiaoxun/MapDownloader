@@ -39,7 +39,7 @@ namespace GMapDownload
             backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
             backgroundWorker.WorkerReportsProgress = true;
             backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
-            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
+            //backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
             backgroundWorker.RunWorkerAsync();
         }
 
@@ -114,8 +114,8 @@ namespace GMapDownload
 
                     downloadLevelCfgs.Add(downloadLevelCfg);
 
-                    int progress = (z - minzoom + 1) * 100 / (maxzoom - minzoom + 1);
-                    worker.ReportProgress(progress);
+                    //int progress = (z - minzoom + 1) * 100 / (maxzoom - minzoom + 1);
+                    //worker.ReportProgress(progress);
                 }
             }
             catch (Exception ex)
