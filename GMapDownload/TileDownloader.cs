@@ -48,10 +48,19 @@ namespace GMapDownload
         private int allDownloadTileSize;  //总数
         private ConcurrentQueue<DownloadLevelTile> downloadFailedTiles = new ConcurrentQueue<DownloadLevelTile>();
 
+        private System.Timers.Timer updateUiTimer;
+
         public TileDownloader(int threadNum)
         {
             this.threadNum = threadNum;
             this.thread = new Thread[threadNum];
+            updateUiTimer = new System.Timers.Timer(500);
+            updateUiTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateUiTimer_Elapsed);
+        }
+
+        void updateUiTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            ReportProress();
         }
 
         public bool IsComplete
@@ -96,6 +105,8 @@ namespace GMapDownload
                 thread[i] = new Thread(new ParameterizedThreadStart(Download));
                 thread[i].Start(args);
             }
+
+            updateUiTimer.Start();
         }
 
         private void ReportProress()
@@ -149,7 +160,7 @@ namespace GMapDownload
                             }
                         }
 
-                        ReportProress();
+                        //ReportProress();
                     }
                     catch (Exception exception)
                     {
@@ -165,6 +176,7 @@ namespace GMapDownload
                         DownloadFailedTiles();
                         isComplete = true;
                         ReportComplete();
+                        updateUiTimer.Stop();
                     }
                 }
             }
@@ -192,7 +204,7 @@ namespace GMapDownload
                             {
                                 ++downloadSize;
                             }
-                            ReportProress();
+                            //ReportProress();
                         }
                         else
                         {

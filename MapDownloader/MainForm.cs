@@ -637,6 +637,7 @@ namespace MapDownloader
         {
             if (e != null)
             {
+                if (this.IsDisposed || !this.IsHandleCreated) return;
                 this.Invoke(new UpdateDownloadProress(UpdateDownloadBar), e.TileCompleteNum,e.TileAllNum);
             }
         }
