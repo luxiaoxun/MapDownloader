@@ -38,7 +38,9 @@ namespace GMapProvidersExt.TianDitu
             try
             {
                 string str = "vec_c";
-                string url = string.Format(TiandituProviderBase4326.UrlFormat, new object[] { GMapProvider.GetServerNum(pos, TiandituProviderBase4326.maxServer), str, str.Substring(0, str.Length - 2), str.Substring(str.Length - 1), zoom, pos.Y, pos.X });
+                int serverIndex = GMapProvider.GetServerNum(pos, TiandituProviderBase4326.maxServer);
+                //string url = string.Format(TiandituProviderBase4326.UrlFormat, new object[] { serverIndex, str, str.Substring(0, str.Length - 2), str.Substring(str.Length - 1), zoom, pos.Y, pos.X });
+                string url = string.Format(TiandituProviderBase4326.UrlFormat, new object[] { serverIndex, str, pos.X, pos.Y, zoom });
                 return base.GetTileImageUsingHttp(url);
             }
             catch (Exception ex)

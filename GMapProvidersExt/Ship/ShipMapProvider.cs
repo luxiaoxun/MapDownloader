@@ -27,6 +27,15 @@ namespace GMapProvidersExt.Ship
             }
         }
 
+        private readonly string cnName = "船舶地图";
+        public string CnName
+        {
+            get
+            {
+                return this.cnName;
+            }
+        }
+
         static ShipMapProvider()
         {
             Instance = new ShipMapProvider();

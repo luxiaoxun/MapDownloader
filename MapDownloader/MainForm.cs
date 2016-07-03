@@ -742,80 +742,98 @@ namespace MapDownloader
 
         #region 地图切换
 
+        private void UpdateMainFormText(string mapName)
+        {
+            this.Text = "地图下载器" + "--" + mapName;
+        }
+
         //船舶地图
         private void 船舶ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Ship.ShipMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Ship.ShipMapProvider.Instance.CnName);
         }
 
         //Google地图
         private void 普通地图ToolStripMenuItem6_Click_1(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.GoogleMap;
+            UpdateMainFormText("Google普通地图");
         }
 
         private void 卫星地图ToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.GoogleSatelliteMap;
+            UpdateMainFormText("Google卫星地图");
         }
 
         private void 混合地图ToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.GoogleHybridMap;
+            UpdateMainFormText("Google混合地图");
         }
 
         //Google中国地图
         private void 普通地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProviders.GoogleChinaMap;
+            UpdateMainFormText("Google中国普通地图");
         }
 
         private void 卫星地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProviders.GoogleChinaSatelliteMap;
+            UpdateMainFormText("Google中国卫星地图");
         }
 
         private void 混合地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProviders.GoogleChinaHybridMap;
+            UpdateMainFormText("Google中国混合地图");
         }
 
         private void 地形图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.GoogleChinaTerrainMap;
+            UpdateMainFormText("Google中国地形地图");
         }
 
         //Baidu地图
         private void 普通地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
-            //this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProviderJS.Instance;
+            UpdateMainFormText(GMapProvidersExt.Baidu.BaiduMapProvider.Instance.CnName);
         }
 
         private void 卫星地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Baidu.BaiduSatelliteMapProvider.Instance.CnName);
         }
 
         private void 混合地图ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduHybridMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Baidu.BaiduHybridMapProvider.Instance.CnName);
         }
 
         //高德地图
         private void 普通地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.AMap.AMapProvider.Instance.CnName);
         }
 
         private void 卫星地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapSateliteProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.AMap.AMapSateliteProvider.Instance.CnName);
         }
 
         private void 混合地图ToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.AMap.AMapHybirdProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.AMap.AMapHybirdProvider.Instance.CnName);
         }
 
         //SoSo地图
@@ -823,133 +841,152 @@ namespace MapDownloader
         {
             this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapProvider.Instance;
             //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Tencent.TencentMapProvider.Instance.CnName);
         }
 
         private void 卫星地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapSateliteProvider.Instance;
             //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapSateliteProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Tencent.TencentMapSateliteProvider.Instance.CnName);
         }
 
         private void 混合地图ToolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Tencent.TencentMapHybridProvider.Instance;
             //this.mapControl.MapProvider = GMapProvidersExt.SoSo.SosoMapHybridProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Tencent.TencentMapHybridProvider.Instance.CnName);
         }
 
         private void 地形地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = TencentTerrainMapAnnoProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Tencent.TencentTerrainMapAnnoProvider.Instance.CnName);
         }
 
         //Here地图
         private void 普通地图ToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProvidersExt.Here.NokiaMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Here.NokiaMapProvider.Instance.CnName);
         }
 
         private void 卫星地图ToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProvidersExt.Here.NokiaSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Here.NokiaSatelliteMapProvider.Instance.CnName);
         }
 
         private void 混合地图ToolStripMenuItem4_Click(object sender, EventArgs e)
         {
             mapControl.MapProvider = GMapProvidersExt.Here.NokiaHybridMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Here.NokiaHybridMapProvider.Instance.CnName);
         }
 
         //Bing地图
         private void 普通地图ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.BingMap;
+            UpdateMainFormText("Bing普通地图");
         }
 
         private void 卫星地图ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.BingSatelliteMap;
+            UpdateMainFormText("Bing卫星地图");
         }
 
         private void 混合地图ToolStripMenuItem5_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProviders.BingHybridMap;
+            UpdateMainFormText("Bing混合地图");
         }
 
         private void 普通地图中文ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Bing.BingChinaMapProvider.Instance;
+            UpdateMainFormText( GMapProvidersExt.Bing.BingChinaMapProvider.Instance.CnName);
         }
 
         //搜狗地图
         private void 普通地图ToolStripMenuItem6_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Sogou.SogouMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.Sogou.SogouMapProvider.Instance.CnName);
         }
 
         //天地图
         private void 街道地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //PointLatLng p = GetNewMapPosition(this.mapControl.MapProvider, GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno3857.Instance);
-            //PointLatLng p = this.mapControl.Position;
-            //GPoint posPixel = this.mapControl.PositionPixel;
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno.Instance;
-            //this.mapControl.Position = p;
-            //this.mapControl.Position = this.mapControl.MapProvider.Projection.FromPixelToLatLng(posPixel, (int)this.mapControl.Zoom);
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno.Instance.CnName);
         }
 
         private void 卫星地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider.Instance.CnName);
         }
 
         private void 混合地图球面墨卡托ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno.Instance.CnName);
         }
 
         private void 街道地图WGS84ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno4326.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituMapProviderWithAnno4326.Instance.CnName);
         }
 
         private void 卫星地图WGS84ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider4326.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituSatelliteMapProvider4326.Instance.CnName);
         }
 
         private void 混合地图WGS84ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno4326.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.TiandituSatelliteMapProviderWithAnno4326.Instance.CnName);
         }
 
         //ArcGIS地图
         private void arcGIS街道地图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISMapProvider.Instance.CnName);
         }
 
         private void arcGIS街道地图无POIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISMapProviderNoPoi.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISMapProviderNoPoi.Instance.CnName);
         }
 
         private void arcGIS街道地图冷色版ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISColdMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISColdMapProvider.Instance.CnName);
         }
 
         private void arcGIS街道地图灰色版ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISGrayMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISGrayMapProvider.Instance.CnName);
         }
 
         private void arcGIS街道地图暖色版ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISWarmMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISWarmMapProvider.Instance.CnName);
         }
 
         private void arcGIS卫星地图无偏移ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.ArcGIS.ArcGISSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.ArcGIS.ArcGISSatelliteMapProvider.Instance.CnName);
         }
 
         #endregion
@@ -1952,7 +1989,7 @@ namespace MapDownloader
             for (int i = 0; i < pointNum; ++i)
             {
                 double x = 118 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
-                double y = 32 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
+                double y = 31.5 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
                 points.Add( new PointLatLng(y, x));
             }
 
@@ -2046,5 +2083,25 @@ namespace MapDownloader
             }
         }
 
+        private void 福建街道地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
+        }
+
+        private void 福建卫星地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
+        }
+
+        private void 福建混合地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
+        }
     }
 }

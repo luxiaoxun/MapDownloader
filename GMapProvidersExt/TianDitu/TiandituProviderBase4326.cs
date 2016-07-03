@@ -18,14 +18,15 @@ namespace GMapProvidersExt.TianDitu
         // Methods
         static TiandituProviderBase4326()
         {
-            maxServer = 7;
-            UrlFormat = "http://t{0}.tianditu.com/{1}/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER={2}&TILEMATRIXSET={3}&TILEMATRIX={4}&TILEROW={5}&TILECOL={6}&FORMAT=tiles";
+            maxServer = 5;
+            //UrlFormat = "http://t{0}.tianditu.com/{1}/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER={2}&TILEMATRIXSET={3}&TILEMATRIX={4}&TILEROW={5}&TILECOL={6}&FORMAT=tiles";
+            UrlFormat = "http://t{0}.tianditu.com/DataServer?T={1}&x={2}&y={3}&l={4}";
         }
 
         public TiandituProviderBase4326()
         {
             base.MaxZoom = 0x12;
-            base.MinZoom = 2;
+            base.MinZoom = 1;
             base.RefererUrl = "http://www.tianditu.com";
         }
 
