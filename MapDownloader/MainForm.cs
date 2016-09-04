@@ -554,13 +554,7 @@ namespace MapDownloader
         #endregion
 
         #region 地图下载
-
-        private void ShowDownloadTip(bool isVisible)
-        {
-            this.toolStripProgressBarDownload.Visible = isVisible;
-            this.toolStripStatusDownload.Visible = isVisible;
-        }
-
+        
         private void ResetToServerAndCacheMode()
         {
             if (this.mapControl.Manager.Mode != AccessMode.ServerAndCache)
@@ -613,6 +607,12 @@ namespace MapDownloader
             {
                 CommonTools.PromptingMessage.PromptMessage(this, "请先用画图工具画下载的区域多边形或选择省市区域！");
             }
+        }
+
+        private void ShowDownloadTip(bool isVisible)
+        {
+            this.toolStripProgressBarDownload.Visible = isVisible;
+            this.toolStripStatusDownload.Visible = isVisible;
         }
 
         void tileDownloader_PrefetchTileComplete(object sender, TileDownloadEventArgs e)
@@ -709,24 +709,6 @@ namespace MapDownloader
                     MessageBox.Show(ex.Message);
                 }
             }
-            else if (currentAreaPolygon != null)
-            {
-                RectLatLng area = GMapUtil.PolygonUtils.GetRegionMaxRect(currentAreaPolygon);
-                try
-                {
-                    ResetToServerAndCacheMode();
-                    int zoom = int.Parse(this.textBoxImageZoom.Text);
-                    //int retry = this.mapControl.Manager.Mode == AccessMode.CacheOnly ? 0 : 1; //是否重试
-                    TileImageConnector tileImage = new TileImageConnector();
-                    tileImage.Retry = retryNum;
-                    tileImage.ImageTileComplete += new EventHandler(tileImage_ImageTileComplete);
-                    tileImage.Start(this.mapControl.MapProvider, area, zoom);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
             else
             {
                 CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
@@ -745,6 +727,27 @@ namespace MapDownloader
         private void UpdateMainFormText(string mapName)
         {
             this.Text = "地图下载器" + "--" + mapName;
+        }
+
+        private void 福建街道地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
+        }
+
+        private void 福建卫星地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
+        }
+
+        private void 福建混合地图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance;
+            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance.CnName);
+            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
         }
 
         //船舶地图
@@ -1034,11 +1037,9 @@ namespace MapDownloader
                     switch (e.DrawingMode)
                     {
                         case DrawingMode.Polygon:
-                            //polygonsOverlay.Polygons.Add(e.Polygon);
                             drawPolygon = e.Polygon;
                             break;
                         case DrawingMode.Rectangle:
-                            //polygonsOverlay.Polygons.Add(e.Rectangle);
                             drawPolygon = e.Rectangle;
                             break;
                         case DrawingMode.Circle:
@@ -2082,26 +2083,6 @@ namespace MapDownloader
                 }
             }
         }
-
-        private void 福建街道地图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance;
-            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianMapProviderWithAnno.Instance.CnName);
-            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
-        }
-
-        private void 福建卫星地图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance;
-            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProvider.Instance.CnName);
-            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
-        }
-
-        private void 福建混合地图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.mapControl.MapProvider = GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance;
-            UpdateMainFormText(GMapProvidersExt.TianDitu.Fujian.TiandituFujianSatelliteMapProviderWithAnno.Instance.CnName);
-            this.mapControl.Position = new PointLatLng(26.0651, 119.2786);
-        }
+     
     }
 }
