@@ -277,14 +277,6 @@ namespace MapDownloader
             {
                 isLeftButtonDown = true;
             }
-
-            //Get Mouse down PointLatLng
-            //if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            //{
-            //    PointLatLng p = this.mapControl.FromLocalToLatLng(e.X, e.Y);
-            //    Guid id = Guid.NewGuid();
-            //    JsonHelper.JsonSerializeToFile(p, this.mapControl.MapProvider.Name + id.ToString() + ".txt", Encoding.UTF8);
-            //}
         }
 
         //Mouse move 事件
@@ -353,16 +345,10 @@ namespace MapDownloader
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (item is GMapAreaPolygon)
+                if (item is GMapAreaPolygon && currentAreaPolygon != null)
                 {
-                    currentAreaPolygon = item as GMapAreaPolygon;
                     this.contextMenuStripSelectedArea.Show(Cursor.Position);
                 }
-                //if (item is GMapDrawRectangle || item is GMapDrawPolygon)
-                //{
-                //    currentDrawPolygon = item;
-                //    //this.contextMenuStripDrawPolygon.Show(Cursor.Position);
-                //}
             }
         }
 
