@@ -212,11 +212,15 @@ namespace MapDownloader
             try
             {
                 Placemark place = (Placemark)e.Result;
-                this.toolStripStatusCenter.Text = "地图中心:"+place.ProvinceName + "," + place.CityName + "," + place.DistrictName;
-                currentCenterCityName = place.CityName;
+                if (!place.Equals(Placemark.Empty))
+                {
+                    this.toolStripStatusCenter.Text = "地图中心:" + place.ProvinceName + "," + place.CityName + "," + place.DistrictName;
+                    currentCenterCityName = place.CityName;
+                }
             }
-            catch (Exception ignore)
+            catch (Exception ex)
             {
+                log.Error("Locate the map center error: " + ex);
             }
         }
 
@@ -607,14 +611,14 @@ namespace MapDownloader
             ShowDownloadTip(false);
         }
 
-        private delegate void UpdateDownloadProress(int completedCount, int total);
+        private delegate void UpdateDownloadProress(int completedCount, int totalCount);
 
-        private void UpdateDownloadBar(int completedCount, int total)
+        private void UpdateDownloadBar(int completedCount, int totalCount)
         {
             if (this.toolStripProgressBarDownload.Visible)
             {
-                int value = completedCount * 100 / total;
-                this.toolStripStatusDownload.Text = string.Format("下载进度：{0}/{1}", completedCount, total);
+                int value = completedCount * 100 / totalCount;
+                this.toolStripStatusDownload.Text = string.Format("下载进度：{0}/{1}", completedCount, totalCount);
                 this.toolStripProgressBarDownload.Value = value;
             }
         }
@@ -1183,6 +1187,7 @@ namespace MapDownloader
                     }
                     catch (Exception exception)
                     {
+                        log.Error("Read GPX file error: " + exception);
                         CommonTools.PromptingMessage.ErrorMessage(this, "读取GPX文件错误");
                     }
                 }
@@ -1212,6 +1217,7 @@ namespace MapDownloader
             }
             catch (Exception exception)
             {
+                log.Error("Read KML file error: " + exception);
                 CommonTools.PromptingMessage.ErrorMessage(this, "读取KML文件时出现异常");
             }
         }
@@ -1927,7 +1933,7 @@ namespace MapDownloader
             }
             catch (Exception ex)
             {
-                log.Error(ex);
+                log.Error("Save POI data error: " + ex);
                 MessageBox.Show("POI保存失败！");
             }
         }

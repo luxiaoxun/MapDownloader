@@ -34,38 +34,53 @@ namespace GMapDownload
             set { tilePath = value; }
         }
 
+        public bool IsComplete
+        {
+            get { return isComplete; }
+            set { isComplete = value; }
+        }
+
         private GMapProvider provider;
         private int threadNum = 5;
         private bool isComplete = true;
         private Thread[] thread;
 
         private object locker = new object();
-        private volatile int downloadSize = 0; //完成数量
+        private volatile int downloadSize = 0; // Download complete number
 
-        private object theradLock = new object();
-        private volatile int threadCompleteNum = 0; //完成线程数
-
-        private int allDownloadTileSize;  //总数
+        private int allTileSize;  //总数
         private ConcurrentQueue<DownloadLevelTile> downloadFailedTiles = new ConcurrentQueue<DownloadLevelTile>();
 
-        private System.Timers.Timer updateUiTimer;
+        private System.Timers.Timer updateUiTimer;  // UI Update thread 
+        private Thread downloadFailedThread;         // Retry failed download thread
 
         public TileDownloader(int threadNum)
         {
             this.threadNum = threadNum;
             this.thread = new Thread[threadNum];
-            updateUiTimer = new System.Timers.Timer(500);
+            updateUiTimer = new System.Timers.Timer(300);
             updateUiTimer.Elapsed += new System.Timers.ElapsedEventHandler(updateUiTimer_Elapsed);
+            downloadFailedThread = new Thread(DownloadFailedTiles);
         }
 
+        // Update progress
         void updateUiTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            ReportProress();
-        }
-
-        public bool IsComplete
-        {
-            get { return isComplete; }
+            if (!IsComplete)
+            {
+                ReportProgress();
+            }
+            else
+            {
+                GMaps.Instance.UseMemoryCache = true;
+                GMaps.Instance.CacheOnIdleRead = true;
+                System.Timers.Timer timer = sender as System.Timers.Timer;
+                if (timer != null)
+                {
+                    timer.Stop();
+                }
+                ReportComplete();
+            }
         }
 
         public void StartDownload(TileDownloaderArgs tileDownloaderArgs)
@@ -74,15 +89,14 @@ namespace GMapDownload
             GMaps.Instance.CacheOnIdleRead = false;
             
             isComplete = false;
-            threadCompleteNum = 0;
             downloadSize = 0;
 
             provider = tileDownloaderArgs.MapProvider;
             List<DownloadLevelTile> downloadTiles = tileDownloaderArgs.DownloadTiles;
 
-            allDownloadTileSize = downloadTiles.Count;
-            int singelNum = (int)(allDownloadTileSize / threadNum);
-            int remainder = (int)(allDownloadTileSize % threadNum);
+            allTileSize = downloadTiles.Count;
+            int singelNum = (int)(allTileSize / threadNum);
+            int remainder = (int)(allTileSize % threadNum);
 
             if (PrefetchTileStart != null)
             {
@@ -99,7 +113,7 @@ namespace GMapDownload
                 int endIndex = startIndex + singelNum - 1;
                 if (remainder != 0 && (threadNum - 1) == i)
                 {
-                    endIndex = downloadTiles.Count - 1;
+                    endIndex = allTileSize - 1;
                 }
                 DownloadThreadArgs args = new DownloadThreadArgs(downloadTiles.GetRange(startIndex, endIndex - startIndex + 1));
                 thread[i] = new Thread(new ParameterizedThreadStart(Download));
@@ -107,13 +121,14 @@ namespace GMapDownload
             }
 
             updateUiTimer.Start();
+            downloadFailedThread.Start();
         }
 
-        private void ReportProress()
+        private void ReportProgress()
         {
             if (PrefetchTileProgress != null)
             {
-                PrefetchTileProgress(null, new TileDownloadEventArgs(allDownloadTileSize, downloadSize));
+                PrefetchTileProgress(null, new TileDownloadEventArgs(allTileSize, downloadSize));
             }
         }
 
@@ -144,6 +159,10 @@ namespace GMapDownload
                             lock (locker)
                             {
                                 ++downloadSize;
+                                if (downloadSize == allTileSize)
+                                {
+                                    IsComplete = true;
+                                }
                             }
                         }
                         else
@@ -159,26 +178,13 @@ namespace GMapDownload
                                 downloadFailedTiles.Enqueue(threadDownloadLevelTiles[i]);
                             }
                         }
-
-                        //ReportProress();
                     }
                     catch (Exception exception)
                     {
                         log.Error(exception);
                     }
                 }
-
-                lock (theradLock)
-                {
-                    ++threadCompleteNum;
-                    if (threadCompleteNum == threadNum)
-                    {
-                        DownloadFailedTiles();
-                        isComplete = true;
-                        ReportComplete();
-                        updateUiTimer.Stop();
-                    }
-                }
+                log.Info("One thread download complete.");
             }
             catch (Exception ex)
             {
@@ -188,8 +194,13 @@ namespace GMapDownload
 
         private void DownloadFailedTiles()
         {
-            while (!downloadFailedTiles.IsEmpty)
+            while (!IsComplete)
             {
+                if (downloadFailedTiles.IsEmpty)
+                {
+                    Thread.Sleep(5000);
+                    continue;
+                }
                 DownloadLevelTile tile = null;
                 downloadFailedTiles.TryDequeue(out tile);
                 if (tile != null)
@@ -203,20 +214,23 @@ namespace GMapDownload
                             lock (locker)
                             {
                                 ++downloadSize;
+                                if(downloadSize == allTileSize)
+                                {
+                                    IsComplete = true;
+                                }
                             }
-                            //ReportProress();
                         }
                         else
                         {
                             downloadFailedTiles.Enqueue(tile);
                         }
                     }
-                    catch (Exception exception)
+                    catch (Exception ex)
                     {
-                        log.Error(exception);
                     }
                 }
             }
+            log.Info("Download failed tiles complete.");
         }
 
         private bool CacheTiles(int zoom, GPoint p, GMapProvider provider)

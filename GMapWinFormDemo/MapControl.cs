@@ -12,49 +12,49 @@ namespace GMapWinFormDemo
 {
     public partial class MapControl : GMapControl
     {
-        #region 比例尺变量
+        //#region 比例尺变量
 
-        /// <summary>
-        /// The font for the m/km markers
-        /// </summary>
-        private Font fontCustomScale = new Font("Arial", 6);
+        ///// <summary>
+        ///// The font for the m/km markers
+        ///// </summary>
+        //private Font fontCustomScale = new Font("Arial", 6);
 
-        /// <summary>
-        /// The font for the scale header 
-        /// </summary>
-        private Font fontCustomScaleBold = new Font("Arial", 10, FontStyle.Bold);
+        ///// <summary>
+        ///// The font for the scale header 
+        ///// </summary>
+        //private Font fontCustomScaleBold = new Font("Arial", 10, FontStyle.Bold);
 
-        /// <summary>
-        /// The brush for the scale's background
-        /// </summary>
-        private Brush brushCustomScaleBackColor = new SolidBrush(Color.FromArgb(180, 185, 215, 255));
+        ///// <summary>
+        ///// The brush for the scale's background
+        ///// </summary>
+        //private Brush brushCustomScaleBackColor = new SolidBrush(Color.FromArgb(180, 185, 215, 255));
 
-        /// <summary>
-        /// The Textcolor for the scale's fonts
-        /// </summary>
-        private Color colorCustomScaleText = Color.FromArgb(20, 65, 140);
+        ///// <summary>
+        ///// The Textcolor for the scale's fonts
+        ///// </summary>
+        //private Color colorCustomScaleText = Color.FromArgb(20, 65, 140);
 
-        /// <summary>
-        /// The width of the scale-rectangle
-        /// </summary>
-        private int intScaleRectWidth = 300;
+        ///// <summary>
+        ///// The width of the scale-rectangle
+        ///// </summary>
+        //private int intScaleRectWidth = 300;
 
-        /// <summary>
-        /// The height of the scale-rectangle
-        /// </summary>
-        private int intScaleRectHeight = 50;
+        ///// <summary>
+        ///// The height of the scale-rectangle
+        ///// </summary>
+        //private int intScaleRectHeight = 50;
 
-        /// <summary>
-        /// The height of the scale bar
-        /// </summary>
-        private int intScaleBarHeight = 10;
+        ///// <summary>
+        ///// The height of the scale bar
+        ///// </summary>
+        //private int intScaleBarHeight = 10;
 
-        /// <summary>
-        /// The padding of the scale
-        /// </summary>
-        private int intScaleLeftPadding = 10;
+        ///// <summary>
+        ///// The padding of the scale
+        ///// </summary>
+        //private int intScaleLeftPadding = 10;
 
-        #endregion
+        //#endregion
 
         public MapControl()
         {

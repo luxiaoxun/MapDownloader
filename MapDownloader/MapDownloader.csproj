@@ -79,6 +79,9 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>system.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevComponents.DotNetBar.Design">
       <HintPath>..\Lib\DevComponents.DotNetBar.Design.dll</HintPath>
@@ -190,6 +193,7 @@
     <None Include="Resource\ChinaBoundryBinaryAll" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="system.ico" />
     <EmbeddedResource Include="leafletjs\dist\images\layers.png" />
     <EmbeddedResource Include="leafletjs\dist\images\locate.png" />
     <EmbeddedResource Include="leafletjs\dist\images\locate_active.png" />
