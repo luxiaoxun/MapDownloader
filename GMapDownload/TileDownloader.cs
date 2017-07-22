@@ -79,6 +79,7 @@ namespace GMapDownload
                 {
                     timer.Stop();
                 }
+                ReportProgress();
                 ReportComplete();
             }
         }
