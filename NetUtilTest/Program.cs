@@ -9,6 +9,7 @@ using GMap.NET.MapProviders;
 using GMapProvidersExt;
 using GMapProvidersExt.Tencent;
 using GMapPositionFix;
+using NetUtil;
 
 namespace NetUtilTest
 {
@@ -16,9 +17,51 @@ namespace NetUtilTest
     {
         static void Main(string[] args)
         {
-            TestMapProviderService();
+            GenerateNewFile();
 
             Console.ReadKey();
+        }
+
+        private static void GenerateNewFile()
+        {
+            string filePath  = "F:\\ChinaBoundaryBinary";
+            Country china = JsonHelper.JsonDeserializeFromFile<Country>(filePath, Encoding.UTF8);
+            foreach (var provice in china.Province)
+            {
+                if (provice.name == "海南省")
+                {
+                    string newRings = GetMapRegionInfo();
+                    provice.rings = newRings;
+                    break;
+                }
+            }
+            JsonHelper.JsonSerializeToBinaryFile(china, "F:\\ChinaBoundary_Province_City");
+        }
+
+        static string GetMapRegionInfo()
+        {
+            string region = null;
+            string newValue = "";
+            bool success = MapRegion.regionDictionary.TryGetValue("海南", out region);
+            if (success)
+            {
+                
+                string[] points = region.Split(';');
+                for (int i = 0; i < points.Length; ++i)
+                {
+                    string[] lnglat = points[i].Split(',');
+                    newValue += lnglat[0];
+                    newValue += " ";
+                    newValue += lnglat[1];
+                    if (i != points.Length - 1)
+                    {
+                        newValue += ",";
+                    }
+                }
+                System.Console.WriteLine(newValue);
+            }
+
+            return newValue;
         }
 
         private static void TestMapProviderService()

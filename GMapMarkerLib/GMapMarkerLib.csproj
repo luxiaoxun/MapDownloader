@@ -66,6 +66,8 @@
     <Compile Include="GMapRouteBezier.cs" />
     <Compile Include="GMapTipMarker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteDataMarker.cs" />
+    <Compile Include="RouteMapData.cs" />
     <Compile Include="ThreadManager.cs" />
   </ItemGroup>
   <ItemGroup>

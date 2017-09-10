@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevComponents.DotNetBar2">
-      <HintPath>..\..\..\C#\DotNetBar11.8\DevComponents.DotNetBar2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -51,7 +48,6 @@
   <ItemGroup>
     <Compile Include="DeepCopy.cs" />
     <Compile Include="MessageBox.cs" />
-    <Compile Include="PromptingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexHelper.cs" />
   </ItemGroup>

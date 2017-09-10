@@ -18,11 +18,6 @@ namespace GMapUtil
 {
     public class KmlUtil
     {
-        // Methods
-        public KmlUtil()
-        {
-        }
-
         private static List<Point2D> CoordinatesToPoints(CoordinateCollection coordinates)
         {
             List<Point2D> list = new List<Point2D>();

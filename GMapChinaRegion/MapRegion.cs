@@ -10,7 +10,7 @@ namespace GMapChinaRegion
 {
     public static class MapRegion
     {
-        private static Dictionary<string,string> regionDictionary = new Dictionary<string, string>();
+        public static Dictionary<string,string> regionDictionary = new Dictionary<string, string>();
 
         static MapRegion()
         {

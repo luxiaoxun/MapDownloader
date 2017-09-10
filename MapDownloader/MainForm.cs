@@ -31,10 +31,11 @@ using GMapProvidersExt.Baidu;
 using GMapExport;
 using GMapHeat;
 using GMapDownload;
+using GMapPOI;
 
 namespace MapDownloader
 {
-    public partial class MainForm : DevComponents.DotNetBar.Office2007Form
+    public partial class MainForm : Form
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
 
@@ -170,7 +171,7 @@ namespace MapDownloader
                 }
                 else
                 {
-                    CommonTools.PromptingMessage.PromptMessage(this, "请先用画图工具画下载的区域多边形或选择省市区域！");
+                    CommonTools.MessageBox.ShowTipMessage("请先用画图工具画下载的区域多边形或选择省市区域！");
                 }
             }
         }
@@ -405,7 +406,7 @@ namespace MapDownloader
 
         private void InitChinaRegion()
         {
-            DevComponents.AdvTree.Node rootNode = new DevComponents.AdvTree.Node("中国");
+            TreeNode rootNode = new TreeNode("中国");
             this.advTreeChina.Nodes.Add(rootNode);
             rootNode.Expand();
 
@@ -420,24 +421,33 @@ namespace MapDownloader
         {
             try
             {
-                foreach (var provice in china.Province)
+                if (china.Province != null)
                 {
-                    DevComponents.AdvTree.Node pNode = new DevComponents.AdvTree.Node(provice.name);
-                    pNode.Tag = provice;
-                    foreach (var city in provice.City)
+                    foreach (var provice in china.Province)
                     {
-                        DevComponents.AdvTree.Node cNode = new DevComponents.AdvTree.Node(city.name);
-                        cNode.Tag = city;
-                        foreach (var piecearea in city.Piecearea)
+                        TreeNode pNode = new TreeNode(provice.name);
+                        pNode.Tag = provice;
+                        if (provice.City != null)
                         {
-                            DevComponents.AdvTree.Node areaNode = new DevComponents.AdvTree.Node(piecearea.name);
-                            areaNode.Tag = piecearea;
-                            cNode.Nodes.Add(areaNode);
+                            foreach (var city in provice.City)
+                            {
+                                TreeNode cNode = new TreeNode(city.name);
+                                cNode.Tag = city;
+                                if (city.Piecearea != null)
+                                {
+                                    foreach (var piecearea in city.Piecearea)
+                                    {
+                                        TreeNode areaNode = new TreeNode(piecearea.name);
+                                        areaNode.Tag = piecearea;
+                                        cNode.Nodes.Add(areaNode);
+                                    }
+                                }
+                                pNode.Nodes.Add(cNode);
+                            }
                         }
-                        pNode.Nodes.Add(cNode);
+                        TreeNode rootNode = this.advTreeChina.Nodes[0];
+                        rootNode.Nodes.Add(pNode);
                     }
-                    DevComponents.AdvTree.Node rootNode = this.advTreeChina.Nodes[0];
-                    rootNode.Nodes.Add(pNode);
                 }
             }
             catch (Exception ex)
@@ -445,26 +455,13 @@ namespace MapDownloader
                 log.Error(ex);
             }
 
-            this.advTreeChina.NodeClick += new DevComponents.AdvTree.TreeNodeMouseEventHandler(advTreeChina_NodeClick);
+            this.advTreeChina.NodeMouseClick += new TreeNodeMouseClickEventHandler(advTreeChina_NodeMouseClick);
         }
 
-        void loadChinaWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        void advTreeChina_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (china == null)
-            {
-                log.Error("加载中国省市边界失败！");
-                return;
-            }
-
-            InitPOICountrySearchCondition();
-
-            InitCountryTree();
-        }
-
-        void advTreeChina_NodeClick(object sender, DevComponents.AdvTree.TreeNodeMouseEventArgs e)
-        {
-            this.advTreeChina.SelectedNode = sender as DevComponents.AdvTree.Node;
-            if (e.Button == MouseButtons.Left||e.Button==MouseButtons.Right)
+            this.advTreeChina.SelectedNode = sender as TreeNode;
+            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
                 string name = e.Node.Text;
                 string rings = null;
@@ -506,12 +503,25 @@ namespace MapDownloader
             }
         }
 
+        void loadChinaWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (china == null)
+            {
+                log.Error("加载中国省市边界失败！");
+                return;
+            }
+
+            InitPOICountrySearchCondition();
+
+            InitCountryTree();
+        }
+
         void loadChinaWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                //byte[] buffer = Properties.Resources.ChinaBoundryBinary_Province_City;
-                byte[] buffer = Properties.Resources.ChinaBoundryBinaryAll;
+                //byte[] buffer = Properties.Resources.ChinaBoundary_Province_City;
+                byte[] buffer = Properties.Resources.ChinaBoundary;
                 china = GMapChinaRegion.ChinaMapRegion.GetChinaRegionFromJsonBinaryBytes(buffer);
             }
             catch (Exception ex)
@@ -562,7 +572,7 @@ namespace MapDownloader
             {
                 if (!tileDownloader.IsComplete)
                 {
-                    CommonTools.PromptingMessage.PromptMessage(this, "正在下载地图，等待下载完成！");
+                    CommonTools.MessageBox.ShowWarningMessage("正在下载地图，等待下载完成！");
                 }
                 else
                 {
@@ -595,7 +605,7 @@ namespace MapDownloader
             }
             else
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用画图工具画下载的区域多边形或选择省市区域！");
+                CommonTools.MessageBox.ShowTipMessage("请先用画图工具画下载的区域多边形或选择省市区域！");
             }
         }
 
@@ -701,7 +711,7 @@ namespace MapDownloader
             }
             else
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请先用“矩形”画图工具选择区域");
+                CommonTools.MessageBox.ShowTipMessage("请先用“矩形”画图工具选择区域");
             }
         }
 
@@ -1188,7 +1198,7 @@ namespace MapDownloader
                     catch (Exception exception)
                     {
                         log.Error("Read GPX file error: " + exception);
-                        CommonTools.PromptingMessage.ErrorMessage(this, "读取GPX文件错误");
+                       CommonTools.MessageBox.ShowTipMessage("读取GPX文件错误");
                     }
                 }
             }
@@ -1218,7 +1228,7 @@ namespace MapDownloader
             catch (Exception exception)
             {
                 log.Error("Read KML file error: " + exception);
-                CommonTools.PromptingMessage.ErrorMessage(this, "读取KML文件时出现异常");
+                CommonTools.MessageBox.ShowTipMessage("读取KML文件时出现异常");
             }
         }
 
@@ -1454,7 +1464,7 @@ namespace MapDownloader
             Province province = this.comboBoxProvince.SelectedItem as Province;
             if (province == null)
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请选择POI查询的省份！");
+                CommonTools.MessageBox.ShowTipMessage("请选择POI查询的省份！");
                 return;
             }
             searchProvince = province.name;
@@ -1462,7 +1472,7 @@ namespace MapDownloader
             City city = this.comboBoxCity.SelectedItem as City;
             if (city == null)
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请选择POI查询的城市！");
+                CommonTools.MessageBox.ShowTipMessage("请选择POI查询的城市！");
                 return;
             }
             searchCity = city.name;
@@ -1470,7 +1480,7 @@ namespace MapDownloader
             string keywords = this.textBoxPOIkeyword.Text.Trim();
             if (string.IsNullOrEmpty(keywords))
             {
-                CommonTools.PromptingMessage.PromptMessage(this, "请输入POI查询的关键字！");
+                CommonTools.MessageBox.ShowTipMessage("请输入POI查询的关键字！");
                 return;
             }
 
@@ -1874,13 +1884,13 @@ namespace MapDownloader
 
         #region POI导出
 
-        private void buttonXPoiSave_Click(object sender, EventArgs e)
+        private void buttonPoiSave_Click(object sender, EventArgs e)
         {
             try
             {
                 if (poiDataList.Count <= 0)
                 {
-                    CommonTools.PromptingMessage.PromptMessage(this, "POI数据为空，无法保存！");
+                    CommonTools.MessageBox.ShowTipMessage("POI数据为空，无法保存！");
                     return;
                 }
                 BackgroundWorker poiExportWorker = new BackgroundWorker();
