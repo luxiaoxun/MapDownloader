@@ -7,11 +7,13 @@ using GMap.NET.Projections;
 using GMap.NET.WindowsForms;
 using NetUtil;
 using Newtonsoft.Json.Linq;
+using log4net;
 
 namespace GMapProvidersExt.AMap
 {
     public class AMapProvider : AMapProviderBase, RoutingProvider,GeocodingProvider
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AMapProvider));
         private readonly string KEY = "26144cb5dbe74ea6c1410777feb646de";
         private int succeedCount;
         public delegate void QueryProgressDelegate(long completedCount, long total);
@@ -148,6 +150,7 @@ namespace GMapProvidersExt.AMap
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
             }
             return list;
         }
@@ -197,6 +200,7 @@ namespace GMapProvidersExt.AMap
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
             }
 
             return list;
@@ -240,7 +244,7 @@ namespace GMapProvidersExt.AMap
             }
             catch (Exception ex)
             {
-
+                log.Warn(ex.Message);
             }
             return list;
         }

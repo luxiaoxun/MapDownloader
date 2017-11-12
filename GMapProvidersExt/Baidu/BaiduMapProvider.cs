@@ -7,11 +7,13 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using NetUtil;
 using Newtonsoft.Json.Linq;
+using log4net;
 
 namespace GMapProvidersExt.Baidu
 {
     public class BaiduMapProvider : BaiduMapProviderBase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(BaiduMapProvider));
         private static readonly string KEY = "P3YVgujUBDobaVnqqiPqw5Gj";
 
         private int succeedCount;
@@ -121,6 +123,7 @@ namespace GMapProvidersExt.Baidu
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
             }
             return list;
         }

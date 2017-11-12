@@ -8,11 +8,13 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using System.Windows.Forms;
 using System.Drawing;
+using log4net;
 
 namespace GMapExport
 {
     public class TileImageConnector
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(TileImageConnector));
         private BackgroundWorker imageGenWorker = new BackgroundWorker();
         private GMapProvider provider;
         
@@ -166,6 +168,7 @@ namespace GMapExport
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
                 MessageBox.Show("拼接图生成错误！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -9,11 +9,14 @@ using GMap.NET.MapProviders;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using NetUtil;
+using log4net;
 
 namespace GMapProvidersExt.Tencent
 {
     public class TencentMapProvider : TencentMapProviderBase, GeocodingProvider
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(TencentMapProvider));
+
         // Fields
         private readonly string cnName;
         private readonly Guid id = new Guid("3C1FF6D8-F8AD-4A98-811A-027FB23314BB");
@@ -197,6 +200,7 @@ namespace GMapProvidersExt.Tencent
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
             }
             return place;
         }
@@ -256,6 +260,7 @@ namespace GMapProvidersExt.Tencent
             }
             catch (Exception ex)
             {
+                log.Warn(ex.Message);
             }
 
             return list;
@@ -283,7 +288,7 @@ namespace GMapProvidersExt.Tencent
             }
             catch (Exception ex)
             {
-
+                log.Warn(ex.Message);
             }
             return list;
         }
