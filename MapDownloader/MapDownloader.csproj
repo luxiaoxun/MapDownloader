@@ -248,6 +248,10 @@
       <Project>{E873E646-BE34-4060-A997-5087E9B7021C}</Project>
       <Name>GMapProvidersExt</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GMapTools\GMapTools.csproj">
+      <Project>{ED39E8DA-A8F3-4906-BA24-90D09D0AF7CD}</Project>
+      <Name>GMapTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapUtil\GMapUtil.csproj">
       <Project>{DB4076E6-AB5B-48E1-B674-391CCFAD9B4F}</Project>
       <Name>GMapUtil</Name>

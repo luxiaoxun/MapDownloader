@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
@@ -17,7 +15,6 @@ using GMap.NET.MapProviders;
 using GMap.NET.CacheProviders;
 using NetUtil;
 using GMapUtil;
-using MySql.Data.MySqlClient;
 using log4net;
 using GMapChinaRegion;
 using GMapPolygonLib;
@@ -32,6 +29,7 @@ using GMapExport;
 using GMapHeat;
 using GMapDownload;
 using GMapPOI;
+using GMapTools;
 
 namespace MapDownloader
 {
@@ -44,10 +42,12 @@ namespace MapDownloader
         private string conString;
 
         private Draw draw;
-        private GMapOverlay polygonsOverlay = new GMapOverlay("polygonsOverlay"); //放置polygon的图层
-        private GMapOverlay poiOverlay = new GMapOverlay("poiOverlay"); //放置poi的图层
+        // polygons overlay
+        private GMapOverlay polygonsOverlay = new GMapOverlay("polygonsOverlay");
+        // POI overlay
+        private GMapOverlay poiOverlay = new GMapOverlay("poiOverlay");
 
-        //中国省市边界
+        // China boundry
         private Country china;
         private bool isCountryLoad = false;
         private GMapOverlay regionOverlay = new GMapOverlay("region");
@@ -58,10 +58,13 @@ namespace MapDownloader
         private MySQLPureImageCacheMulti mysqlCache = new MySQLPureImageCacheMulti();
 
         private bool isLeftButtonDown = false;
+        // Current dragable node when editing "current area polygon"
         private GMapMarkerEllipse currentDragableNode = null;
         private List<GMapMarkerEllipse> currentDragableNodes;
-        private GMapAreaPolygon currentAreaPolygon; //区域边界多边形
-        //private GMapPolygon currentDrawPolygon; //画图多边形
+        // Current area polygon for downloading
+        private GMapAreaPolygon currentAreaPolygon;
+
+        private DrawDistance drawDistance;  // Draw distane tool
 
         private bool allowRouting = false;
         private PointLatLng routeStartPoint = PointLatLng.Empty;
@@ -70,7 +73,7 @@ namespace MapDownloader
         private GMapOverlay routeOverlay = new GMapOverlay("routeOverlay");
         private string currentCenterCityName = "南京市";
 
-        //地图下载器，5个线程
+        // Tile Downloader, init 5 threads
         private TileDownloader tileDownloader = new TileDownloader(5);
 
         public MainForm()
@@ -86,7 +89,7 @@ namespace MapDownloader
             InitMySQLConString();
         }
 
-        //初始化App config配置信息
+        // Init App, load configurations
         private void InitMySQLConString()
         {
             try
@@ -122,12 +125,12 @@ namespace MapDownloader
             }
         }
 
-        //初始化地图
+        // Init map
         private void InitMap()
         {
             mapControl.ShowCenter = false;
             mapControl.DragButton = System.Windows.Forms.MouseButtons.Left;
-            mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; //缓存位置
+            mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; // Map cache location
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
             //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
             mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
@@ -135,8 +138,6 @@ namespace MapDownloader
             mapControl.MinZoom = 1;
             mapControl.MaxZoom = 18;
             mapControl.Zoom = 9;
-            //mapControl.EmptyMapBackground = Color.Black;
-            //mapControl.FillEmptyTiles = true;
 
             mapControl.Overlays.Add(polygonsOverlay);
             mapControl.Overlays.Add(regionOverlay);
@@ -149,18 +150,22 @@ namespace MapDownloader
             this.mapControl.MouseUp += new MouseEventHandler(mapControl_MouseUp);
             this.mapControl.OnMarkerEnter += new MarkerEnter(mapControl_OnMarkerEnter);
             this.mapControl.OnMarkerLeave += new MarkerLeave(mapControl_OnMarkerLeave);
+            this.mapControl.OnMarkerClick += new MarkerClick(mapControl_OnMarkerClick);
             this.mapControl.OnPolygonClick += new PolygonClick(mapControl_OnPolygonClick);
             this.mapControl.OnPolygonEnter += new PolygonEnter(mapControl_OnPolygonEnter);
             this.mapControl.OnPolygonLeave += new PolygonLeave(mapControl_OnPolygonLeave);
             this.mapControl.OnPositionChanged += new PositionChanged(mapControl_OnPositionChanged);
             this.mapControl.OnMapZoomChanged += new MapZoomChanged(mapControl_OnMapZoomChanged);
             this.mapControl.OnPolygonDoubleClick += new PolygonDoubleClick(mapControl_OnPolygonDoubleClick);
-            
+
             draw = new Draw(this.mapControl);
             draw.DrawComplete += new EventHandler<DrawEventArgs>(draw_DrawComplete);
+
+            drawDistance = new DrawDistance(this.mapControl);
+            drawDistance.DrawComplete += new EventHandler<DrawDistanceEventArgs>(drawDistance_DrawComplete);
         }
 
-        //双击多边形下载地图
+        // Double click to download the map
         void mapControl_OnPolygonDoubleClick(GMapPolygon item, MouseEventArgs e)
         {
             if (item is GMapAreaPolygon)
@@ -176,7 +181,7 @@ namespace MapDownloader
             }
         }
 
-        #region 地图控件事件
+        #region Map event
 
         void mapControl_OnMapZoomChanged()
         {
@@ -203,8 +208,8 @@ namespace MapDownloader
         void mapControl_OnPositionChanged(PointLatLng point)
         {
             BackgroundWorker centerPositionWorker = new BackgroundWorker();
-            centerPositionWorker.DoWork +=new DoWorkEventHandler(centerPositionWorker_DoWork);
-            centerPositionWorker.RunWorkerCompleted +=new RunWorkerCompletedEventHandler(centerPositionWorker_RunWorkerCompleted);
+            centerPositionWorker.DoWork += new DoWorkEventHandler(centerPositionWorker_DoWork);
+            centerPositionWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(centerPositionWorker_RunWorkerCompleted);
             centerPositionWorker.RunWorkerAsync(point);
         }
 
@@ -241,6 +246,28 @@ namespace MapDownloader
                 if (allowRouting)
                 {
                     this.contextMenuStripLocation.Show(Cursor.Position);
+                }
+            }
+        }
+
+        void mapControl_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (item is DrawDeleteMarker)
+                {
+                    currentAreaPolygon = null;
+
+                    GMapOverlay overlay = item.Overlay;
+                    if (overlay.Markers.Contains(item))
+                    {
+                        overlay.Markers.Remove(item);
+                    }
+
+                    if (this.mapControl.Overlays.Contains(overlay))
+                    {
+                        this.mapControl.Overlays.Remove(overlay);
+                    }
                 }
             }
         }
@@ -284,7 +311,7 @@ namespace MapDownloader
             }
         }
 
-        //Mouse move 事件
+        // Mouse move evnet
         void mapControl_MouseMove(object sender, MouseEventArgs e)
         {
             try
@@ -359,7 +386,7 @@ namespace MapDownloader
 
         #endregion
 
-        //初始化UI
+        // Init UI
         private void InitUI()
         {
             ShowDownloadTip(false);
@@ -368,7 +395,7 @@ namespace MapDownloader
 
             this.serverAndCacheToolStripMenuItem.Checked = true;
             this.xPanderPanel2.ExpandClick += new EventHandler<EventArgs>(xPanderPanel2_ExpandClick);
-            
+
             this.comboBoxStore.SelectedIndex = 0;
             this.comboBoxStore.SelectedIndexChanged += new EventHandler(comboBoxStore_SelectedIndexChanged);
 
@@ -554,7 +581,7 @@ namespace MapDownloader
         #endregion
 
         #region 地图下载
-        
+
         private void ResetToServerAndCacheMode()
         {
             if (this.mapControl.Manager.Mode != AccessMode.ServerAndCache)
@@ -638,7 +665,7 @@ namespace MapDownloader
             if (e != null)
             {
                 if (this.IsDisposed || !this.IsHandleCreated) return;
-                this.Invoke(new UpdateDownloadProress(UpdateDownloadBar), e.TileCompleteNum,e.TileAllNum);
+                this.Invoke(new UpdateDownloadProress(UpdateDownloadBar), e.TileCompleteNum, e.TileAllNum);
             }
         }
 
@@ -908,7 +935,7 @@ namespace MapDownloader
         private void 普通地图中文ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.mapControl.MapProvider = GMapProvidersExt.Bing.BingChinaMapProvider.Instance;
-            UpdateMainFormText( GMapProvidersExt.Bing.BingChinaMapProvider.Instance.CnName);
+            UpdateMainFormText(GMapProvidersExt.Bing.BingChinaMapProvider.Instance.CnName);
         }
 
         //搜狗地图
@@ -1031,7 +1058,7 @@ namespace MapDownloader
         {
             try
             {
-                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null || e.Route!=null))
+                if (e != null && (e.Polygon != null || e.Rectangle != null || e.Circle != null || e.Line != null || e.Route != null))
                 {
                     GMapPolygon drawPolygon = null;
                     switch (e.DrawingMode)
@@ -1073,6 +1100,34 @@ namespace MapDownloader
             {
                 draw.IsEnable = false;
             }
+        }
+
+        #endregion
+
+        #region 测距
+
+        private void 测距ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            drawDistance.IsEnable = true;
+        }
+
+        void drawDistance_DrawComplete(object sender, DrawDistanceEventArgs e)
+        {
+            if (e != null)
+            {
+                GMapOverlay distanceOverlay = new GMapOverlay();
+                this.mapControl.Overlays.Add(distanceOverlay);
+                foreach (LineMarker line in e.LineMarkers)
+                {
+                    distanceOverlay.Markers.Add(line);
+                }
+                foreach (DrawDistanceMarker marker in e.DistanceMarkers)
+                {
+                    distanceOverlay.Markers.Add(marker);
+                }
+                distanceOverlay.Markers.Add(e.DistanceDeleteMarker);
+            }
+            drawDistance.IsEnable = false;
         }
 
         #endregion
@@ -1198,7 +1253,7 @@ namespace MapDownloader
                     catch (Exception exception)
                     {
                         log.Error("Read GPX file error: " + exception);
-                       CommonTools.MessageBox.ShowTipMessage("读取GPX文件错误");
+                        CommonTools.MessageBox.ShowTipMessage("读取GPX文件错误");
                     }
                 }
             }
@@ -1402,7 +1457,7 @@ namespace MapDownloader
         {
             this.toolStripStatusPOIDownload.Text = string.Format("已找到{0}条POI，还在查询中...", completedCount);
         }
-        
+
         void poiWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (poisQueryResult != null && poisQueryResult.Count > 0)
@@ -1410,7 +1465,7 @@ namespace MapDownloader
                 foreach (Placemark place in poisQueryResult)
                 {
                     GMarkerGoogle marker = new GMarkerGoogle(place.Point, GMarkerGoogleType.blue_dot);
-                    marker.ToolTipText = place.Name+"\r\n"+place.Address+"\r\n"+place.Category;
+                    marker.ToolTipText = place.Name + "\r\n" + place.Address + "\r\n" + place.Category;
                     this.poiOverlay.Markers.Add(marker);
                     PoiData poiData = new PoiData();
                     poiData.Name = place.Name;
@@ -1849,7 +1904,7 @@ namespace MapDownloader
         private void 导出地图切片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ArcGISLayerConfigForm form = new ArcGISLayerConfigForm();
-            DialogResult res =  form.ShowDialog();
+            DialogResult res = form.ShowDialog();
             if (res == System.Windows.Forms.DialogResult.OK)
             {
                 ExportParameter exportParameter = form.GetExportParameter();
@@ -1865,7 +1920,7 @@ namespace MapDownloader
         {
             if (e != null)
             {
-                this.toolStripStatusExport.Text = string.Format("正在导出第{0}级的切片...",e.CurrentExportZoom);
+                this.toolStripStatusExport.Text = string.Format("正在导出第{0}级的切片...", e.CurrentExportZoom);
             }
         }
 
@@ -1896,7 +1951,7 @@ namespace MapDownloader
                 BackgroundWorker poiExportWorker = new BackgroundWorker();
                 poiExportWorker.DoWork += new DoWorkEventHandler(poiExportWorker_DoWork);
                 poiExportWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(poiExportWorker_RunWorkerCompleted);
-                
+
                 int selectIndex = this.comboBoxPoiSave.SelectedIndex;
                 if (selectIndex == 0)
                 {
@@ -1993,7 +2048,7 @@ namespace MapDownloader
             {
                 double x = 118 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
                 double y = 31.5 + rand.NextDouble() * 0.1 + rand.NextDouble() * 0.1 * 0.1 + rand.NextDouble();
-                points.Add( new PointLatLng(y, x));
+                points.Add(new PointLatLng(y, x));
             }
 
             return points;
@@ -2005,9 +2060,9 @@ namespace MapDownloader
         private void 热力图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int zoom = (int)this.mapControl.Zoom;
-            
+
             List<PointLatLng> ps = GetRandomPoint();
-            foreach(var p in ps)
+            foreach (var p in ps)
             {
                 GMapPointMarker pointmarker = new GMapPointMarker(p);
                 //this.poiOverlay.Markers.Add(pointmarker);
@@ -2085,6 +2140,7 @@ namespace MapDownloader
                 }
             }
         }
-     
+
+
     }
 }
