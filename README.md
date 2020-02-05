@@ -18,3 +18,5 @@ PS： Please use your own KEY from Biadu, Amap and Tencent to search POIs!
 * http://lbsyun.baidu.com/index.php?title=webapi
 * https://lbs.amap.com/api/webservice/summary/
 * https://lbs.qq.com/webservice_v1/index.html
+
+声明：本软件仅供个人学习与科研使用，所下载的数据版权归各个地图服务商所有，任何组织或个人因数据使用不当造成的问题，软件作者不负责任。
