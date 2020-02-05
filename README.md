@@ -1,5 +1,5 @@
 # MapDownloader
-Map downloader based on GMap.NET
+Map downloader based on [GMap.NET](https://github.com/radioman/greatmaps)
 
 中文详情：[Chinese Details](https://www.cnblogs.com/luxiaoxun/p/4454880.html)
 ### Features:
