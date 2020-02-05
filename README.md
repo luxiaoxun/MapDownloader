@@ -5,8 +5,15 @@ Map downloader based on GMap.NET
 ### Features:
 * Support maps from Baidu(百度), Amap(高德), Tencent(腾讯), Tianditu(天地图), Google, Bing, OpenStreetMap, ArcGIS, Here...
 * Store maps into SQLite(Data.gmdb) and MYSQL.
-* Search POI and export into excel.
-* Show map based on Chinese boundary.
-* Draw line, polygon, marker and distance line.
+* Search POI(Points of Interest) and export into excel.
+* Show maps based on Chinese boundary.
+* Draw line, polygon, circle and marker.
+* Show distance between 2 points.
+* Show postion based on keywords.
 ### GUI:
 ![GUI](https://github.com/luxiaoxun/MapDownloader/blob/master/Info/GUI.png)
+
+PS： Please use your own KEY from Biadu, Amap and Tencent to search POIs! 
+http://lbsyun.baidu.com/index.php?title=webapi
+https://lbs.amap.com/api/webservice/summary/
+https://lbs.qq.com/webservice_v1/index.html
