@@ -10,6 +10,7 @@ Map downloader based on [GMap.NET](https://github.com/radioman/greatmaps)
 * Draw line, polygon, circle and marker.
 * Show distance between 2 points.
 * Show postion based on keywords.
+* Web GIS(work with Leaflet).
 ### GUI:
 ![GUI](https://github.com/luxiaoxun/MapDownloader/blob/master/Info/GUI.png)
 
