@@ -3,7 +3,7 @@ Map downloader based on [GMap.NET](https://github.com/radioman/greatmaps)
 
 中文详情：[Chinese Details](https://www.cnblogs.com/luxiaoxun/p/4454880.html)
 ### Features:
-* Support maps from Baidu(百度), Amap(高德), Tencent(腾讯), Tianditu(天地图), Google, Bing, OpenStreetMap, ArcGIS, Here...
+* Support maps from Baidu(百度), Amap(高德), Tencent(腾讯), Tianditu(天地图), Ship, Google, Bing, OpenStreetMap, ArcGIS, Here(Nokia)...
 * Store maps into SQLite(Data.gmdb) and MYSQL.
 * Search POI(Points of Interest) and export into excel.
 * Show maps based on Chinese boundary.
