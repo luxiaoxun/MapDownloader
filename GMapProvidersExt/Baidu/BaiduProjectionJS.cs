@@ -9,7 +9,7 @@ namespace GMapProvidersExt.Baidu
     public class BaiduProjectionJS : PureProjection
     {
         // 百度经纬度 -> 百度墨卡托 -> 像素坐标
-        public static readonly BaiduProjection Instance = new BaiduProjection();
+        public static readonly BaiduProjectionJS Instance = new BaiduProjectionJS();
 
         static readonly double MinLatitude = -74;       // 最小纬度
         static readonly double MaxLatitude = 74;        // 最大纬度
