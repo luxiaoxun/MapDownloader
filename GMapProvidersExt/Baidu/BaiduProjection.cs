@@ -9,7 +9,7 @@ namespace GMapProvidersExt.Baidu
     public class BaiduProjection : PureProjection
     {
         // Fields
-        public static readonly BaiduProjection Instance = new BaiduProjection();
+        public static readonly BaiduProjectionJS Instance = new BaiduProjectionJS();
         private static readonly double MinLatitude = -85.05112878;
         private static readonly double MaxLatitude = 85.05112878;
         private static readonly double MinLongitude = -180.0;
