@@ -49,7 +49,7 @@ namespace GMapProvidersExt.Baidu
         {
             get
             {
-                return BaiduProjection.Instance;
+                return BaiduProjectionJS.Instance;
             }
         }
 
