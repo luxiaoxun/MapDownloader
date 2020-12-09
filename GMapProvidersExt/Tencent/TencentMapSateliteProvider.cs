@@ -56,6 +56,6 @@ namespace GMapProvidersExt.Tencent
             }
         }
 
-        static readonly string UrlFormat = "http://p{0}.map.soso.com/sateTiles/{1}.jpg";
+        static readonly string UrlFormat = "http://p{0}.map.gtimg.com/sateTiles/{1}.jpg";
     }
 }

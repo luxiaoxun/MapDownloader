@@ -1,60 +1,83 @@
 ﻿
 namespace GMap.NET.WindowsPresentation
 {
-    using System.Collections.Generic;
-    using System.Windows.Shapes;
+   using System.Collections.Generic;
+   using System.Windows;
+   using System.Windows.Media;
+   using System.Windows.Media.Effects;
+   using System.Windows.Shapes;
 
-    public class GMapPolygon : GMapMarker, IShapable
-    {
-        public readonly List<PointLatLng> Points = new List<PointLatLng>();
+   public class GMapPolygon : GMapMarker, IShapable
+   {
+      public GMapPolygon(IEnumerable<PointLatLng> points)
+      {
+         Points = new List<PointLatLng>(points);
+      }
 
-        public GMapPolygon(IEnumerable<PointLatLng> points)
-        {
-            Points.AddRange(points);
-            if (Points.Count > 0)
+      public List<PointLatLng> Points
+      {
+         get;
+         set;
+      }
+
+      public override void Clear()
+      {
+         base.Clear();
+         Points.Clear();
+      }
+
+       /// <summary>
+      /// creates path from list of points, for performance set addBlurEffect to false
+      /// </summary>
+      /// <param name="pl"></param>
+      /// <returns></returns>
+      public virtual Path CreatePath(List<Point> localPath, bool addBlurEffect)
+      {
+         // Create a StreamGeometry to use to specify myPath.
+         StreamGeometry geometry = new StreamGeometry();
+
+         using(StreamGeometryContext ctx = geometry.Open())
+         {
+            ctx.BeginFigure(localPath[0], true, true);
+
+            // Draw a line to the next specified point.
+            ctx.PolyLineTo(localPath, true, true);
+         }
+
+         // Freeze the geometry (make it unmodifiable)
+         // for additional performance benefits.
+         geometry.Freeze();
+
+         // Create a path to draw a geometry with.
+         Path myPath = new Path();
+         {
+            // Specify the shape of the Path using the StreamGeometry.
+            myPath.Data = geometry;
+
+            if(addBlurEffect)
             {
-                Position = Points[0];
-                RegenerateShape(null);
+               BlurEffect ef = new BlurEffect();
+               {
+                  ef.KernelType = KernelType.Gaussian;
+                  ef.Radius = 3.0;
+                  ef.RenderingBias = RenderingBias.Performance;
+               }
+
+               myPath.Effect = ef;
             }
-        }
 
-        /// <summary>
-        /// regenerates shape of polygon
-        /// </summary>
-        public virtual void RegenerateShape(GMapControl map)
-        {
-            if (map != null)
-            {
-                Map = map;
+            myPath.Stroke = Brushes.MidnightBlue;
+            myPath.StrokeThickness = 5;
+            myPath.StrokeLineJoin = PenLineJoin.Round;
+            myPath.StrokeStartLineCap = PenLineCap.Triangle;
+            myPath.StrokeEndLineCap = PenLineCap.Square;
 
-                if (Points.Count > 1)
-                {
-                    Position = Points[0];
+            myPath.Fill = Brushes.AliceBlue;
 
-                    var localPath = new List<System.Windows.Point>();
-                    var offset = Map.FromLatLngToLocal(Points[0]);
-                    foreach (var i in Points)
-                    {
-                        var p = Map.FromLatLngToLocal(new PointLatLng(i.Lat, i.Lng));
-                        localPath.Add(new System.Windows.Point(p.X - offset.X, p.Y - offset.Y));
-                    }
-
-                    var shape = map.CreatePolygonPath(localPath);
-
-                    if (this.Shape != null && this.Shape is Path)
-                    {
-                        (this.Shape as Path).Data = shape.Data;
-                    }
-                    else
-                    {
-                        this.Shape = shape;
-                    }
-                }
-                else
-                {
-                    this.Shape = null;
-                }
-            }
-        }
-    }
+            myPath.Opacity = 0.6;
+            myPath.IsHitTestVisible = false;
+         }
+         return myPath;
+      }
+   }
 }

@@ -132,12 +132,16 @@ namespace MapDownloader
             mapControl.DragButton = System.Windows.Forms.MouseButtons.Left;
             mapControl.CacheLocation = Environment.CurrentDirectory + "\\MapCache\\"; // Map cache location
             //mapControl.MapProvider = GMapProviders.GoogleChinaMap;
-            //mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
-            mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
-            mapControl.Position = new PointLatLng(32.043, 118.773);
-            mapControl.MinZoom = 1;
-            mapControl.MaxZoom = 18;
-            mapControl.Zoom = 9;
+            //mapControl.MapProvider = GMapProvidersExt.AMap.AMapProvider.Instance;
+            //mapControl.Position = new PointLatLng(32.043, 118.773);
+            //mapControl.MinZoom = 1;
+            //mapControl.MaxZoom = 18;
+            //mapControl.Zoom = 9;
+            //mapControl.ShowTileGridLines = true;
+            mapControl.MapProvider = GMapProvidersExt.Baidu.BaiduMapProvider.Instance;
+            mapControl.MinZoom = BaiduMapProvider.Instance.MinZoom;
+            mapControl.MaxZoom = BaiduMapProvider.Instance.MaxZoom.Value;
+            mapControl.Zoom = 15;
 
             mapControl.Overlays.Add(polygonsOverlay);
             mapControl.Overlays.Add(regionOverlay);
@@ -638,8 +642,19 @@ namespace MapDownloader
 
         private void ShowDownloadTip(bool isVisible)
         {
-            this.toolStripProgressBarDownload.Visible = isVisible;
-            this.toolStripStatusDownload.Visible = isVisible;
+            if (this.Created && this.InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    this.toolStripProgressBarDownload.Visible = isVisible;
+                    this.toolStripStatusDownload.Visible = isVisible;
+                }));
+            }
+            else
+            {
+                this.toolStripProgressBarDownload.Visible = isVisible;
+                this.toolStripStatusDownload.Visible = isVisible;
+            }
         }
 
         void tileDownloader_PrefetchTileComplete(object sender, TileDownloadEventArgs e)

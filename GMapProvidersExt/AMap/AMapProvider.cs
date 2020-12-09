@@ -376,6 +376,11 @@ namespace GMapProvidersExt.AMap
             throw new NotImplementedException("Not Implemented !");
         }
 
+        public MapRoute GetRoute(PointLatLng start, PointLatLng end, bool avoidHighways, bool walkingMode, int zoom, bool getInstructions = false)
+        {
+            throw new NotImplementedException();
+        }
+
         private string MakeRouteUrl(PointLatLng start, PointLatLng end)
         {
             //http://restapi.amap.com/v3/direction/transit/integrated?
@@ -408,6 +413,7 @@ namespace GMapProvidersExt.AMap
             string url = string.Format(UrlFormat, num, pos.X, pos.Y, zoom);
             return url;
         }
+
         //http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x=3399&y=1664&z=12
         static readonly string UrlFormat = "http://webrd0{0}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={1}&y={2}&z={3}";
     }

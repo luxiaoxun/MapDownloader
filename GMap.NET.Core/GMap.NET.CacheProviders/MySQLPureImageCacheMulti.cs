@@ -90,7 +90,7 @@ namespace GMap.NET.CacheProviders
                     catch (Exception ex)
                     {
                         this.initialized = false;
-                        Debug.WriteLine("MySQL Initialize: "+ex.Message);
+                        Debug.WriteLine("MySQL Initialize: " + ex.Message);
                     }
                     #endregion
                 }

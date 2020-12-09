@@ -20,7 +20,7 @@ namespace GMap.NET.MapProviders
          Instance = new GoogleChinaSatelliteMapProvider();
       }
 
-      public string Version = "s@130";
+      public string Version = "s@170";
 
       #region GMapProvider Members
 
@@ -31,15 +31,6 @@ namespace GMap.NET.MapProviders
          {
             return id;
          }
-      }
-
-      private readonly string cnName = "Google中国卫星地图";
-      public string CnName
-      {
-          get
-          {
-              return this.cnName;
-          }
       }
 
       readonly string name = "GoogleChinaSatelliteMap";
@@ -53,16 +44,9 @@ namespace GMap.NET.MapProviders
 
       public override PureImage GetTileImage(GPoint pos, int zoom)
       {
-          try
-          {
-              string url = MakeTileImageUrl(pos, zoom, LanguageStr);
+         string url = MakeTileImageUrl(pos, zoom, LanguageStr);
 
-              return GetTileImageUsingHttp(url);
-          }
-          catch (Exception ex)
-          {
-              return null;
-          }
+         return GetTileImageUsingHttp(url);
       }
 
       #endregion
@@ -73,14 +57,11 @@ namespace GMap.NET.MapProviders
          string sec2 = string.Empty; // after &zoom=...
          GetSecureWords(pos, out sec1, out sec2);
 
-         //return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, pos.X, sec1, pos.Y, zoom, sec2, ServerChina);
-         return string.Format(UrlFormat, pos.X, pos.Y, zoom);
+         return string.Format(UrlFormat, UrlFormatServer, GetServerNum(pos, 4), UrlFormatRequest, Version, pos.X, sec1, pos.Y, zoom, sec2, ServerChina);
       }
 
       static readonly string UrlFormatServer = "mt";
       static readonly string UrlFormatRequest = "vt";
-      //static readonly string UrlFormat = "http://{0}{1}.{9}/{2}/lyrs={3}&gl=cn&x={4}{5}&y={6}&z={7}&s={8}";
-      //http://www.google.cn/maps/vt?lyrs=s@167&gl=cn&x=54390&y=26610&z=16
-      static readonly string UrlFormat = "http://www.google.cn/maps/vt?lyrs=s@167&gl=cn&x={0}&y={1}&z={2}";
+      static readonly string UrlFormat = "http://{0}{1}.{9}/{2}/lyrs={3}&gl=cn&x={4}{5}&y={6}&z={7}&s={8}";
    }
 }

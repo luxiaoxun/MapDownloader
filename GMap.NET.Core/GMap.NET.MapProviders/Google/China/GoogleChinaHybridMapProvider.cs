@@ -20,7 +20,7 @@ namespace GMap.NET.MapProviders
          Instance = new GoogleChinaHybridMapProvider();
       }
 
-      public string Version = "h@218";
+      public string Version = "h@298";
 
       #region GMapProvider Members
 
@@ -31,15 +31,6 @@ namespace GMap.NET.MapProviders
          {
             return id;
          }
-      }
-
-      private readonly string cnName = "Google中国混合地图";
-      public string CnName
-      {
-          get
-          {
-              return this.cnName;
-          }
       }
 
       readonly string name = "GoogleChinaHybridMap";
@@ -66,16 +57,9 @@ namespace GMap.NET.MapProviders
 
       public override PureImage GetTileImage(GPoint pos, int zoom)
       {
-          try
-          {
-              string url = MakeTileImageUrl(pos, zoom, LanguageStr);
+         string url = MakeTileImageUrl(pos, zoom, LanguageStr);
 
-              return GetTileImageUsingHttp(url);
-          }
-          catch (Exception ex)
-          {
-              return null;
-          }
+         return GetTileImageUsingHttp(url);
       }
 
       #endregion

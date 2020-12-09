@@ -6,7 +6,7 @@ namespace GMap.NET.Internals
    using System.IO;
    using System.Text;
    using GMap.NET.CacheProviders;
-    using System.Security.Cryptography;
+   using System.Security.Cryptography;
 
    internal class CacheLocator
    {
@@ -41,12 +41,13 @@ namespace GMap.NET.Internals
       }
 
       static void Reset()
-      {
-#if !PocketPC
-         location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData) + Path.DirectorySeparatorChar + "GMap.NET" + Path.DirectorySeparatorChar;
+      {    
+         string appDataLocation = GetApplicationDataFolderPath();
 
+#if !PocketPC
          // http://greatmaps.codeplex.com/discussions/403151
-         if(string.IsNullOrEmpty(location)) 
+         // by default Network Service don't have disk write access
+         if(string.IsNullOrEmpty(appDataLocation)) 
          {
             GMaps.Instance.Mode = AccessMode.ServerOnly;
             GMaps.Instance.UseDirectionsCache = false;
@@ -55,9 +56,53 @@ namespace GMap.NET.Internals
             GMaps.Instance.UseRouteCache = false;
             GMaps.Instance.UseUrlCache = false;
          }
-#else
-         location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "GMap.NET" + Path.DirectorySeparatorChar;
+         else
 #endif
+         {
+            Location = appDataLocation;
+         }
+      }
+
+      public static string GetApplicationDataFolderPath()
+      {
+#if !PocketPC
+         bool isSystem = false;
+         try
+         {
+            using(var identity = System.Security.Principal.WindowsIdentity.GetCurrent())
+            {
+               if(identity != null)
+               {
+                  isSystem = identity.IsSystem;
+               }
+            }
+         }
+         catch(Exception ex)
+         {
+            Trace.WriteLine("SQLitePureImageCache, WindowsIdentity.GetCurrent: " + ex);
+         }
+
+         string path = string.Empty;
+
+         // https://greatmaps.codeplex.com/workitem/16112
+         if(isSystem)
+         {
+            path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData);
+         }
+         else
+         {
+            path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+         }
+#else
+         path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+#endif
+
+         if(!string.IsNullOrEmpty(path))
+         {
+            path += Path.DirectorySeparatorChar + "GMap.NET" + Path.DirectorySeparatorChar;
+         }
+
+         return path;
       }
 
       public static bool Delay = false;

@@ -383,7 +383,7 @@ namespace GMapProvidersExt.Tencent
             }
         }
 
-        static readonly string UrlFormat = "http://p{0}.map.soso.com/{1}/{2}.png";
+        static readonly string UrlFormat = "http://p{0}.map.gtimg.com/{1}/{2}.png";
     }
 
 }

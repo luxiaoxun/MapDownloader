@@ -1,6 +1,7 @@
 ﻿
 namespace GMap.NET.CacheProviders
 {
+#if MySQL
    using System;
    using System.Data;
    using System.Diagnostics;
@@ -255,5 +256,5 @@ namespace GMap.NET.CacheProviders
       }
       #endregion
    }
-
+#endif
 }

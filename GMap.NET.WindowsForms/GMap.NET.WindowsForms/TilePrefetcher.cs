@@ -24,7 +24,6 @@ using System.Drawing;
       int sleep;
       int all;
       public bool ShowCompleteMessage = false;
-      public bool ShowProgressMessage = false;
       RectLatLng area;
       GMap.NET.GSize maxOfTiles;
       public GMapOverlay Overlay;
@@ -54,14 +53,11 @@ using System.Drawing;
          {
             done.Set();
 
-            if (ShowProgressMessage)
+            MethodInvoker m = delegate
             {
-                MethodInvoker m = delegate
-                {
-                    label2.Text = "all tiles saved";
-                };
-                Invoke(m);
-             }
+               label2.Text = "all tiles saved";
+            };
+            Invoke(m);
          }
       }
 
@@ -71,14 +67,11 @@ using System.Drawing;
          {
             done.Reset();
 
-            if (ShowProgressMessage)
+            MethodInvoker m = delegate
             {
-                MethodInvoker m = delegate
-                {
-                    label2.Text = "saving tiles...";
-                };
-                Invoke(m);
-             }
+               label2.Text = "saving tiles...";
+            };
+            Invoke(m);
          }
       }
 
@@ -86,14 +79,11 @@ using System.Drawing;
       {
          if(!IsDisposed)
          {
-             if (ShowProgressMessage)
-             {
-                 MethodInvoker m = delegate
-                 {
-                     label2.Text = left + " tile to save...";
-                 };
-                 Invoke(m);
-             }
+            MethodInvoker m = delegate
+            {
+               label2.Text = left + " tile to save...";
+            };
+            Invoke(m);
          }
       }
 
@@ -101,7 +91,9 @@ using System.Drawing;
       {
          if(!worker.IsBusy)
          {
-             
+            this.label1.Text = "...";
+            this.progressBarDownload.Value = 0;
+
             this.area = area;
             this.zoom = zoom;
             this.provider = provider;
@@ -119,12 +111,7 @@ using System.Drawing;
 
             worker.RunWorkerAsync();
 
-            if (ShowProgressMessage)
-            {
-                this.label1.Text = "...";
-                this.progressBarDownload.Value = 0;
-                this.ShowDialog();
-            }
+            this.ShowDialog();
          }
       }
 
@@ -148,27 +135,29 @@ using System.Drawing;
 
       void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
       {
-         if(ShowCompleteMessage)
+         if(!IsDisposed)
          {
-            if(!e.Cancelled)
+            if(ShowCompleteMessage)
             {
-               MessageBox.Show(this, "Prefetch Complete! => " + ((int)e.Result).ToString() + " of " + all);
+               if(!e.Cancelled)
+               {
+                  MessageBox.Show(this, "Prefetch Complete! => " + ((int)e.Result).ToString() + " of " + all);
+               }
+               else
+               {
+                  MessageBox.Show(this, "Prefetch Canceled! => " + ((int)e.Result).ToString() + " of " + all);
+               }
             }
-            else
-            {
-               MessageBox.Show(this, "Prefetch Canceled! => " + ((int)e.Result).ToString() + " of " + all);
-            }
-         }
 
-         list.Clear();
+            list.Clear();
+            this.Close();
+         }
 
          GMaps.Instance.UseMemoryCache = true;
          GMaps.Instance.CacheOnIdleRead = true;
          GMaps.Instance.BoostCacheEngine = false;
 
-         worker.Dispose();
-
-         this.Close();
+         worker.Dispose();         
       }
 
       bool CacheTiles(int zoom, GPoint p)
@@ -279,11 +268,8 @@ using System.Drawing;
 
       void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
       {
-          if (ShowProgressMessage)
-          {
-              this.label1.Text = "Fetching tile at zoom (" + zoom + "): " + ((int)e.UserState).ToString() + " of " + all + ", complete: " + e.ProgressPercentage.ToString() + "%";
-              this.progressBarDownload.Value = e.ProgressPercentage;
-          }
+         this.label1.Text = "Fetching tile at zoom (" + zoom + "): " + ((int)e.UserState).ToString() + " of " + all + ", complete: " + e.ProgressPercentage.ToString() + "%";
+         this.progressBarDownload.Value = e.ProgressPercentage;
 
          if (Overlay != null)
          {
