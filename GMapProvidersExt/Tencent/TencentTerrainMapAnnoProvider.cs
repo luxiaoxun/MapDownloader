@@ -20,7 +20,8 @@ namespace GMapProvidersExt.Tencent
         // Methods
         static TencentTerrainMapAnnoProvider()
         {
-            UrlFormat = "http://rt{0}.map.gtimg.com/realtimerender?z={1}&x={2}&y={3}&type=vector&style=1&v=1.1";
+            //UrlFormat = "http://rt{0}.map.gtimg.com/realtimerender?z={1}&x={2}&y={3}&type=vector&style=1&v=1.1";
+            UrlFormat = "https://rt{0}.map.gtimg.com/tile?z={1}&x={2}&y={3}&type=vector&styleid=3&version=597"; //地形路网用
             Instance = new TencentTerrainMapAnnoProvider();
             GMapProviders.AddMapProvider(Instance);
         }
@@ -35,8 +36,9 @@ namespace GMapProvidersExt.Tencent
         {
             try
             {
-                long num = (((long)Math.Pow(2.0, (double)zoom)) - 1) - pos.Y;
-                string url = string.Format(UrlFormat, new object[] { GMapProvider.GetServerNum(pos, TencentMapProviderBase.maxServer), zoom, pos.X, num });
+                long num = (((long)Math.Pow(2.0, (double)zoom)) - 1L) - pos.Y;
+                int serverIndex = GMapProvider.GetServerNum(pos, TencentMapProviderBase.maxServer);
+                string url = string.Format(UrlFormat, serverIndex, zoom, pos.X, num);
                 return base.GetTileImageUsingHttp(url);
             }
             catch (Exception ex)
