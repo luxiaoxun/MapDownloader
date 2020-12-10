@@ -11,7 +11,7 @@ namespace GMap.NET.MapProviders
       public static readonly BingHybridMapProvider Instance;
 
       BingHybridMapProvider()
-      { 
+      {
       }
 
       static BingHybridMapProvider()
@@ -46,13 +46,37 @@ namespace GMap.NET.MapProviders
          return GetTileImageUsingHttp(url);
       }
 
+      public override void OnInitialized()
+      {
+         base.OnInitialized();
+
+         if(!DisableDynamicTileUrlFormat)
+         {
+            //UrlFormat[AerialWithLabels]: http://ecn.{subdomain}.tiles.virtualearth.net/tiles/h{quadkey}.jpeg?g=3179&mkt={culture}
+
+            UrlDynamicFormat = GetTileUrl("AerialWithLabels");
+            if(!string.IsNullOrEmpty(UrlDynamicFormat))
+            {
+               UrlDynamicFormat = UrlDynamicFormat.Replace("{subdomain}", "t{0}").Replace("{quadkey}", "{1}").Replace("{culture}", "{2}");
+            }
+         }
+      }
+
       #endregion
 
       string MakeTileImageUrl(GPoint pos, int zoom, string language)
       {
          string key = TileXYToQuadKey(pos.X, pos.Y, zoom);
-         return string.Format(UrlFormat, GetServerNum(pos, 4), key, Version, language, (!string.IsNullOrEmpty(ClientKey) ? "&key=" + ClientKey : string.Empty));
+
+         if(!DisableDynamicTileUrlFormat && !string.IsNullOrEmpty(UrlDynamicFormat))
+         {
+            return string.Format(UrlDynamicFormat, GetServerNum(pos, 4), key, language);
+         }
+
+         return string.Format(UrlFormat, GetServerNum(pos, 4), key, Version, language, ForceSessionIdOnTileAccess ? "&key=" + SessionId : string.Empty);
       }
+
+      string UrlDynamicFormat = string.Empty;
 
       // http://ecn.dynamic.t3.tiles.virtualearth.net/comp/CompositionHandler/12030012020203?mkt=en-us&it=A,G,L&n=z
 

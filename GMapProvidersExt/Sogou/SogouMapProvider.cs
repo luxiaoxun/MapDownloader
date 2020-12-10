@@ -25,6 +25,14 @@ namespace GMapProvidersExt.Sogou
         private SogouMapProvider()
         {
             this.sogouUrls = new string[] { "http://p0.go2map.com/seamless1/0/174/", "http://p1.go2map.com/seamless1/0/174/", "http://p2.go2map.com/seamless1/0/174/", "http://p3.go2map.com/seamless1/0/174/" };
+            //"http://p1.map.sogou.com/seamless1/0/174/713/63/12/12686_2561.png?v=2020124"
+            //this.sogouUrls = new string[] {
+            //    "http://p0.map.sogou.com/seamless1/0/174/",
+            //    "http://p1.map.sogou.com/seamless1/0/174/",
+            //    "http://p2.map.sogou.com/seamless1/0/174/",
+            //    "http://p3.map.sogou.com/seamless1/0/174/",
+            //};
+
             this.name = "SogouMap";
             this.cnName = "搜狗普通地图";
         }
@@ -53,6 +61,7 @@ namespace GMapProvidersExt.Sogou
             long xPos = x - num;
             long yPos = -y + num2;
             int num7 = 0x2d9 - zoom;
+            //int num7 = 0x2d8 - zoom;
             if (num7 == 710)
             {
                 num7 = 0x318;
@@ -79,6 +88,7 @@ namespace GMapProvidersExt.Sogou
             string yPosStr = yPos.ToString().Replace("-", "M");
             int index = int.Parse(((x + y) % ((long)this.sogouUrls.Length)).ToString());
             return string.Concat(new object[] { this.sogouUrls[index], num7, "/", str2, "/", str, "/", xPosStr, "_", yPosStr, ".GIF" });
+            //return string.Concat(new object[] { this.sogouUrls[index], num7, "/", str2, "/", str, "/", xPosStr, "_", yPosStr, ".png?v=2020124" });
         }
 
         // Properties

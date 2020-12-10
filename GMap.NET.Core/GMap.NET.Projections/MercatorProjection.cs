@@ -97,15 +97,5 @@ namespace GMap.NET.Projections
          long xy = (1 << zoom);
          return new GSize(xy - 1, xy - 1);
       }
-
-      public override double GetLevelResolution(int level)
-      {
-          return (((3.1415926535897931 * this.Axis) * 2.0) / (Math.Pow(2.0, (double)level) * this.TileSize.Width));
-      }
-
-      public override double GetLevelScale(int level)
-      {
-          return Math.Round((double)((this.GetLevelResolution(level) * 96.0) / 0.0254), 2);
-      }
    }
 }

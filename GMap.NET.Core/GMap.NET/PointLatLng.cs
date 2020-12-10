@@ -14,7 +14,7 @@ namespace GMap.NET
       private double lat;
       private double lng;
 
-      private bool NotEmpty;
+      bool NotEmpty;
 
       public PointLatLng(double lat, double lng)
       {
@@ -68,6 +68,11 @@ namespace GMap.NET
       public static PointLatLng operator -(PointLatLng pt, SizeLatLng sz)
       {
          return Subtract(pt, sz);
+      }
+
+      public static SizeLatLng operator -(PointLatLng pt1, PointLatLng pt2)
+      {
+          return new SizeLatLng(pt1.Lat - pt2.Lat, pt2.Lng - pt1.Lng);
       }
 
       public static bool operator ==(PointLatLng left, PointLatLng right)

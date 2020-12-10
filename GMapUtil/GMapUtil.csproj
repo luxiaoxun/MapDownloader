@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GMap.NET.Core">
-      <HintPath>..\GMap.NET.Core\bin\Release\GMap.NET.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\GMap.NET.WindowsForms\bin\Release\GMap.NET.WindowsForms.dll</HintPath>
-    </Reference>
     <Reference Include="SharpKml">
       <HintPath>..\Lib\SharpKml.dll</HintPath>
     </Reference>
@@ -59,6 +53,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
+      <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
+      <Name>GMap.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj">
+      <Project>{e06def77-f933-42fb-afd7-db2d0d8d6a98}</Project>
+      <Name>GMap.NET.WindowsForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GMapCommonType\GMapCommonType.csproj">
       <Project>{B004E87D-FE07-433C-812C-341D16164A40}</Project>
       <Name>GMapCommonType</Name>

@@ -56,7 +56,7 @@ namespace GMap.NET.WindowsForms
                   {
                      if(!Overlay.Control.HoldInvalidation)
                      {
-                        Overlay.Control.Core.Refresh.Set();
+                         Overlay.Control.Invalidate();
                      }
                   }
                }
@@ -158,14 +158,8 @@ namespace GMap.NET.WindowsForms
              {
                  if (graphicsPath != null)
                  {
-                     if (Fill != null)
-                     {
-                         g.FillPath(Fill, graphicsPath);
-                     }
-                     if (Stroke != null)
-                     {
-                         g.DrawPath(Stroke, graphicsPath);
-                     }
+                     g.FillPath(Fill, graphicsPath);
+                     g.DrawPath(Stroke, graphicsPath);
                  }
              }            
          }

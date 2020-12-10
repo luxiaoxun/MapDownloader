@@ -109,7 +109,7 @@ namespace GMap.NET.WindowsForms
                   {
                      if(!Overlay.Control.HoldInvalidation)
                      {
-                        Overlay.Control.Core.Refresh.Set();
+                         Overlay.Control.Invalidate();
                      }
                   }
                }
@@ -147,19 +147,6 @@ namespace GMap.NET.WindowsForms
          get
          {
             return area;
-         }
-      }
-
-      internal Rectangle LocalAreaInControlSpace
-      {
-         get
-         {
-            Rectangle r = area;
-            if(Overlay != null && Overlay.Control != null)
-            {
-               r.Offset((int)Overlay.Control.Core.renderOffset.X, (int)overlay.Control.Core.renderOffset.Y);
-            }
-            return r;
          }
       }
 
@@ -226,7 +213,7 @@ namespace GMap.NET.WindowsForms
                   {
                      if(!Overlay.Control.HoldInvalidation)
                      {
-                        Overlay.Control.Core.Refresh.Set();
+                         Overlay.Control.Invalidate();
                      }
                   }
                }
