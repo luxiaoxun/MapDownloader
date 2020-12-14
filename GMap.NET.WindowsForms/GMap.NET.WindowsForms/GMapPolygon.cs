@@ -158,8 +158,14 @@ namespace GMap.NET.WindowsForms
              {
                  if (graphicsPath != null)
                  {
-                     g.FillPath(Fill, graphicsPath);
-                     g.DrawPath(Stroke, graphicsPath);
+                    if (Fill != null)
+                    {
+                        g.FillPath(Fill, graphicsPath);
+                    }
+                    if (Stroke != null)
+                    {
+                        g.DrawPath(Stroke, graphicsPath);
+                    }
                  }
              }            
          }
